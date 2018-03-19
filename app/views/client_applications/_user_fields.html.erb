@@ -1,0 +1,12 @@
+<div class='nested-fields'>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+  </div>
+
+  <%= link_to_remove_association "remove task", f %>
+</div>

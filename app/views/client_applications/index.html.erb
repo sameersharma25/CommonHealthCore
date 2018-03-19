@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Client Applications</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><%= @client_application.name%></td>
+      <td><%= link_to 'Show', @client_application %></td>
+      <td><%= link_to 'Edit', edit_client_application_path(@client_application) %></td>
+      <td><%= link_to 'Destroy', @client_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+<%#= link_to 'New Client Application', new_client_application_path %>
