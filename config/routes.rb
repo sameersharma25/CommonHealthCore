@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # use_doorkeeper
   resources :client_applications
   get 'users/index'
 
@@ -20,6 +21,7 @@ Rails.application.routes.draw do
     match 'activation', :to => 'minors#activation', via: [:get, :post]
     post 'generate_end_point', to: 'minors#generate_end_point'
     post 'user_find', to: "users#user_find"
+    resource :sessions, only: [:create]
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

@@ -20,9 +20,11 @@
       <%= f.fields_for :users do |user| %>
           <%= render 'user_fields', :f => user %>
       <% end %>
+
       <%= link_to_add_association 'add user', f, :users %>
 
     </div>
+
 
     <%= f.submit 'Save' %>
 

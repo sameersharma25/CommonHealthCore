@@ -7,7 +7,7 @@ class ClientApplicationsController < ApplicationController
   def index
     user = current_user
     @client_application = current_user.client_application
-
+    logger.debug("the session is *********************: #{session[:user_id]}")
   end
 
   # GET /client_applications/1
@@ -28,7 +28,7 @@ class ClientApplicationsController < ApplicationController
   # POST /client_applications.json
   def create
     @client_application = ClientApplication.new(client_application_params)
-    @client_application.client_representative_id = current_client_representative
+    # @client_application.client_representative_id = current_client_representative
 
     respond_to do |format|
       if @client_application.save
