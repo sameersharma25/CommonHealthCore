@@ -34,15 +34,15 @@ gem 'bootstrap-sass'
 
 gem 'mongoid', '~> 6.1.0'
 
+#CanCan is an authorization library for Ruby on Rails which restricts what resources a given user is allowed to access
+# gem "cancan"
+
 #Devise is a flexible authentication solution for Rails based on Warden
 gem 'devise'
 # Gem to handle nested forms
 gem "cocoon"
 #Use wicked to make your Rails controllers into step-by-step wizards
 gem 'wicked'
-
-gem 'doorkeeper', '~> 4.0'
-gem 'doorkeeper-mongodb', '~> 4.0'
 
 gem 'simple_token_authentication'
 
