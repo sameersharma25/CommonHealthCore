@@ -1,0 +1,30 @@
+<%= form_with(model: registration_request, local: true) do |form| %>
+  <% if registration_request.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(registration_request.errors.count, "error") %> prohibited this registration_request from being saved:</h2>
+
+      <ul>
+      <% registration_request.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :application_name %>
+    <%= form.text_field :application_name, id: :application_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :application_url %>
+    <%= form.text_field :application_url, id: :application_url %>
+  </div>
+  <div class="field">
+    <%= form.label :user_email %>
+    <%= form.text_field :user_email, id: :user_email %>
+  </div>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

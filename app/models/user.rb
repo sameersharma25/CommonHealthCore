@@ -40,10 +40,10 @@ class User
   field :name, type: String
   field :client_application , type: String
   field :admin, type: Boolean
-  field :application_representative, type: String
+  field :application_representative, type: Boolean
   field :cc, type: Boolean
   field :pcp, type: Boolean
 
   belongs_to :client_application
-
+  has_many :appointments
 end

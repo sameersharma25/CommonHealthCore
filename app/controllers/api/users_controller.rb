@@ -1,5 +1,6 @@
 module Api
   class UsersController < ActionController::Base
+    include UsersHelper
     before_action :authenticate_user_from_token
 
     def user_find
@@ -21,28 +22,53 @@ module Api
 
     end
 
-    private
-
-    def authenticate_user_from_token
-      logger.debug("In the authenticate_user_from_token *************")
-      user_email = params[:email].presence
-      user       = user_email && User.find_by(email: user_email)
-
-      user_token = request.headers["HTTP_USER_TOKEN"]
-      logger.debug("In the authenticate_user_from_token USER IS: #{user.inspect} ************* HEADER IS: #{user_token}")
-      # Notice how we use Devise.secure_compare to compare the token
-      # in the database with the token given in the params, mitigating
-      # timing attacks.
-      if user && Devise.secure_compare(user.authentication_token, user_token)
-        logger.debug("In the authenticate_user_from_token INSIDE THE IF *************")
-        # sign_in user, store: false
+    def create_appointment
+      logger.debug("")
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
+      p = Patient.new
+      p.last_name = params[:last_name]
+      p.first_name = params[:first_name]
+      p.patient_phone = params[:patient_phone]
+      p.patient_coverage = params[:patient_coverage] if params[:patient_coverage]
+      p.client_application_id = client_application
+      if p.save
+        a = Appointment.new
+        a.date_of_appointment = params[:date_of_appointment]
+        a.reason_for_visit = params[:reason_for_visit]
+        a.status = params[:status]
+        a.user_id = user
+        a.client_application_id = client_application
+        a.patient_id = p
+        if a.save
+          render :json=> {status: :ok, message: "Appointment Created"}
+        end
       else
-        logger.debug("In the authenticate_user_from_token INSIDE THE ELSE *************")
-        # render nothing: true, status: :unauthorized and return
-        # return false
-        render :json => {status: :unauthorized ,message: "You have to login"}
+        render :json => {status: :bad_request, message: "Check all patient details"}
       end
     end
+
+    def get_user_appointments
+      user = User.find_by(email: params[:email])
+
+      appointments = Appointment.where(user_id: user)
+      appointments_array = Array.new
+
+      appointments.each do |a|
+        patient = a.patient
+        patient_name = patient.first_name+" "+patient.last_name
+        patient_dob = patient.date_of_birth
+        appointment_status = a.status
+        details_array = {patient_name: patient_name, patient_dob: patient_dob, appointment_status: appointment_status }
+        appointments_array.push(details_array)
+      end
+
+
+      render :json => {status: :ok, appointments: appointments, details_array: appointments_array }
+
+    end
+
+
 
   end
 end

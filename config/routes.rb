@@ -25,6 +25,8 @@ Rails.application.routes.draw do
     match 'activation', :to => 'minors#activation', via: [:get, :post]
     post 'generate_end_point', to: 'minors#generate_end_point'
     post 'user_find', to: "users#user_find"
+    post 'create_appointment', to: "users#create_appointment"
+    post 'get_user_appointments', to: "users#get_user_appointments"
     resource :sessions, only: [:create, :destroy]
   end
   # patch "update" => "users#update", as: :user_update

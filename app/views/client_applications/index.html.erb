@@ -2,7 +2,7 @@
 
 <h1>Client Applications</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Name</th>
@@ -46,4 +46,29 @@
     </table>
 <%end%>
 
-<%= link_to 'New Client Application', new_client_application_path %>
+
+<% if current_user.admin? %>
+  <h1>Registration Requests</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th >Name</th>
+        <th >URL</th>
+        <th >UserEmail</th>
+      </tr>
+    </thead>
+    <tbody>
+    <%@registration_request.each do |rr|%>
+      <tr>
+        <td><%= rr.application_name%></td>
+        <td><%= rr.application_url%></td>
+        <td><%= rr.user_email%></td>
+      </tr>
+    <%end%>
+    </tbody>
+  </table>
+
+<% end %>
+
+
+<%= link_to 'New Client Application', new_client_application_path if current_user.admin? %>

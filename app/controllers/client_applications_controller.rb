@@ -1,12 +1,13 @@
 class ClientApplicationsController < ApplicationController
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:new, :create]
 
   # GET /client_applications
   # GET /client_applications.json
   def index
     user = current_user
     @client_application = current_user.client_application
+    @registration_request = RegistrationRequest.all
     logger.debug("the session is *********************: #{session[:user_id]}")
   end
 
