@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :patients
   resources :registration_requests
   resources :client_applications
-  resources :users
+  # resources :users
   # get 'users/index'
   #
   # get 'user/edit'
