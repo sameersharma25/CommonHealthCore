@@ -3,26 +3,25 @@ Rails.application.routes.draw do
   resources :patients
   resources :registration_requests
   resources :client_applications
-  # resources :users
+  resources :users
   # get 'users/index'
-
-  # get 'users/edit'
-
-  get 'users/new'
-  get 'users/create'
-  # get 'users/show'
+  #
+  # get 'user/edit'
+  #
+  # get 'users/new'
+  # get 'users/create'
+  # get 'user/show'
 
   devise_for :users
   # devise_for :users, controllers: { registrations: 'registrations'}
   root "client_applications#index"
 
 
-  # get "edit" => "users#edit", as: :user_edit
-  # get "show" => "users#show", as: :user_show
+  get "edit" => "users#edit", as: :user_edit
+  get "show" => "users#show", as: :user_show
 
   namespace :api do
-    # get 'activation', to: 'minors#activation'
-    match 'activation', :to => 'minors#activation', via: [:get, :post]
+    # match 'activation', :to => 'minors#activation', via: [:get, :post]
     post 'generate_end_point', to: 'minors#generate_end_point'
     post 'user_find', to: "users#user_find"
     post 'create_appointment', to: "users#create_appointment"
