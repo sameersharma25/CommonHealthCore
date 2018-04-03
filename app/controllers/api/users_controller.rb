@@ -3,12 +3,23 @@ module Api
     include UsersHelper
     before_action :authenticate_user_from_token
 
-    def user_find
+    def get_all_users
       logger.debug("the user email you sent is : #{params[:email]}")
       user = User.find_by(email: params[:email])
+      client_application = user.client_application
+      client_all_users = client_application.users
+      users_details_array = Array.new
 
-      render :json=> {status: :ok,message: "Login Successful",
-                      data: {:user_id=>user.id.to_s, :name => user.name, :cc => user.cc, admin: user.admin, pcp: user.pcp }}
+      client_all_users.each do |u|
+        uname = u.name
+        uemail = u.email
+        ucc = u.cc
+        upcp = u.pcp
+        user_derails = {name: uname, email: uemail, cc: ucc, pcp: upcp }
+        users_details_array.push(user_derails)
+      end
+
+      render :json=> {status: :ok, :users_data=> users_details_array }
 
       # resource = User.find_for_database_authentication(:email=>params[:email])
       # return invalid_login_attempt unless resource
@@ -63,12 +74,23 @@ module Api
         appointments_array.push(details_array)
       end
 
-
       render :json => {status: :ok, appointments: appointments, details_array: appointments_array }
-
     end
 
+    def create_user
 
+      u = User.new
+      u.email = params[:user_email]
+      u.password = params[:user_password]
+      u.encrypted_password
+      u.cc = params[:cc]
+      u.pcp = params[:pcp]
+      if u.save
+        render :json => {status: :ok, message: "User was successfully created."}
+      else
+        render :json => {status: :bad_request, message: "There was some problem creating user."}
+      end
+    end
 
   end
 end
