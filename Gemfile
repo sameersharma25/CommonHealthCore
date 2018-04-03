@@ -39,10 +39,13 @@ gem 'mongoid', '~> 6.1.0'
 
 #Devise is a flexible authentication solution for Rails based on Warden
 gem 'devise'
+gem 'devise_invitable'
 # Gem to handle nested forms
 gem "cocoon"
 #Use wicked to make your Rails controllers into step-by-step wizards
 gem 'wicked'
+
+gem 'rack-cors', :require => 'rack/cors'
 
 gem 'simple_token_authentication'
 
