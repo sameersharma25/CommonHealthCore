@@ -1,0 +1,26 @@
+<%= form_for @client_application, url: wizard_path do |f| %>
+
+
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name, id: :client_name %>
+    </div>
+
+    <div class="field">
+      <%= f.label :application_url %>
+      <%= f.text_field :application_url, id: :application_url %>
+    </div>
+    <%= f.hidden_field :email,:value => @user.email, readonly: true %>
+    <h3>Users</h3>
+    <div id='users'>
+      <%= f.fields_for :users do |user| %>
+          <%= render 'user_fields', :f => user %>
+      <% end %>
+      <div class='links'>
+        <%= link_to_add_association 'add user', f, :users %>
+      </div>
+    </div>
+
+    <%= f.submit 'Save' %>
+
+<%end %>

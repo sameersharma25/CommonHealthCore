@@ -16,14 +16,10 @@
     </div>
 
     <h3>Users</h3>
-    <div id='users'>
-      <%= f.fields_for :users do |user| %>
-          <%= render 'user_fields', :f => user %>
-      <% end %>
-
-      <%= link_to_add_association 'add user', f, :users %>
-
-    </div>
+    <%= f.fields_for :user do |u| %>
+        <%= u.text_field :name, :placeholder => "Name" %>
+        <%= u.text_field :email, :placeholder => "Email" %>
+    <% end %>
 
 
     <%= f.submit 'Save' %>
@@ -32,3 +28,4 @@
 <% end %>
 
 <%= link_to 'Back', client_applications_path %>
+

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :patients
   resources :registration_requests
   resources :client_applications
+  resources :after_signup
   # resources :users
   # get 'users/index'
   #
@@ -12,8 +13,8 @@ Rails.application.routes.draw do
   # get 'users/create'
   # get 'user/show'
 
-  devise_for :users
-  # devise_for :users, controllers: { registrations: 'registrations'}
+  devise_for :users, :controllers =>{invitations: 'invitations'}
+      # devise_for :users, controllers: { registrations: 'registrations'}
   root "client_applications#index"
 
 
@@ -22,8 +23,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]
-    post 'generate_end_point', to: 'minors#generate_end_point'
-    post 'user_find', to: "users#user_find"
+    # post 'generate_end_point', to: 'minors#generate_end_point'
+    post 'get_all_users', to: "users#get_all_users"
     post 'create_appointment', to: "users#create_appointment"
     post 'get_user_appointments', to: "users#get_user_appointments"
     resource :sessions, only: [:create, :destroy]

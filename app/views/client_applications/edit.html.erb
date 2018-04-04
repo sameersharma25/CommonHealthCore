@@ -1,6 +1,24 @@
 <h1>Editing Client Application</h1>
 
-<%= render 'form', client_application: @client_application %>
+<%#= render 'form', client_application: @client_application %>
 
-<%= link_to 'Show', @client_application %> |
-<%= link_to 'Back', client_applications_path %>
+<%#= link_to 'Show', @client_application %> |
+<%#= link_to 'Back', client_applications_path %>
+
+<%= form_for @client_application do |f| %>
+
+
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name, id: :client_name %>
+    </div>
+
+    <div class="field">
+      <%= f.label :application_url %>
+      <%= f.text_field :application_url, id: :application_url %>
+    </div>
+
+    
+    <%= f.submit 'Save' %>
+
+<%end %>

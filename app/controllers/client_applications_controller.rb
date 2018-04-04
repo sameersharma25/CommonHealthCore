@@ -8,7 +8,11 @@ class ClientApplicationsController < ApplicationController
     user = current_user
     @client_application = current_user.client_application
     @registration_request = RegistrationRequest.all
-    logger.debug("the session is *********************: #{session[:user_id]}")
+    logger.debug("the session count is *********************: #{user.sign_in_count}")
+    # if user.sign_in_count.to_s == "1"
+    #   logger.debug("REDIRECTING TO THE NEW STEPS****************")
+    #   # redirect_to after_signup_path(:update_details_and_add_users)
+    # end
   end
 
   # GET /client_applications/1
@@ -28,11 +32,13 @@ class ClientApplicationsController < ApplicationController
   # POST /client_applications
   # POST /client_applications.json
   def create
+    logger.debug("THE PARAMETERS ARE: #{params.inspect}")
     @client_application = ClientApplication.new(client_application_params)
-    # @client_application.client_representative_id = current_client_representative
-
     respond_to do |format|
       if @client_application.save
+       if params[:client_application][:user][:email]
+         send_invite_to_user(params[:client_application][:user][:email],@client_application, params[:client_application][:user][:name] )
+       end
         format.html { redirect_to @client_application, notice: 'Client application was successfully created.' }
         format.json { render :show, status: :created, location: @client_application }
       else
@@ -42,6 +48,11 @@ class ClientApplicationsController < ApplicationController
     end
   end
 
+  def send_invite_to_user(email, client_application,name)
+    @user = User.invite!(email: email, name: name)
+    @user.update(client_application_id: client_application , application_representative: true)
+
+  end
   def register_client
     @client_application = ClientApplication.new
   end
@@ -78,6 +89,6 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url, users_attributes: [:name, :email, :_destroy])
+    params.require(:client_application).permit(:name, :application_url, users_attributes: [:id,:name, :email, :_destroy])
   end
 end
