@@ -78,15 +78,17 @@ module Api
     end
 
     def create_user
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
 
-      u = User.new
-      u.email = params[:user_email]
-      u.password = params[:user_password]
-      u.encrypted_password
-      u.cc = params[:cc]
-      u.pcp = params[:pcp]
-      if u.save
-        render :json => {status: :ok, message: "User was successfully created."}
+      email = params[:user_email]
+      name = params[:user_name]
+      cc = params[:cc]
+      pcp = params[:pcp]
+
+      @user = User.invite!(email: email)
+      if @user.update(client_application_id: client_application ,cc: cc, pcp: pcp, name: name )
+        render :json => {status: :ok, message: "User was successfully Invited."}
       else
         render :json => {status: :bad_request, message: "There was some problem creating user."}
       end
