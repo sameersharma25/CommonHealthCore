@@ -2,7 +2,7 @@
 
 <h1>Client Applications</h1>
 
-<table class="table">
+<table class="table table-responsive table-bordered user-display">
   <thead>
     <tr>
       <th>Name</th>
@@ -21,9 +21,9 @@
 </table>
 
 <br>
-
+<h1>Users in the Application</h1>
 <% if @client_application.users.count > 0 %>
-    <table class="table table-striped">
+    <table class="table table-responsive table-bordered user-display">
       <thead>
       <tr>
         <th>NAME</th>
@@ -34,7 +34,7 @@
 
       <tbody>
       <% @client_application.users.each do |u| %>
-          <tr>
+          <tr class="">
             <td><%= u.name %></td>
             <td><%= u.email %></td>
             <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
@@ -49,7 +49,7 @@
 
 <% if current_user.admin? %>
   <h1>Registration Requests</h1>
-  <table class="table table-striped">
+  <table class="table table-responsive table-bordered user-display">
     <thead>
       <tr>
         <th >Name</th>

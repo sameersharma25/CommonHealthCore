@@ -1,3 +1,7 @@
 // Place all the styles related to the ClientApplications controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.user-display > tbody > tr:nth-child(2n+1) > td {
+  background-color: #99dfe9;
+}
