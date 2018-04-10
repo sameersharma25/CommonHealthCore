@@ -66,12 +66,15 @@ module Api
       appointments_array = Array.new
 
       appointments.each do |a|
+        logger.debug("the APPOINTMENR IS : #{a.id.inspect} ******************************")
         patient = a.patient
+        appointment_id = a.id.to_s
         patient_name = patient.first_name+" "+patient.last_name
         patient_dob = patient.date_of_birth
         appointment_status = a.status
-        details_array = {patient_name: patient_name, patient_dob: patient_dob, appointment_status: appointment_status }
+        details_array = {appointment_id: appointment_id, patient_name: patient_name, patient_dob: patient_dob, appointment_status: appointment_status }
         appointments_array.push(details_array)
+        logger.debug("AFTER THE PUSH**********")
       end
 
       render :json => {status: :ok, appointments: appointments, details_array: appointments_array }
@@ -92,6 +95,24 @@ module Api
       else
         render :json => {status: :bad_request, message: "There was some problem creating user."}
       end
+    end
+
+    def edit_appointment
+
+      appointment = Appointment.find(params[:appointment_id])
+      logger.debug("EDITING APPOINTMENT -: #{appointment.inspect}")
+      patient = appointment.patient
+
+
+      render :json => {status: :ok, appointment_hash: { first_name: patient.first_name, last_name: patient.last_name,
+                                                        phone_number: patient.patient_phone,
+                                                        coverage: patient.patient_coverage,
+                                                        appointment_date: appointment.date_of_appointment,
+                                                        reason_for_visit: appointment.reason_for_visit,
+                                                        status: appointment.status
+        }
+      }
+
     end
 
   end
