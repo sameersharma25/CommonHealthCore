@@ -115,5 +115,15 @@ module Api
 
     end
 
+    def update_appointment
+      a = Appointment.find(params[:appointment_id])
+      user = User.find_by(email: params[:email])
+      a.date_of_appointment = params[:date_of_appointment]
+      a.reason_for_visit = params[:reason_for_visit]
+      a.status = "Edit"
+      a.save
+      render :json=> {status: :ok, message: "Appointment Updated"}
+    end
+
   end
 end

@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     post 'get_all_users', to: "users#get_all_users"
     post 'create_appointment', to: "users#create_appointment"
     post 'edit_appointment', to: "users#edit_appointment"
+    post 'update_appointment', to: "users#update_appointment"
     post 'get_user_appointments', to: "users#get_user_appointments"
     post 'create_user', to: "users#create_user"
     resource :sessions, only: [:create, :destroy]
