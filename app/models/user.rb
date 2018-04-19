@@ -52,6 +52,7 @@ class User
   field :application_representative, type: Boolean
   field :cc, type: Boolean
   field :pcp, type: Boolean
+  field :service_provider_id, type: Integer
 
   belongs_to :client_application
   has_many :appointments

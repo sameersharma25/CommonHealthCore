@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     post 'edit_appointment', to: "users#edit_appointment"
     post 'update_appointment', to: "users#update_appointment"
     post 'get_user_appointments', to: "users#get_user_appointments"
+    post 'appointments_referred_to_me', to: "users#appointments_referred_to_me"
     post 'create_user', to: "users#create_user"
     resource :sessions, only: [:create, :destroy]
   end
