@@ -1,5 +1,6 @@
 class Appointment
   include Mongoid::Document
+  include Mongoid::Timestamps
   field :date_of_appointment, type: String
   field :reason_for_visit, type: String
   field :status, type: String

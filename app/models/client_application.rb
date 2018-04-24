@@ -1,5 +1,6 @@
 class ClientApplication
   include Mongoid::Document
+  include Mongoid::Timestamps
   field :name, type: String
   field :application_url, type: String
   # field :client_representative_id, type: String

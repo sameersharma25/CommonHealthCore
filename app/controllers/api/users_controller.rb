@@ -1,7 +1,7 @@
 module Api
   class UsersController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token
+    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification]
 
     def get_all_users
       logger.debug("the user email you sent is : #{params[:email]}")
@@ -154,6 +154,19 @@ module Api
       a.status = "Edit"
       a.save
       render :json=> {status: :ok, message: "Appointment Updated"}
+    end
+
+    def give_appointment_details_for_notification
+
+      a = Appointment.find(params[:appointments_id])
+      patient = a.patient
+      status = a.status
+      patient_email = patient.email
+      patient_name = patient.first_name+" "+patient.last_name
+      cc_email = User.find(a.cc_id).email
+      
+
+      render :json => {status: :ok , patient_email: patient_email, patient_name: patient_name, cc_email: cc_email  }
     end
 
   end
