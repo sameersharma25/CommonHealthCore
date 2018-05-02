@@ -9,6 +9,7 @@ class ClientApplication
 
   has_many :patients
   has_many :appointments
+  has_many :notification_rules
   has_many :users, inverse_of: :client_application
   accepts_nested_attributes_for :users, reject_if: :all_blank, allow_destroy: true
 end

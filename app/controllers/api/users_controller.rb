@@ -46,14 +46,18 @@ module Api
       p = Patient.new
       p.last_name = params[:last_name]
       p.first_name = params[:first_name]
-      p.patient_phone = params[:patient_phone]
-      p.patient_coverage = params[:patient_coverage] if params[:patient_coverage]
+      p.patient_phone = "+1"+params[:patient_phone]
+      p.healthcare_coverage = params[:healthcare_coverage]
+      p.patient_coverage_id = params[:patient_coverage] if params[:patient_coverage]
       p.client_application_id = client_application
+      p.date_of_birth = params[:dob]
+      p.patient_zipcode = params[:zipcode]
+      p.patient_email = params[:patient_email]
       if p.save
         a = Appointment.new
         a.date_of_appointment = params[:date_of_appointment]
-        a.reason_for_visit = params[:reason_for_visit]
-        a.status = params[:status]
+        a.reason_for_visit = params[:reason_for_visit] ? params[:reason_for_visit] : " "
+        a.status = "New"
         a.user_id = user
         a.client_application_id = client_application
         a.patient_id = p
@@ -80,7 +84,12 @@ module Api
         patient_name = patient.first_name+" "+patient.last_name
         patient_dob = patient.date_of_birth
         appointment_status = a.status
-        details_array = {appointment_id: appointment_id, patient_name: patient_name, patient_dob: patient_dob, appointment_status: appointment_status }
+        referred_by = a.user.email
+        reason_for_visit = a.reason_for_visit
+        date_of_appointment = a.date_of_appointment
+        details_array = {appointment_id: appointment_id, patient_name: patient_name,
+                         patient_dob: patient_dob, appointment_status: appointment_status,
+                          referred_by: referred_by, rov: reason_for_visit, date_of_appointment: date_of_appointment }
         appointments_array.push(details_array)
         logger.debug("AFTER THE PUSH**********")
       end
@@ -90,6 +99,7 @@ module Api
 
     def appointments_referred_to_me
       user = User.find_by(email: params[:email])
+      logger.debug("THE USER IS #{user.inspect}")
       if user.pcp == true
         service_provider_id = user.service_provider_id
         appointments_array = Array.new
@@ -136,8 +146,9 @@ module Api
 
 
       render :json => {status: :ok, appointment_hash: { first_name: patient.first_name, last_name: patient.last_name,
-                                                        phone_number: patient.patient_phone,
-                                                        coverage: patient.patient_coverage,
+                                                        patient_phone_number: patient.patient_phone,
+                                                        patient_email: patient.patient_email,
+                                                        patient_coverage: patient.patient_coverage_id,
                                                         appointment_date: appointment.date_of_appointment,
                                                         reason_for_visit: appointment.reason_for_visit,
                                                         status: appointment.status
@@ -149,6 +160,12 @@ module Api
     def update_appointment
       a = Appointment.find(params[:appointment_id])
       user = User.find_by(email: params[:email])
+      patient = a.patient
+      patient.first_name = params[:first_name]
+      patient.last_name = params[:last_name]
+      patient.patient_phone = params[:patient_phone]
+      patient.date_of_birth = params[:dob]
+      patient.healthcare_coverage = params[:healthcare_coverage]
       a.date_of_appointment = params[:date_of_appointment]
       a.reason_for_visit = params[:reason_for_visit]
       a.status = "Edit"
@@ -157,16 +174,23 @@ module Api
     end
 
     def give_appointment_details_for_notification
-
-      a = Appointment.find(params[:appointments_id])
+      logger.debug("THE PARAMETERS ARE : #{params.inspect}")
+      a = Appointment.find(params["appointment_id"])
       patient = a.patient
       status = a.status
-      patient_email = patient.email
+      patient_email = patient.patient_email
+      patient_phone = patient.patient_phone
       patient_name = patient.first_name+" "+patient.last_name
       cc_email = User.find(a.cc_id).email
-      
+      logger.debug("BEFORE NOTIFICATION RULE*******************#{status}")
+      notification = NotificationRule.where(:appointment_status => status, :appointment_time_passed => params["appointment_time_passed"])
+      logger.debug("After NOTIFICATION RULE******************* #{notification.entries}")
+      subject = notification[0].subject
+      body = notification[0].body
 
-      render :json => {status: :ok , patient_email: patient_email, patient_name: patient_name, cc_email: cc_email  }
+      render :json => {status: :ok , patient_email: patient_email, patient_name: patient_name,
+                       cc_email: cc_email, patient_phone: patient_phone,
+                       subject: subject, body: body }
     end
 
   end

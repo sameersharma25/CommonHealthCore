@@ -48,7 +48,8 @@ gem 'wicked'
 gem 'rack-cors', :require => 'rack/cors'
 
 gem 'simple_token_authentication'
-
+gem 'aws-sdk'
+gem 'whenever', require: false
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

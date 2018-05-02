@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :notification_rules
   resources :appointments
   resources :patients
   resources :registration_requests
