@@ -162,7 +162,7 @@ module Api
       user = User.find_by(email: params[:email])
       patient = a.patient
       patient.first_name = params[:first_name]
-      patient.last_name = params[:last_name]
+      patient.last_name = params[:last_name] if !params[:last_name].nil?
       patient.patient_phone = params[:patient_phone]
       patient.date_of_birth = params[:dob]
       patient.healthcare_coverage = params[:healthcare_coverage]
@@ -174,23 +174,47 @@ module Api
     end
 
     def give_appointment_details_for_notification
-      logger.debug("THE PARAMETERS ARE : #{params.inspect}")
-      a = Appointment.find(params["appointment_id"])
-      patient = a.patient
-      status = a.status
-      patient_email = patient.patient_email
-      patient_phone = patient.patient_phone
-      patient_name = patient.first_name+" "+patient.last_name
-      cc_email = User.find(a.cc_id).email
-      logger.debug("BEFORE NOTIFICATION RULE*******************#{status}")
-      notification = NotificationRule.where(:appointment_status => status, :appointment_time_passed => params["appointment_time_passed"])
-      logger.debug("After NOTIFICATION RULE******************* #{notification.entries}")
-      subject = notification[0].subject
-      body = notification[0].body
+      # logger.debug("THE PARAMETERS ARE : #{params.inspect}")
+      # a = Appointment.find(params["appointment_id"])
+      # patient = a.patient
+      # status = a.status
+      # patient_email = patient.patient_email
+      # patient_phone = patient.patient_phone
+      # patient_name = patient.first_name+" "+patient.last_name
+      # cc_email = User.find(a.cc_id).email
+      # logger.debug("BEFORE NOTIFICATION RULE*******************#{status}")
 
-      render :json => {status: :ok , patient_email: patient_email, patient_name: patient_name,
-                       cc_email: cc_email, patient_phone: patient_phone,
-                       subject: subject, body: body }
+      td_hrs = params["td_hrs"]
+      notification_details = selected_rules(params["appointment_id"] ,td_hrs)
+
+      # NotificationRule.create(appointment_status: "New", time_difference: 48, greater: false, subject: "some subject for PCP", body: "Some message for PCP", client_application_id: c, user_type: "pcp" )
+      # notification_response = Hash.new
+
+      # notification = NotificationRule.where(:appointment_status => status, :appointment_time_passed => params["td_hrs"])
+      # logger.debug("After NOTIFICATION RULE******************* #{notification.entries}")
+      # subject = notification[0].subject
+      # body = notification[0].body
+
+      render :json => {status: :ok , notification_details: notification_details  }
+    end
+
+
+    def patients_list
+      user = User.find_by(email: params[:email])
+      c = user.client_application_id
+      patients = Patient.where(client_application_id: c)
+      patients_details = Array.new
+
+      patients.each do |p|
+        patient_id = p.id.to_s
+        first_name = p.first_name
+        last_name = p.last_name
+        ph_number = p.patient_phone
+        patient_detail = {patient_id: patient_id, first_name: first_name, last_name: last_name, ph_number: ph_number }
+        patients_details.push(patient_detail)
+      end
+
+      render :json => {status: :ok, patients_details: patients_details }
     end
 
   end
