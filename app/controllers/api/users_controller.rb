@@ -217,5 +217,33 @@ module Api
       render :json => {status: :ok, patients_details: patients_details }
     end
 
+    def patient_appointments
+      p = Patient.find(params[:patient_id])
+      appointments = p.appointments.order(created_at: :desc).limit(10)
+      appointments_array = Array.new
+
+      patient_name = p.first_name+" "+p.last_name
+      
+      appointments.each do |a|
+        logger.debug("the APPOINTMENR IS : #{a.id.inspect} ******************************")
+        patient = a.patient
+        appointment_id = a.id.to_s
+        patient_name = patient.first_name+" "+patient.last_name
+        patient_dob = patient.date_of_birth
+        appointment_status = a.status
+        referred_by = a.user.email
+        reason_for_visit = a.reason_for_visit
+        date_of_appointment = a.date_of_appointment
+        details_array = {appointment_id: appointment_id, patient_name: patient_name,
+                         patient_dob: patient_dob, appointment_status: appointment_status,
+                         referred_by: referred_by, rov: reason_for_visit, date_of_appointment: date_of_appointment }
+        appointments_array.push(details_array)
+        logger.debug("AFTER THE PUSH**********")
+      end
+
+      render :json => {status: :ok, patient_name: patient_name ,details_array: appointments_array }
+
+    end
+
   end
 end
