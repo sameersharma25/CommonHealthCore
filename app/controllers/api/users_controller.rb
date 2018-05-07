@@ -166,7 +166,8 @@ module Api
       patient.patient_phone = params[:patient_phone]
       patient.date_of_birth = params[:dob]
       patient.healthcare_coverage = params[:healthcare_coverage]
-      a.date_of_appointment = params[:date_of_appointment]
+      patient.save
+      a.date_of_appointment = params[:date_of_appointment] if params[:date_of_appointment]
       a.reason_for_visit = params[:reason_for_visit]
       a.status = "Edit"
       a.save
@@ -185,7 +186,7 @@ module Api
       # logger.debug("BEFORE NOTIFICATION RULE*******************#{status}")
 
       td_hrs = params["td_hrs"]
-      notification_details = selected_rules(params["appointment_id"] ,td_hrs)
+      notification_details = NotificationRule.selected_rules(params["appointment_id"] ,td_hrs)
 
       # NotificationRule.create(appointment_status: "New", time_difference: 48, greater: false, subject: "some subject for PCP", body: "Some message for PCP", client_application_id: c, user_type: "pcp" )
       # notification_response = Hash.new
@@ -217,13 +218,26 @@ module Api
       render :json => {status: :ok, patients_details: patients_details }
     end
 
+    def patient_details
+      patient = Patient.find(params[:patient_id])
+      patients_details = {first_name: patient.first_name, last_name: patient.last_name,
+                          ph_number: patient.patient_phone, date_of_birth: patient.date_of_birth,
+                          patient_email: patient.patient_email, patient_zipcode: patient.patient_zipcode,
+                          healthcare_coverage: patient.healthcare_coverage, patient_coverage_id: patient.patient_coverage_id,
+                          mode_of_contact: patient.mode_of_contact}
+
+      render :json => {status: :ok, patients_details: patients_details }
+
+
+    end
+
     def patient_appointments
       p = Patient.find(params[:patient_id])
       appointments = p.appointments.order(created_at: :desc).limit(10)
       appointments_array = Array.new
 
       patient_name = p.first_name+" "+p.last_name
-      
+
       appointments.each do |a|
         logger.debug("the APPOINTMENR IS : #{a.id.inspect} ******************************")
         patient = a.patient
@@ -240,10 +254,9 @@ module Api
         appointments_array.push(details_array)
         logger.debug("AFTER THE PUSH**********")
       end
-
       render :json => {status: :ok, patient_name: patient_name ,details_array: appointments_array }
-
     end
+
 
   end
 end
