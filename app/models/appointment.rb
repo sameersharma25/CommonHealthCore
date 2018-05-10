@@ -17,6 +17,7 @@ class Appointment
   belongs_to :client_application
   belongs_to :patient
   belongs_to :user
+  has_many :notifications
 
 
 
