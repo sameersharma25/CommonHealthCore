@@ -148,6 +148,7 @@ module Api
       render :json => {status: :ok, appointment_hash: { first_name: patient.first_name, last_name: patient.last_name,
                                                         patient_phone_number: patient.patient_phone,
                                                         patient_email: patient.patient_email,
+                                                        mode_of_contact: patient.mode_of_contact,
                                                         patient_coverage: patient.patient_coverage_id,
                                                         appointment_date: appointment.date_of_appointment,
                                                         reason_for_visit: appointment.reason_for_visit,
@@ -166,6 +167,7 @@ module Api
       patient.patient_phone = params[:patient_phone]
       patient.date_of_birth = params[:dob]
       patient.healthcare_coverage = params[:healthcare_coverage]
+      patient.mode_of_contact = params[:mode_of_contact]
       patient.save
       a.date_of_appointment = params[:date_of_appointment] if params[:date_of_appointment]
       a.reason_for_visit = params[:reason_for_visit]
@@ -185,9 +187,15 @@ module Api
       # cc_email = User.find(a.cc_id).email
       # logger.debug("BEFORE NOTIFICATION RULE*******************#{status}")
 
+
       td_hrs = params["td_hrs"]
       notification_details = NotificationRule.selected_rules(params["appointment_id"] ,td_hrs)
 
+      n = Notification.new
+      n.message = notification_details
+      n.active = true
+      n.appointment_id = params["appointment_id"]
+      n.save
       # NotificationRule.create(appointment_status: "New", time_difference: 48, greater: false, subject: "some subject for PCP", body: "Some message for PCP", client_application_id: c, user_type: "pcp" )
       # notification_response = Hash.new
 
@@ -203,19 +211,30 @@ module Api
     def patients_list
       user = User.find_by(email: params[:email])
       c = user.client_application_id
-      patients = Patient.where(client_application_id: c)
+      patients = Patient.where(client_application_id: c).order(first_name: :asc)
       patients_details = Array.new
-
+      # active_notification = false
+      active_notification_array = []
       patients.each do |p|
         patient_id = p.id.to_s
         first_name = p.first_name
         last_name = p.last_name
         ph_number = p.patient_phone
-        patient_detail = {patient_id: patient_id, first_name: first_name, last_name: last_name, ph_number: ph_number }
+        active_notification = false
+        p.appointments.each do |a|
+          a.notifications.each do |n|
+            if n.active == true
+              active_notification = true
+            end
+          end
+        end
+        active_notification_array.push(active_notification)
+        patient_detail = {patient_id: patient_id, first_name: first_name, last_name: last_name,
+                          ph_number: ph_number, active_notification: active_notification }
         patients_details.push(patient_detail)
       end
-
-      render :json => {status: :ok, patients_details: patients_details }
+      active_notification_array_count = active_notification_array.count(true)
+      render :json => {status: :ok, patients_details: patients_details , active_notifications_count: active_notification_array_count}
     end
 
     def patient_details
@@ -227,14 +246,19 @@ module Api
                           mode_of_contact: patient.mode_of_contact}
 
       render :json => {status: :ok, patients_details: patients_details }
-
-
     end
 
     def patient_appointments
+      user = User.find_by(email:params[:email])
+      if user.cc == true
+        user_type = "cc"
+      elsif user.pcp == true
+        user_type = "pcp"
+      end
       p = Patient.find(params[:patient_id])
       appointments = p.appointments.order(created_at: :desc).limit(10)
       appointments_array = Array.new
+
 
       patient_name = p.first_name+" "+p.last_name
 
@@ -248,15 +272,32 @@ module Api
         referred_by = a.user.email
         reason_for_visit = a.reason_for_visit
         date_of_appointment = a.date_of_appointment
+        notification_data = [ ]
+        logger.debug("the user type is : #{user_type}")
+        if a.notifications.where(active: true)
+          a.notifications.where(active: true).each do |n|
+            logger.debug("the notification is #{n.inspect}**********")
+            notification_id = n.id.to_s
+            notification_body = n.message[user_type]["body"]
+            notification_data.push(notification_id: notification_id, notification_body: notification_body )
+          end
+        end
+
+
+
         details_array = {appointment_id: appointment_id, patient_name: patient_name,
                          patient_dob: patient_dob, appointment_status: appointment_status,
-                         referred_by: referred_by, rov: reason_for_visit, date_of_appointment: date_of_appointment }
+                         referred_by: referred_by, rov: reason_for_visit, date_of_appointment: date_of_appointment,
+                         notification_data: notification_data}
         appointments_array.push(details_array)
         logger.debug("AFTER THE PUSH**********")
       end
       render :json => {status: :ok, patient_name: patient_name ,details_array: appointments_array }
     end
 
+    def update_notifications
+
+    end
 
   end
 end

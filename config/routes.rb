@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :notifications
   resources :notification_rules
   resources :appointments
   resources :patients
@@ -36,6 +37,8 @@ Rails.application.routes.draw do
     post 'patients_list', to: "users#patients_list"
     post 'patient_details', to: "users#patient_details"
     post 'patient_appointments', to: "users#patient_appointments"
+
+    post 'update_notifications', to: "users#update_notifications"
     resource :sessions, only: [:create, :destroy]
   end
   # patch "update" => "users#update", as: :user_update
