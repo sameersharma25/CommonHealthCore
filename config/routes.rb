@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     post 'patient_appointments', to: "users#patient_appointments"
 
     post 'update_patient', to: "patients#update_patient"
-
+    post 'create_patient', to: "patients#create_patient"
     post 'crete_appointment_for_patient', to: "patients#crete_appointment_for_patient"
     post 'update_notifications', to: "users#update_notifications"
     resource :sessions, only: [:create, :destroy]

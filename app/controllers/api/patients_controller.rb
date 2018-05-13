@@ -49,7 +49,23 @@ module Api
     end
 
     def create_patient
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
 
+      patient = Patient.new
+      patient.client_application_id = client_application
+      patient.first_name = params[:first_name] if params[:first_name]
+      patient.last_name = params[:last_name] if params[:last_name]
+      patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
+      patient.patient_email = params[:patient_email] if params[:patient_email]
+      patient.patient_phone = params[:patient_phone] if params[:patient_phone]
+      patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
+      patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
+      patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
+      patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
+      if patient.save
+        render :json=> {status: :ok, message: "Patient Created Successfully"}
+      end
     end
 
 
