@@ -220,6 +220,7 @@ module Api
         first_name = p.first_name
         last_name = p.last_name
         ph_number = p.patient_phone
+        p_status = p.patient_status
         active_notification = false
         p.appointments.each do |a|
           a.notifications.each do |n|
@@ -230,7 +231,7 @@ module Api
         end
         active_notification_array.push(active_notification)
         patient_detail = {patient_id: patient_id, first_name: first_name, last_name: last_name,
-                          ph_number: ph_number, active_notification: active_notification }
+                          ph_number: ph_number, active_notification: active_notification, p_status: p_status }
         patients_details.push(patient_detail)
       end
       active_notification_array_count = active_notification_array.count(true)
@@ -296,6 +297,28 @@ module Api
     end
 
     def update_notifications
+
+    end
+
+
+    def update_patient
+      patient = Patient.find(params[:patient_id])
+      patient.first_name = params[:first_name] if params[:first_name]
+      patient.last_name = params[:last_name] if params[:last_name]
+      patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
+      patient.patient_email = params[:patient_email] if params[:patient_email]
+      patient.patient_phone = params[:patient_phone] if params[:patient_phone]
+      patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
+      patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
+      patient.mode_of_contact = params[:mode_of_contac] if params[:mode_of_contac]
+      patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
+      patient.save
+
+      render :json => {status: :ok, message: "Patient Details have been updated" }
+    end
+
+    def crete_appointment_for_patient
+      patient = Patient.find(params[:patient_id])
 
     end
 
