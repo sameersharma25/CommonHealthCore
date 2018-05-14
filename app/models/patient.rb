@@ -11,7 +11,38 @@ class Patient
   field :patient_address, type: String
   field :mode_of_contact, type: String
   field :patient_zipcode, type: String
+  field :patient_status, type: String
 
   belongs_to :client_application
   has_many :appointments
+
+  def self.update_patient_status
+
+    ap = Patient.all
+
+    ap.each do |p|
+      appointment_count = p.appointments.count
+      if appointment_count == 0
+        p.patient_status = "New"
+      elsif appointment_count == 1
+        if p.appointments[0][:status] == "Completed"
+          p.patient_status = "Treated"
+        elsif p.appointments[0][:status] == "Scheduled"
+          p.patient_status = "Scheduled"
+        else
+          p.patient_status = "Contacted"
+        end
+      elsif appointment_count > 1
+        if p.appointments.collect{|a| a.status}.uniq.include?("Schedule")
+          p.patient_status = "Scheduled"
+        elsif p.appointments.collect{|a| a.status}.uniq.include?("New") || p.appointments.collect{|a| a.status}.uniq.include?("Edit")
+          p.patient_status = "Contacted"
+        else
+          p.patient_status = "Treated"
+        end
+      end
+      p.save
+    end
+  end
+
 end
