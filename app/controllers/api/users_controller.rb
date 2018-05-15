@@ -191,11 +191,13 @@ module Api
       td_hrs = params["td_hrs"]
       notification_details = NotificationRule.selected_rules(params["appointment_id"] ,td_hrs)
 
-      n = Notification.new
-      n.message = notification_details
-      n.active = true
-      n.appointment_id = params["appointment_id"]
-      n.save
+      if !notification_details.blank?
+        n = Notification.new
+        n.message = notification_details
+        n.active = true
+        n.appointment_id = params["appointment_id"]
+        n.save
+      end
       # NotificationRule.create(appointment_status: "New", time_difference: 48, greater: false, subject: "some subject for PCP", body: "Some message for PCP", client_application_id: c, user_type: "pcp" )
       # notification_response = Hash.new
 

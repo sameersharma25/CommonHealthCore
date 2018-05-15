@@ -6,7 +6,7 @@ class Appointment
   include Mongoid::Document
   include Mongoid::Timestamps
   field :date_of_appointment, type: String
-  field :reason_for_visit, type: String
+  field :reason_for_visit, type: Array, default: []
   field :status, type: String
   field :service_provider_id, type: Integer
   field :cc_id, type: String
@@ -36,11 +36,11 @@ class Appointment
     uri = URI("https://770xc1lwwg.execute-api.us-east-1.amazonaws.com/alpha/execution")
 
     header = {'Content-Type' => 'text/json'}
-    user = {user: {
-        name: 'Bob',
-        email: 'bob@example.com'
-    }
-    }
+    # user = {user: {
+    #     name: 'Bob',
+    #     email: 'bob@example.com'
+    # }
+    # }
 
     # Create the HTTP objects
     http = Net::HTTP.new(uri.host, uri.port)
@@ -56,4 +56,5 @@ class Appointment
 
 
   end
+
 end

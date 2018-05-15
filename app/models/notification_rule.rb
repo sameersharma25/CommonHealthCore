@@ -28,7 +28,7 @@ class NotificationRule
     pcp_email = "pcp@test.com"
 
     #puts("the notifications are: #{NotificationRule.where(:time_difference.lt => td_hrs, :appointment_status => "New" ).select{"time_difference"}}")
-    notification_array= NotificationRule.where(:time_difference.lt => td_hrs, :appointment_status => "New" ).collect{|nr| nr.time_difference}
+    notification_array= NotificationRule.where(:time_difference.lt => td_hrs, :appointment_status => status ).collect{|nr| nr.time_difference}
     maximum_if_time_difference = notification_array.max
     relevant_notifications = NotificationRule.where(:appointment_status => status, :time_difference => maximum_if_time_difference )
 
