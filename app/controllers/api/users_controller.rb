@@ -279,6 +279,7 @@ module Api
         referred_by = a.user.email
         reason_for_visit = a.reason_for_visit
         date_of_appointment = a.date_of_appointment
+        sp_id = a.service_provider_id
         notification_data = [ ]
         logger.debug("the user type is : #{user_type}")
         if a.notifications.where(active: true)
@@ -295,7 +296,7 @@ module Api
         details_array = {appointment_id: appointment_id, patient_name: patient_name,
                          patient_dob: patient_dob, appointment_status: appointment_status,
                          referred_by: referred_by, rov: reason_for_visit, date_of_appointment: date_of_appointment,
-                         notification_data: notification_data}
+                         notification_data: notification_data, sp_id: sp_id }
         appointments_array.push(details_array)
         logger.debug("AFTER THE PUSH**********")
       end
