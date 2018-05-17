@@ -15,6 +15,9 @@ module Api
       patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
       patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
+      patient.ethnicity = params[:ethnicity] if params[:ethnicity]
+      patient.gender = params[:gender] if params[:gender]
+      patient.patient_address = params[:patient_address] if params[:patient_address]
       patient.save
 
       patient_name = patient.first_name+" "+ patient.last_name
@@ -63,6 +66,8 @@ module Api
       patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
       patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
+      patient.ethnicity = params[:ethnicity] if params[:ethnicity]
+      patient.gender = params[:gender] if params[:gender]
       patient.patient_status = "New"
       if patient.save
         render :json=> {status: :ok, message: "Patient Created Successfully"}

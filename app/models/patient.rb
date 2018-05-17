@@ -12,6 +12,9 @@ class Patient
   field :mode_of_contact, type: String
   field :patient_zipcode, type: String
   field :patient_status, type: String
+  field :gender, type: String
+  field :race, type: String
+  field :ethnicity, type: String
 
   belongs_to :client_application
   has_many :appointments

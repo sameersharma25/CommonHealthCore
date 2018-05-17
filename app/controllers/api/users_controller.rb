@@ -169,8 +169,11 @@ module Api
       patient.healthcare_coverage = params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact]
       patient.save
-      a.date_of_appointment = params[:date_of_appointment] if params[:date_of_appointment]
-      a.reason_for_visit = params[:reason_for_visit]
+      logger.debug("************THE converted the date format is : #{params[:date_of_appointment].to_date.strftime('%m/%d/%Y')}")
+      appointment_date = params[:date_of_appointment].to_date.strftime('%m/%d/%Y')
+      a.date_of_appointment = appointment_date if params[:date_of_appointment]
+      a.service_provider_id = params[:sp_id] if params[:sp_id]
+      # a.reason_for_visit = params[:reason_for_visit]
       a.status = "Edit"
       a.save
       render :json=> {status: :ok, message: "Appointment Updated"}
@@ -246,7 +249,8 @@ module Api
                           ph_number: patient.patient_phone, date_of_birth: patient.date_of_birth,
                           patient_email: patient.patient_email, patient_zipcode: patient.patient_zipcode,
                           healthcare_coverage: patient.healthcare_coverage, patient_coverage_id: patient.patient_coverage_id,
-                          mode_of_contact: patient.mode_of_contact}
+                          mode_of_contact: patient.mode_of_contact, ethnicity: patient.ethnicity, gender: patient.gender,
+                          patient_address: patient.patient_address }
 
       render :json => {status: :ok, patients_details: patients_details }
     end
