@@ -162,18 +162,18 @@ module Api
       a = Appointment.find(params[:appointment_id])
       user = User.find_by(email: params[:email])
       patient = a.patient
-      patient.first_name = params[:first_name]
-      patient.last_name = params[:last_name] if !params[:last_name].nil?
-      patient.patient_phone = params[:patient_phone]
-      patient.date_of_birth = params[:dob]
-      patient.healthcare_coverage = params[:healthcare_coverage]
-      patient.mode_of_contact = params[:mode_of_contact]
-      patient.save
+      # patient.first_name = params[:first_name] if params[:first_name]
+      # patient.last_name = params[:last_name] if !params[:last_name].nil?
+      # patient.patient_phone = params[:patient_phone] if params[:patient_phone]
+      # patient.date_of_birth = params[:dob] if params[:dob]
+      # patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
+      # patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
+      # patient.save
       logger.debug("************THE converted the date format is : #{params[:date_of_appointment].to_date.strftime('%m/%d/%Y')}")
       appointment_date = params[:date_of_appointment].to_date.strftime('%m/%d/%Y')
       a.date_of_appointment = appointment_date if params[:date_of_appointment]
       a.service_provider_id = params[:sp_id] if params[:sp_id]
-      # a.reason_for_visit = params[:reason_for_visit]
+      a.reason_for_visit = params[:reason_for_visit]
       a.status = "Edit"
       a.save
       render :json=> {status: :ok, message: "Appointment Updated"}
@@ -193,7 +193,7 @@ module Api
 
       td_hrs = params["td_hrs"]
       notification_details = NotificationRule.selected_rules(params["appointment_id"] ,td_hrs)
-
+      logger.debug("give_appointment_details_for_notification ********* #{notification_details}")
       if !notification_details.blank?
         n = Notification.new
         n.message = notification_details
