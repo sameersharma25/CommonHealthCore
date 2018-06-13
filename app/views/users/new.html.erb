@@ -1,2 +1,17 @@
 <h1>Users#new</h1>
 <p>Find me in app/views/users/new.html.erb</p>
+
+<%= form_for @user , url: create_user_path, method: :post do |f |%>
+
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name, id: :name %>
+    </div>
+
+    <div class="field">
+      <%= f.label :email %>
+      <%= f.text_field :email, id: :email %>
+    </div>
+
+    <%= f.submit 'Create User' %>
+<%end%>

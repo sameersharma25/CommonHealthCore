@@ -18,7 +18,16 @@
       <%= f.text_field :application_url, id: :application_url %>
     </div>
 
-    
+    <h3>Users</h3>
+    <div id='users'>
+      <%= f.fields_for :users do |user| %>
+          <%= render 'user_fields', :f => user %>
+      <% end %>
+      <div class='links'>
+        <%= link_to_add_association 'add user', f, :users %>
+      </div>
+    </div>
+
     <%= f.submit 'Save' %>
 
-<%end %>
+<% end %>

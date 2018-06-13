@@ -4,7 +4,9 @@ class NotificationRulesController < ApplicationController
   # GET /notification_rules
   # GET /notification_rules.json
   def index
-    @notification_rules = NotificationRule.all
+    client_application = current_user.client_application
+    @notification_rules = client_application.notification_rules
+    @notification_rule = NotificationRule.new
   end
 
   # GET /notification_rules/1
@@ -24,15 +26,24 @@ class NotificationRulesController < ApplicationController
   # POST /notification_rules
   # POST /notification_rules.json
   def create
+    client_application = current_user.client_application
     @notification_rule = NotificationRule.new(notification_rule_params)
-
-    respond_to do |format|
-      if @notification_rule.save
-        format.html { redirect_to @notification_rule, notice: 'Notification rule was successfully created.' }
-        format.json { render :show, status: :created, location: @notification_rule }
-      else
-        format.html { render :new }
-        format.json { render json: @notification_rule.errors, status: :unprocessable_entity }
+    @notification_rule.client_application = client_application
+    # respond_to do |format|
+    #   if @notification_rule.save
+    #     @notification_rules = client_application.notification_rules
+    #     # format.html #{ redirect_to @notification_rule, notice: 'Notification rule was successfully created.' }
+    #     format.js
+    #     # format.json { render :show, status: :created, location: @notification_rule }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @notification_rule.errors, status: :unprocessable_entity }
+    #   end
+    # end
+    if @notification_rule.save
+      @notification_rules = client_application.notification_rules
+      respond_to do |format|
+        format.js
       end
     end
   end
@@ -69,6 +80,7 @@ class NotificationRulesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def notification_rule_params
-      params.fetch(:notification_rule, {})
+      # params.fetch(:notification_rule, {})
+      params.require(:notification_rule).permit(:appointment_status, :time_difference, :subject, :body, :user_type, :notification_type)
     end
 end

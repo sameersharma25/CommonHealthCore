@@ -54,6 +54,6 @@ class User
   field :pcp, type: Boolean
   field :service_provider_id, type: Integer
 
-  belongs_to :client_application
+  belongs_to :client_application, inverse_of: :users
   has_many :appointments
 end

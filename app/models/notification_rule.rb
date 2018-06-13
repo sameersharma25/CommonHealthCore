@@ -11,7 +11,7 @@ class NotificationRule
   field :notification_type, type: String
 
 
-  belongs_to :client_application
+  belongs_to :client_application, inverse_of: :notification_rules
 
 
 

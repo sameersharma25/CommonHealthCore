@@ -13,6 +13,8 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require rails-ujs
+//= require dataTables/jquery.dataTables
+//= require jquery.turbolinks
 //= require turbolinks
 //= require cocoon
 //= require_tree .

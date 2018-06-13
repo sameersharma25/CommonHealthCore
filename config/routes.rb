@@ -22,6 +22,12 @@ Rails.application.routes.draw do
 
   get "edit" => "users#edit", as: :user_edit
   get "show" => "users#show", as: :user_show
+  post "update" => "users#update", as: :user_update
+  get "new_user" => "users#new", as: :new_user
+  post "create_user" => "users#create", as: :create_user
+
+  get "/all_details", to: "client_applications#all_details"
+  get "/save_all_details", to: "client_applications#save_all_details"
 
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]

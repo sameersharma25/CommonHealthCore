@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :destroy]
 
   # GET /users
   # GET /users.json
@@ -20,31 +20,44 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    @user = @user
   end
 
   # POST /users
   # POST /users.json
   def create
     @user = User.new(user_params)
-
+    client_application = current_user.client_application.id
+    # @user.client_application = client_application
+    logger.debug("USER IS : #{@user.inspect}")
+    # @user = User.invite!(email: params[:user][:email], name: params[:user][:name])
+    send_invite_to_user(params[:user][:email], client_application, params[:user][:name] )
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
+        logger.debug("user is SAVED")
+        format.html { redirect_to root_path, notice: 'User was successfully created.' }
+        # format.json { render :show, status: :created, location: @user }
       else
+        logger.debug("user is NOT SAVED")
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
 
+  def send_invite_to_user(email, client_application,name)
+    @user = User.invite!(email: email, name: name)
+    @user.update(client_application_id: client_application , application_representative: true)
+
+  end
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    @user = User.find_by(email: params[:user][:email])
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
+        format.html { redirect_to root_path, notice: 'User was successfully updated.' }
+        # format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }

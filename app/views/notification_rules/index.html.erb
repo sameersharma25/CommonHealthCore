@@ -1,25 +1,30 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Notification Rules</h1>
+<%= form_for @notification_rule,url: notification_rules_path, method: :post,:remote => true do |f| %>
+    <div class="field row">
+      <%= f.text_field :appointment_status, :placeholder => "Appointment Status" %>
+      <%= f.text_field :time_difference, :placeholder => "Time Difference" %>
+      <%= f.text_field :subject, :placeholder => "Subject for email" %>
+      <%= f.text_field :body, :placeholder => "Content" %>
 
+      <%= f.submit 'Create' %>
+    </div>
+<% end %>
+
+
+<h1>Notification Rules</h1>
 <table>
   <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Status</th>
+    <th>Time</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
-
-  <tbody>
-    <% @notification_rules.each do |notification_rule| %>
-      <tr>
-        <td><%= link_to 'Show', notification_rule %></td>
-        <td><%= link_to 'Edit', edit_notification_rule_path(notification_rule) %></td>
-        <td><%= link_to 'Destroy', notification_rule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
+  <tbody id="notification_rules_table">
+    <%= render "notification_rules/notification_rules_table"%>
   </tbody>
 </table>
-
 <br>
 
-<%= link_to 'New Notification Rule', new_notification_rule_path %>
+<%#= link_to 'New Notification Rule', new_notification_rule_path %>

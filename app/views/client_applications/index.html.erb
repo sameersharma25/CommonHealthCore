@@ -1,5 +1,11 @@
 <p id="notice"><%= notice %></p>
+<% if @client_application.users.count == 0 %>
+    <div style="color: red"><%= link_to "You donn't have any users. Please click here to create users", new_user_path%></div>
+<%end%>
 
+<% if @notification_rules.count == 0 %>
+    <div><%= link_to "You donn't have any Notification Rules. Please click here to create rules", notification_rules_path, :style => "color: red" %></div>
+<%end %>
 <h1>Client Applications</h1>
 
 <table class="table table-responsive table-bordered user-display">
@@ -28,6 +34,7 @@
       <tr>
         <th>NAME</th>
         <th>EMAIL</th>
+        <th>Role</th>
         <th colspan="3"></th>
       </tr>
       </thead>
@@ -37,15 +44,43 @@
           <tr class="">
             <td><%= u.name %></td>
             <td><%= u.email %></td>
+            <%if u.cc == true%>
+              <td>Care Coordinator</td>
+            <%elsif u.pcp == true %>
+                <td>Care Provider</td>
+            <%else%>
+                <td>---</td>
+            <%end%>
             <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
             <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
-            <td><%#= link_to 'Destroy', client_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <!--<td><%#= link_to 'Destroy', client_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
           </tr>
       <% end %>
       </tbody>
     </table>
 <%end%>
 
+<h1>Notification Rules Table</h1>
+<% if @notification_rules.count > 0 %>
+    <table id="notification_rules" class="table table-responsive table-bordered user-display">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Time</th>
+          <th>Subject</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%@notification_rules.each do |nr| %>
+          <tr>
+            <td><%= nr.appointment_status%></td>
+            <td><%= nr.time_difference%></td>
+            <td><%= nr.subject%></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+<%end%>
 
 <% if current_user.admin? %>
   <h1>Registration Requests</h1>
@@ -71,4 +106,10 @@
 <% end %>
 
 
-<%= link_to 'New Client Application', new_client_application_path if current_user.admin? %>
+<%= link_to 'New Client Application', new_client_application_path if current_user.admin? %><br>
+
+<%= link_to "Application Details", "/all_details"%><br>
+
+<%= link_to "Add User", new_user_path%><br>
+
+<%= link_to "Create Notification Rule", notification_rules_path%>

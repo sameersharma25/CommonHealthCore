@@ -1,0 +1,11 @@
+<div class='nested-fields'>
+  <div class="field row">
+    <%= f.text_field :appointment_status, :placeholder => "Appointment Status" %>
+    <%= f.text_field :time_difference, :placeholder => "Time Difference" %>
+    <%= f.text_field :subject, :placeholder => "Subject for email" %>
+    <%= f.text_field :body, :placeholder => "Content" %>
+
+    <%= link_to_remove_association "remove rule", f %>
+  </div>
+
+</div>

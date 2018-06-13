@@ -8,10 +8,11 @@ class ClientApplicationsController < ApplicationController
     user = current_user
     @client_application = current_user.client_application
     @registration_request = RegistrationRequest.all
+    @notification_rules = @client_application.notification_rules
     logger.debug("the session count is *********************: #{user.sign_in_count}")
     # if user.sign_in_count.to_s == "1"
     #   logger.debug("REDIRECTING TO THE NEW STEPS****************")
-    #   # redirect_to after_signup_path(:update_details_and_add_users)
+    #   redirect_to after_signup_path(:update_details_and_add_users)
     # end
   end
 
@@ -80,6 +81,20 @@ class ClientApplicationsController < ApplicationController
     end
   end
 
+  def all_details
+    # @client_application = @client_application
+    user = current_user
+    @client_application = current_user.client_application
+  end
+
+  def save_all_details
+
+    @client_application = current_user.client_application
+    @client_application.update(client_application_params)
+    redirect_to root_path
+
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_client_application
@@ -89,6 +104,7 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url, users_attributes: [:id,:name, :email, :_destroy])
+    params.require(:client_application).permit(:name, :application_url,:service_provider_url, users_attributes: [:name, :email, :_destroy],
+    notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end

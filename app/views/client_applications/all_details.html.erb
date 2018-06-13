@@ -1,0 +1,44 @@
+<h1>Application Details</h1>
+
+<%= form_for @client_application, url: save_all_details_path, method: :get do |f| %>
+
+
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name, id: :client_name %>
+    </div>
+
+    <div class="field">
+      <%= f.label :application_url %>
+      <%= f.text_field :application_url, id: :application_url %>
+    </div>
+
+    <div class="field">
+      <%= f.label :service_provider_url %>
+      <%= f.text_field :service_provider_url, id: :service_provider_url %>
+    </div>
+    <%#= f.hidden_field :email,:value => @user.email, readonly: true %>
+    <!--<h3>Users</h3>-->
+    <!--<div id='users'>-->
+      <!--<%#= f.fields_for :users do |user| %>-->
+      <!--<%#= render 'user_fields', :f => user %>-->
+      <!--<%# end %>-->
+      <!--<div class='links'>-->
+        <!--<%#= link_to_add_association 'add user', f, :users %>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<h3>Notificatoin Rules</h3>-->
+    <!--<div id='notification_rules'>-->
+      <!--<%#= f.fields_for :notification_rules do |nr| %>-->
+      <!--<%#= render 'notification_rule_fields', :f => nr %>-->
+      <!--<%# end %>-->
+      <!--<div class='links'>-->
+        <!--<%#= link_to_add_association 'add rule', f, :notification_rules %>-->
+      <!--</div>-->
+    <!--</div>-->
+
+
+    <%= f.submit 'Save' %>
+
+<%end %>

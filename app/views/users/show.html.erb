@@ -1,3 +1,8 @@
 Name: <%=@user.name %><br>
 
-Email: <%=@user.email%>
+Email: <%=@user.email%><br>
+<%if @user.cc == true%>
+  User Role: <%= "Care Coordinator"%>
+<%elsif @user.pcp == true%>
+  User Role: <%= "Primary Care Provider"%>
+<%end%>
