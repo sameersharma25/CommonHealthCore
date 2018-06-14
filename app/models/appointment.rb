@@ -12,6 +12,7 @@ class Appointment
   field :cc_id, type: String
 
   field :last_notified, type: String
+  field :notes, type: String
 
 
   belongs_to :client_application
