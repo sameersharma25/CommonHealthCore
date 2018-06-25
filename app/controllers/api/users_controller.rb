@@ -149,6 +149,7 @@ module Api
                                                         patient_phone_number: patient.patient_phone,
                                                         patient_email: patient.patient_email,
 
+                                                        date_of_birth: patient.date_of_birth,
                                                         patient_zip: patient.patient_zipcode,
                                                         patient_address: patient.patient_address,
                                                         gender: patient.gender,
