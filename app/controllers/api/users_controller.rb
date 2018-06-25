@@ -148,6 +148,13 @@ module Api
       render :json => {status: :ok, appointment_hash: { first_name: patient.first_name, last_name: patient.last_name,
                                                         patient_phone_number: patient.patient_phone,
                                                         patient_email: patient.patient_email,
+
+                                                        patient_zip: patient.patient_zipcode,
+                                                        patient_address: patient.patient_address,
+                                                        gender: patient.gender,
+                                                        ethnicity: patient.ethnicity,
+                                                        notes: appointment.notes,
+
                                                         mode_of_contact: patient.mode_of_contact,
                                                         patient_coverage: patient.patient_coverage_id,
                                                         appointment_date: appointment.date_of_appointment,
@@ -217,7 +224,15 @@ module Api
     def patients_list
       user = User.find_by(email: params[:email])
       c = user.client_application_id
-      patients = Patient.where(client_application_id: c).order(first_name: :asc)
+      if params[:search]
+        # patients = Patient.where("last_name LIKE ?", "%#{params[:search]}%")
+        # patients = Patient.where(client_application_id: c,:last_name => Regexp.new(params[:search], true),:first_name_name => Regexp.new(params[:search], true) ).order(first_name: :asc)
+        patients = Patient.where(client_application_id: c).or({:last_name => Regexp.new(params[:search], true)},{:first_name => Regexp.new(params[:search], true)}).order(first_name: :asc)
+        # patients = Patient.where(client_application_id: c).or({:first_name => Regexp.new(params[:search], true)},{:last_name => Regexp.new(params[:search], true)}).order(first_name: :asc)
+      else
+        patients = Patient.where(client_application_id: c).order(first_name: :asc)
+      end
+
       patients_details = Array.new
       # active_notification = false
       active_notification_array = []
