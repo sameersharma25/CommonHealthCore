@@ -177,13 +177,13 @@ module Api
       # patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       # patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
       # patient.save
-      logger.debug("************THE converted the date format is : #{params[:date_of_appointment].to_date.strftime('%m/%d/%Y')}")
-      appointment_date = params[:date_of_appointment].to_date.strftime('%m/%d/%Y')
+      # logger.debug("************THE converted the date format is : #{params[:date_of_appointment].to_date.strftime('%m/%d/%Y')}")
+      appointment_date = params[:date_of_appointment].to_date.strftime('%m/%d/%Y') if params[:date_of_appointment]
       a.date_of_appointment = appointment_date if params[:date_of_appointment]
       a.service_provider_id = params[:sp_id] if params[:sp_id]
-      a.reason_for_visit = params[:reason_for_visit]
+      a.reason_for_visit = params[:reason_for_visit] if params[:reason_for_visit]
       a.status = "Edit"
-      a.notes = params[:note]
+      a.notes = params[:note] if params[:note]
       a.save
       render :json=> {status: :ok, message: "Appointment Updated"}
     end
@@ -225,7 +225,7 @@ module Api
     def patients_list
       user = User.find_by(email: params[:email])
       c = user.client_application_id
-      if params[:search]
+      if params[:search] and !params[:search].blank?
         # patients = Patient.where("last_name LIKE ?", "%#{params[:search]}%")
         # patients = Patient.where(client_application_id: c,:last_name => Regexp.new(params[:search], true),:first_name_name => Regexp.new(params[:search], true) ).order(first_name: :asc)
         patients = Patient.where(client_application_id: c).or({:last_name => Regexp.new(params[:search], true)},{:first_name => Regexp.new(params[:search], true)}).order(first_name: :asc)
