@@ -46,6 +46,7 @@ module Api
       a.client_application_id = client_application
       a.patient_id = patient
       a.cc_id = cc_id
+      a.notes = params[:note] if params[:note]
       if a.save
         render :json=> {status: :ok, message: "Appointment Created for #{patient_name}"}
       end
