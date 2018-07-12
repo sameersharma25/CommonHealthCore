@@ -262,12 +262,15 @@ module Api
 
     def patient_details
       patient = Patient.find(params[:patient_id])
+      patient_coords = Geocoder.search(patient.patient_zipcode)
+      patient_lat = patient_coords.first.coordinates[0]
+      patient_lng = patient_coords.first.coordinates[1]
       patients_details = {first_name: patient.first_name, last_name: patient.last_name,
                           ph_number: patient.patient_phone, date_of_birth: patient.date_of_birth,
                           patient_email: patient.patient_email, patient_zipcode: patient.patient_zipcode,
                           healthcare_coverage: patient.healthcare_coverage, patient_coverage_id: patient.patient_coverage_id,
                           mode_of_contact: patient.mode_of_contact, ethnicity: patient.ethnicity, gender: patient.gender,
-                          patient_address: patient.patient_address }
+                          patient_address: patient.patient_address, patient_lat: patient_lat, patient_lng: patient_lng }
 
       render :json => {status: :ok, patients_details: patients_details }
     end

@@ -1,6 +1,9 @@
 class Patient
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Geocoder::Model::Mongoid
+  include Geocoder::Model::MongoMapper
+
   field :first_name, type: String
   field :last_name, type: String
   field :date_of_birth, type: String
@@ -18,6 +21,8 @@ class Patient
 
   belongs_to :client_application
   has_many :appointments
+
+  geocoded_by :patient_zipcode
 
   def self.update_patient_status
 
