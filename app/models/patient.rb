@@ -2,7 +2,7 @@ class Patient
   include Mongoid::Document
   include Mongoid::Timestamps
   include Geocoder::Model::Mongoid
-  include Geocoder::Model::MongoMapper
+  # include Geocoder::Model::MongoMapper
 
   field :first_name, type: String
   field :last_name, type: String
