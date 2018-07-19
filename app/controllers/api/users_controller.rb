@@ -262,10 +262,17 @@ module Api
 
     def patient_details
       patient = Patient.find(params[:patient_id])
-      patient_coords = Geocoder.search(patient.patient_zipcode)
-      # logger.debug("******the coordinates are : #{patient_coords.inspect}")
-      patient_lat = patient_coords.first.coordinates[0]
-      patient_lng = patient_coords.first.coordinates[1]
+      if patient.patient_zipcode?
+        patient_coords = Geocoder.search(patient.patient_zipcode)
+        # logger.debug("******the coordinates are : #{patient_coords.inspect}")
+        patient_lat = patient_coords.first.coordinates[0]
+        patient_lng = patient_coords.first.coordinates[1]
+      else
+        patient_coords = Geocoder.search("99203")
+        # logger.debug("******the coordinates are : #{patient_coords.inspect}")
+        patient_lat = patient_coords.first.coordinates[0]
+        patient_lng = patient_coords.first.coordinates[1]
+      end
       patients_details = {first_name: patient.first_name, last_name: patient.last_name,
                           ph_number: patient.patient_phone, date_of_birth: patient.date_of_birth,
                           patient_email: patient.patient_email, patient_zipcode: patient.patient_zipcode,
