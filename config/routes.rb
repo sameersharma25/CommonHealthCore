@@ -49,6 +49,9 @@ Rails.application.routes.draw do
     post 'crete_appointment_for_patient', to: "patients#crete_appointment_for_patient"
     post 'update_notifications', to: "users#update_notifications"
     resource :sessions, only: [:create, :destroy]
+    resource :invitations, only: [:update]
+    post 'user_accept_invitation', to: "users#set_password"
+    post "password", to: "invitations#password"
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

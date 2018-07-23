@@ -1,7 +1,7 @@
 module Api
   class UsersController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification]
+    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
 
     def get_all_users
       logger.debug("the user email you sent is : #{params[:email]}")
@@ -356,6 +356,34 @@ module Api
     def crete_appointment_for_patient
       patient = Patient.find(params[:patient_id])
 
+    end
+
+    def set_password
+      logger.debug("the parameters are : #{params.inspect}")
+      raw_invitation_token = update_resource_params[:invitation_token]
+      self.resource = accept_resource
+      invitation_accepted = resource.errors.empty?
+
+      yield resource if block_given?
+
+      if invitation_accepted
+        if Devise.allow_insecure_sign_in_after_accept
+          logger.debug("in the first if******")
+          flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
+          set_flash_message :notice, flash_message if is_flashing_format?
+          # sign_in(resource_name, resource)
+          # respond_with resource, :location => after_accept_path_for(resource)
+          redirect_to "http://localhost:4200"
+        else
+          logger.debug("in the first else******")
+          set_flash_message :notice, :updated_not_active if is_flashing_format?
+          respond_with resource, :location => new_session_path(resource_name)
+        end
+      else
+        logger.debug("in the second else******")
+        resource.invitation_token = raw_invitation_token
+        respond_with_navigational(resource){ render :edit }
+      end
     end
 
   end
