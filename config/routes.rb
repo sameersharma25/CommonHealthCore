@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :tasks
+  resources :referrals
   resources :notifications
   resources :notification_rules
   resources :appointments

@@ -53,4 +53,10 @@ class Patient
     end
   end
 
+  def self.entries_count
+    p = Patient.all.count
+    a = Appointment.all.count
+    puts("Patients Count: #{p} , Appointment Count: #{a}")
+  end
+
 end

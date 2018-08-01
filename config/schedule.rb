@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + "/environment")
 
 #set :output, "/home/chronstackuser/time_stack/log/cron_log.log"
+set :output, "/Users/harshavardhangandhari/RSI/chc/log/cron_log.log"
 
 set :environment, "development"
 
@@ -31,4 +32,9 @@ every 2.minutes do
   Rails.logger.debug "Sending Notifications****************"
   runner "Appointment.appointments_for_notification"
   #rake "some:great:rake:task"
+end
+
+every 1.minutes do
+  Rails.logger.debug("Counting Patients")
+  runner "Patient.entries_count"
 end
