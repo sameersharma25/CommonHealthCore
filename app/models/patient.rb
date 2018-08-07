@@ -21,7 +21,7 @@ class Patient
 
   belongs_to :client_application
   has_many :appointments
-
+  has_many :referrals
   geocoded_by :patient_zipcode
 
   def self.update_patient_status

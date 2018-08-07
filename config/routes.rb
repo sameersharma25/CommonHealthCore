@@ -54,6 +54,9 @@ Rails.application.routes.draw do
     resource :invitations, only: [:update]
     post 'user_accept_invitation', to: "users#set_password"
     post "password", to: "invitations#password"
+
+    post "rfl_create", to: "referrals#create_referral"#, :as => "rfl_create"
+
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
