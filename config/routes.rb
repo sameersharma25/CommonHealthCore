@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     post "password", to: "invitations#password"
 
     post "rfl_create", to: "referrals#create_referral"#, :as => "rfl_create"
+    post "rfl_list", to: "referrals#referral_list"
     post "tsk_list", to: "referrals#task_list"
     post "tsk_create", to: "referrals#create_task"
   end
