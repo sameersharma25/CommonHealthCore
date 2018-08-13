@@ -61,5 +61,22 @@ module Api
 
     end
 
+    def create_task
+      referral = Referral.find(params[:referral_id])
+      task = Task.new
+      task.referral_id = referral
+      task.task_type = params[:task_type] if params[:task_type]
+      task.task_status = params[:task_status] if params[:task_status]
+      task.task_owner = params[:task_owner] if params[:task_owner]
+      task.provider = params[:provider] if params[:provider]
+      task.task_deadline = params[:task_deadline] if params[:task_deadline]
+      task.task_description = params[:task_description] if params[:task_description]
+      if task.save
+        render :json=> {status: :ok, message: "Task Created"}
+      end
+
+
+    end
+
   end
 end
