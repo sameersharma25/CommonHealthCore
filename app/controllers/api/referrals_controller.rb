@@ -38,5 +38,28 @@ module Api
       end
     end
 
+    def task_list
+      # patient = Patient.find(params[:patient_id])
+      referral = Referral.find(params[:referral_id])
+      task_list = Array.new
+
+      referral.tasks.each do |t|
+        task_id = t.id.to_s
+        task_type = t.task_type
+        task_status = t.task_status
+        task_owner = t.task_owner
+        provider = t.provider
+        task_deadline = t.task_deadline
+        task_description = t.task_description
+        task_details = {task_id: task_id , task_type: task_type, task_status: task_status, task_owner: task_owner,
+                        provider: provider , task_deadline: task_deadline, task_description: task_description,
+                        }
+        task_list.push(task_details)
+      end
+
+      render :json => {status: :ok, task_list: task_list }
+
+    end
+
   end
 end

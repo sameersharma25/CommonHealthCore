@@ -56,7 +56,7 @@ Rails.application.routes.draw do
     post "password", to: "invitations#password"
 
     post "rfl_create", to: "referrals#create_referral"#, :as => "rfl_create"
-
+    post "tsk_list", to: "referrals#task_list"
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
