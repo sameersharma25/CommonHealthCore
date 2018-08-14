@@ -57,8 +57,11 @@ Rails.application.routes.draw do
 
     post "rfl_create", to: "referrals#create_referral"#, :as => "rfl_create"
     post "rfl_list", to: "referrals#referral_list"
+    post "rfl_update", to: "referrals#update_referral"
+
     post "tsk_list", to: "referrals#task_list"
     post "tsk_create", to: "referrals#create_task"
+    post "tsk_update", to: "referrals#update_task"
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

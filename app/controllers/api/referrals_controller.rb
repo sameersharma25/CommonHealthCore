@@ -57,6 +57,19 @@ module Api
       render :json => {status: :ok, referral_list: referral_list }
     end
 
+    def update_referral
+      referral = Referral.find(params[:referral_id])
+
+      referral.source = params[:source] if params[:source]
+      referral.referral_name = params[:referral_name] if params[:referral_name]
+      referral.referral_description = params[:referral_description] if params[:referral_description]
+      referral.urgency = params[:urgency] if params[:urgency]
+      referral.due_date = params[:due_date] if params[:due_date]
+      if referral.save
+        render :json=> {status: :ok, message: "Referral Updated"}
+      end
+    end
+
     def task_list
       # patient = Patient.find(params[:patient_id])
       referral = Referral.find(params[:referral_id])
@@ -95,6 +108,19 @@ module Api
       end
 
 
+    end
+
+    def update_task
+      task = Task.find(params[:task_id])
+      task.task_type = params[:task_type] if params[:task_type]
+      task.task_status = params[:task_status] if params[:task_status]
+      task.task_owner = params[:task_owner] if params[:task_owner]
+      task.provider = params[:provider] if params[:provider]
+      task.task_deadline = params[:task_deadline] if params[:task_deadline]
+      task.task_description = params[:task_description] if params[:task_description]
+      if task.save
+        render :json=> {status: :ok, message: "Task Updated"}
+      end
     end
 
   end
