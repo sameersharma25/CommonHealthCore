@@ -5,7 +5,7 @@ class Task
   field :task_status, type: String
   field :task_owner, type: String
   field :provider , type: String
-  field :task_deadline, type: DateTime
+  field :task_deadline, type: String
   field :task_description, type: String
 
 
