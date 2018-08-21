@@ -18,7 +18,6 @@ module Api
         user_derails = {name: uname, email: uemail, cc: ucc, pcp: upcp }
         users_details_array.push(user_derails)
       end
-
       render :json=> {status: :ok, :users_data=> users_details_array }
 
       # resource = User.find_for_database_authentication(:email=>params[:email])
@@ -262,6 +261,8 @@ module Api
 
     def patient_details
       patient = Patient.find(params[:patient_id])
+      dob = patient.date_of_birth
+      age = ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
       if patient.patient_zipcode?
         patient_coords = Geocoder.search(patient.patient_zipcode)
         # logger.debug("******the coordinates are : #{patient_coords.inspect}")
@@ -278,7 +279,8 @@ module Api
                           patient_email: patient.patient_email, patient_zipcode: patient.patient_zipcode,
                           healthcare_coverage: patient.healthcare_coverage, patient_coverage_id: patient.patient_coverage_id,
                           mode_of_contact: patient.mode_of_contact, ethnicity: patient.ethnicity, gender: patient.gender,
-                          patient_address: patient.patient_address, patient_lat: patient_lat, patient_lng: patient_lng }
+                          patient_address: patient.patient_address, patient_lat: patient_lat, patient_lng: patient_lng,
+                          age: age}
 
       render :json => {status: :ok, patients_details: patients_details }
     end

@@ -10,4 +10,5 @@ class Referral
 
   has_many :tasks
   belongs_to :patient
+  belongs_to :client_application
 end
