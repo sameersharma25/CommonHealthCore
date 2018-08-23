@@ -5,6 +5,7 @@ module Api
 
     def create_referral
       patient = Patient.find(params[:patient_id])
+      client_id = patient.client_application_id.to_s
       referral = Referral.new
 
       referral.source = params[:source]
@@ -13,6 +14,7 @@ module Api
       referral.urgency = params[:urgency]
       referral.due_date = params[:due_date]
       referral.patient_id = patient
+      referral.client_application_id = client_id
       referral.save
       if params[:task].blank?
         if referral.save

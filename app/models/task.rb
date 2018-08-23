@@ -10,4 +10,5 @@ class Task
 
 
   belongs_to :referral
+  has_many :communications
 end
