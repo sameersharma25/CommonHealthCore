@@ -65,6 +65,7 @@ Rails.application.routes.draw do
     post "tsk_update", to: "referrals#update_task"
 
     post "msg_send", to: "communications#send_message"
+    post "msg_get", to: "communications#get_messages"
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
