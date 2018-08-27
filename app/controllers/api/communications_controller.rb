@@ -67,19 +67,19 @@ module Api
       comm_id = params[:comm_id]
       message = params[:message]
       comm = Communication.find(comm_id)
-      task_id = comm.taks_id
+      task_id = comm.task.id.to_s
       sender = comm.recipient_id
 
       new_comm = Communication.new
       new_comm.comm_message = message
       new_comm.sender_id = sender
       new_comm.task_id = task_id
-      new_comm.message_type = comm.comm_type
+      new_comm.comm_type = comm.comm_type
       new_comm.comm_subject = comm.comm_subject
       new_comm.save
-
-
+      
       logger.debug("the comm is : #{comm.inspect}")
+      render :json=> {status: :ok, :message=> "Response Sent" }
     end
 
   end
