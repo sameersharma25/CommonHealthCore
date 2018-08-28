@@ -8,8 +8,7 @@ class Communication
   field :comm_subject, type: String
   field :comm_message, type: String
   field :comm_type, type: String
-
+  field :from_cc, type: Boolean
 
   belongs_to :task
 end
-se

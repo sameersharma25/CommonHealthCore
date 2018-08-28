@@ -27,6 +27,7 @@ module Api
       comm.comm_message = params[:comm_message]
       comm.comm_type = comm_type
       comm.task_id = task_id
+      comm.from_cc = true
       if comm.save
         #https://kl94y9g3yc.execute-api.us-east-1.amazonaws.com/send_message
         uri = URI("https://kl94y9g3yc.execute-api.us-east-1.amazonaws.com/send_message?commType=#{comm.comm_type}&commMessage=#{comm.comm_message}&commSubject=#{comm.comm_message}&sendTo=#{send_to}&commId=#{comm.id.to_s}")
@@ -53,7 +54,8 @@ module Api
           t.communications.each do |c|
             subject = c.comm_subject
             message = c.comm_message
-            communication = {subject: subject, message: message }
+            from_cc = c.from_cc
+            communication = {subject: subject, message: message, from_cc: from_cc }
             comm_array.push(communication)
           end
         end
@@ -76,8 +78,9 @@ module Api
       new_comm.task_id = task_id
       new_comm.comm_type = comm.comm_type
       new_comm.comm_subject = comm.comm_subject
+      new_comm.from_cc = false
       new_comm.save
-      
+
       logger.debug("the comm is : #{comm.inspect}")
       render :json=> {status: :ok, :message=> "Response Sent" }
     end
