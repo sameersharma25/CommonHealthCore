@@ -43,26 +43,36 @@ module Api
 
 
     def message_list
-      patient_id = params[:patient_id]
-      patient = Patient.find(patient_id)
-      referrals = patient.referrals
       comm_array = Array.new
-
-      referrals.each do |r|
-        tasks = r.tasks
-        tasks.each do |t|
-          t.communications.each do |c|
-            subject = c.comm_subject
-            message = c.comm_message
-            from_cc = c.from_cc
-            communication = {subject: subject, message: message, from_cc: from_cc }
-            comm_array.push(communication)
+      if params[:task_id]
+        t = Task.find(params[:task_id])
+        t.communications.each do |c|
+          subject = c.comm_subject
+          message = c.comm_message
+          from_cc = c.from_cc
+          id = c.id.to_s
+          communication = {subject: subject, message: message, from_cc: from_cc, id: id  }
+          comm_array.push(communication)
+        end
+      elsif params[:patient_id]
+        patient_id = params[:patient_id]
+        patient = Patient.find(patient_id)
+        referrals = patient.referrals
+        referrals.each do |r|
+          tasks = r.tasks
+          tasks.each do |t|
+            t.communications.each do |c|
+              subject = c.comm_subject
+              message = c.comm_message
+              from_cc = c.from_cc
+              id = c.id.to_s
+              communication = {subject: subject, message: message, from_cc: from_cc, id: id  }
+              comm_array.push(communication)
+            end
           end
         end
       end
-
       render :json=> {status: :ok, :comm_data=> comm_array }
-
     end
 
     def get_messages
