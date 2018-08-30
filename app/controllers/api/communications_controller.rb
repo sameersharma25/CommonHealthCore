@@ -6,23 +6,51 @@ module Api
   class CommunicationsController < ActionController::Base
 
     def send_message
-      task_id = params[:task_id]
+      # if params[:comm_id]
+      #   comm = Communication.find(params[:comm_id])
+      #   task = Task.find(comm.task_id.to_s)
+      #
+      # else
+      #   task_id = params[:task_id]
+      #   patient = Task.find(task_id).referral.patient
+      #   if patient.mode_of_contact
+      #     comm_type = patient.mode_of_contact
+      #     if comm_type == "text"
+      #       send_to = patient.patient_phone
+      #     elsif comm_type == "email"
+      #       send_to = patient.patient_email
+      #     end
+      #   else
+      #     comm_type = "text"
+      #     send_to = patient.patient_phone
+      #   end
+      # end
+
+      communication = Communication.find(params[:comm_id]) if params[:comm_id]
+      if params[:comm_id]
+        recipient_id = communication.sender_id
+        recipient_type = communication.recipient_type
+
+      end
+      task_id = params[:comm_id] ? communication.task_id : params[:task_id]
       patient = Task.find(task_id).referral.patient
+      logger.debug("the patient details are : #{patient.inspect}")
       if patient.mode_of_contact
         comm_type = patient.mode_of_contact
         if comm_type == "text"
           send_to = patient.patient_phone
-        elsif comm_type == "text"
+        elsif comm_type == "email"
           send_to = patient.patient_email
         end
       else
         comm_type = "text"
         send_to = patient.patient_phone
       end
+      logger.debug("the communication type is: #{comm_type}")
       comm = Communication.new
       comm.sender_id = params[:sender_id]
-      comm.recipient_id = params[:recipient_id]
-      comm.recipient_type = params[:recipient_type]
+      comm.recipient_id = params[:comm_id] ? recipient_id : params[:recipient_id]
+      comm.recipient_type = params[:comm_id] ? recipient_type : params[:recipient_type]
       comm.comm_subject = params[:comm_subject]
       comm.comm_message = params[:comm_message]
       comm.comm_type = comm_type
