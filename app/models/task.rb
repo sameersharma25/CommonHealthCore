@@ -7,7 +7,7 @@ class Task
   field :provider , type: String
   field :task_deadline, type: String
   field :task_description, type: String
-
+  field :additional_fields, type: Hash
 
   belongs_to :referral
   has_many :communications

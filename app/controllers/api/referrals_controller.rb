@@ -86,9 +86,10 @@ module Api
         provider = t.provider
         task_deadline = t.task_deadline
         task_description = t.task_description
+        additional_fields = t.additional_fields
         task_details = {task_id: task_id , task_type: task_type, task_status: task_status, task_owner: task_owner,
                         provider: provider , task_deadline: task_deadline, task_description: task_description,
-                        }
+                        additional_fields: additional_fields}
         task_list.push(task_details)
       end
 
@@ -106,6 +107,7 @@ module Api
       task.provider = params[:provider] if params[:provider]
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
       task.task_description = params[:task_description] if params[:task_description]
+      task.additional_fields = params[:additional_fields] if params[:additional_fields]
       if task.save
         render :json=> {status: :ok, message: "Task Created"}
       end
