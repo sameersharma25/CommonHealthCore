@@ -51,9 +51,10 @@ module Api
         referral_description = r.referral_description
         urgency = r.urgency
         due_date = r.due_date
+        source = r.source
         task_count = r.tasks.count
         referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
-                            urgency: urgency, due_date: due_date, task_count: task_count }
+                            urgency: urgency, due_date: due_date,source: source, task_count: task_count }
         referral_list.push(referral_details)
       end
 
