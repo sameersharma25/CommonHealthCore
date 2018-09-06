@@ -1,10 +1,12 @@
 module Api
   class PatientsController < ActionController::Base
+    include UsersHelper
+    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
 
 
 
 
-    def update_patient
+  def update_patient
       patient = Patient.find(params[:patient_id])
       patient.first_name = params[:first_name] if params[:first_name]
       patient.last_name = params[:last_name] if params[:last_name]
@@ -67,6 +69,7 @@ module Api
       patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
       patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
+      patient.patient_address = params[:patient_address] if params[:patient_address]
       patient.ethnicity = params[:ethnicity] if params[:ethnicity]
       patient.gender = params[:gender] if params[:gender]
       patient.patient_status = "New"
