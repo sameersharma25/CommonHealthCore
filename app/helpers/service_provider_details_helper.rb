@@ -1,0 +1,2 @@
+module ServiceProviderDetailsHelper
+end

@@ -13,6 +13,7 @@ class ClientApplication
   has_many :notification_rules, inverse_of: :client_application
   has_many :users, inverse_of: :client_application
   has_many :referrals
+  has_many :service_provider_details
   accepts_nested_attributes_for :users, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notification_rules, reject_if: :all_blank, allow_destroy: true
 

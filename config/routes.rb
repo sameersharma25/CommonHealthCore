@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :service_provider_details
   resources :communications
   resources :tasks
   resources :referrals
@@ -31,6 +32,8 @@ Rails.application.routes.draw do
 
   get "/all_details", to: "client_applications#all_details"
   get "/save_all_details", to: "client_applications#save_all_details"
+
+  post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
 
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]

@@ -1,0 +1,42 @@
+<%= form_with(model: service_provider_detail, local: true) do |form| %>
+  <% if service_provider_detail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(service_provider_detail.errors.count, "error") %> prohibited this service_provider_detail from being saved:</h2>
+
+      <ul>
+      <% service_provider_detail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :service_provider_name, id: :service_provider_name %>
+  </div>
+  <div class="field">
+    <%= form.label :share %>
+    <%= form.check_box :share %>
+  </div>
+  <div class="field">
+    <%= form.label :data_storage %>:
+    <%= form.radio_button( :data_storage_type, "Internal", :class => "internal_data_storage" ) %> Internal
+    <%= form.radio_button( :data_storage_type, "External",:class => "external_data_storage" ) %> External
+  </div>
+
+    <div class="field hide service_provider_api">
+      <%= form.label :service_provider_api %>
+      <%= form.text_field :service_provider_api, id: :service_provider_api %>
+    </div>
+
+    <div class="field hide upload_csv">
+      <%= form.label :upload_csv %>
+
+    </div>
+    <div class="field">
+      <%= form.hidden_field(:client_application_id, :value => @client_application)%>
+    </div>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
