@@ -46,7 +46,7 @@ class Appointment
 
           # system "curl -X POST -d \'{\"input\": \"{\"appointment\": \"5ad81aa4e95465658a075507\", \"status\": \"New\", \"created_at\": \"2018-04-25 13:23:47\"}\",\"stateMachineArn\": \"arn:aws:states:us-east-1:193584522294:stateMachine:Helloworld\"}\' https://770xc1lwwg.execute-api.us-east-1.amazonaws.com/alpha/execution"
 
-           uri = URI("https://770xc1lwwg.execute-api.us-east-1.amazonaws.com/alpha/execution")
+           uri = URI("https://f6v0zpby6h.execute-api.us-west-2.amazonaws.com/prod")
 
            header = {'Content-Type' => 'text/json'}
            # user = {user: {

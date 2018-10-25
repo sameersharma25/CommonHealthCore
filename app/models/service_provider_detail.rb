@@ -8,8 +8,12 @@ class ServiceProviderDetail
   field :data_storage_type, type: String
   field :service_provider_api, type: String
   field :filtering_fields, type: Hash
+  field :coordinates_provided, type: Boolean
+  field :lat_name, type: String
+  field :long_name, type: String
 
   belongs_to :client_application
 
   validates :service_provider_name, presence: true
+  validates :data_storage_type , presence: true
 end

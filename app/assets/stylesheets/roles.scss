@@ -1,0 +1,31 @@
+// Place all the styles related to the Roles controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#all_ability_list{
+  width: 70%;
+  height: 300px;
+  //border: 1px solid #c3c3c3;
+  margin: 0 auto;
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+  display: flex;
+  flex-wrap: wrap;
+  background-color:#eaf6f9;
+  overflow: auto;
+}
+
+.ability_checkboxes{
+  margin: auto;
+}
+
+input[type=text] {
+  border-top: transparent;
+  border-left: transparent;
+  border-right: transparent;
+  border-bottom: 2px solid #27aacc;
+}
+
+input:focus, textarea:focus, select:focus{
+  outline: none;
+}

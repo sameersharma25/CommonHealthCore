@@ -1,0 +1,19 @@
+<h1>Service Provider</h1>
+<div>
+    <%#= link_to "zip_adult", "#", type: "button", class: "provider_filter", id: "zip_adult" %><br>
+    <%#= link_to "name_adult", "#", type: "button", class: "provider_filter", id: "name_adult" %>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>ABCD</th>
+      <th>Adult</th>
+      <th>Zipcode</th>
+    </tr>
+  </thead>
+  <tbody id="filter_table">
+    <%= render 'filter_field_value_box' %>
+  </tbody>
+</table>

@@ -2,7 +2,7 @@ module Api
   class ReferralsController < ActionController::Base
     # include UsersHelper
     # before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
-
+    load_and_authorize_resource class: :api
     def create_referral
       patient = Patient.find(params[:patient_id])
       client_id = patient.client_application_id.to_s

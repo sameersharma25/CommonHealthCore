@@ -1,4 +1,4 @@
-<h1>Users#edit</h1>
+<h1>Edit User</h1>
 
 <%= form_for @user, url: user_update_path, method: :post do |f| %>
 
@@ -10,6 +10,14 @@
     <div class="field">
       <%= f.label :email %>
       <%= f.text_field :email, id: :email %>
+    </div>
+    <div class="field">
+      <%= f.label :roles %>:
+      <%#= f.select :role_id, options_from_collection_for_select(@roles, 'id',"role_name", @user.role) %>
+      <% @roles.each do |role|%>
+          <%= f.check_box  :roles,{multiple: true}, role.id.to_s, false%>
+          <%= role.role_name  %>
+      <%end%>
     </div>
 
     <%= f.submit 'Update' %>

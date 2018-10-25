@@ -19,9 +19,15 @@
     <%= form.check_box :share %>
   </div>
   <div class="field">
+    <%= form.label :provider_type %>
+    <%= form.text_field :provider_type, id: :provider_type %>
+  </div>
+  <div class="field">
     <%= form.label :data_storage %>:
     <%= form.radio_button( :data_storage_type, "Internal", :class => "internal_data_storage" ) %> Internal
+    <a href="#" data-toggle="tooltip" title="By selecting Internal you are opting to you chc's database. To use the chc database you will have to provide a list of service providers with all the required fields in a csv file."><%=image_tag "question_mark1.png", :style => "width:20px;height;20px;"%></a>
     <%= form.radio_button( :data_storage_type, "External",:class => "external_data_storage" ) %> External
+    <a href="#" data-toggle="tooltip" title="By selecting External you are opting to use an external storage maintained by your organization. You will need to provide api with all the required parameters."><%=image_tag "question_mark1.png", :style => "width:20px;height;20px;"%></a>
   </div>
 
     <div class="field hide service_provider_api">
@@ -36,6 +42,16 @@
     <div class="field">
       <%= form.hidden_field(:client_application_id, :value => @client_application)%>
     </div>
+
+    <div class="field">
+      <%= form.label :filtering_fields%><br>
+      <%= text_field_tag "field_name",'', :placeholder => "Field Name"%>
+      <%= select_tag "filter_field_type", options_for_select(["Input", "Dropdown"])%>
+      <%= text_field_tag "filter_field_values", '',:placeholder => "droprown list values"%>
+      <%= button_tag "Add",type: "button", :class => "add_filter_fields"%><br>
+      <%= form.text_area :filtering_fields, :id => "filtering_field_text", cols: 50, row: 80 %>
+    </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

@@ -4,6 +4,7 @@ require 'json'
 
 module Api
   class CommunicationsController < ActionController::Base
+    load_and_authorize_resource class: :api
 
     def send_message
       # if params[:comm_id]

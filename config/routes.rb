@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :roles
   resources :service_provider_details
   resources :communications
   resources :tasks
@@ -34,7 +35,9 @@ Rails.application.routes.draw do
   get "/save_all_details", to: "client_applications#save_all_details"
 
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
-
+  post "filter_field_values", to: "service_provider_details#filter_field_values"
+  post "/add_filter_fields", to: "service_provider_details#add_filter_fields"
+  get "/filter_page", to: "service_provider_details#filter_page"
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]
     # post 'generate_end_point', to: 'minors#generate_end_point'
@@ -70,6 +73,12 @@ Rails.application.routes.draw do
     post "msg_send", to: "communications#send_message"
     post "msg_get", to: "communications#get_messages"
     post "msg_list", to: "communications#message_list"
+
+
+    #API's for Service Provider Details
+    post "spd_create", to: "service_provider_details#create_provider"
+    post "spd_edit", to: "service_provider_details#edit_provider_details"
+    post "spd_filter", to: "service_provider_details#filter_provider"
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

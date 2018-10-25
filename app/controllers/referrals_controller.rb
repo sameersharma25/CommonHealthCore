@@ -62,7 +62,12 @@ class ReferralsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
+  def self.permission
+    return "Invitation"
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
     def set_referral
       @referral = Referral.find(params[:id])
     end

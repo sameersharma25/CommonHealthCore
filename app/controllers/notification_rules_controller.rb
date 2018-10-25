@@ -1,5 +1,7 @@
 class NotificationRulesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_notification_rule, only: [:show, :edit, :update, :destroy]
+
 
   # GET /notification_rules
   # GET /notification_rules.json

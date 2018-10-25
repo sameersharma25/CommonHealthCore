@@ -8,15 +8,15 @@
 
 <!--</nav>-->
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" style="background-color: #27aacc;">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">WebSiteName</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><%= link_to 'Home', root_path if current_user.present?%></li>
-      <li><%= link_to 'Logout', destroy_user_session_path, :method => :delete if current_user.present?%></li>
-      <li><%= link_to "Sign up Request", new_registration_request_path if !current_user.present?%></li>
+      <li class="top_bar_elements"><%= link_to 'Home', root_path if current_user.present?%></li>
+      <li class="top_bar_elements"><%= link_to 'Logout', destroy_user_session_path, :method => :delete if current_user.present?%></li>
+      <li class="top_bar_elements"><%= link_to "Sign up Request", new_registration_request_path if !current_user.present?%></li>
     </ul>
   </div>
 </nav>

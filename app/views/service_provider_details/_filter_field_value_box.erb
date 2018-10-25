@@ -1,0 +1,16 @@
+<%if !@response_body.empty?%>
+
+    <% @response_body.each do |sp|%>
+        <tr>
+          <td><%= sp['Name']%></td>
+
+          <%if sp['ABCD'] == "1"%>
+              <td>Yes</td>
+          <%elsif sp['ABCD'] == "0"%>
+              <td>No</td>
+          <%end%>
+          <td><%= sp['Adult']%></td>
+          <td><%= sp['Billing_Zip/Postal_Code']%></td>
+        </tr>
+    <%end%>
+<%end%>

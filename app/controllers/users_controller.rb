@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user, only: [:show, :edit, :destroy]
-
+  before_action :client_roles
+  load_and_authorize_resource
   # GET /users
   # GET /users.json
   def index
@@ -16,11 +17,13 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    # logger.debug("the roles for the client are : #{@roles.inspect}")
   end
 
   # GET /users/1/edit
   def edit
     @user = @user
+    # @user_role = @user.role
   end
 
   # POST /users
@@ -31,11 +34,11 @@ class UsersController < ApplicationController
     # @user.client_application = client_application
     logger.debug("USER IS : #{@user.inspect}")
     # @user = User.invite!(email: params[:user][:email], name: params[:user][:name])
-    send_invite_to_user(params[:user][:email], client_application, params[:user][:name] )
+    send_invite_to_user(params[:user][:email], client_application, params[:user][:name],params[:user][:roles] )
     respond_to do |format|
       if @user.save
         logger.debug("user is SAVED")
-        format.html { redirect_to root_path, notice: 'User was successfully created.' }
+        format.html { redirect_to root_path, notice: 'User was successfully Invited.' }
         # format.json { render :show, status: :created, location: @user }
       else
         logger.debug("user is NOT SAVED")
@@ -45,8 +48,8 @@ class UsersController < ApplicationController
     end
   end
 
-  def send_invite_to_user(email, client_application,name)
-    @user = User.invite!(email: email, name: name)
+  def send_invite_to_user(email, client_application,name,role)
+    @user = User.invite!(email: email, name: name, roles: role)
     @user.update(client_application_id: client_application , application_representative: true)
 
   end
@@ -54,6 +57,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     @user = User.find_by(email: params[:user][:email])
+    @user.roles = params[:user][:roles]
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to root_path, notice: 'User was successfully updated.' }
@@ -81,10 +85,15 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def client_roles
+    client_application = ClientApplication.find(current_user.client_application_id.to_s)
+    @roles = client_application.roles
+  end
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
     # params.fetch(:user, {})
-    params.require(:user).permit(:name, :email, :client_application)
+    params.require(:user).permit(:name, :email, :client_application,:roles)
   end
 
 end

@@ -55,6 +55,9 @@ class User
   field :service_provider_id, type: Integer
   field :active, type: Boolean, default: trust
 
+  field :roles, type: Array, default: []
+
   belongs_to :client_application, inverse_of: :users
   has_many :appointments
+  # belongs_to :role
 end

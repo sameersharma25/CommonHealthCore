@@ -30,3 +30,44 @@
 #   #   # https://github.com/ryanb/cancan/wiki/Defining-Abilities
 #   # end
 # end
+require 'cancancan'
+
+class Ability
+  include CanCan::Ability
+
+  def initialize(user)
+    # user.role.role_abilities.each do |ability|
+    #   ability["action"].each do |m|
+    #     Rails.logger.debug("In the abilities folder #{m.to_sym}")
+    #   can [:create_user], User
+    #   end
+    # end
+    # if user.role.role_name == "Create User"
+    #   can [:create_user,:edit_appointment], :UserApi
+    # end
+    # return unless user.present?
+    # user ||= User.find_by()
+    # Rails.logger.debug("THE ABILITIES ARE***************** #{user}")
+    # user.role.role_abilities.each do |ability|
+    #   Rails.logger.debug("In the abilities folder #{ability["action"]}")
+    #   can ability["action"], ability["subject"]
+    # end
+
+    user.roles.each do |role|
+      r = Role.find(role)
+      r.role_abilities.each do |ability|
+        can ability["action"], ability["subject"]
+      end
+    end
+
+
+
+  end
+end
+
+
+# r.role_abilities.each do |a|
+#       a["action"].each do |m|
+#            print m.to_sym
+#        end
+#   end
