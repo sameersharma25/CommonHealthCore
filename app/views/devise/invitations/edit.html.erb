@@ -5,6 +5,7 @@
   <%= f.hidden_field :invitation_token, readonly: true %>
   <%= f.hidden_field :email, readonly: true %>
 
+  <h2><%= resource.email %></h2>
   <% if f.object.class.require_password_on_accepting %>
   <p><%= f.label :password %><br />
   <%= f.password_field :password %></p>
