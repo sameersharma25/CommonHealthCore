@@ -17,7 +17,7 @@
     </div>
 
     <div class="field">
-      <%= form.label :role_abilities %>
+      <%= form.label :role_abilities, style: "margin-left: 15%;" %>
     </div>
       <%#= form.collection_check_boxes :role_abilities, @abilities, :role_abilities %>
       <div id="all_ability_list">
@@ -29,7 +29,7 @@
         <%end%>
       </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <div class="actions", style="margin-left: 75%;margin-top: 10px;">
+    <%= form.submit class: 'submit_button'%>
   </div>
 <% end %>

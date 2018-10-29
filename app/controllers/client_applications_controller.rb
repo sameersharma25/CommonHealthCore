@@ -37,8 +37,10 @@ class ClientApplicationsController < ApplicationController
     @client_application = ClientApplication.new(client_application_params)
     respond_to do |format|
       if @client_application.save
+        admin_role = Role.create(client_application_id: @client_application.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
        if params[:client_application][:user][:email]
-         send_invite_to_user(params[:client_application][:user][:email],@client_application, params[:client_application][:user][:name] )
+         user_invite = send_invite_to_user(params[:client_application][:user][:email],@client_application,
+                                           params[:client_application][:user][:name], admin_role.id.to_s )
        end
         format.html { redirect_to @client_application, notice: 'Client application was successfully created.' }
         format.json { render :show, status: :created, location: @client_application }
@@ -49,11 +51,11 @@ class ClientApplicationsController < ApplicationController
     end
   end
 
-  def send_invite_to_user(email, client_application,name)
-    @user = User.invite!(email: email, name: name)
-    @user.update(client_application_id: client_application , application_representative: true)
-
+  def send_invite_to_user(email, client_application,name,role)
+    @user = User.invite!(email: email, name: name,roles: [role])
+    @user.update(client_application_id: client_application , application_representative: true, admin: true)
   end
+
   def register_client
     @client_application = ClientApplication.new
   end
