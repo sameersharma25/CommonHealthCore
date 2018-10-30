@@ -121,4 +121,6 @@
 
 <H3> Links for Testing</H3>
 <%= link_to "Create User", api_create_user_path(email: "defaultuser@test.com"), method: :post %><br>
-<%= link_to "Create Patient", api_create_patient_path(email: "defaultuser@test.com"), method: :post %>
+<%= link_to "Create Patient", api_create_patient_path(email: "defaultuser@test.com"), method: :post %><br>
+<%= link_to "Create task", api_tsk_create_path(email: "defaultuser@test.com"), method: :post %><br>
+<%= link_to "Patients List", api_patients_list_path(email: current_user.email), method: :post %><br>

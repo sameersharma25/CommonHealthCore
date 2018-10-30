@@ -11,8 +11,8 @@
     </div>
   <% end %>
   <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :service_provider_name, id: :service_provider_name %>
+    <%#= form.label :name %>
+    <%= form.text_field :service_provider_name, id: :service_provider_name, placeholder: "Provider Name" %>
   </div>
   <div class="field">
     <%= form.label :share %>
@@ -20,7 +20,7 @@
   </div>
   <div class="field">
     <%= form.label :provider_type %>
-    <%= form.text_field :provider_type, id: :provider_type %>
+    <%= form.text_field :provider_type, id: :provider_type, placeholder: "Provider Type" %>
   </div>
   <div class="field">
     <%= form.label :data_storage %>:
@@ -53,6 +53,6 @@
     </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit class: 'submit_button' %>
   </div>
 <% end %>

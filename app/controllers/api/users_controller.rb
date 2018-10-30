@@ -1,9 +1,10 @@
 module Api
   class UsersController < ActionController::Base
-    # include UsersHelper
-    # before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
+    include UsersHelper
+    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
     # before_action :authenticate_user!
     load_and_authorize_resource class: :api
+
     def get_all_users
       logger.debug("the user email you sent is : #{params[:email]}")
       user = User.find_by(email: params[:email])

@@ -1,6 +1,7 @@
 module Api
   class ServiceProviderDetailsController < ActionController::Base
-
+    include UsersHelper
+    before_action :authenticate_user_from_token, except: []
     load_and_authorize_resource class: :api
 
     def create_provider

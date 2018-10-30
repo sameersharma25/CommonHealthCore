@@ -4,6 +4,8 @@ require 'json'
 
 module Api
   class CommunicationsController < ActionController::Base
+    include UsersHelper
+    before_action :authenticate_user_from_token, except: []
     load_and_authorize_resource class: :api
 
     def send_message

@@ -1,7 +1,7 @@
 module Api
   class PatientsController < ActionController::Base
-    # include UsersHelper
-    # before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
+    include UsersHelper
+    before_action :authenticate_user_from_token, except: []
     load_and_authorize_resource class: :api
 
 
