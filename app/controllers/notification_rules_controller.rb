@@ -9,6 +9,8 @@ class NotificationRulesController < ApplicationController
     client_application = current_user.client_application
     @notification_rules = client_application.notification_rules
     @notification_rule = NotificationRule.new
+    @statuses = Status.where(client_application_id: client_application)
+    @role = Role.where(client_application_id: client_application)
   end
 
   # GET /notification_rules/1

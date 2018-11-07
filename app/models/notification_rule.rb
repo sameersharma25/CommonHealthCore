@@ -15,31 +15,63 @@ class NotificationRule
 
 
 
-  def self.selected_rules(a_id ,td_hrs)
+  def self.selected_rules(t_id ,td_hrs)
     notification_hash = Hash.new
 
-    a = Appointment.find(a_id)
-    patient = a.patient
-    status = a.status
+    # a = Appointment.find(a_id)
+    # patient = a.patient
+    # status = a.status
+    # patient_email = patient.patient_email
+    # patient_phone = patient.patient_phone
+    # patient_name = patient.first_name+" "+patient.last_name
+    # cc_email = User.find(a.cc_id).email
+    # pcp_email = "pcp@test.com"
+
+    t = Task.find(t_id)
+    status = t.task_status
+    patient = t.referral.patient
     patient_email = patient.patient_email
     patient_phone = patient.patient_phone
     patient_name = patient.first_name+" "+patient.last_name
-    cc_email = User.find(a.cc_id).email
+    cc_email = User.find(t.task_owner).email
     pcp_email = "pcp@test.com"
+    task_owner_email = User.find(t.task_owner).email
+
+
+
 
     #puts("the notifications are: #{NotificationRule.where(:time_difference.lt => td_hrs, :appointment_status => "New" ).select{"time_difference"}}")
-    notification_array= NotificationRule.where(:time_difference.lt => td_hrs, :appointment_status => status ).collect{|nr| nr.time_difference}
-    maximum_if_time_difference = notification_array.max
-    relevant_notifications = NotificationRule.where(:appointment_status => status, :time_difference => maximum_if_time_difference )
+    # notification_array= NotificationRule.where(:time_difference.lt => td_hrs, :appointment_status => status ).collect{|nr| nr.time_difference}
+    # maximum_if_time_difference = notification_array.max
+    relevant_notifications = NotificationRule.where(:appointment_status => status, :time_difference => td_hrs )
 
-    # puts("BEFORE LOOOOOOOOOPINGGGGGGGg*******************#{relevant_notifications.inspect}")
+    puts("BEFORE LOOOOOOOOOPINGGGGGGGg*******************#{relevant_notifications.entries}........... time is : #{td_hrs}")
     relevant_notifications.each do |rn|
+      if rn.user_type == "Owner"
+        createing_hash =  {"#{rn.user_type}" => {"email" => task_owner_email, subject: rn.subject, body: rn.body}}
+
+      elsif rn.user_type == "Patient"
+        createing_hash =  {"#{rn.user_type}" => {"email" => patient_email, "phone" => patient_phone, subject: rn.subject, body: rn.body}}
+      elsif rn.user_type == "Service Provider"
+
+      elsif rn.user_type == "All"
+        all_hash = Hash.new
+        [{"Patient" => patient_email}, {"Owner" => task_owner_email}].each do |l|
+          l.each do |key, val|
+            partial_hash =  {"#{key}" => {"email" => val, "phone" => patient_phone, subject: rn.subject, body: rn.body}}
+            all_hash.update(partial_hash)
+          end
+        end
+        createing_hash = all_hash
+      end
+
       #puts("the notifications are: #{rn.inspect}************************************\n")
-      createing_hash =  {"#{rn.user_type}" => {"email" => eval("#{rn.user_type}_email"), "phone" => patient_phone, subject: rn.subject, body: rn.body}}
+      # createing_hash =  {"#{rn.user_type}" => {"email" => eval("#{rn.user_type}_email"), "phone" => patient_phone, "patient_email" => patient_email, subject: rn.subject, body: rn.body}}
       notification_hash.update(createing_hash)
 
       # puts("the notifications are: #{notification_hash}************************************\n")
     end
+    # notification_hash.update(createing_hash)
     return notification_hash
   end
 

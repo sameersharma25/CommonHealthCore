@@ -3,7 +3,7 @@ module Api
     include UsersHelper
     before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
     # before_action :authenticate_user!
-    load_and_authorize_resource class: :api
+    load_and_authorize_resource class: :api, except: [:give_appointment_details_for_notification]
 
     def get_all_users
       logger.debug("the user email you sent is : #{params[:email]}")
@@ -202,7 +202,7 @@ module Api
 
 
       td_hrs = params["td_hrs"]
-      notification_details = NotificationRule.selected_rules(params["appointment_id"] ,td_hrs)
+      notification_details = NotificationRule.selected_rules(params["task_id"] ,td_hrs)
       logger.debug("give_appointment_details_for_notification ********* #{notification_details}")
       if !notification_details.blank?
         n = Notification.new
@@ -265,23 +265,23 @@ module Api
       patient = Patient.find(params[:patient_id])
       dob = patient.date_of_birth
       age = ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
-      if patient.patient_zipcode?
-        patient_coords = Geocoder.search(patient.patient_zipcode)
-        logger.debug("******the coordinates are : #{patient_coords.inspect}")
-        patient_lat = patient_coords.first.coordinates[0]
-        patient_lng = patient_coords.first.coordinates[1]
-      else
-        patient_coords = Geocoder.search("99203")
-        # logger.debug("******the coordinates are : #{patient_coords.inspect}")
-        patient_lat = patient_coords.first.coordinates[0]
-        patient_lng = patient_coords.first.coordinates[1]
-      end
+      # if patient.patient_zipcode?
+      #   patient_coords = Geocoder.search(patient.patient_zipcode)
+      #   logger.debug("******the coordinates are : #{patient_coords.inspect}")
+      #   patient_lat = patient_coords.first.coordinates[0]
+      #   patient_lng = patient_coords.first.coordinates[1]
+      # else
+      #   patient_coords = Geocoder.search("99203")
+      #   # logger.debug("******the coordinates are : #{patient_coords.inspect}")
+      #   patient_lat = patient_coords.first.coordinates[0]
+      #   patient_lng = patient_coords.first.coordinates[1]
+      # end
       patients_details = {first_name: patient.first_name, last_name: patient.last_name,
                           ph_number: patient.patient_phone, date_of_birth: patient.date_of_birth,
                           patient_email: patient.patient_email, patient_zipcode: patient.patient_zipcode,
                           healthcare_coverage: patient.healthcare_coverage, patient_coverage_id: patient.patient_coverage_id,
                           mode_of_contact: patient.mode_of_contact, ethnicity: patient.ethnicity, gender: patient.gender,
-                          patient_address: patient.patient_address, patient_lat: patient_lat, patient_lng: patient_lng,
+                          patient_address: patient.patient_address,
                           age: age}
 
       render :json => {status: :ok, patients_details: patients_details }

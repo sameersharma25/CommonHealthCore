@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :statuses
   resources :roles
   resources :service_provider_details
   resources :communications

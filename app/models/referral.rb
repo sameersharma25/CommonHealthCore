@@ -1,5 +1,6 @@
 class Referral
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   field :referral_name, type: String
   field :source, type: String
