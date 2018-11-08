@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :statuses
+  resources :statuses do
+    collection do
+      patch :sort
+    end 
+  end 
   resources :roles
   resources :service_provider_details
   resources :communications
