@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :statuses do
     collection do
-      patch :sort
+      put :sort
     end 
   end 
   resources :roles

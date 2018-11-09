@@ -1,6 +1,7 @@
 class Status
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Orderable
 
   field :status
   field :title, type: String
@@ -8,10 +9,8 @@ class Status
   field :position, type: Integer 
   field :status_id, type: Integer
 
-
-
-
   belongs_to :client_application
+
 
 
 end

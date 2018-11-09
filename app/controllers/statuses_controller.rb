@@ -5,7 +5,8 @@ class StatusesController < ApplicationController
   # GET /statuses.json
   def index
     #Will need to call status in order by statusid? or?
-    #@statuses = Status.order(:position)
+    @status = Status.order(:position =>:asc)
+
 
     client_application_id = current_user.client_application_id.to_s
     @statuses = Status.where(client_application_id: client_application_id)
@@ -13,8 +14,13 @@ class StatusesController < ApplicationController
 
   def sort
     params[:status].each_with_index do |id, index|
-      Status.where(id: id).update_all(position: index + 1)
-    end 
+      logger.debug ("HELLO: #{id} BELLO: #{index}")
+      #Status.where(id: id).update_all(position: index + 1)
+      s = Status.find(id)
+      logger.debug("Checking my value #{s}")
+      s.position = index+1
+      s.save
+          end 
     head :ok
   end 
 

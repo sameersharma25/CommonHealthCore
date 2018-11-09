@@ -1,17 +1,14 @@
 <p id="notice"><%= notice %></p>
 
-<script>
+<script> 
  $(function(){
  $('.section').sortable({
   update: function(event,ui){
-
-    var id  = document.getElementsByClassName("section")[1].ObjectId
-    console.log("id",id)
     console.log("event",event,"ui",ui);
     console.log($(this).sortable('serialize'));
     $.ajax({
       url: $(this).data("url"),
-      type: "PATCH",
+      type: "PUT",
       data: $(this).sortable('serialize'),
     });
   }
@@ -24,7 +21,7 @@
 <h1>Statuses</h1>
 <div>
   <div class="section" data-url="<%= sort_statuses_path %>">
-    <% @statuses.each do |status| %>
+    <% @status.each do |status| %>
 
         <%= link_to status.title, status, class: "lstm", id: dom_id(status) %>
         <%= status.position %>
