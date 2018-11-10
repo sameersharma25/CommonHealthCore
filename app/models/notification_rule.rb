@@ -45,7 +45,7 @@ class NotificationRule
     # maximum_if_time_difference = notification_array.max
     relevant_notifications = NotificationRule.where(:appointment_status => status, :time_difference => td_hrs )
 
-    puts("BEFORE LOOOOOOOOOPINGGGGGGGg*******************#{relevant_notifications.entries}........... time is : #{td_hrs}")
+    puts("BEFORE LOOOOOOOOOPINGGGGGGGg*******************#{relevant_notifications.entries}........... time is : #{td_hrs}, TASK IS : #{t_id}")
     relevant_notifications.each do |rn|
       if rn.user_type == "Owner"
         createing_hash =  {"#{rn.user_type}" => {"email" => task_owner_email, subject: rn.subject, body: rn.body}}
@@ -58,7 +58,12 @@ class NotificationRule
         all_hash = Hash.new
         [{"Patient" => patient_email}, {"Owner" => task_owner_email}].each do |l|
           l.each do |key, val|
-            partial_hash =  {"#{key}" => {"email" => val, "phone" => patient_phone, subject: rn.subject, body: rn.body}}
+            if key == "Patient"
+              partial_hash =  {"#{key}" => {"email" => val, "phone" => patient_phone, subject: rn.subject, body: rn.body}}
+            elsif key == "Owner"
+              partial_hash =  {"#{key}" => {"email" => val, subject: rn.subject, body: rn.body}}
+            end
+
             all_hash.update(partial_hash)
           end
         end

@@ -5,26 +5,45 @@ class TasksController < ApplicationController
   # GET /tasks.json
   def index
     @tasks = Task.all
+
   end
 
   # GET /tasks/1
   # GET /tasks/1.json
   def show
+
   end
 
   # GET /tasks/new
   def new
+    client_application_id = current_user.client_application_id.to_s
     @task = Task.new
+    @statuses = Status.where(client_application_id: client_application_id)
+    logger.debug("THE STATUS FOR TASK ARE: #{@statuses}")
   end
 
   # GET /tasks/1/edit
   def edit
+    client_application_id = current_user.client_application_id.to_s
+    @statuses = Status.where(client_application_id: client_application_id)
   end
 
   # POST /tasks
   # POST /tasks.json
   def create
+    client_application_id = current_user.client_application_id.to_s
+    @statuses = Status.where(client_application_id: client_application_id)
     @task = Task.new(task_params)
+
+
+    # year = params[:task]["task_deadline(1i)"]
+    # month = params[:task]["task_deadline(2i)"]
+    # date = params[:task]["task_deadline(3i)"]
+    # hour = params[:task]["task_deadline(4i)"]
+    # minutes = params[:task]["task_deadline(5i)"]
+    # task_deadline = "#{year}-#{month}-#{date} #{hour}:#{minutes}".to_datetime
+    @task.task_deadline = params[:task][:task_deadline]
+    @task.referral_id = "5b88078758f01af1e9435c80"
 
     respond_to do |format|
       if @task.save
@@ -70,5 +89,6 @@ class TasksController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
       params.fetch(:task, {})
+      params.require(:task).permit(:task_type, :task_status, :task_deadline)
     end
 end

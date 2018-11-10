@@ -8,11 +8,13 @@
 <%end %>
 <h1>Client Applications</h1>
 
-<table class="table table-responsive table-bordered user-display">
+<table id="client_application" class="table table-responsive table-bordered user-display">
   <thead>
     <tr>
       <th>Name</th>
-      <th colspan="3"></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -29,40 +31,39 @@
 <br>
 <h1>Users in the Application</h1>
 <% if @client_application.users.count > 0 %>
-    <table class="table table-responsive table-bordered user-display">
+    <table id="user_list" class="table table-responsive table-bordered user-display">
       <thead>
-      <tr>
-        <th>NAME</th>
-        <th>EMAIL</th>
-        <th>Role</th>
-        <th colspan="3"></th>
-      </tr>
+        <tr>
+          <th>NAME</th>
+          <th>EMAIL</th>
+          <th>Role</th>
+          <th></th>
+          <th></th>
+        </tr>
       </thead>
-
       <tbody>
-      <% @client_application.users.each do |u| %>
-          <tr class="">
-            <td><%= u.name %></td>
-            <td><%= u.email %></td>
-            <%if u.cc == true%>
-              <td>Care Coordinator</td>
-            <%elsif u.pcp == true %>
-                <td>Care Provider</td>
-            <%else%>
-                <td>---</td>
-            <%end%>
-            <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
-            <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
-            <!--<td><%#= link_to 'Destroy', client_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
-          </tr>
-      <% end %>
+        <% @client_application.users.each do |u| %>
+            <tr>
+              <td><%= u.name %></td>
+              <td><%= u.email %></td>
+              <%if u.cc == true%>
+                <td>Care Coordinator</td>
+              <%elsif u.pcp == true %>
+                  <td>Care Provider</td>
+              <%else%>
+                  <td>---</td>
+              <%end%>
+              <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
+              <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
+            </tr>
+        <% end %>
       </tbody>
     </table>
 <%end%>
 
 <h1>Notification Rules Table</h1>
 <% if @notification_rules.count > 0 %>
-    <table id="notification_rules" class="table table-responsive table-bordered user-display">
+    <table id="notification_rules" class="table table-responsive table-bordered display">
       <thead>
         <tr>
           <th>Status</th>
@@ -119,6 +120,8 @@
 
 <%= link_to "Filter Page" , filter_page_path %><br>
 <%= link_to "Status" , statuses_path %><br>
+<%= link_to "Task" , tasks_path %><br>
+
 
 <H3> Links for Testing</H3>
 <%= link_to "Create User", api_create_user_path(email: "defaultuser@test.com"), method: :post %><br>

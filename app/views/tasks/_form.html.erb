@@ -11,6 +11,21 @@
     </div>
   <% end %>
 
+    <div class="field">
+      <%= form.label :task_type %>
+      <%= form.text_field :task_type, id: :task_type, placeholder: "Task Type" %>
+    </div>
+
+    <div >
+      <%= form.label :task_status %>
+      <%= form.select(:task_status, options_from_collection_for_select(@statuses, 'status', 'status'))  %>
+    </div>
+
+    <div class="field">
+      <%= form.label :task_deadline %>
+      <%= datetime_field_tag :task_deadline %>
+    </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>
