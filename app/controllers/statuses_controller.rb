@@ -4,13 +4,30 @@ class StatusesController < ApplicationController
   # GET /statuses
   # GET /statuses.json
   def index
+    #Will need to call status in order by statusid? or?
+    @status = Status.order(:position =>:asc)
+
+
     client_application_id = current_user.client_application_id.to_s
     @statuses = Status.where(client_application_id: client_application_id)
   end
 
+  def sort
+    params[:status].each_with_index do |id, index|
+      logger.debug ("HELLO: #{id} BELLO: #{index}")
+      #Status.where(id: id).update_all(position: index + 1)
+      s = Status.find(id)
+      logger.debug("Checking my value #{s}")
+      s.position = index+1
+      s.save
+          end 
+    head :ok
+  end 
+
   # GET /statuses/1
   # GET /statuses/1.json
   def show
+      @status = Status.find(params[:id])
   end
 
   # GET /statuses/new
@@ -20,6 +37,7 @@ class StatusesController < ApplicationController
 
   # GET /statuses/1/edit
   def edit
+    @status = Status.find(params[:id])
   end
 
   # POST /statuses
@@ -72,6 +90,6 @@ class StatusesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def status_params
       params.fetch(:status, {})
-      params.require(:status).permit(:status)
+      params.require(:status).permit(:status,:title, :status_id)
     end
 end
