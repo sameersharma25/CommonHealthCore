@@ -23,7 +23,7 @@
   <div class="section" data-url="<%= sort_statuses_path %>">
     <% @status.each do |status| %>
 
-        <%= link_to status.title, status, class: "lstm", id: dom_id(status) %>
+        <%= link_to status.status, status, class: "lstm", id: dom_id(status) %>
         <%= status.position %>
 
     <% end %>

@@ -2,10 +2,12 @@
 
 <h1>Tasks</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
-      <th colspan="3"></th>
+      <th colspan="1">Task Status</th>
+      <th colspan="1">Task Type</th>
+      <th colspan="1">Appointment Time</th>
     </tr>
   </thead>
 
@@ -14,9 +16,11 @@
       <tr>
         <td><%= task.task_status%></td>
         <td><%= task.task_type%></td>
-        <td><%= link_to 'Show', task %></td>
+        <td><%= task.task_deadline.strftime("%m/%d/%Y %I:%M%p")%></td>
+
+        <td><%#= link_to 'Show', task %></td>
         <td><%= link_to 'Edit', edit_task_path(task) %></td>
-        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%#= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

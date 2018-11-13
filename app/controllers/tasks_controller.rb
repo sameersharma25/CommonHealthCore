@@ -42,8 +42,17 @@ class TasksController < ApplicationController
     # hour = params[:task]["task_deadline(4i)"]
     # minutes = params[:task]["task_deadline(5i)"]
     # task_deadline = "#{year}-#{month}-#{date} #{hour}:#{minutes}".to_datetime
-    @task.task_deadline = params[:task][:task_deadline]
+
+    # @task.task_deadline = params[:task_deadline].blank? ? params[:task_deadline] : (Date.today + 6.days)
+
+    if !params[:task_deadline].blank?
+      @task.task_deadline = params[:task_deadline]
+    else
+      @task.task_deadline = (Date.today + 6.days)
+    end
+
     @task.referral_id = "5b88078758f01af1e9435c80"
+    @task.task_owner = "5ab9245258f01aedba4afd11"
 
     respond_to do |format|
       if @task.save
@@ -59,9 +68,11 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
   def update
+    @task.task_deadline = params[:task_deadline]
+    @task.save
     respond_to do |format|
       if @task.update(task_params)
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+        format.html { redirect_to tasks_path, notice: 'Task was successfully updated.' }
         format.json { render :show, status: :ok, location: @task }
       else
         format.html { render :edit }

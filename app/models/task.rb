@@ -33,7 +33,7 @@ class Task
         # created_at = task.created_at.strftime('%Y-%m-%d %H:%M:%S')
 
         puts("the task dead line is : #{task.task_deadline}")
-        due_date = task.task_deadline.to_date.strftime('%Y-%m-%d %H:%M:%S')
+        due_date = task.task_deadline.strftime('%Y-%m-%d %H:%M:%S')
 
         input = {"input": "{\"task\": \"#{task_id}\", \"status\": \"#{task_status}\",\"due_date\": \"#{due_date}\" }", "stateMachineArn": "arn:aws:states:us-west-2:394013058182:stateMachine:Helloworld"}
         uri = URI("https://f6v0zpby6h.execute-api.us-west-2.amazonaws.com/prod")

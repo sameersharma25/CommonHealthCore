@@ -11,6 +11,16 @@
     </div>
   <% end %>
 
+    <div class="field">
+      <%= form.label :status %>
+      <%= form.text_field :appointment_status, id: :appointment_status, placeholder: "Status" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :time_remaining %>
+      <%= form.text_field :time_difference, id: :time_difference, placeholder: "Time Remaining" %>
+    </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>
