@@ -119,11 +119,13 @@ class AfterSignupController < ApplicationController
         service_provider_detail.data_storage_type = params[:service_provider_detail][:data_storage_type]
         service_provider_detail.service_provider_api = params[:service_provider_detail][:service_provider_api]
         service_provider_detail.client_application_id = params[:client_id]
-        if service_provider_detail.save
+       if service_provider_detail.save
+        jump_to(:wicked_finish)
           render_wizard service_provider_detail
+
           # next_step
         end
-        jump_to(:wicked_finish)
+        # jump_to(:wicked_finish)
         # next_step
     end
     logger.debug("the paramas in the update wizard is : #{params.inspect}")
