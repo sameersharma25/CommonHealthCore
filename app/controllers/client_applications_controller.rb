@@ -10,10 +10,11 @@ class ClientApplicationsController < ApplicationController
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
     logger.debug("the session count is *********************: #{user.sign_in_count}")
-    # if user.sign_in_count.to_s == "1"
-    #   logger.debug("REDIRECTING TO THE NEW STEPS****************")
-    #   redirect_to after_signup_path(:update_details_and_add_users)
-    # end
+    logger.debug("the params are *********************: #{params.inspect}")
+    if user.sign_in_count.to_s == "1"
+      logger.debug("REDIRECTING TO THE NEW STEPS****************")
+      redirect_to after_signup_path(:role)
+    end
   end
 
   # GET /client_applications/1
@@ -33,7 +34,7 @@ class ClientApplicationsController < ApplicationController
   # POST /client_applications
   # POST /client_applications.json
   def create
-    logger.debug("THE PARAMETERS ARE: #{params.inspect}")
+    logger.debug("************THE PARAMETERS IN create Client Applicaiton ARE: #{params.inspect}")
     @client_application = ClientApplication.new(client_application_params)
     respond_to do |format|
       if @client_application.save
@@ -52,6 +53,7 @@ class ClientApplicationsController < ApplicationController
   end
 
   def send_invite_to_user(email, client_application,name,role)
+    logger.debug("********* In the send user invite method")
     @user = User.invite!(email: email, name: name,roles: [role])
     @user.update(client_application_id: client_application , application_representative: true, admin: true)
   end

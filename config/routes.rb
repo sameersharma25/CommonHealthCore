@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   resources :statuses do
     collection do
       put :sort
-    end 
-  end 
+    end
+  end
   resources :roles
   resources :service_provider_details
   resources :communications
@@ -35,14 +35,28 @@ Rails.application.routes.draw do
   post "update" => "users#update", as: :user_update
   get "new_user" => "users#new", as: :new_user
   post "create_user" => "users#create", as: :create_user
+  post "/wizard_add_user", to: "users#wizard_add_user"
 
   get "/all_details", to: "client_applications#all_details"
   get "/save_all_details", to: "client_applications#save_all_details"
+  post "/copy_default_settings", to: "client_applications#copy_default_settings"
 
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
   post "filter_field_values", to: "service_provider_details#filter_field_values"
   post "/add_filter_fields", to: "service_provider_details#add_filter_fields"
   get "/filter_page", to: "service_provider_details#filter_page"
+
+
+  post "/wizard_add_status", to: "statuses#wizard_add_status"
+
+
+
+
+  post "/wizard_add_notification", to: "notification_rules#wizard_add_notification"
+
+
+
+  post "/wizard_add_new_role", to: "roles#wizard_add_new_role"
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]
     # post 'generate_end_point', to: 'minors#generate_end_point'

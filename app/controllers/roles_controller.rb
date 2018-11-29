@@ -82,6 +82,23 @@ class RolesController < ApplicationController
 
   end
 
+  def wizard_add_new_role
+    abilities = []
+    client_application = current_user.client_application_id.to_s
+    params[:abilities].each do |ability|
+      abilities << ability.to_sym
+    end
+    @role = Role.new
+    @role.role_abilities = [{"action"=> abilities, "subject"=>[:api]}]
+    @role.client_application_id = client_application
+    @role.role_name = params[:name]
+    if @role.save
+      respond_to do |format|
+        format.js
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_role

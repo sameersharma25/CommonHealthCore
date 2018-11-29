@@ -76,6 +76,23 @@ class NotificationRulesController < ApplicationController
     end
   end
 
+
+  def wizard_add_notification
+    client_application_id = current_user.client_application_id.to_s
+    notifiacation_rule = NotificationRule.new
+    notifiacation_rule.appointment_status = params[:status]
+    notifiacation_rule.time_difference = params[:time]
+    notifiacation_rule.subject = params[:subject]
+    notifiacation_rule.body = params[:body]
+    notifiacation_rule.user_type = params[:user_type]
+    notifiacation_rule.client_application_id = client_application_id
+    if notifiacation_rule.save
+      respond_to do |format|
+        format.js
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_notification_rule

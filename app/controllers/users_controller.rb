@@ -79,6 +79,19 @@ class UsersController < ApplicationController
     end
   end
 
+#"role_ids"=>["user_roles_5bfdb71358f01a58b4915c63", "user_roles_5bfdc32e58f01a58b4915c6f"]
+  def wizard_add_user
+    role_ids = params[:role_ids]
+    roles = []
+    role_ids.each do |rid|
+      roles.push(rid.split("_")[2])
+    end
+    name = params[:name]
+    email = params[:email]
+    client_application = current_user.client_application.id
+    send_invite_to_user(email, client_application, name,roles)
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user

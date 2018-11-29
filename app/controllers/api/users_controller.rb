@@ -246,7 +246,7 @@ module Api
         p_status = p.patient_status
         p_email = p.patient_email
         dob = p.date_of_birth
-        p_age = dob.nil? ? "" :((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+        p_age = dob.blank? ? "" :((Time.zone.now - dob.to_time) / 1.year.seconds).floor
         active_notification = false
         p.appointments.each do |a|
           a.notifications.each do |n|
@@ -257,7 +257,7 @@ module Api
         end
         active_notification_array.push(active_notification)
         patient_detail = {patient_id: patient_id, first_name: first_name, last_name: last_name,
-                          ph_number: ph_number,email: p_email,ph_age: p_age, active_notification: active_notification, p_status: p_status }
+                          ph_number: ph_number,email: p_email,p_age: p_age, active_notification: active_notification, p_status: p_status }
         patients_details.push(patient_detail)
       end
       active_notification_array_count = active_notification_array.count(true)
@@ -267,7 +267,7 @@ module Api
     def patient_details
       patient = Patient.find(params[:patient_id])
       dob = patient.date_of_birth
-      age = dob.nil? ? "" :((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+      age = dob.blank? ? "" :((Time.zone.now - dob.to_time) / 1.year.seconds).floor
       # if patient.patient_zipcode?
       #   patient_coords = Geocoder.search(patient.patient_zipcode)
       #   logger.debug("******the coordinates are : #{patient_coords.inspect}")

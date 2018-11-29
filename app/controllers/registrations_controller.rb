@@ -27,7 +27,7 @@ class RegistrationsController < Devise::RegistrationsController
     clean_up_passwords resource
     set_minimum_password_length
     respond_with resource
-    after_signup_path(:update_details_and_add_users)
+    after_signup_path(:role)
   end
 
 
@@ -71,7 +71,7 @@ class RegistrationsController < Devise::RegistrationsController
     logger.debug("*****************registration----after_sign_up_path_for*************")
     # current_user.api_token = Digest::SHA1.hexdigest(current_user.email+ Time.now.to_s + rand(100000).to_s)
     # current_user.save
-    after_signup_path(:update_details_and_add_users)
+    after_signup_path(:role)
   end
   #
   # def check_captcha

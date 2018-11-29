@@ -1,0 +1,28 @@
+<%= "Step #{@current_step} of #{@total_steps}" %>
+<h1>Status</h1>
+
+<%= form_for @status, url: wizard_path, method: :put do |f| %>
+    <%= f.label :status_title %>
+    <%= f.text_field :status %>
+    <%= hidden_field_tag 'client_id',@client_application_id %>
+    <%= link_to "Add Status", "#", class: "wizard_add_new_status"%>
+
+    <h1>Statuses</h1>
+    <table class="table">
+      <thead >
+      <tr>
+        <th>Status</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+      <tbody id="wizard_status_table">
+      <%= render "created_status"%>
+      </tbody>
+    </table>
+    <br>
+    <%= f.submit "Next" %>
+<% end %>
+
+
+
+

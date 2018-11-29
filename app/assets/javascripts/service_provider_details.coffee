@@ -43,3 +43,5 @@ jQuery ($) ->
       filter: filter_value
     return
   )
+
+  $("#service_provider_details_tables").DataTable()

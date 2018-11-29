@@ -1,0 +1,33 @@
+<%= "Step #{@current_step} of #{@total_steps}" %>
+<h1>Alert Workflow</h1>
+
+<%= form_for @notification_rule, url: wizard_path, method: :put do |f| %>
+    <%= f.select(:appointment_status, options_from_collection_for_select(@statuses, "status", "status"))  %>
+    <%= f.text_field :time_difference, :placeholder => "Time Remaining" %>
+    <%= f.select(:user_type, options_for_select(["Owner","Patient","Service Provider", "All"]))  %>
+    <%= f.text_field :subject, :placeholder => "Subject for email" %>
+    <%= f.text_field :body, :placeholder => "Content" %>
+    <%= hidden_field_tag 'client_id',@client_application_id %>
+
+    <%= link_to "Add Alerts","#", class: "wizard_add_new_notification_rule"%>
+
+    <h1>Notification Rules</h1>
+    <table class="table">
+      <thead >
+      <tr>
+        <th>Status</th>
+        <th>Time</th>
+        <th>User Type</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+      <tbody id="wizard_alert_workflow_table">
+      <%= render "created_alert_workflow"%>
+      </tbody>
+    </table>
+    <br>
+
+
+    <%= f.submit "Next" %>
+<% end %>
+<%= link_to 'skip', next_wizard_path %>

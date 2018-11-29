@@ -1,0 +1,34 @@
+<%= "Step #{@current_step} of #{@total_steps}" %>
+<h1>User</h1>
+
+
+<%= form_for @user, url: wizard_path, method: :put do |f| %>
+    <%= f.text_field :name, placeholder: "User Name" %>
+    <%= f.text_field :email, placeholder: "Email" %>
+    <div class="field">
+      <%= f.label :roles %>:
+      <%#= f.select :role_id, options_from_collection_for_select(@roles, 'id',"role_name", @user.role) %>
+      <% @roles.each do |role|%>
+          <%= f.check_box  :roles,{multiple: true, class: "wizard_roles_checkboxes"}, role.id.to_s, false %>
+          <%= role.role_name  %>
+      <%end%>
+    </div>
+    <%= hidden_field_tag 'client_id',@client_application_id %>
+    <%= link_to "Add User", "#", class: "wizard_add_new_user"%>
+
+    <h1>Users</h1>
+    <table class="table">
+      <thead >
+      <tr>
+        <th>Status</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+      <tbody id="wizard_user_table">
+      <%= render "created_users"%>
+      </tbody>
+    </table>
+    <br>
+    <%= f.submit "Next" %>
+<% end %>
+<%= link_to 'Previous',previous_wizard_path %>

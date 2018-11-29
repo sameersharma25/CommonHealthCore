@@ -1,0 +1,47 @@
+<%= "Step #{@current_step} of #{@total_steps}" %>
+<h1>Roles</h1>
+
+<%= link_to "Default", wizard_path(:default_settings)%>
+<%#= link_to "Default", jump_to(:wicked_finish, id: "wicked_finish")%>
+<%= form_for @role, url: wizard_path, method: :put do |f| %>
+    <%#=  f.text_field :role_name, :placeholder => "Role Name"  %>
+
+    <div class="field">
+      <%#= form.label :role_name %>
+      <%= f.text_field :role_name, id: :role_name, placeholder: "Role Name *" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :role_abilities, style: "margin-left: 15%;" %>
+    </div>
+    <%#= form.collection_check_boxes :role_abilities, @abilities, :role_abilities %>
+    <div id="all_ability_list">
+      <% @abilities.each do |ability|%>
+          <div class="ability_checkboxes">
+            <%= f.check_box  :role_abilities,{multiple: true,class: "role_abilities"}, ability,false%>
+            <%= ability.titleize  %>
+          </div>
+      <%end%>
+    </div><br>
+
+    <%= link_to "Add Role", "#", class: "wizard_add_new_role" %>
+
+    <h1>Roles</h1>
+    <table class="table">
+      <thead >
+      <tr>
+        <th>Name</th>
+      </tr>
+      </thead>
+      <tbody id="wizard_role_table">
+      <%= render "created_role"%>
+      </tbody>
+    </table>
+    <br>
+    <%= hidden_field_tag 'client_id',@client_application_id %>
+    <%#= f.submit "Next" %>
+<% end %>
+
+<%= link_to 'Next',next_wizard_path %>
+
+<%#= link_to 'skip',wizard_path(:service_provider) %>

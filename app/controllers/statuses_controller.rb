@@ -4,11 +4,12 @@ class StatusesController < ApplicationController
   # GET /statuses
   # GET /statuses.json
   def index
-    #Will need to call status in order by statusid? or?
-    @status = Status.order(:position =>:asc)
+
 
 
     client_application_id = current_user.client_application_id.to_s
+    #Will need to call status in order by statusid? or?
+    @status = Status.where(client_application_id: client_application_id).order(:position =>:asc)
     @statuses = Status.where(client_application_id: client_application_id)
   end
 
@@ -48,7 +49,7 @@ class StatusesController < ApplicationController
     @status.client_application_id = client_application_id
     respond_to do |format|
       if @status.save
-        format.html { redirect_to @status, notice: 'Status was successfully created.' }
+        format.html { redirect_to statuses_path, notice: 'Status was successfully created.' }
         format.json { render :show, status: :created, location: @status }
       else
         format.html { render :new }
@@ -78,6 +79,20 @@ class StatusesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to statuses_url, notice: 'Status was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+
+  def wizard_add_status
+    client_application_id = current_user.client_application_id.to_s
+    logger.debug("the status of from wizard is*************")
+    status = Status.new
+    status.status = params[:status]
+    status.client_application_id = client_application_id
+    if status.save
+      respond_to do |format|
+        format.js
+      end
     end
   end
 
