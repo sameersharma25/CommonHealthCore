@@ -93,6 +93,7 @@ class RolesController < ApplicationController
     @role.client_application_id = client_application
     @role.role_name = params[:name]
     if @role.save
+      @roles = Role.where(client_application_id: client_application)
       respond_to do |format|
         format.js
       end

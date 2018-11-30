@@ -1,4 +1,4 @@
-<%= "Step #{@current_step} of #{@total_steps}" %>
+<h3><%= "Step #{@current_step} of #{@total_steps}" %></h3>
 <h1>Alert Workflow</h1>
 
 <%= form_for @notification_rule, url: wizard_path, method: :put do |f| %>
@@ -29,6 +29,10 @@
 
 
     <%#= f.submit "Next" %>
-    <%= link_to 'Next',next_wizard_path %>
+    <%#= link_to 'Next',next_wizard_path %>
 <% end %>
+
+<div class="a2a_kit a2a_kit_size_32 a2a_default_style" id="my_centered_buttons">
+  <%= link_to 'Next',next_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
+</div>
 <%= link_to 'skip', next_wizard_path %>

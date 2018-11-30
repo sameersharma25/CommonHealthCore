@@ -246,7 +246,7 @@ module Api
         p_status = p.patient_status
         p_email = p.patient_email
         dob = p.date_of_birth
-        p_age = dob.blank? ? "" :((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+        p_age = dob.blank? ? "" : ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
         active_notification = false
         p.appointments.each do |a|
           a.notifications.each do |n|

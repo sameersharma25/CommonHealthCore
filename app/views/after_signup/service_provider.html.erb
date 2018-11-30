@@ -1,4 +1,4 @@
-<%= "Step #{@current_step} of #{@total_steps}" %>
+<h3><%= "Step #{@current_step} of #{@total_steps}" %></h3>
 <h1>Service Provider</h1>
 
 
@@ -33,7 +33,9 @@
     </div>
 
     <%= hidden_field_tag 'client_id',@client_application_id %>
-    <%= f.submit "Create Notification Rule" %>
+    <div class="a2a_kit a2a_kit_size_32 a2a_default_style" id="my_centered_buttons">
+      <%= f.submit "Finish",class: "btn btn-primary wizard_next_button" %>
+    </div>
 <% end %>
-<%= link_to 'skip', next_wizard_path %>
+<%#= link_to 'skip', next_wizard_path %>
 <%= link_to "Previous", previous_wizard_path %>

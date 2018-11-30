@@ -88,6 +88,7 @@ class NotificationRulesController < ApplicationController
     notifiacation_rule.client_application_id = client_application_id
     if notifiacation_rule.save
       respond_to do |format|
+        @notification_rules = NotificationRule.where(client_application_id: client_application)
         format.js
       end
     end

@@ -1,4 +1,4 @@
-<%= "Step #{@current_step} of #{@total_steps}" %>
+<h3><%= "Step #{@current_step} of #{@total_steps}" %></h3>
 <h1>Status</h1>
 
 <%= form_for @status, url: wizard_path, method: :put do |f| %>
@@ -20,9 +20,11 @@
       </tbody>
     </table>
     <br>
-    <%= f.submit "Next" %>
+    <%#= f.submit "Next" %>
 <% end %>
-
+<div class="a2a_kit a2a_kit_size_32 a2a_default_style" id="my_centered_buttons">
+  <%= link_to 'Next',next_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
+</div>
 
 
 

@@ -91,6 +91,7 @@ class StatusesController < ApplicationController
     status.client_application_id = client_application_id
     if status.save
       respond_to do |format|
+        @statuses = Status.where(client_application_id: client_application)
         format.js
       end
     end

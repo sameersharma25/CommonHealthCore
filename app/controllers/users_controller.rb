@@ -90,6 +90,9 @@ class UsersController < ApplicationController
     email = params[:email]
     client_application = current_user.client_application.id
     send_invite_to_user(email, client_application, name,roles)
+
+    @users = User.where(client_application_id: client_application)
+
   end
 
   private
