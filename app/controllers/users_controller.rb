@@ -89,9 +89,12 @@ class UsersController < ApplicationController
     name = params[:name]
     email = params[:email]
     client_application = current_user.client_application.id
-    send_invite_to_user(email, client_application, name,roles)
-
-    @users = User.where(client_application_id: client_application)
+    if send_invite_to_user(email, client_application, name,roles)
+      respond_to do |format|
+        @users = User.where(client_application_id: client_application)
+        format.js
+      end
+    end
 
   end
 

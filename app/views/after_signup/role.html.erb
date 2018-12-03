@@ -1,8 +1,9 @@
 <h3><%= "Step #{@current_step} of #{@total_steps}" %></h3>
 <h1>Roles</h1>
 <div class="" id="default_centered_button">
-  <%= link_to "Set Default Values", wizard_path(:default_settings),type: "button" ,class: "btn btn-primary wizard_default_button" %>
+  <%= link_to "Skip Setup, Use Defaults", wizard_path(:default_settings),type: "button" ,class: "btn btn-primary wizard_default_button" %>
 </div>
+
 <%#= button_to "Set Default Values", wizard_path(:default_settings), :method => "get" %>
 <%#= link_to "Default", jump_to(:wicked_finish, id: "wicked_finish")%>
 <%= form_for @role, url: wizard_path, method: :put do |f| %>
@@ -45,10 +46,9 @@
 
 <% end %>
 
-<div class="a2a_kit a2a_kit_size_32 a2a_default_style" id="my_centered_buttons">
+<div class="" id="my_centered_buttons">
   <%= link_to 'Next',next_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
 </div>
 <%#= button_to "Next", next_wizard_path, :method => "get", calss: "wizard_next_button" %>
 <%#= link_to 'Next',next_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
 
-<%#= link_to 'skip',wizard_path(:service_provider) %>
