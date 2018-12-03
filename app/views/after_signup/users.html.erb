@@ -1,4 +1,4 @@
-<%= "Step #{@current_step} of #{@total_steps}" %>
+<h3><%= "Step #{@current_step} of #{@total_steps}" %></h3>
 <h1>User</h1>
 
 
@@ -29,6 +29,11 @@
       </tbody>
     </table>
     <br>
-    <%= f.submit "Next" %>
+    <%#= f.submit "Next" %>
 <% end %>
-<%= link_to 'Previous',previous_wizard_path %>
+<div class="" id="my_centered_buttons">
+  <%= link_to 'Previous', previous_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
+  <%= link_to 'Next',next_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
+</div>
+<%#= link_to 'Previous',previous_wizard_path %>
+
