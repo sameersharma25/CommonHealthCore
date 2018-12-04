@@ -126,5 +126,22 @@ module Api
       render :json=> {status: :ok, :message=> "Response Sent" }
     end
 
+    def task_message_list
+      task_msg_array = Array.new
+      patient_id = params[:patient_id]
+      patient = Patient.find(patient_id)
+      referrals = patient.referrals
+      referrals.each do |r|
+        tasks = r.tasks
+        tasks.each do |t|
+          task_type = t.task_type
+          msg_count = t.communications.count
+          task_msg = {task_type: task_type,msg_count: msg_count}
+          task_msg_array.push(task_msg)
+        end
+      end
+      render :json=> {status: :ok, :task_msg_data=> task_msg_array }
+    end
+
   end
 end

@@ -92,6 +92,7 @@ Rails.application.routes.draw do
     post "msg_send", to: "communications#send_message"
     post "msg_get", to: "communications#get_messages"
     post "msg_list", to: "communications#message_list"
+    post "msg_tsk_list", to: "communications#task_message_list"
 
 
     #API's for Service Provider Details

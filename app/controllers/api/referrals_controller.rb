@@ -24,19 +24,24 @@ module Api
         end
       elsif !params[:task].blank?
         logger.debug("Create task********************")
-        task = Task.new
-        task.task_type = params[:task][:task_type]
-        task.task_status = params[:task][:task_status]
-        task.task_owner = params[:task][:task_owner]
-        task.provider = params[:task][:provider]
-        task.task_deadline = params[:task][:task_deadline]
-        task.task_description = params[:task][:task_description]
-        task.referral_id = referral.id.to_s
-        if task.save
-          render :json=> {status: :ok, message: "Referral and Task Created"}
-        else
-          render :json=> {status: :ok, message: "Referral and Task not Created"}
+        params[:task].each do |t|
+          logger.debug("****************the TASK is : #{t}")
+          task = Task.new
+          task.task_type = t[:task_type]
+          task.task_status = t[:task_status]
+          task.task_owner = t[:task_owner]
+          task.provider = t[:provider]
+          task.task_deadline = t[:task_deadline]
+          task.task_description = t[:task_description]
+          task.referral_id = referral.id.to_s
+          task.save
         end
+
+        # if task.save
+          render :json=> {status: :ok, message: "Referral and Task Created"}
+        # else
+        #   render :json=> {status: :ok, message: "Referral and Task not Created"}
+        # end
       end
     end
 
@@ -131,3 +136,6 @@ module Api
 
   end
 end
+
+
+#[{"name": "time", "place": "resource"}, {"name": "stack", "place": "chron"}]
