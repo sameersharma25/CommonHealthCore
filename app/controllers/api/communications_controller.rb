@@ -134,9 +134,10 @@ module Api
       referrals.each do |r|
         tasks = r.tasks
         tasks.each do |t|
+          task_id = t.id.to_s
           task_type = t.task_type
           msg_count = t.communications.count
-          task_msg = {task_type: task_type,msg_count: msg_count}
+          task_msg = {task_id: task_id,task_type: task_type,msg_count: msg_count}
           task_msg_array.push(task_msg)
         end
       end

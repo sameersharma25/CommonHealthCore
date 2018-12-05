@@ -75,6 +75,9 @@ Rails.application.routes.draw do
     post 'update_patient', to: "patients#update_patient"
     post 'create_patient', to: "patients#create_patient"
     post 'crete_appointment_for_patient', to: "patients#crete_appointment_for_patient"
+    post "note_create", to: "patients#create_note"
+    post "notes_list", to: "patients#patient_notes_list"
+
     post 'update_notifications', to: "users#update_notifications"
     resource :sessions, only: [:create, :destroy]
     resource :invitations, only: [:update]
@@ -93,6 +96,8 @@ Rails.application.routes.draw do
     post "msg_get", to: "communications#get_messages"
     post "msg_list", to: "communications#message_list"
     post "msg_tsk_list", to: "communications#task_message_list"
+
+
 
 
     #API's for Service Provider Details

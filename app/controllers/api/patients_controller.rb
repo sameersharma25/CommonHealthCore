@@ -16,6 +16,11 @@ module Api
       patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
       patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
+      if ZipCodes.identify(params[:patient_zipcode]).nil?
+        logger.debug("Inside the zip validations*********************")
+        render :json=> {message: "Please enter a valid zipcode"}
+        return
+      end
       patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
       patient.ethnicity = params[:ethnicity] if params[:ethnicity]
       patient.gender = params[:gender] if params[:gender]
@@ -68,6 +73,11 @@ module Api
       patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
       patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
+      if ZipCodes.identify(params[:patient_zipcode]).nil?
+        logger.debug("Inside the zip validations*********************")
+        render :json=> {message: "Please enter a valid zipcode"}
+        return
+      end
       patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
       patient.patient_address = params[:patient_address] if params[:patient_address]
       patient.ethnicity = params[:ethnicity] if params[:ethnicity]
@@ -78,6 +88,31 @@ module Api
       end
     end
 
+    def create_note
+      patient_id = params[:patient_id]
+      note = Note.new
+      note.note_text = params[:text]
+      note.patient_id = patient_id
+      if note.save
+        render :json=> {status: :ok, message: "Note was created"}
+      end
+
+    end
+
+    def patient_notes_list
+      patient = Patient.find(params[:patient_id])
+      notes_array = []
+      notes = patient.notes
+      notes.each do |note|
+        text = note.note_text
+        time = note.created_at.strftime("%m/%d/%Y %I:%M%p")
+        note_hash = {text: text, time: time}
+        notes_array.push(note_hash)
+      end
+
+      render :json => {status: :ok, notes_array: notes_array }
+
+    end
 
 
   end
