@@ -97,7 +97,14 @@ module Api
               message = c.comm_message
               from_cc = c.from_cc
               id = c.id.to_s
-              communication = {subject: subject, message: message, from_cc: from_cc, id: id  }
+              created_at = c.created_at.strftime("%m/%d/%Y %I:%M%p")
+              if !c.sender_id.nil?
+                sender = User.find(c.sender_id)
+                sender_name = sender.name
+              else
+                sender_name = ""
+              end
+              communication = {subject: subject, message: message, from_cc: from_cc, id: id, created_at: created_at, sender_name: sender_name}
               comm_array.push(communication)
             end
           end
@@ -135,9 +142,10 @@ module Api
         tasks = r.tasks
         tasks.each do |t|
           task_id = t.id.to_s
+          provider = t.provider
           task_type = t.task_type
           msg_count = t.communications.count
-          task_msg = {task_id: task_id,task_type: task_type,msg_count: msg_count}
+          task_msg = {task_id: task_id,task_type: task_type,provider: provider, msg_count: msg_count}
           task_msg_array.push(task_msg)
         end
       end

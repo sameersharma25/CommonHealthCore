@@ -112,6 +112,8 @@ module Api
       task.task_owner = params[:task_owner] if params[:task_owner]
       task.provider = params[:provider] if params[:provider]
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
+      #task.task_deadline = params[:task_deadline].to_datetime.strftime('%m/%d/%Y') if params[:task_deadline]
+
       task.task_description = params[:task_description] if params[:task_description]
       task.additional_fields = params[:additional_fields] if params[:additional_fields]
       if task.save
