@@ -99,8 +99,13 @@ module Api
               id = c.id.to_s
               created_at = c.created_at.strftime("%m/%d/%Y %I:%M%p")
               if !c.sender_id.nil?
-                sender = User.find(c.sender_id)
-                sender_name = sender.name
+                if c.from_cc == true
+                  sender = User.find(c.sender_id)
+                  sender_name = sender.name
+                elsif c.from_cc == false
+                  sender = Patient.find(c.sender_id)
+                  sender_name = sender.first_name
+                end
               else
                 sender_name = ""
               end
