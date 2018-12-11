@@ -138,6 +138,3 @@ module Api
 
   end
 end
-
-
-#[{"name": "time", "place": "resource"}, {"name": "stack", "place": "chron"}]
