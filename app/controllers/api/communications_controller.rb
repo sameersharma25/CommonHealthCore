@@ -5,7 +5,7 @@ require 'json'
 module Api
   class CommunicationsController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: []
+    before_action :authenticate_user_from_token, except: [:get_messages]
     load_and_authorize_resource class: :api
 
     def send_message
@@ -61,7 +61,8 @@ module Api
       comm.from_cc = true
       if comm.save
         #https://kl94y9g3yc.execute-api.us-east-1.amazonaws.com/send_message
-        uri = URI("https://kl94y9g3yc.execute-api.us-east-1.amazonaws.com/send_message?commType=#{comm.comm_type}&commMessage=#{comm.comm_message}&commSubject=#{comm.comm_message}&sendTo=#{send_to}&commId=#{comm.id.to_s}")
+        # uri = URI("https://kl94y9g3yc.execute-api.us-east-1.amazonaws.com/send_message?commType=#{comm.comm_type}&commMessage=#{comm.comm_message}&commSubject=#{comm.comm_message}&sendTo=#{send_to}&commId=#{comm.id.to_s}")
+        uri = URI("https://f9nmqkovog.execute-api.us-west-2.amazonaws.com/prod?commType=#{comm.comm_type}&commMessage=#{comm.comm_message}&commSubject=#{comm.comm_message}&sendTo=#{send_to}&commId=#{comm.id.to_s}")
         # uri = URI("https://kl94y9g3yc.execute-api.us-east-1.amazonaws.com/send_message?commType=text&commMessage=sending message from rails with out line break&sendTo=+13126135585&commId=#{comm.id.to_s}")
 
         res = Net::HTTP.get(uri)
@@ -78,11 +79,7 @@ module Api
       if params[:task_id]
         t = Task.find(params[:task_id])
         t.communications.each do |c|
-          subject = c.comm_subject
-          message = c.comm_message
-          from_cc = c.from_cc
-          id = c.id.to_s
-          communication = {subject: subject, message: message, from_cc: from_cc, id: id  }
+          communication= create_message_list_hash(c)
           comm_array.push(communication)
         end
       elsif params[:patient_id]
@@ -93,29 +90,33 @@ module Api
           tasks = r.tasks
           tasks.each do |t|
             t.communications.each do |c|
-              subject = c.comm_subject
-              message = c.comm_message
-              from_cc = c.from_cc
-              id = c.id.to_s
-              created_at = c.created_at.strftime("%m/%d/%Y %I:%M%p")
-              if !c.sender_id.nil?
-                if c.from_cc == true
-                  sender = User.find(c.sender_id)
-                  sender_name = sender.name
-                elsif c.from_cc == false
-                  sender = Patient.find(c.sender_id)
-                  sender_name = sender.first_name
-                end
-              else
-                sender_name = ""
-              end
-              communication = {subject: subject, message: message, from_cc: from_cc, id: id, created_at: created_at, sender_name: sender_name}
+              communication= create_message_list_hash(c)
               comm_array.push(communication)
             end
           end
         end
       end
       render :json=> {status: :ok, :comm_data=> comm_array }
+    end
+
+    def create_message_list_hash(c)
+      subject = c.comm_subject
+      message = c.comm_message
+      from_cc = c.from_cc
+      id = c.id.to_s
+      created_at = c.created_at.strftime("%m/%d/%Y %I:%M%p")
+      if !c.sender_id.nil?
+        if c.from_cc == true
+          sender = User.find(c.sender_id)
+          sender_name = sender.name
+        elsif c.from_cc == false
+          sender = Patient.find(c.sender_id)
+          sender_name = sender.first_name
+        end
+      else
+        sender_name = ""
+      end
+      communication = {subject: subject, message: message, from_cc: from_cc, id: id, created_at: created_at, sender_name: sender_name}
     end
 
     def get_messages
