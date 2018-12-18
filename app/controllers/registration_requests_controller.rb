@@ -27,7 +27,7 @@ class RegistrationRequestsController < ApplicationController
     @registration_request = RegistrationRequest.new(registration_request_params)
 
     respond_to do |format|
-      if @registration_request.save
+      if verify_recaptcha && @registration_request.save
         RegistrationRequestMailer.registation_request(@registration_request).deliver
         format.html { redirect_to root_path, notice: 'Registration request was successfully created.' }
         format.json { render :show, status: :created, location: @registration_request }

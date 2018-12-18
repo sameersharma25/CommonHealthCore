@@ -29,6 +29,7 @@ class ServiceProviderDetailsController < ApplicationController
   # GET /service_provider_details/1/edit
   def edit
     @client_application = current_user.client_application_id.to_s
+
   end
 
   # POST /service_provider_details
@@ -152,6 +153,6 @@ class ServiceProviderDetailsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def service_provider_detail_params
       params.fetch(:service_provider_detail, {})
-      params.require(:service_provider_detail).permit(:service_provider_name, :provider_type, :share, :data_storage_type, :service_provider_api,:client_application_id, filtering_fields: {})
+      params.require(:service_provider_detail).permit(:service_provider_name, :provider_type, :share, :data_storage_type, :service_provider_api,:client_application_id, :provider_data_file, filtering_fields: {})
     end
 end

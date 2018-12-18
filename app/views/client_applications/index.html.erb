@@ -91,6 +91,7 @@
         <th >Name</th>
         <th >URL</th>
         <th >UserEmail</th>
+        <th ></th>
       </tr>
     </thead>
     <tbody>
@@ -99,6 +100,11 @@
         <td><%= rr.application_name%></td>
         <td><%= rr.application_url%></td>
         <td><%= rr.user_email%></td>
+        <% if rr.invited == true %>
+            <td><%= link_to "Resend Invite", "#", id: rr.id.to_s,:remote => true %></td>
+        <% elsif rr.invited == false%>
+            <td><%= link_to "Invite", "#", id: rr.id.to_s, class: "requested_application",:remote => true %></td>
+        <% end %>
       </tr>
     <%end%>
     </tbody>

@@ -99,6 +99,28 @@ class ClientApplicationsController < ApplicationController
 
   end
 
+  def send_application_invitation
+    logger.debug("*************the id is: #{params[:id]}")
+    rr = RegistrationRequest.find(params[:id])
+
+    ca = ClientApplication.new
+    ca.name = rr.application_name
+    ca.application_url = rr.application_url
+
+    if ca.save
+      admin_role = Role.create(client_application_id: ca.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
+      if rr.user_email
+        user_invite = send_invite_to_user(rr.user_email,ca,
+                                          rr.application_name, admin_role.id.to_s )
+        logger.debug("the user Invite value is : #{user_invite.class}")
+        if user_invite == true
+          rr.invited = true
+        end
+      end
+    end
+
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_client_application

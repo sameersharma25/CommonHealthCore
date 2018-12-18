@@ -8,8 +8,8 @@ module Api
 
   def update_patient
       patient = Patient.find(params[:patient_id])
-      patient.first_name = params[:first_name] if params[:first_name]
-      patient.last_name = params[:last_name] if params[:last_name]
+      patient.first_name = params[:first_name].titleize if params[:first_name]
+      patient.last_name = params[:last_name].titleize if params[:last_name]
       patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
       patient.patient_email = params[:patient_email] if params[:patient_email]
       patient.patient_phone = params[:patient_phone] if params[:patient_phone]
@@ -65,8 +65,8 @@ module Api
 
       patient = Patient.new
       patient.client_application_id = client_application
-      patient.first_name = params[:first_name] if params[:first_name]
-      patient.last_name = params[:last_name] if params[:last_name]
+      patient.first_name = params[:first_name].titleize if params[:first_name]
+      patient.last_name = params[:last_name].titleize if params[:last_name]
       patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
       patient.patient_email = params[:patient_email] if params[:patient_email]
       patient.patient_phone = params[:patient_phone] if params[:patient_phone]

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   get "/all_details", to: "client_applications#all_details"
   get "/save_all_details", to: "client_applications#save_all_details"
   post "/copy_default_settings", to: "client_applications#copy_default_settings"
+  post "send_application_invitation", to: "client_applications#send_application_invitation"
 
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
   post "filter_field_values", to: "service_provider_details#filter_field_values"

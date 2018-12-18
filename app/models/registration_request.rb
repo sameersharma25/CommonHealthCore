@@ -4,6 +4,8 @@ class RegistrationRequest
   field :application_name, type: String
   field :application_url, type: String
   field :user_email, type: String
+  field :invited, type: Boolean, default: false
 
-  # validates_presence_of :application_name, :application_url, :user_email
+  validates_presence_of :application_name, :application_url, :user_email
+
 end

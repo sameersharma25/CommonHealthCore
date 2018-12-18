@@ -15,6 +15,7 @@ module Api
       sp.data_storage_type = params[:data_storage_type] if params[:data_storage_type]
       sp.provider_type = params[:provider_type] if params[:provider_type]
       sp.share = params[:share] if params[:share]
+      sp.provider_data_file = params[:provider_data_file]
       sp.filtering_fields = params[:filtering_fields].to_unsafe_h
       logger.debug("SERVICE PROVIDER IS : #{sp.inspect}----------------------------")
       if sp.save

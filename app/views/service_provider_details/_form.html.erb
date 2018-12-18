@@ -37,6 +37,7 @@
 
     <div class="field hide upload_csv">
       <%= form.label :upload_csv %>
+      <%= form.file_field :provider_data_file %>
 
     </div>
     <div class="field">
@@ -56,3 +57,5 @@
     <%= form.submit class: 'submit_button' %>
   </div>
 <% end %>
+
+<%#=@db_data%>
