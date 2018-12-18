@@ -1,3 +1,16 @@
 // Place all the styles related to the RegistrationRequests controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.right_box {
+  border: 1px solid black;
+  width: 50%;
+  margin: 10px
+}
+
+.left_box {
+  border: 1px solid black ;
+  width: 50%;
+  //height: 70px;
+  margin: 10px
+}
