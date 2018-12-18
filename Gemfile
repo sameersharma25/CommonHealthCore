@@ -48,7 +48,8 @@ gem 'wicked'
 gem 'rack-cors', :require => 'rack/cors'
 
 gem 'simple_token_authentication'
-gem 'aws-sdk'
+# gem 'aws-sdk'
+gem 'aws-sdk', '~> 3.0', '>= 3.0.1'
 gem 'whenever', require: false
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -64,6 +65,12 @@ gem 'mongoid_orderable'
 #gem 'acts_as_list'
 
 gem 'zip-codes'
+gem 'carrierwave', :git => "git://github.com/jnicklas/carrierwave.git"
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+gem 'mini_magick', :git => 'git://github.com/probablycorey/mini_magick.git'
+
+gem "recaptcha", '3.4.0', require: "recaptcha/rails"
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -1,5 +1,12 @@
 <h1>New Registration Request</h1>
 
-<%= render 'form', registration_request: @registration_request %>
+  <div class="row">
+    <div class="col-md-4" style="border: 1px solid black ; width: 40%; height: 70px;margin: 10px">
+      After you send the request registration the Admin will review it and send you an invitation.
+    </div>
 
-<%= link_to 'Back', registration_requests_path %>
+    <div class="col-md-4" style="border: 1px solid black; width: 40%; margin: 10px">
+      <%= render 'form', registration_request: @registration_request %>
+    </div>
+  </div>
+<%#= link_to 'Back', registration_requests_path %>
