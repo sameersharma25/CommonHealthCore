@@ -12,6 +12,9 @@ class ClientApplicationsController < ApplicationController
     logger.debug("the session count is *********************: #{user.sign_in_count}")
     logger.debug("the params are *********************: #{params.inspect}")
     if user.sign_in_count.to_s == "1"
+      rr = RegistrationRequest.find_by(user_email: user.email)
+      rr.invitation_accepted = true
+      rr.save
       logger.debug("REDIRECTING TO THE NEW STEPS****************")
       redirect_to after_signup_path(:role)
     end
@@ -112,9 +115,10 @@ class ClientApplicationsController < ApplicationController
       if rr.user_email
         user_invite = send_invite_to_user(rr.user_email,ca,
                                           rr.application_name, admin_role.id.to_s )
-        logger.debug("the user Invite value is : #{user_invite.class}")
+        logger.debug("the user Invite value is : #{user_invite} -------#{user_invite.class}")
         if user_invite == true
           rr.invited = true
+          rr.save
         end
       end
     end

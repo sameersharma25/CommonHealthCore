@@ -97,13 +97,15 @@
     <tbody>
     <%@registration_request.each do |rr|%>
       <tr>
-        <td><%= rr.application_name%></td>
-        <td><%= rr.application_url%></td>
-        <td><%= rr.user_email%></td>
-        <% if rr.invited == true %>
-            <td><%= link_to "Resend Invite", "#", id: rr.id.to_s,:remote => true %></td>
-        <% elsif rr.invited == false%>
-            <td><%= link_to "Invite", "#", id: rr.id.to_s, class: "requested_application",:remote => true %></td>
+        <% if rr.invitation_accepted == false %>
+          <td><%= rr.application_name%></td>
+          <td><%= rr.application_url%></td>
+          <td><%= rr.user_email%></td>
+          <% if rr.invited == true %>
+              <td><%= link_to "Resend Invite", "#", id: rr.id.to_s,:remote => true %></td>
+          <% elsif rr.invited == false %>
+              <td><%= link_to "Invite", "#", id: rr.id.to_s, class: "requested_application",:remote => true %></td>
+          <% end %>
         <% end %>
       </tr>
     <%end%>
@@ -113,7 +115,7 @@
 <% end %>
 
 
-<%= link_to 'New Client Application', new_client_application_path if current_user.admin? %><br>
+<%#= link_to 'New Client Application', new_client_application_path if current_user.admin? %><br>
 
 <%= link_to "Application Details", "/all_details"%><br>
 
