@@ -1,9 +1,9 @@
-<h3><%= "Step #{@current_step} of #{@total_steps}" %></h3>
+<h3><%= "Step #{@current_step} of #{@total_steps - 1}" %></h3>
 <h1>Alert Workflow</h1>
 
 <%= form_for @notification_rule, url: wizard_path, method: :put do |f| %>
     <%= f.select(:appointment_status, options_from_collection_for_select(@statuses, "status", "status"))  %>
-    <%= f.text_field :time_difference, :placeholder => "Time Remaining" %>
+    <%= f.text_field :time_difference, :placeholder => "Time Remaining (in Hrs)" %>
     <%= f.select(:user_type, options_for_select(["Owner","Patient","Service Provider", "All"]))  %>
     <%= f.text_field :subject, :placeholder => "Subject for email" %>
     <%= f.text_field :body, :placeholder => "Content" %>

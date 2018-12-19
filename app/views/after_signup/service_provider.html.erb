@@ -1,8 +1,21 @@
-<h3><%= "Step #{@current_step} of #{@total_steps}" %></h3>
+<h3><%= "Step #{@current_step} of #{@total_steps - 1}" %></h3>
 <h1>Service Provider</h1>
 
 
 <%= form_for @service_provider_detail, url: wizard_path, method: :put do |f| %>
+
+    <% if @service_provider_detail.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@service_provider_detail.errors.count, "error") %> prohibited this service_provider_detail from being saved:</h2>
+
+          <ul>
+            <% @service_provider_detail.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
     <%= f.text_field :service_provider_name, id: :service_provider_name, placeholder: "Provider Name" %>
     <%= f.text_field :provider_type, id: :provider_type, placeholder: "Provider Type" %>
 
@@ -20,7 +33,7 @@
     </div>
     <div class="field hide upload_csv">
       <%= f.label :upload_csv %>
-
+      <%= f.file_field :provider_data_file %>
     </div>
 
     <div class="field">
