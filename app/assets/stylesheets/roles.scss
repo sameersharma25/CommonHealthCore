@@ -34,3 +34,12 @@ input:focus, textarea:focus, select:focus{
   background-color: #00b1cb;
   border-radius: 5px;
 }
+
+ul.ability_ul {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  //height: 306px; /* account for borders */
+  list-style-type: none;
+  width: 200px;
+}

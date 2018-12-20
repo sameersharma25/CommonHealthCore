@@ -20,10 +20,14 @@
     <%#= form.collection_check_boxes :role_abilities, @abilities, :role_abilities %>
     <div id="all_ability_list">
       <% @abilities.each do |ability|%>
-          <div class="ability_checkboxes">
-            <%= f.check_box  :role_abilities,{multiple: true,class: "role_abilities"}, ability,false%>
-            <%= ability.titleize  %>
-          </div>
+        <ul class="ability_ul">
+          <li>
+            <div class="ability_checkboxes">
+              <%= f.check_box  :role_abilities,{multiple: true,class: "role_abilities"}, ability,false%>
+              <%= ability.titleize  %>
+            </div>
+          </li>
+        </ul>
       <%end%>
     </div><br>
 
