@@ -25,7 +25,7 @@
   <div class="field">
     <%= form.label :data_storage %>:
     <%= form.radio_button( :data_storage_type, "Internal", :class => "internal_data_storage" ) %> Internal
-    <a href="#" data-toggle="tooltip" title="By selecting Internal you are opting to you chc's database. To use the chc database you will have to provide a list of service providers with all the required fields in a csv file."><%=image_tag "question_mark1.png", :style => "width:20px;height;20px;"%></a>
+    <a href="#" data-toggle="tooltip" title="By selecting Internal you are opting to use chc's database. To use the chc database you will have to provide a list of service providers with all the required fields in a csv file."><%=image_tag "question_mark1.png", :style => "width:20px;height;20px;"%></a>
     <%= form.radio_button( :data_storage_type, "External",:class => "external_data_storage" ) %> External
     <a href="#" data-toggle="tooltip" title="By selecting External you are opting to use an external storage maintained by your organization. You will need to provide api with all the required parameters."><%=image_tag "question_mark1.png", :style => "width:20px;height;20px;"%></a>
   </div>
