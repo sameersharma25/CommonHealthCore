@@ -29,13 +29,14 @@ class ServiceProviderDetailsController < ApplicationController
   # GET /service_provider_details/1/edit
   def edit
     @client_application = current_user.client_application_id.to_s
-
   end
 
   # POST /service_provider_details
   # POST /service_provider_details.json
   def create
     @service_provider_detail = ServiceProviderDetail.new(service_provider_detail_params)
+    @client_application = current_user.client_application_id.to_s
+
     # filtering_fields = params[:filtering_fields].split("\r\n")
     logger.debug("the fields are: #{@service_provider_detail.inspect}")
     # @service_provider_detail.filtering_fields = params[:service_provider_detail][:filtering_fields].to_json
@@ -55,6 +56,8 @@ class ServiceProviderDetailsController < ApplicationController
   # PATCH/PUT /service_provider_details/1.json
   def update
     respond_to do |format|
+
+      @client_application = current_user.client_application_id.to_s
       if @service_provider_detail.update(service_provider_detail_params)
         # format.html { redirect_to @service_provider_detail, notice: 'Service provider detail was successfully updated.' }
         format.html{redirect_to service_provider_details_path,notice: 'Service provider detail was successfully updated.'}

@@ -3,6 +3,7 @@ module Api
     include UsersHelper
     before_action :authenticate_user_from_token, except: []
     load_and_authorize_resource class: :api
+
     def create_referral
       patient = Patient.find(params[:patient_id])
       client_id = patient.client_application_id.to_s
@@ -134,6 +135,34 @@ module Api
       if task.save
         render :json=> {status: :ok, message: "Task Updated"}
       end
+    end
+
+    def dashboard_tasks
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
+      referrals = Referral.where(client_application_id: client_application.id.to_s)
+      today_array = []
+      upcoming_array = []
+      referrals.each do |r|
+        r.tasks.each do |t|
+          if t.task_deadline == Date.today
+            task_id = t.id.to_s
+            patient = t.referral.patient.first_name
+            task_date = "Today"
+            today_hash = {task_id: task_id, patient: patient, task_date: task_date }
+            today_array.push(today_hash)
+          else
+            task_id = t.id.to_s
+            patient = t.referral.patient.first_name
+            task_date = "Today"
+            upcoming_hash = {task_id: task_id, patient: patient, task_date: task_date }
+            upcoming_array.push(today_hash)
+          end
+        end
+      end
+
+      render :json => {status: :ok, today_array: today_array, upcoming_array: upcoming_array }
+
     end
 
   end
