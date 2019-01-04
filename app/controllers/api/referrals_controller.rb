@@ -154,9 +154,9 @@ module Api
           else
             task_id = t.id.to_s
             patient = t.referral.patient.first_name
-            task_date = "Today"
+            task_date = !t.task_deadline.nil? ? t.task_deadline.strftime("%b %d") : " "
             upcoming_hash = {task_id: task_id, patient: patient, task_date: task_date }
-            upcoming_array.push(today_hash)
+            upcoming_array.push(upcoming_hash)
           end
         end
       end

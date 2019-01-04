@@ -158,5 +158,28 @@ module Api
       render :json=> {status: :ok, :task_msg_data=> task_msg_array }
     end
 
+    def dashboard_messages
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
+      messagess = Communication.where(client_application_id: client_application.id.to_s).order_by(created_at: :desc).first(5)
+      message_array = []
+      referrals = Referral.where(client_application_id: client_application.id.to_s)
+
+      referrals.each do |r|
+        r.tasks.each do |t|
+          t.communications.each do |c|
+            msg_id = m.id.to_s
+            message = m.comm_message
+            created_at = m.created_at
+            message_hash = {msg_id: msg_id, message: message, created_at: created_at}
+            message_array.push(message_hash )
+          end
+        end
+      end
+      sorted_list = message_array.sort_by { |hsh| hsh[:created_at] }
+
+      render :json => {status: :ok, message_array: sorted_list }
+    end
+
   end
 end
