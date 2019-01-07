@@ -99,7 +99,6 @@ module Api
                         additional_fields: additional_fields}
         task_list.push(task_details)
       end
-
       render :json => {status: :ok, task_list: task_list }
 
     end
@@ -162,6 +161,41 @@ module Api
       end
 
       render :json => {status: :ok, today_array: today_array, upcoming_array: upcoming_array }
+    end
+
+    def dashboard_referrals
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
+      referrals = Referral.where(client_application_id: client_application.id.to_s)
+      new_referral_array = Array.new
+      active_referral_array = Array.new
+      pending_referral_array = Array.new
+
+      referrals.each do |r|
+        r.tasks.each do |t|
+          if t.task_deadline == Date.today
+            ref_id = r.id.to_s
+            ref_patient = r.patient.last_name + r.patient.first_name
+            date = t.task_deadline.strftime("%b %d")
+            active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+            active_referral_array.push(active_referral_hash)
+            break
+          elsif !t.task_deadline.nil? && t.task_deadline != Date.today
+            ref_id = r.id.to_s
+            ref_patient = r.patient.last_name + r.patient.first_name
+            date = t.task_deadline.strftime("%b %d")
+            pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+            pending_referral_array.push(pending_referral_hash)
+          elsif t.task_deadline.nil?
+            ref_id = r.id.to_s
+            ref_patient = r.patient.last_name + r.patient.first_name
+            date = t.task_deadline.strftime("%b %d")
+            new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+            new_referral_array.push(new_referral_hash)
+          end
+        end
+      end
+      render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }
 
     end
 

@@ -88,6 +88,7 @@ Rails.application.routes.draw do
     post "rfl_create", to: "referrals#create_referral"#, :as => "rfl_create"
     post "rfl_list", to: "referrals#referral_list"
     post "rfl_update", to: "referrals#update_referral"
+    post "rfl_dashboard", to: "referrals#dashboard_referrals"
 
     post "tsk_list", to: "referrals#task_list"
     post "tsk_create", to: "referrals#create_task"
@@ -101,7 +102,7 @@ Rails.application.routes.draw do
     post "msg_tsk_list", to: "communications#task_message_list"
     post "msg_dashboard", to: "communications#dashboard_messages"
 
-
+    post "dashboard_notifications", to: "communications#dashboard_notifications"
 
     #API's for Service Provider Details
     post "spd_create", to: "service_provider_details#create_provider"
