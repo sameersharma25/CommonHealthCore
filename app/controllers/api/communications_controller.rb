@@ -161,24 +161,65 @@ module Api
     def dashboard_messages
       user = User.find_by(email: params[:email])
       client_application = user.client_application
-      messagess = Communication.where(client_application_id: client_application.id.to_s).order_by(created_at: :desc).first(5)
+      # messagess = Communication.where(client_application_id: client_application.id.to_s).order_by(created_at: :desc).first(5)
       message_array = []
       referrals = Referral.where(client_application_id: client_application.id.to_s)
 
       referrals.each do |r|
         r.tasks.each do |t|
           t.communications.each do |c|
-            msg_id = m.id.to_s
-            message = m.comm_message
-            created_at = m.created_at
+            msg_id = c.id.to_s
+            message = c.comm_message
+            created_at = c.created_at
             message_hash = {msg_id: msg_id, message: message, created_at: created_at}
             message_array.push(message_hash )
           end
         end
       end
-      sorted_list = message_array.sort_by { |hsh| hsh[:created_at] }
+      sorted_list = message_array.sort_by { |hsh| hsh[:created_at] }.first(5)
 
       render :json => {status: :ok, message_array: sorted_list }
+    end
+
+    def dashboard_notifications
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
+      notification_array = Array.new
+
+      referrals = Referral.where(client_application_id: client_application.id.to_s)
+      referrals.each do |r|
+        r.tasks.each do |t|
+          t.notifications.each do |notification|
+            if notification.message["Owner"]
+              notification_id = notification.id.to_s
+              notification_message = notification.message["Owner"]["body"]
+              notification_date = notification.created_at.strftime("%b %d")
+
+              notifications_hash = {notification_id: notification_id, notification_message: notification_message, notification_date: notification_date}
+              notification_array.push(notifications_hash )
+            end
+         end
+        end
+      end
+
+
+      # notifications = Notification.all
+      # notification_array = Array.new
+
+
+      #
+      # notifications.each do |notification|
+      #   if notification.message["cc"]
+      #     notification_id = notification.id.to_s
+      #     notification_message = notification.message["cc"]["body"]
+      #     notification_date = notification.created_at.strftime("%b %d")
+      #
+      #     notifications_hash = {notification_id: notification_id, notification_message: notification_message, notification_date: notification_date}
+      #     notification_array.push(notifications_hash )
+      #   end
+      # end
+
+      render :json => {status: :ok, notification_array: notification_array }
     end
 
   end
