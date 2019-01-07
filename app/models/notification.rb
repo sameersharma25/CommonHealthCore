@@ -6,7 +6,8 @@ class Notification
   field :active, type: Boolean
 
 
-  belongs_to :appointment
+  # belongs_to :appointment
+  belongs_to :task
 
 
 end
