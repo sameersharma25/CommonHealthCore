@@ -89,6 +89,7 @@ Rails.application.routes.draw do
     post "rfl_list", to: "referrals#referral_list"
     post "rfl_update", to: "referrals#update_referral"
     post "rfl_dashboard", to: "referrals#dashboard_referrals"
+    post "patient_document", to: "referrals#patient_document"
 
     post "tsk_list", to: "referrals#task_list"
     post "tsk_create", to: "referrals#create_task"

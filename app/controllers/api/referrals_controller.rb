@@ -112,6 +112,7 @@ module Api
       task.task_owner = params[:task_owner] if params[:task_owner]
       task.provider = params[:provider] if params[:provider]
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
+      task.patient_document = params[:patient_document] if params[:patient_document]
       #task.task_deadline = params[:task_deadline].to_datetime.strftime('%m/%d/%Y') if params[:task_deadline]
 
       task.task_description = params[:task_description] if params[:task_description]
@@ -131,6 +132,7 @@ module Api
       task.provider = params[:provider] if params[:provider]
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
       task.task_description = params[:task_description] if params[:task_description]
+      task.patient_document = params[:patient_document] if params[:patient_document]
       if task.save
         render :json=> {status: :ok, message: "Task Updated"}
       end
@@ -189,7 +191,7 @@ module Api
           elsif t.task_deadline.nil?
             ref_id = r.id.to_s
             ref_patient = r.patient.last_name + r.patient.first_name
-            date = t.task_deadline.strftime("%b %d")
+            date = ""
             new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
             new_referral_array.push(new_referral_hash)
           end
@@ -197,6 +199,31 @@ module Api
       end
       render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }
 
+    end
+
+    def patient_document
+      user = User.find_by(email: params[:email])
+      patient = Patient.find(params[:patient_id])
+      client_application = user.client_application
+      referrals = patient.referrals
+      patient_document_array = Array.new
+
+      referrals.each do |r|
+        r.tasks.each do |t|
+          if t.patient_document.present?
+            logger.debug("the task is ************ #{t.inspect}")
+            file_name = t.patient_document_identifier
+            logger.debug("the FILE SIZE is ************ #{t.patient_document}")
+            # file_size = number_to_human_size(t.patient_document.size)
+            task_date = t.created_at.strftime('%m/%d/%Y')
+            file_size = (t.patient_document.size)/1000.0
+            task_id = t.id.to_s
+            patient_document_hash = {file_name: file_name,file_size: file_size, task_id: task_id, task_date: task_date }
+            patient_document_array.push(patient_document_hash)
+          end
+        end
+      end
+      render :json => {status: :ok,patient_document_array: patient_document_array}
     end
 
   end
