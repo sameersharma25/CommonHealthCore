@@ -192,6 +192,9 @@ module Api
       active_referral_array = Array.new
       pending_referral_array = Array.new
       task_type_collection_array = Array.new
+      active_referral_time_array = Array.new
+      pending_referral_time_array = Array.new
+      new_referral_time_array = Array.new
 
       referrals.each do |r|
         r.tasks.each do |t|
@@ -203,6 +206,7 @@ module Api
             # active_referral_array.push(active_referral_hash)
             # break
             task_type_collection_array.push("active")
+            active_referral_time_array.push(date)
           elsif !t.task_deadline.nil? && t.task_deadline != Date.today
             ref_id = r.id.to_s
             ref_patient = r.patient.last_name + r.patient.first_name
@@ -210,6 +214,7 @@ module Api
             # pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
             # pending_referral_array.push(pending_referral_hash)
             task_type_collection_array.push("pending")
+            pending_referral_time_array.push(date)
           elsif t.task_deadline.nil?
             ref_id = r.id.to_s
             ref_patient = r.patient.last_name + r.patient.first_name
@@ -223,12 +228,13 @@ module Api
         if task_type_collection_array.include? ("active")
           ref_id = r.id.to_s
           ref_patient = r.patient.last_name + r.patient.first_name
-          active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient }
+          date = active_referral_time_array.sort.last
+          active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
         elsif task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active")
           ref_id = r.id.to_s
           ref_patient = r.patient.last_name + r.patient.first_name
-
-          pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient}
+          date = pending_referral_time_array.sort.last
+          pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date}
           pending_referral_array.push(pending_referral_hash)
         elsif !task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active") && task_type_collection_array.include?("new")
           ref_id = r.id.to_s
