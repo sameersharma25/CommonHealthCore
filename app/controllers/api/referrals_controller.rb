@@ -34,6 +34,7 @@ module Api
           task.provider = t[:provider]
           task.task_deadline = t[:task_deadline]
           task.task_description = t[:task_description]
+          task.patient_document = params[:patient_document] if params[:patient_document]
           task.referral_id = referral.id.to_s
           task.save
         end
@@ -121,7 +122,23 @@ module Api
         render :json=> {status: :ok, message: "Task Created"}
       end
 
+    end
 
+    def get_task
+
+      t = Task.find(params[:task_id])
+      task_id = t.id.to_s
+      task_type = t.task_type
+      task_status = t.task_status
+      task_owner = t.task_owner
+      provider = t.provider
+      task_deadline = t.task_deadline
+      task_description = t.task_description
+      additional_fields = t.additional_fields
+      task_details = {task_id: task_id , task_type: task_type, task_status: task_status, task_owner: task_owner,
+                      provider: provider , task_deadline: task_deadline, task_description: task_description,
+                      additional_fields: additional_fields}
+      render :json => {status: :ok, task_details: task_details }
     end
 
     def update_task
