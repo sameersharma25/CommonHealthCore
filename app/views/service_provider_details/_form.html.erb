@@ -12,7 +12,7 @@
   <% end %>
   <div class="field">
     <%#= form.label :name %>
-    <%= form.text_field :service_provider_name, id: :service_provider_name, placeholder: "Provider Name" %>
+    <%= form.text_field :service_provider_name, id: :service_provider_name, placeholder: "Provider Catalog Name" %>
   </div>
   <div class="field">
     <%= form.label :share %>
@@ -44,14 +44,14 @@
       <%= form.hidden_field(:client_application_id, :value => @client_application)%>
     </div>
 
-    <div class="field">
-      <%= form.label :filtering_fields%><br>
-      <%= text_field_tag "field_name",'', :placeholder => "Field Name"%>
-      <%= select_tag "filter_field_type", options_for_select(["Input", "Dropdown"])%>
-      <%= text_field_tag "filter_field_values", '',:placeholder => "droprown list values"%>
-      <%= button_tag "Add",type: "button", :class => "add_filter_fields"%><br>
-      <%= form.text_area :filtering_fields, :id => "filtering_field_text", cols: 50, row: 80 %>
-    </div>
+    <!--<div class="field">-->
+      <%#= form.label :filtering_fields%><br>
+      <!--<%#= text_field_tag "field_name",'', :placeholder => "Field Name"%>-->
+      <!--<%#= select_tag "filter_field_type", options_for_select(["Input", "Dropdown"])%>-->
+      <!--<%#= text_field_tag "filter_field_values", '',:placeholder => "droprown list values"%>-->
+      <%#= button_tag "Add",type: "button", :class => "add_filter_fields"%><br>
+      <!--<%#= form.text_area :filtering_fields, :id => "filtering_field_text", cols: 50, row: 80 %>-->
+    <!--</div>-->
 
   <div class="actions">
     <%= form.submit class: 'submit_button' %>

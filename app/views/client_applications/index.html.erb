@@ -125,14 +125,14 @@
 
 <%= link_to "Service Providers", service_provider_details_path%><br>
 <%= link_to "Roles", roles_path%><br>
-
-<%= link_to "Filter Page" , filter_page_path %><br>
 <%= link_to "Status" , statuses_path %><br>
-<%= link_to "Task" , tasks_path %><br>
+<%#= link_to "Filter Page" , filter_page_path %><br>
+
+<%#= link_to "Task" , tasks_path %><br>
 
 
-<H3> Links for Testing</H3>
-<%= link_to "Create User", api_create_user_path(email: "defaultuser@test.com"), method: :post %><br>
-<%= link_to "Create Patient", api_create_patient_path(email: "defaultuser@test.com"), method: :post %><br>
-<%= link_to "Create task", api_tsk_create_path(email: "defaultuser@test.com"), method: :post %><br>
-<%= link_to "Patients List", api_patients_list_path(email: current_user.email), method: :post %><br>
+<!--<H3> Links for Testing</H3>-->
+<%#= link_to "Create User", api_create_user_path(email: "defaultuser@test.com"), method: :post %><br>
+<%#= link_to "Create Patient", api_create_patient_path(email: "defaultuser@test.com"), method: :post %><br>
+<%#= link_to "Create task", api_tsk_create_path(email: "defaultuser@test.com"), method: :post %><br>
+<%#= link_to "Patients List", api_patients_list_path(email: current_user.email), method: :post %><br>
