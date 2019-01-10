@@ -68,6 +68,21 @@ module Api
       render :json => {status: :ok, referral_list: referral_list }
     end
 
+
+    def get_referral
+      r = Referral.find(params[:referral_id])
+      referral_id = r.id.to_s
+      referral_name = r.referral_name
+      referral_description = r.referral_description
+      urgency = r.urgency
+      due_date = r.due_date
+      source = r.source
+      task_count = r.tasks.count
+      referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
+                          urgency: urgency, due_date: due_date,source: source, task_count: task_count }
+      render :json => {status: :ok, referral_details: referral_details }
+    end
+
     def update_referral
       referral = Referral.find(params[:referral_id])
 

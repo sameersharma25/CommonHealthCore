@@ -88,6 +88,7 @@ Rails.application.routes.draw do
     post "rfl_create", to: "referrals#create_referral"#, :as => "rfl_create"
     post "rfl_list", to: "referrals#referral_list"
     post "rfl_update", to: "referrals#update_referral"
+    post "rfl_get", to: "referrals#get_referral"
     post "rfl_dashboard", to: "referrals#dashboard_referrals"
     post "patient_document", to: "referrals#patient_document"
 
