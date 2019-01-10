@@ -16,14 +16,14 @@ class RolesController < ApplicationController
   # GET /roles/new
   def new
     @role = Role.new
-    @abilities = Role.get_method_names
+    @abilities = Role.get_method_names.sort
 
     logger.debug("the abilities are : #{@abilities}")
   end
 
   # GET /roles/1/edit
   def edit
-    @abilities = Role.get_method_names
+    @abilities = Role.get_method_names.sort
   end
 
   # POST /roles
@@ -31,7 +31,7 @@ class RolesController < ApplicationController
   def create
     abilities = []
     client_application = current_user.client_application_id.to_s
-    @abilities = Role.get_method_names
+    @abilities = Role.get_method_names.sort
     @role = Role.new(role_params)
     params[:role][:role_abilities].each do |ability|
       abilities << ability.to_sym

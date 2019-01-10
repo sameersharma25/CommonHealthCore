@@ -13,12 +13,13 @@ module Api
       users_details_array = Array.new
 
       client_all_users.each do |u|
+        uid = u.id.to_s
         uname = u.name
         uemail = u.email
         ucc = u.cc
         upcp = u.pcp
-        user_derails = {name: uname, email: uemail, cc: ucc, pcp: upcp }
-        users_details_array.push(user_derails)
+        user_details = {id: uid, name: uname, email: uemail, cc: ucc, pcp: upcp }
+        users_details_array.push(user_details)
       end
       render :json=> {status: :ok, :users_data=> users_details_array }
 
@@ -205,10 +206,12 @@ module Api
       notification_details = NotificationRule.selected_rules(params["task_id"] ,td_hrs)
       logger.debug("give_appointment_details_for_notification ********* #{notification_details}")
       if !notification_details.blank?
+        logger.debug("YES YOU ARE ABOUT TO CREATE A NEW NOTIFICATION*******************************")
         n = Notification.new
         n.message = notification_details
         n.active = true
-        n.appointment_id = params["appointment_id"]
+        # n.appointment_id = params["appointment_id"]
+        n.task_id = params["task_id"]
         n.save
       end
       # NotificationRule.create(appointment_status: "New", time_difference: 48, greater: false, subject: "some subject for PCP", body: "Some message for PCP", client_application_id: c, user_type: "pcp" )
@@ -232,7 +235,7 @@ module Api
         patients = Patient.where(client_application_id: c).or({:last_name => Regexp.new(params[:search], true)},{:first_name => Regexp.new(params[:search], true)}).order(first_name: :asc)
         # patients = Patient.where(client_application_id: c).or({:first_name => Regexp.new(params[:search], true)},{:last_name => Regexp.new(params[:search], true)}).order(first_name: :asc)
       else
-        patients = Patient.where(client_application_id: c).order(first_name: :asc)
+        patients = Patient.where(client_application_id: c).order(last_name: :asc)
       end
 
       patients_details = Array.new

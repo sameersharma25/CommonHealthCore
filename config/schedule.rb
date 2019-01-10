@@ -30,7 +30,8 @@ set :environment, "development"
 every 2.minutes do
   #command "/usr/bin/some_great_command"
   Rails.logger.debug "Sending Notifications****************"
-  runner "Appointment.appointments_for_notification"
+  # runner "Appointment.appointments_for_notification"
+  runner "Task.tasks_for_notifications"
   #rake "some:great:rake:task"
 end
 
