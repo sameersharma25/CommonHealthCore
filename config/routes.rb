@@ -96,7 +96,7 @@ Rails.application.routes.draw do
     post "tsk_create", to: "referrals#create_task"
     post "tsk_update", to: "referrals#update_task"
     post "tsk_get", to: "referrals#get_task"
-
+    post "tsk_status", to: "referrals#get_task_status"
     post "tsk_dashboard", to: "referrals#dashboard_tasks"
 
     post "msg_send", to: "communications#send_message"

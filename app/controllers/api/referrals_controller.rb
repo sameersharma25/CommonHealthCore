@@ -139,6 +139,18 @@ module Api
 
     end
 
+    def get_task_status
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
+      status = Status.where(client_application_id: client_application.id.to_s)
+      status_array = Array.new
+      status.each do |s|
+        status = s.status
+        status_array.push(status)
+      end
+      render :json => {status: :ok, status_array: status_array }
+    end
+
     def get_task
 
       t = Task.find(params[:task_id])
