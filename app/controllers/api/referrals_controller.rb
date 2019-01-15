@@ -158,7 +158,11 @@ module Api
       task_type = t.task_type
       task_status = t.task_status
       task_owner = t.task_owner
-      provider = t.provider
+      if t.provider.blank?
+        provider = "No Provider Selected"
+      else
+        provider = t.provider
+      end
       task_deadline = t.task_deadline
       task_description = t.task_description
       additional_fields = t.additional_fields
