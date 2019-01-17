@@ -1,6 +1,6 @@
 <% @notification_rules.each do |notification_rule| %>
     <tr>
-      <td><%= notification_rule.appointment_status%></td>
+      <td><%= Status.find(notification_rule.appointment_status).status%></td>
       <td><%= notification_rule.time_difference%></td>
       <td><%= notification_rule.user_type%></td>
       <td><%#= link_to 'Show', notification_rule %></td>

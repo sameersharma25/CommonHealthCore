@@ -28,7 +28,7 @@ class NotificationRule
     # pcp_email = "pcp@test.com"
 
     t = Task.find(t_id)
-    status = t.task_status
+    task_status = t.task_status
     patient = t.referral.patient
     patient_email = patient.patient_email
     patient_phone = patient.patient_phone
@@ -43,6 +43,7 @@ class NotificationRule
     #puts("the notifications are: #{NotificationRule.where(:time_difference.lt => td_hrs, :appointment_status => "New" ).select{"time_difference"}}")
     # notification_array= NotificationRule.where(:time_difference.lt => td_hrs, :appointment_status => status ).collect{|nr| nr.time_difference}
     # maximum_if_time_difference = notification_array.max
+    status = Status.find_by(status: task_status).status
     relevant_notifications = NotificationRule.where(:appointment_status => status, :time_difference => td_hrs )
 
     puts("BEFORE LOOOOOOOOOPINGGGGGGGg*******************#{relevant_notifications.entries}........... time is : #{td_hrs}, TASK IS : #{t_id}")

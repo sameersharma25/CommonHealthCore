@@ -25,7 +25,7 @@ class Task
 
     client_applications.each do |c|
       client_application_id = c.id.to_s
-      application_notification_rules_statuses = NotificationRule.where(client_application_id: client_application_id).collect{|nr| nr.appointment_status}.uniq
+      application_notification_rules_statuses = NotificationRule.where(client_application_id: client_application_id).collect{|nr| Status.find(nr.appointment_status).status}.uniq
 
       tasks = Task.where(:task_status.in => application_notification_rules_statuses)
 

@@ -74,7 +74,7 @@
       <tbody>
         <%@notification_rules.each do |nr| %>
           <tr>
-            <td><%= nr.appointment_status%></td>
+            <td><%= Status.find(nr.appointment_status).status %></td>
             <td><%= nr.time_difference%></td>
             <td><%= nr.subject%></td>
           </tr>

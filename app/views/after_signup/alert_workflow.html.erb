@@ -2,7 +2,7 @@
 <h1>Alert Workflow</h1>
 
 <%= form_for @notification_rule, url: wizard_path, method: :put do |f| %>
-    <%= f.select(:appointment_status, options_from_collection_for_select(@statuses, "status", "status"))  %>
+    <%= f.select(:appointment_status, options_from_collection_for_select(@statuses, "id", "status"))  %>
     <%= f.text_field :time_difference, :placeholder => "Time Remaining (in Hrs)" %>
     <%= f.select(:user_type, options_for_select(["Owner","Patient","Service Provider", "All"]))  %>
     <%= f.text_field :subject, :placeholder => "Subject for email" %>
