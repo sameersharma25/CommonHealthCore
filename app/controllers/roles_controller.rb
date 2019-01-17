@@ -24,6 +24,15 @@ class RolesController < ApplicationController
   # GET /roles/1/edit
   def edit
     @abilities = Role.get_method_names.sort
+    @role_abilities_array = Array.new
+    role_abilities = @role.role_abilities.first["action"]
+
+    role_abilities.each do |a|
+      ability = a.to_s.underscore.humanize.split.map(&:capitalize).join(' ')
+      @role_abilities_array.push(ability)
+    end
+
+    logger.debug("the reole abilities from edit role is:  #{@role_abilities_array} ")
   end
 
   # POST /roles
@@ -59,7 +68,7 @@ class RolesController < ApplicationController
     @role.role_abilities = [{"action"=> abilities, "subject"=>[:api]}]
     respond_to do |format|
       if @role.update(role_params)
-        format.html { redirect_to @role, notice: 'Role was successfully updated.' }
+        format.html { redirect_to roles_path, notice: 'Role was successfully updated.' }
         format.json { render :show, status: :ok, location: @role }
       else
         format.html { render :edit }

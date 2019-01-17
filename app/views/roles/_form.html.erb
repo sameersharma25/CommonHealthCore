@@ -22,14 +22,31 @@
       <%#= form.collection_check_boxes :role_abilities, @abilities, :role_abilities %>
       <div id="all_ability_list">
         <% @abilities.each do |ability|%>
-          <ul class="ability_ul">
-            <li>
-              <div class="ability_checkboxes">
-                <%= form.check_box  :role_abilities,{multiple: true}, ability,false%>
-                <%= ability.titleize  %>
-              </div>
-            </li>
-          </ul>
+          <%if @role_abilities_array%>
+                <ul class="ability_ul">
+                  <li>
+                    <div class="ability_checkboxes">
+                      <%if @role_abilities_array.include?(ability.titleize)%>
+                          <%= form.check_box  :role_abilities,{multiple: true, checked: true}, ability,false%>
+                      <%else%>
+                        <%= form.check_box  :role_abilities,{multiple: true}, ability,false%>
+                      <%end%>
+                      <%= ability.titleize  %>
+                    </div>
+                  </li>
+                </ul>
+
+          <%else%>
+                <ul class="ability_ul">
+                  <li>
+                    <div class="ability_checkboxes">
+                      <%= form.check_box  :role_abilities,{multiple: true}, ability,false%>
+                      <%= ability.titleize  %>
+                    </div>
+                  </li>
+                </ul>
+          <%end%>
+
         <%end%>
       </div>
 
