@@ -13,7 +13,8 @@
 
     <div class="field">
       <%= form.label :status %>
-      <%= form.text_field :appointment_status, id: :appointment_status, placeholder: "Status" %>
+      <%#= form.text_field :appointment_status, id: :appointment_status, placeholder: "Status" %>
+      <%= form.select(:appointment_status, options_from_collection_for_select(@statuses, "id", "status",params[:appointment_status]))%>
     </div>
 
     <div class="field">

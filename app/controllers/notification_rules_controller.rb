@@ -25,6 +25,8 @@ class NotificationRulesController < ApplicationController
 
   # GET /notification_rules/1/edit
   def edit
+    client_application = current_user.client_application
+    @statuses = Status.where(client_application_id: client_application)
   end
 
   # POST /notification_rules
