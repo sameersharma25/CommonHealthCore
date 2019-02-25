@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Organization Catalogue</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th >Name</th>
+      <th >Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i  = 1 %>
+    <% @scraping_rules.each do |scraping_rule| %>
+      <tr id= <%="catalogue_row_#{i}"%> >
+        <% if scraping_rule.organizationName_change == true %>
+          <td style="color: red"><%= scraping_rule.organizationName_Text%></td>
+        <%else%>
+          <td> <%= scraping_rule.organizationName_Text%></td>
+        <%end%>
+        <% if scraping_rule.organizationDescription_change == true %>
+            <td style="color: red"><%= scraping_rule.organizationDescription_Text %> </td>
+        <%else%>
+          <td><%= scraping_rule.organizationDescription_Text %> </td>
+        <%end %>
+        <td><%= check_box_tag "scraping_rule_#{i}", scraping_rule.id.to_s ,false, :class => "catalogue_checkboxes" %> </td>
+        <td><%#= link_to 'Show', scraping_rule %></td>
+        <td><%#= link_to 'Edit', edit_scraping_rule_path(scraping_rule) %></td>
+        <td><%#= link_to 'Destroy', scraping_rule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+      <% i += 1 %>
+    <% end %>
+
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "Validate", "#", :class => "validate_rules", :remote => true %><br>
+<%= link_to "Remove Entry", "#", :class => "remove_rules", :remote => true %><br>
+
+
+<%#= link_to 'New Scraping Rule', new_scraping_rule_path %>

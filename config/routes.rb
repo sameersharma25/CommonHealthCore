@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :scraping_rules
   resources :statuses do
     collection do
       put :sort
@@ -41,6 +42,7 @@ Rails.application.routes.draw do
   get "/save_all_details", to: "client_applications#save_all_details"
   post "/copy_default_settings", to: "client_applications#copy_default_settings"
   post "send_application_invitation", to: "client_applications#send_application_invitation"
+  get "/contact_management_details", to: "client_applications#contact_management"
 
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
   post "filter_field_values", to: "service_provider_details#filter_field_values"
@@ -51,6 +53,9 @@ Rails.application.routes.draw do
   post "/wizard_add_status", to: "statuses#wizard_add_status"
 
 
+  post "/manage_scraping_rules", to: "scraping_rules#manage_scraping_rules"
+  post "/validate_cat_entry", to: "scraping_rules#validate_catalogue_entries"
+  post "/remove_cat_entry", to: "scraping_rules#remove_catalogue_entries"
 
 
   post "/wizard_add_notification", to: "notification_rules#wizard_add_notification"
@@ -111,6 +116,8 @@ Rails.application.routes.draw do
     post "spd_create", to: "service_provider_details#create_provider"
     post "spd_edit", to: "service_provider_details#edit_provider_details"
     post "spd_filter", to: "service_provider_details#filter_provider"
+    post "/scrappy_response", to: "service_provider_details#scrappy_doo_response"
+
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

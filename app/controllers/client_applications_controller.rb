@@ -1,6 +1,6 @@
 class ClientApplicationsController < ApplicationController
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:new, :create]
+  before_action :authenticate_user!, except: [:new, :create, :contact_management]
 
   # GET /client_applications
   # GET /client_applications.json
@@ -12,9 +12,9 @@ class ClientApplicationsController < ApplicationController
     logger.debug("the session count is *********************: #{user.sign_in_count}")
     logger.debug("the params are *********************: #{params.inspect}")
     if user.sign_in_count.to_s == "1"
-      rr = RegistrationRequest.find_by(user_email: user.email)
-      rr.invitation_accepted = true
-      rr.save
+      # rr = RegistrationRequest.find_by(user_email: user.email)
+      # rr.invitation_accepted = true
+      # rr.save
       logger.debug("REDIRECTING TO THE NEW STEPS****************")
       redirect_to after_signup_path(:role)
     end
@@ -122,6 +122,22 @@ class ClientApplicationsController < ApplicationController
         end
       end
     end
+
+  end
+
+  def contact_management
+    dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+
+    table_name = 'contact_management_1'
+    params = {
+        table_name: table_name,
+        # projection_expression: "url",
+        # filter_expression: "url = test1.com"
+    }
+
+    @result = dynamodb.scan(params)[:items]
+
+    logger.debug("the RESULT OF THE SCAN IS : #{@result}************************")
 
   end
 

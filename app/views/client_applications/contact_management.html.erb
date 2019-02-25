@@ -1,0 +1,38 @@
+
+<table id="client_application" class="table table-responsive table-bordered user-display">
+  <thead>
+  <tr>
+    <!--<th >URL</th>-->
+    <th >Description</th>
+    <th >Organization</th>
+    <!--<th >Coverage</th>-->
+    <!--<th >State</th>-->
+    <th >Status</th>
+    <!--<th >Scope</th>-->
+    <th ></th>
+  </tr>
+  </thead>
+  <tbody>
+    <% i  = 1 %>
+    <% @result.each do |r|%>
+      <%if r["status"] == "New"%>
+          <% i += 1 %>
+          <tr id= <%="rule_#{i}" %>  >
+            <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
+            <td id= <%= "Orgdescription_#{i}" %> ><%= r["OrganizationDescription_Text"] %></td>
+            <%= hidden_field_tag r["OrganizationDescription_xpath"] ,i, :id => "Orgdescription_xpath_#{i}" %>
+            <%= hidden_field_tag r["OrganizationDescription_URL"] ,i, :id => "Orgdescription_url_#{i}" %>
+            <td id=<%= "nameOfOrg_#{i}"%> ><%= r["OrganizationName_Text"] %></td>
+            <%= hidden_field_tag r["OrganizationName_xpath"] ,i, :id => "orgName_xpath_#{i}" %>
+            <%= hidden_field_tag r["OrganizationName_URL"] ,i, :id => "orgName_url_#{i}" %>
+
+            <!--<td><%#= r["geographicScope"] %></td>-->
+            <!--<td><%#= r["state"] %></td>-->
+            <td><%= r["status"] %></td>
+            <!--<td><%#= r["primeScope"] %></td>-->
+            <td><%= link_to "Add", "#", class: "add_rule", id: "rule_#{i}" %>
+          </tr>
+      <%end%>
+    <%end%>
+  </tbody>
+</table>

@@ -1,8 +1,8 @@
 module Api
   class ServiceProviderDetailsController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: []
-    load_and_authorize_resource class: :api
+    before_action :authenticate_user_from_token, except: [:scrappy_doo_response]
+    load_and_authorize_resource class: :api, except: [:scrappy_doo_response]
 
     def create_provider
       client_application = User.find_by(email: params[:email]).client_application_id.to_s
@@ -40,6 +40,23 @@ module Api
       if spd.save
         render :json=> {status: :ok, :message=> "Provide Details updated successfully"  }
       end
+
+    end
+
+    def scrappy_doo_response
+
+      logger.debug("the parameters are: #{params.inspect}")
+      sr = ScrapingRule.find(params[:rule_id])
+      rules_to_change = params[:ruleToChange]
+      rules_to_change.each do |r_change|
+        if r_change == "OrganizationName"
+          sr.organizationName_change = true
+        elsif r_change == "OrganizationDescription"
+          sr.organizationDescription_change = true
+        end
+      end
+      sr.save
+      #{"ruleToChange"=>["OrganizationName", "OrganizationDescription"], "rule_id"=>" 5c7418b158f01a070996c531", "service_provider_detail"=>{}}
 
     end
 
