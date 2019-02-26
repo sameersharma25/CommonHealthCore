@@ -129,7 +129,14 @@
 <%= link_to "Contack Management" , contact_management_details_path %><br>
 <%= link_to "Catalogue Management" , scraping_rules_path %><br>
 <%#= link_to "Plug-in Link", "https://drive.google.com/uc?id=1oYTrCH6JmNqaA3VjADNWmilWeQGczUJu&export=dowload"%>
-<%= link_to "Plug-in Page", plugin_page_path %>
+<%#= link_to "Plug-in Page", plugin_page_path %>
+<%= link_to 'Plug-in Page', plugin_page_path,  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window', class: 'btn btn-primary btn-lg'}  %>
+<div id="modal-window" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
 <%#= link_to "Filter Page" , filter_page_path %><br>
 
 <%#= link_to "Task" , tasks_path %><br>
