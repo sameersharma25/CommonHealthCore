@@ -30,7 +30,7 @@
             <!--<td><%#= r["state"] %></td>-->
             <td><%= r["status"] %></td>
             <!--<td><%#= r["primeScope"] %></td>-->
-            <td><%= link_to "Add", "#", class: "add_rule", id: "rule_#{i}" %>
+            <td><%= link_to "Add", "#", class: "add_rule", id: "rule_#{i}", :remote => true %>
           </tr>
       <%end%>
     <%end%>

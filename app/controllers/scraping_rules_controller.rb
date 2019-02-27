@@ -74,7 +74,7 @@ class ScrapingRulesController < ApplicationController
     sr.organizationDescription_xpath = params[:description_xpath]
     sr.save
     respond_to do |format|
-      format.html
+      # format.html
       format.js
     end
 
@@ -86,13 +86,14 @@ class ScrapingRulesController < ApplicationController
     ScrapingRule.validate_scraping_rules(rule_ids)
 
     respond_to do |format|
-      format.html
+      # format.html
       format.js
     end
   end
 
   def remove_catalogue_entries
     rule_ids = params[:ids]
+    @row_ids = params[:row_ids]
 
     rule_ids.each do |ri|
       catalogue_entyr = ScrapingRule.find(ri)
@@ -100,7 +101,7 @@ class ScrapingRulesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html
+      # format.html
       format.js
     end
 

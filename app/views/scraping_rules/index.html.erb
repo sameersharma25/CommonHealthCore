@@ -25,7 +25,7 @@
         <%else%>
           <td><%= scraping_rule.organizationDescription_Text %> </td>
         <%end %>
-        <td><%= check_box_tag "scraping_rule_#{i}", scraping_rule.id.to_s ,false, :class => "catalogue_checkboxes" %> </td>
+        <td><%= check_box_tag i , scraping_rule.id.to_s ,false, :class => "catalogue_checkboxes" %> </td>
         <td><%#= link_to 'Show', scraping_rule %></td>
         <td><%#= link_to 'Edit', edit_scraping_rule_path(scraping_rule) %></td>
         <td><%#= link_to 'Destroy', scraping_rule, method: :delete, data: { confirm: 'Are you sure?' } %></td>

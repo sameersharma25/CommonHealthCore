@@ -137,7 +137,16 @@ class ClientApplicationsController < ApplicationController
 
     @result = dynamodb.scan(params)[:items]
 
-    logger.debug("the RESULT OF THE SCAN IS : #{@result}************************")
+    logger.debug("the RESULT OF THE SCAN IS : {@result}************************")
+
+  end
+
+  def plugin
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
 
   end
 
