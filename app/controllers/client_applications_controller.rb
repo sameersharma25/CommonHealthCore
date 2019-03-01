@@ -137,7 +137,31 @@ class ClientApplicationsController < ApplicationController
 
     @result = dynamodb.scan(params)[:items]
 
-    logger.debug("the RESULT OF THE SCAN IS : {@result}************************")
+    logger.debug("the RESULT OF THE SCAN IS : #{@result}************************")
+
+  end
+
+  def get_contact_management
+    dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    table_name = 'contact_management_1'
+
+    parameters = {
+        table_name: table_name,
+        key: {
+            OrganizationName_Text: params["org_name"]
+        }
+        # projection_expression: "url",
+        # filter_expression: "url = test1.com"
+    }
+
+    @result = dynamodb.get_item(parameters)[:item]
+
+    logger.debug("the Result of the get entry is : #{@result}")
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
 
   end
 
@@ -147,6 +171,17 @@ class ClientApplicationsController < ApplicationController
       format.html
       format.js
     end
+
+  end
+
+  def download_plugin
+
+    s3 = Aws::S3::Resource.new(
+        region: "us-east-1",
+        access_key_id: 'AKIAIJAVNKTMYWWYTF3Q',
+        secret_access_key: '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'
+    )
+    s3.bucket('chcplugin').object('AdWord.zip').get(response_target: 's3://chcplugin/AdWord.zip')
 
   end
 
