@@ -177,9 +177,7 @@ class ClientApplicationsController < ApplicationController
   def download_plugin
 
     s3 = Aws::S3::Resource.new(
-        region: "us-east-1",
-        access_key_id: 'AKIAIJAVNKTMYWWYTF3Q',
-        secret_access_key: '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'
+        region: "us-east-1"
     )
     s3.bucket('chcplugin').object('AdWord.zip').get(response_target: 's3://chcplugin/AdWord.zip')
 
