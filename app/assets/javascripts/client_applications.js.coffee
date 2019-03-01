@@ -17,5 +17,5 @@ jQuery ($) ->
 
   $('#client_application').DataTable( );
 
-  $('#contact_management_table').DataTable();
+  $('#contact_management_table').DataTable( "order": []);
 

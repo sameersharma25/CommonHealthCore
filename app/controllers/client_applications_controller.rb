@@ -135,7 +135,7 @@ class ClientApplicationsController < ApplicationController
         # filter_expression: "url = test1.com"
     }
 
-    @result = dynamodb.scan(params)[:items]
+    @result = dynamodb.scan(params)[:items].sort_by!{|k| k["created_at"]}.reverse!
 
     logger.debug("the RESULT OF THE SCAN IS : #{@result}************************")
 
@@ -177,7 +177,8 @@ class ClientApplicationsController < ApplicationController
   def download_plugin
 
     s3 = Aws::S3::Resource.new(
-        region: "us-east-1"
+        region: "us-east-1",
+
     )
     s3.bucket('chcplugin').object('AdWord.zip').get(response_target: 's3://chcplugin/AdWord.zip')
 
