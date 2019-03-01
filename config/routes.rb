@@ -44,6 +44,8 @@ Rails.application.routes.draw do
   post "send_application_invitation", to: "client_applications#send_application_invitation"
   get "/contact_management_details", to: "client_applications#contact_management"
   get "/plugin_page", to: "client_applications#plugin"
+  get "/download_plugin", to: "client_applications#download_plugin"
+  post "/get_contact_management", to: "client_applications#get_contact_management"
 
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
   post "filter_field_values", to: "service_provider_details#filter_field_values"
