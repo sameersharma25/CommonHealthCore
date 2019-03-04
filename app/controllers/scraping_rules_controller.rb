@@ -63,15 +63,32 @@ class ScrapingRulesController < ApplicationController
 
   def manage_scraping_rules
     logger.debug("the parameters for adding rule are: #{params.inspect}")
-    @row = params[:row_id]
+
+    dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    table_name = 'contact_management_1'
+
+    parameters = {
+        table_name: table_name,
+        key: {
+            OrganizationName_Text: params[:org_name]
+        }
+        # projection_expression: "url",
+        # filter_expression: "url = test1.com"
+    }
+
+    result = dynamodb.get_item(parameters)[:item]
+
+    logger.debug("***********************************************the Result of the get entry is : #{result}")
+
+    # @row = params[:row_id]
     sr = ScrapingRule.new
     # sr.url = params[:url]
-    sr.organizationName_Text = params[:org_name]
-    sr.organizationName_xpath = params[:orgName_xpath]
-    sr.organizationName_URL = params[:orgName_url]
-    sr.organizationDescription_Text = params[:description]
-    sr.organizationDescription_URL = params[:description_url]
-    sr.organizationDescription_xpath = params[:description_xpath]
+    sr.organizationName_Text = result["OrganizationName_Text"]
+    sr.organizationName_xpath = result["OrganizationName_xpath"]
+    sr.organizationName_URL = result["OrganizationName_UR"]
+    sr.organizationDescription_Text = result["OrganizationDescription_Text"]
+    sr.organizationDescription_URL = result["OrganizationDescription_URL"]
+    sr.organizationDescription_xpath = result["OrganizationDescription_xpath"]
     sr.save
     respond_to do |format|
       # format.html

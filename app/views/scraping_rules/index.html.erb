@@ -21,9 +21,9 @@
           <td> <%= scraping_rule.organizationName_Text%></td>
         <%end%>
         <% if scraping_rule.organizationDescription_change == true %>
-            <td style="color: red"><%= scraping_rule.organizationDescription_Text %> </td>
+            <td style="color: red"><%= scraping_rule.organizationDescription_Text.truncate(50) %> </td>
         <%else%>
-          <td><%= scraping_rule.organizationDescription_Text %> </td>
+          <td><%= scraping_rule.organizationDescription_Text.truncate(50) %> </td>
         <%end %>
         <td><%= check_box_tag i , scraping_rule.id.to_s ,false, :class => "catalogue_checkboxes" %> </td>
         <td><%#= link_to 'Show', scraping_rule %></td>
