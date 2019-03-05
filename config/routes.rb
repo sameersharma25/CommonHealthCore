@@ -120,6 +120,7 @@ Rails.application.routes.draw do
     post "spd_edit", to: "service_provider_details#edit_provider_details"
     post "spd_filter", to: "service_provider_details#filter_provider"
     post "/scrappy_response", to: "service_provider_details#scrappy_doo_response"
+    post "/authenticate_email", to: "service_provider_details#authenticate_user_email"
 
   end
   # patch "update" => "users#update", as: :user_update

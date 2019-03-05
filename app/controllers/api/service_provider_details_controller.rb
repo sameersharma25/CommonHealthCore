@@ -1,8 +1,8 @@
 module Api
   class ServiceProviderDetailsController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: [:scrappy_doo_response]
-    load_and_authorize_resource class: :api, except: [:scrappy_doo_response]
+    before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email]
+    load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email]
 
     def create_provider
       client_application = User.find_by(email: params[:email]).client_application_id.to_s
@@ -57,6 +57,18 @@ module Api
       end
       sr.save
       #{"ruleToChange"=>["OrganizationName", "OrganizationDescription"], "rule_id"=>" 5c7418b158f01a070996c531", "service_provider_detail"=>{}}
+
+    end
+
+    def authenticate_user_email
+      user = User.where(email: params[:email])
+      logger.debug("the email being authenticated is : #{user.inspect}")
+
+      if !user.empty?
+        render :json=> {status: :ok, :message=> "Valid User"  }
+      else
+        render :json=> {status: :unauthorized, :message=> "Invalid User" }
+      end
 
     end
 

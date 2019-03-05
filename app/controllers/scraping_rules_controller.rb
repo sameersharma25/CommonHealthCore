@@ -85,7 +85,7 @@ class ScrapingRulesController < ApplicationController
     # sr.url = params[:url]
     sr.organizationName_Text = result["OrganizationName_Text"]
     sr.organizationName_xpath = result["OrganizationName_xpath"]
-    sr.organizationName_URL = result["OrganizationName_UR"]
+    sr.organizationName_URL = result["OrganizationName_URL"]
     sr.organizationDescription_Text = result["OrganizationDescription_Text"]
     sr.organizationDescription_URL = result["OrganizationDescription_URL"]
     sr.organizationDescription_xpath = result["OrganizationDescription_xpath"]
