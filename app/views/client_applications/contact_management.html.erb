@@ -9,11 +9,9 @@
       <!--<th >Coverage</th>-->
       <!--<th >State</th>-->
       <th >Status</th>
-      <!--<th> Time </th>-->
       <!--<th >Scope</th>-->
       <th ></th>
       <th ></th>
-      <!--<th ></th>-->
     </tr>
   </thead>
   <tbody>
@@ -23,13 +21,14 @@
           <% i += 1 %>
           <tr id= <%="rule_#{i}" %>  >
             <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
-            <td id=<%= "nameOfOrg_#{i}"%> ><%= r["OrganizationName_Text"] %></td>
-            <td id= <%= "Orgdescription_#{i}" %> ><%= r["OrganizationDescription_Text"].truncate(50) if r["OrganizationDescription_Text"]  %></td>
-            <%= hidden_field_tag r["OrganizationDescription_xpath"] ,i, :id => "Orgdescription_xpath_#{i}" %>
-            <%= hidden_field_tag r["OrganizationDescription_URL"] ,i, :id => "Orgdescription_url_#{i}" %>
+            <td id=<%= "nameOfOrg_#{i}"%> ><%= r["organizationName"]["organizationName_Text"] if r["organizationName"] %></td>
+            <td id= <%= "Orgdescription_#{i}" %> ><%= r["organizationDescription"]["organizationDescription_Text"].truncate(50) if r["organizationDescription_Text"]  %></td>
+            <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
+            <%= hidden_field_tag r["organizationDescription_URL"] ,i, :id => "orgdescription_url_#{i}" %>
+            <%= hidden_field_tag r["url"] ,i, :id => "url_#{i}" %>
 
-            <%= hidden_field_tag r["OrganizationName_xpath"] ,i, :id => "orgName_xpath_#{i}" %>
-            <%= hidden_field_tag r["OrganizationName_URL"] ,i, :id => "orgName_url_#{i}" %>
+            <%= hidden_field_tag r["organizationName_xpath"] ,i, :id => "orgName_xpath_#{i}" %>
+            <%= hidden_field_tag r["organizationName_URL"] ,i, :id => "orgName_url_#{i}" %>
 
             <!--<td><%#= r["geographicScope"] %></td>-->
             <!--<td><%#= r["state"] %></td>-->
@@ -37,7 +36,8 @@
             <!--<td><%#= r["created_at"] %></td>-->
             <!--<td><%#= r["primeScope"] %></td>-->
             <td><%= link_to "Add", "#", class: "add_rule", id: "rule_#{i}", :remote => true %> </td>
-            <td><%= link_to "See More", get_contact_management_path(org_name: r["OrganizationName_Text"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
+            <!--<td><%#= link_to "See More", get_contact_management_path(org_name: r["OrganizationName_Text"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
+            <td><%= link_to "See More", get_contact_management_path(org_url: r["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
           </tr>
 
       <%end%>

@@ -16,14 +16,14 @@
     <% @scraping_rules.each do |scraping_rule| %>
       <tr id= <%="catalogue_row_#{i}"%> >
         <% if scraping_rule.organizationName_change == true %>
-          <td style="color: red"><%= scraping_rule.organizationName_Text%></td>
+          <td style="color: red"><%= scraping_rule.organizationName["organizationName_Text"] if scraping_rule.organizationName%></td>
         <%else%>
-          <td> <%= scraping_rule.organizationName_Text%></td>
+          <td> <%= scraping_rule.organizationName["organizationName_Text"] if scraping_rule.organizationName%></td>
         <%end%>
         <% if scraping_rule.organizationDescription_change == true %>
-            <td style="color: red"><%= scraping_rule.organizationDescription_Text.truncate(50) %> </td>
+            <td style="color: red"><%= scraping_rule.organizationDescription["organizationDescription_Text"].truncate(50) if !scraping_rule.organizationDescription.blank? %> </td>
         <%else%>
-          <td><%= scraping_rule.organizationDescription_Text.truncate(50) %> </td>
+          <td><%= scraping_rule.organizationDescription["organizationDescription_Text"].truncate(50) if !scraping_rule.organizationDescription.blank?%> </td>
         <%end %>
         <td><%= check_box_tag i , scraping_rule.id.to_s ,false, :class => "catalogue_checkboxes" %> </td>
         <td><%#= link_to 'Show', scraping_rule %></td>
@@ -38,8 +38,8 @@
 
 <br>
 
-<%= link_to "Validate", "#", :class => "validate_rules", :remote => true %><br>
-<%= link_to "Remove Entry", "#", :class => "remove_rules", :remote => true %><br>
+<%= link_to "Validate", "#", :class => "validate_rules", :remote => true, data: { confirm: "Validating the rules" } %><br>
+<%= link_to "Remove Entry", "#", :class => "remove_rules", :remote => true, data: { confirm: "Are you sure you want to remove the rule(s)?" } %><br>
 
 
 <%#= link_to 'New Scraping Rule', new_scraping_rule_path %>

@@ -128,14 +128,14 @@ class ClientApplicationsController < ApplicationController
   def contact_management
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
 
-    table_name = 'contact_management_1'
+    table_name = 'contact_management'
     params = {
         table_name: table_name,
         # projection_expression: "url",
         # filter_expression: "url = test1.com"
     }
 
-    @result = dynamodb.scan(params)[:items].sort_by!{|k| k["created_at"]}.reverse!
+    @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
     logger.debug("the RESULT OF THE SCAN IS : #{@result}************************")
 
@@ -143,12 +143,13 @@ class ClientApplicationsController < ApplicationController
 
   def get_contact_management
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-    table_name = 'contact_management_1'
+    table_name = 'contact_management'
 
     parameters = {
         table_name: table_name,
         key: {
-            OrganizationName_Text: params["org_name"]
+            # OrganizationName_Text: params["org_name"]
+            url: params[:org_url]
         }
         # projection_expression: "url",
         # filter_expression: "url = test1.com"
@@ -176,11 +177,32 @@ class ClientApplicationsController < ApplicationController
 
   def download_plugin
 
-    s3 = Aws::S3::Resource.new(
-        region: "us-east-1",
+    # s3 = Aws::S3::Resource.new(
+    #     region: "us-east-1",
+    #
+    # )
+    # zip_file= s3.bucket('chcplugin').object('AdWord.zip').get()
+    #
+    # logger.debug("the file output is : #{zip_file.body.inspect}")
 
-    )
-    s3.bucket('chcplugin').object('AdWord.zip').get(response_target: 's3://chcplugin/AdWord.zip')
+    key = 'AdWord.zip'
+    bucketName = "chcplugin"
+    localPath = "/Users/harshavardhangandhari/RSI"
+    # (1) Create S3 object
+    s3 = Aws::S3::Resource.new(region: 'us-east-1')
+    # (2) Create the source object
+    sourceObj = s3.bucket(bucketName).object(key)
+    # (3) Download the file
+    sourceObj.get(response_target: localPath)
+    puts "s3://#{bucketName}/#{key} has been downloaded to #{localPath}"
+    # s3.bucket('chcplugin').object('AdWord.zip').send_file('/Users/harshavardhangandhari/RSI/')
+
+    # bucket = s3.bucket('chcplugin')
+    #
+    # bucket.objects.limit(50).each do |item|
+    #   puts "Name:  #{item.key}"
+    #   puts "URL:   #{item.presigned_url(:get)}"
+    # end
 
   end
 

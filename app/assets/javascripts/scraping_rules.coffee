@@ -17,10 +17,12 @@ jQuery ($) ->
     orgName = $("#nameOfOrg_" + id).text()
     orgName_xpath = $("#orgName_xpath_" + id).attr("name")
     orgName_url = $("#orgName_url_" + id).attr("name")
-    console.log("the description is: ", description, "name of the org is : ", orgName, "desc xpath: ",description_xpath, "desc URL : ", description_url )
+    url = $("#url_" + id).attr("name")
+    console.log("the description is: ", description, "name of the org is : ", orgName, "desc xpath: ",description_xpath, "desc URL : ", description_url,"url :", url )
 
     $.post "/manage_scraping_rules",
       row_id: id,
+      url: url,
       description: description,
       description_xpath: description_xpath,
       description_url: description_url,
