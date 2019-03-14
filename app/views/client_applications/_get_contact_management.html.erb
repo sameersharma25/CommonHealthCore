@@ -1,23 +1,23 @@
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal">x</button>
-  <h4 class="modal-title" id="myModalLabel"><%= @result["OrganizationName_Text"]%>'s Details</h4>
+  <h4 class="modal-title" id="myModalLabel"><%= @result["organizationName"]["organizationName_Text"]%>'s Details</h4>
 </div>
 
 <div class="modal-body">
 
   <h3> Organization Details</h3>
 
-  <strong>Organization Name : </strong> <%= @result["OrganizationName_Text"]%><br>
-  <strong>Organization Description : </strong> <%= @result["OrganizationDescription_Text"]%><br>
+  <strong>Organization Name : </strong> <%= @result["organizationName"]["organizationName_Text"]%><br>
+  <strong>Organization Description : </strong> <%= @result["organizationDescription"]["organizationDescription_Text"]%><br>
 
   <h3>Geographic Scope</h3>
-  <strong>Service Area Name : </strong><%= @result["ServiceAreaName_Text"] %><br>
-  <strong>Scope : </strong><%= @result["GeoScope_Scope"] %><br>
-  <strong>Country : </strong><%= @result["GeoScope_Country"] %><br>
-  <strong>Region : </strong><%= @result["GeoScope_Region"] %><br>
-  <strong>State : </strong><%= @result["GeoScope_State"] %><br>
-  <strong>City : </strong><%= @result["GeoScope_City"] %><br>
-  <strong>Neighborhood : </strong><%= @result["GeoScope_Neighborhood"] %><br>
+  <strong>Service Area Name : </strong><%= @result["geoScope"]["serviceAreaName_Text"] %><br>
+  <strong>Scope : </strong><%= @result["geoScope"]["scope"] %><br>
+  <strong>Country : </strong><%= @result["geoScope"]["country"] %><br>
+  <strong>Region : </strong><%= @result["geoScope"]["region"] %><br>
+  <strong>State : </strong><%= @result["geoScope"]["state"] %><br>
+  <strong>City : </strong><%= @result["geoScope"]["city"] %><br>
+  <strong>Neighborhood : </strong><%= @result["geoScope"]["neighborhood"] %><br>
 
   <h3>Program Name</h3>
   <strong>Program Name : </strong><%= @result["programName_Text"] %><br>
