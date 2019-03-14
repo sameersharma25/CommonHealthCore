@@ -49,10 +49,10 @@ module Api
       sr = ScrapingRule.find(params[:rule_id])
       rules_to_change = params[:ruleToChange]
       rules_to_change.each do |r_change|
-        if r_change == "OrganizationName"
-          sr.organizationName_change = true
-        elsif r_change == "OrganizationDescription"
-          sr.organizationDescription_change = true
+        if r_change == "organizationName"
+          sr.organizationName_changeeee = true
+        elsif r_change == "organizationDescription"
+          sr.organizationDescription_changeeee = true
         end
       end
       sr.save

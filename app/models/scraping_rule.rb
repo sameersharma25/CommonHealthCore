@@ -9,11 +9,11 @@ class ScrapingRule
   # field :organizationName_Text, type: String
   # field :organizationName_URL, type: String
   # field :organizationName_xpath, type: String
-  field :organizationName_change, type: Boolean, default: false
+  field :organizationName_changeeee, type: Boolean, default: false
   # field :organizationDescription_Text, type: String
   # field :organizationDescription_URL, type: String
   # field :organizationDescription_xpath, type: String
-  field :organizationDescription_change, type: Boolean, default: false
+  field :organizationDescription_changeeee, type: Boolean, default: false
   field :organizationName, type: Hash
   field :organizationDescription, type: Hash
   field :url, type: String
@@ -48,7 +48,7 @@ class ScrapingRule
 
       http = Net::HTTP.new(uri.host, uri.port)
       puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
-      # http.use_ssl = true
+      http.use_ssl = true
 
       request = Net::HTTP::Post.new(uri.path, header)
       request.body = sr_hash.to_json
@@ -61,7 +61,6 @@ class ScrapingRule
   end
 
   def self.validate_scraping_rules(rule_ids)
-
     rule_ids.each do |scraping_rule_id|
       sr = ScrapingRule.find(scraping_rule_id)
 
@@ -95,7 +94,7 @@ class ScrapingRule
 
       http = Net::HTTP.new(uri.host, uri.port)
       puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
-      # http.use_ssl = true
+      http.use_ssl = true
 
       request = Net::HTTP::Post.new(uri.path, header)
       request.body = sr_hash.to_json

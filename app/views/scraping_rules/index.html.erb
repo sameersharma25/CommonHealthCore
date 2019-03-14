@@ -15,12 +15,12 @@
     <% i  = 1 %>
     <% @scraping_rules.each do |scraping_rule| %>
       <tr id= <%="catalogue_row_#{i}"%> >
-        <% if scraping_rule.organizationName_change == true %>
+        <% if scraping_rule.organizationName_changeeee == true %>
           <td style="color: red"><%= scraping_rule.organizationName["organizationName_Text"] if scraping_rule.organizationName%></td>
         <%else%>
           <td> <%= scraping_rule.organizationName["organizationName_Text"] if scraping_rule.organizationName%></td>
         <%end%>
-        <% if scraping_rule.organizationDescription_change == true %>
+        <% if scraping_rule.organizationDescription_changeeee == true %>
             <td style="color: red"><%= scraping_rule.organizationDescription["organizationDescription_Text"].truncate(50) if !scraping_rule.organizationDescription.blank? %> </td>
         <%else%>
           <td><%= scraping_rule.organizationDescription["organizationDescription_Text"].truncate(50) if !scraping_rule.organizationDescription.blank?%> </td>
