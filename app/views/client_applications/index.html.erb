@@ -46,13 +46,20 @@
             <tr>
               <td><%= u.name %></td>
               <td><%= u.email %></td>
-              <%if u.cc == true%>
-                <td>Care Coordinator</td>
-              <%elsif u.pcp == true %>
-                  <td>Care Provider</td>
-              <%else%>
-                  <td>---</td>
-              <%end%>
+              <%#if u.cc == true%>
+                <!--<td>Care Coordinator</td>-->
+              <!--<%#elsif u.pcp == true %>-->
+                  <!--<td>Care Provider</td>-->
+              <!--<%#else%>-->
+                  <!--<td>-&#45;&#45;</td>-->
+              <%#end%>
+              <% roles_array = []%>
+              <% u.roles.each do |r|%>
+                <% role_name = Role.find(r).role_name%>
+                <% roles_array.push(role_name) %>
+              <%end %>
+
+              <td><%=  roles_array.join(', ') %></td>
               <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
               <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
             </tr>

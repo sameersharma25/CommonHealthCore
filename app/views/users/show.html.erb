@@ -1,8 +1,21 @@
-Name: <%=@user.name %><br>
+<h3><%=@user.name %></h3>
 
-Email: <%=@user.email%><br>
-<%if @user.cc == true%>
-  User Role: <%= "Care Coordinator"%>
-<%elsif @user.pcp == true%>
-  User Role: <%= "Primary Care Provider"%>
+<%=  form_for @user, url: user_show_path do |f| %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name, id: :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email, id: :email %>
+  </div>
+  <div class="field">
+    <%= f.label :roles %>:
+    <%#= f.select :role_id, options_from_collection_for_select(@roles, 'id',"role_name", @user.role) %>
+    <% @roles.each do |role|%>
+        <%= f.check_box  :roles,{multiple: true, class: "roles_checkboxes", :disabled => true}, role.id.to_s, false %>
+        <%= role.role_name  %>
+    <%end%>
+  </div>
 <%end%>

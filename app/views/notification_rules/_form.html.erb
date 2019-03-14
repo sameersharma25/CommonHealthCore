@@ -22,6 +22,12 @@
       <%= form.text_field :time_difference, id: :time_difference, placeholder: "Time Remaining" %>
     </div>
 
+    <div class="field">
+      <%= form.label :user_type %>
+      <%= form.select(:user_type, options_for_select(["Owner","Patient","Service Provider", "All"]))  %>
+    </div>
+
+
   <div class="actions">
     <%= form.submit %>
   </div>
