@@ -27,7 +27,7 @@ class RegistrationRequestsController < ApplicationController
     @registration_request = RegistrationRequest.new(registration_request_params)
 
     respond_to do |format|
-      if verify_recaptcha && @registration_request.save
+      if @registration_request.save
         RegistrationRequestMailer.registation_request(@registration_request).deliver
         format.html { redirect_to root_path, notice: 'Registration request was successfully created.' }
         format.json { render :show, status: :created, location: @registration_request }
@@ -71,6 +71,6 @@ class RegistrationRequestsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def registration_request_params
       params.fetch(:registration_request, {})
-      params.require(:registration_request).permit(:application_name, :application_url , :user_email)
+      params.require(:registration_request).permit(:application_name, :application_url , :user_email, :external_application)
     end
 end

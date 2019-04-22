@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :registration_requests
   resources :client_applications
   resources :after_signup
+  resources :after_signup_external
   # resources :users
   # get 'users/index'
   #
@@ -44,6 +45,11 @@ Rails.application.routes.draw do
   post "send_application_invitation", to: "client_applications#send_application_invitation"
   get "/contact_management_details", to: "client_applications#contact_management"
   get "/plugin_page", to: "client_applications#plugin"
+
+  post "/define_parameters", to: "client_applications#define_parameters"
+  post "/external_api_setup", to: "client_applications#external_api_setup"
+  post "/parameters_mapping", to: "client_applications#parameters_mapping"
+
   get "/download_plugin", to: "client_applications#download_plugin"
   post "/get_contact_management", to: "client_applications#get_contact_management"
 
@@ -66,6 +72,9 @@ Rails.application.routes.draw do
 
 
   post "/wizard_add_new_role", to: "roles#wizard_add_new_role"
+
+  post "/after_signup_external/api_setup", to: "after_signup_external#update"
+
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]
     # post 'generate_end_point', to: 'minors#generate_end_point'
@@ -121,6 +130,10 @@ Rails.application.routes.draw do
     post "spd_filter", to: "service_provider_details#filter_provider"
     post "/scrappy_response", to: "service_provider_details#scrappy_doo_response"
     post "/authenticate_email", to: "service_provider_details#authenticate_user_email"
+
+    #API's for External Application
+    post "/send_patient", to: "external_applications#send_patient"
+    get "/client_list", to: "external_applications#client_list"
 
   end
   # patch "update" => "users#update", as: :user_update

@@ -17,6 +17,11 @@
       <%= f.label :service_provider_url %>
       <%= f.text_field :service_provider_url, id: :service_provider_url %>
     </div>
+
+    <div class="field">
+      <%= f.label :accept_referrals %>
+      <%= f.check_box :accept_referrals, id: :accept_referrals %>
+    </div>
     <%#= f.hidden_field :email,:value => @user.email, readonly: true %>
     <!--<h3>Users</h3>-->
     <!--<div id='users'>-->

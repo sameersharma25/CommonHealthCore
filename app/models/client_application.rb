@@ -4,6 +4,8 @@ class ClientApplication
   field :name, type: String
   field :application_url, type: String
   field :service_provider_url, type: String
+  field :external_application, type: Boolean
+  field :accept_referrals, type: Boolean
   # field :client_representative_id, type: String
 
   # validates_presence_of :name, :application_url
@@ -16,6 +18,8 @@ class ClientApplication
   has_many :service_provider_details
   has_many :roles
   has_many :statuses
+  has_many :external_api_setups
+  # has_many :mapped_parameters
   accepts_nested_attributes_for :users, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notification_rules, reject_if: :all_blank, allow_destroy: true
 

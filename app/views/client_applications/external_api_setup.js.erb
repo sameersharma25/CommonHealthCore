@@ -1,0 +1,12 @@
+var api_value  = $("#<%= @api_name%>").val();
+console.log('api value is :', api_value)
+
+
+<% if @show_error_messageg == true%>
+  $("#parameters-error-messagge").removeClass("hidden")
+  console.log("the params are empty*******")
+<%else%>
+  $("#modal-window").find(".modal-content").html("<%= j (render 'parameters_mapping') %>");
+  $("#modal-window").modal();
+  console.log("params are NOT NOT NOT empty*****")
+<%end%>

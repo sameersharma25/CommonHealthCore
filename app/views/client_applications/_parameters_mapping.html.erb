@@ -1,0 +1,44 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal">x</button>
+  <h4 class="modal-title" id="myModalLabel">Defining Parameters</h4>
+</div>
+
+<div class="modal-body">
+
+
+  <%= form_tag'/parameters_mapping',:multipart => true, :remote => true  do%>
+    <h1><%= @parameter_for %></h1>
+    <h1> Map Parameters </h1>
+
+    <%= hidden_field_tag "client_application_id", @client_application_id %>
+    <%= hidden_field_tag "external_application_id", @external_api_id %>
+    <%#= hidden_field_tag "api_value", api_value %>
+
+    <table class="table table-responsive table-bordered user-display">
+      <thead>
+      <tr>
+        <th >External Parameter</th>
+        <th >Internal Parameter</th>
+        <th ></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @hash_keys_array.each do |k|%>
+          <tr>
+            <%# fields_for :mapped_parameter do |mapper|%>
+
+            <td><%= label_tag k, k %></td>
+            <td><%= hidden_field_tag "extermal_parameter[]", k %></td>
+            <td><%= select_tag "chc_parameter[]", options_for_select(@chc_parameters), include_blank: true %> </td>
+            <td> </td>
+
+
+        <%# end %>
+          </tr>
+      <%end%>
+      </tbody>
+    </table>
+      <%= submit_tag 'Save' %>
+  <%end%>
+
+</div>

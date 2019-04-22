@@ -6,6 +6,7 @@ class RegistrationRequest
   field :user_email, type: String
   field :invited, type: Boolean, default: false
   field :invitation_accepted, type: Boolean, default: false
+  field :external_application, type: Boolean, default: false
 
   validates_presence_of :application_name, :application_url, :user_email
 

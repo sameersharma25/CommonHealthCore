@@ -11,12 +11,20 @@ class ClientApplicationsController < ApplicationController
     @notification_rules = @client_application.notification_rules
     logger.debug("the session count is *********************: #{user.sign_in_count}")
     logger.debug("the params are *********************: #{params.inspect}")
-    if user.sign_in_count.to_s == "1"
+    if user.sign_in_count.to_s == "1" && user.admin == true
       # rr = RegistrationRequest.find_by(user_email: user.email)
       # rr.invitation_accepted = true
       # rr.save
-      logger.debug("REDIRECTING TO THE NEW STEPS****************")
-      redirect_to after_signup_path(:role)
+      if @client_application.external_application == true
+        logger.debug("REDIRECTING TO THE API STEPS for EXTERNAL APPLICATION ****************")
+        # redirect_to after_signup_external_path(:api_setup)
+        redirect_to after_signup_external_index_path
+
+      else
+        logger.debug("REDIRECTING TO THE NEW STEPS****************")
+        redirect_to after_signup_path(:role)
+      end
+
     end
   end
 
@@ -69,6 +77,7 @@ class ClientApplicationsController < ApplicationController
   def update
     respond_to do |format|
       if @client_application.update(client_application_params)
+        logger.debug("IN THE APPLICATION UPDATE*************************")
         format.html { redirect_to @client_application, notice: 'Client application was successfully updated.' }
         format.json { render :show, status: :ok, location: @client_application }
       else
@@ -109,6 +118,7 @@ class ClientApplicationsController < ApplicationController
     ca = ClientApplication.new
     ca.name = rr.application_name
     ca.application_url = rr.application_url
+    ca.external_application = rr.external_application
 
     if ca.save
       admin_role = Role.create(client_application_id: ca.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
@@ -206,6 +216,95 @@ class ClientApplicationsController < ApplicationController
 
   end
 
+  def define_parameters
+    @parameter_for = params[:api_for]
+    @client_application_id = params[:client_application_id]
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
+
+  def external_api_setup
+    if !params[:expected_paramas].blank?
+      @hash_keys_array = []
+      @chc_parameters = []
+      eval(params[:expected_paramas]).each do |key, value|
+        @hash_keys_array.push(key)
+      end
+      @client_application_id = params[:client_application_id]
+      @api_name = params[:api_name]
+      logger.debug("the hash is : #{eval(params[:expected_paramas])}")
+      eas = ExternalApiSetup.new
+      eas.client_application_id = @client_application_id
+      eas.api_for = params[:api_for]
+      eas.expected_parameters = eval(params[:expected_paramas])
+      eas.save
+      @external_api_id = eas.id.to_s
+
+      logger.debug("the saved EAS is : #{eas.inspect}************** the keys are : #{@hash_keys_array}********external_api_id : #{@external_api_id}")
+      parameter_exceptions = ["_id", "created_at", "updated_at"]
+
+      model_array = [Patient, Referral, Task]
+
+      model_array.each do |m|
+        m.fields.keys.each do |p|
+          if !parameter_exceptions.include?(p)
+            @chc_parameters.push(p)
+          end
+        end
+      end
+
+      @chc_parameters.sort!
+      logger.debug("the CHC parameters are : #{@chc_parameters}**************")
+
+      respond_to do |format|
+        format.html
+        format.js
+      end
+    else
+      logger.debug("in the else block of empty params")
+      @show_error_messageg = true
+      respond_to do |format|
+        format.html
+        format.js
+      end
+    end
+
+  end
+
+  def parameters_mapping
+    logger.debug("IN the parameters mapping method************")
+    external_parameters = params[:extermal_parameter]
+    chc_parameters = params[:chc_parameter]
+    external_api_id = params[:external_application_id]
+    i = 0
+    external_parameters.each do |ep|
+      logger.debug("in the extermal parameters loop******************")
+      mp = MappedParameter.new
+      logger.debug("after creating new mappedparameters #{mp.inspect}******************")
+      mp.external_api_setup_id = external_api_id
+      mp.external_parameter = ep
+      mp.chc_parameter = chc_parameters[i]
+      logger.debug("after ADDING mappedparameters #{mp.inspect}******************")
+      if mp.save
+        logger.debug('the MP WAS SAVED***********')
+      else
+        logger.debug('NOT SAVEDDDDDDDDDDDd')
+      end
+      i+=1
+    end
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+
+  end
+
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_client_application
@@ -215,7 +314,7 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url,:service_provider_url, users_attributes: [:name, :email, :_destroy],
+    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals, #users_attributes: [:name, :email, :_destroy],
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end

@@ -19,3 +19,21 @@ jQuery ($) ->
 
   $('#contact_management_table').DataTable( "order": []);
 
+  $(document).on("click", ".external_api_setup", ->
+#    text = $("#send_patient").val()
+    client_id = $("#client_application_id").val()
+    api_array = []
+    $(".external_api_text_field").each ->
+      id=  $(this).attr('id')
+      text = $(this).val()
+      h = {id: id, text: text }
+      if text.length != 0
+        api_array.push(h)
+      console.log("the id is : ", id, 'the text is :', text)
+
+    console.log("the array from js is :", api_array, "Client ID is : ", client_id  )
+    $.post "/after_signup_external/api_setup",
+      api_array: api_array,
+      client_id: client_id
+    return
+  )

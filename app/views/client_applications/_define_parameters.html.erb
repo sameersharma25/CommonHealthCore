@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal">x</button>
+  <h4 class="modal-title" id="myModalLabel">Defining Parameters</h4>
+</div>
+
+<div class="modal-body">
+
+  <p id="parameters-error-messagge" class="hidden" style="color: red" >Parameters can not be blank  </p>
+  <%= form_tag'/external_api_setup',:multipart => true, :remote => true  do %>
+    <h1><%= @parameter_for %></h1>
+    <%= text_area_tag "expected_paramas", nil, rows: 10, cols: 50 %>
+    <%= hidden_field_tag "api_for", @parameter_for %>
+    <%= hidden_field_tag "client_application_id", @client_application_id %>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <%= submit_tag 'Save' %>
+  <% end %>
+
+</div>
