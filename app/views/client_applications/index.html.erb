@@ -3,9 +3,12 @@
     <div style="color: red"><%= link_to "You donn't have any users. Please click here to create users", new_user_path%></div>
 <%end%>
 
-<% if @notification_rules.count == 0 %>
-    <div><%= link_to "You donn't have any Notification Rules. Please click here to create rules", notification_rules_path, :style => "color: red" %></div>
+<% if @client_application.external_application == false || @client_application.external_application.nil? %>
+  <% if @notification_rules.count == 0 %>
+      <div><%= link_to "You do not have any Notification Rules. Please click here to create rules", notification_rules_path, :style => "color: red" %></div>
+  <%end %>
 <%end %>
+
 <h1>Client Applications</h1>
 
 <table id="client_application" class="table table-responsive table-bordered user-display">
@@ -68,58 +71,63 @@
     </table>
 <%end%>
 
-<h1>Notification Rules Table</h1>
-<% if @notification_rules.count > 0 %>
-    <table id="notification_rules" class="table table-responsive table-bordered display">
+<% if @client_application.external_application == false || @client_application.external_application.nil? %>
+  <h1>Notification Rules Table</h1>
+  <% if @notification_rules.count > 0 %>
+      <table id="notification_rules" class="table table-responsive table-bordered display">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Time</th>
+            <th>Subject</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%@notification_rules.each do |nr| %>
+            <tr>
+              <td><%= Status.find(nr.appointment_status).status %></td>
+              <td><%= nr.time_difference%></td>
+              <td><%= nr.subject%></td>
+            </tr>
+          <%end%>
+        </tbody>
+      </table>
+  <%end%>
+<%end%>
+
+
+<% if @client_application.external_application == false || @client_application.external_application.nil? %>
+  <% if current_user.admin? %>
+    <h1>Registration Requests</h1>
+    <table class="table table-responsive table-bordered user-display">
       <thead>
         <tr>
-          <th>Status</th>
-          <th>Time</th>
-          <th>Subject</th>
+          <th >Name</th>
+          <th >URL</th>
+          <th >UserEmail</th>
+          <th ></th>
         </tr>
       </thead>
       <tbody>
-        <%@notification_rules.each do |nr| %>
-          <tr>
-            <td><%= Status.find(nr.appointment_status).status %></td>
-            <td><%= nr.time_difference%></td>
-            <td><%= nr.subject%></td>
-          </tr>
-        <%end%>
+      <%@registration_request.each do |rr|%>
+        <tr>
+          <% if rr.invitation_accepted == false %>
+            <td><%= rr.application_name%></td>
+            <td><%= rr.application_url%></td>
+            <td><%= rr.user_email%></td>
+            <% if rr.invited == true %>
+                <td><%= link_to "Resend Invite", "#", id: rr.id.to_s,:remote => true %></td>
+            <% elsif rr.invited == false %>
+                <td><%= link_to "Invite", "#", id: rr.id.to_s, class: "requested_application",:remote => true %></td>
+            <% end %>
+          <% end %>
+        </tr>
+      <%end%>
       </tbody>
     </table>
+
+  <% end %>
 <%end%>
-
-<% if current_user.admin? %>
-  <h1>Registration Requests</h1>
-  <table class="table table-responsive table-bordered user-display">
-    <thead>
-      <tr>
-        <th >Name</th>
-        <th >URL</th>
-        <th >UserEmail</th>
-        <th ></th>
-      </tr>
-    </thead>
-    <tbody>
-    <%@registration_request.each do |rr|%>
-      <tr>
-        <% if rr.invitation_accepted == false %>
-          <td><%= rr.application_name%></td>
-          <td><%= rr.application_url%></td>
-          <td><%= rr.user_email%></td>
-          <% if rr.invited == true %>
-              <td><%= link_to "Resend Invite", "#", id: rr.id.to_s,:remote => true %></td>
-          <% elsif rr.invited == false %>
-              <td><%= link_to "Invite", "#", id: rr.id.to_s, class: "requested_application",:remote => true %></td>
-          <% end %>
-        <% end %>
-      </tr>
-    <%end%>
-    </tbody>
-  </table>
-
-<% end %>
 
 
 <%#= link_to 'New Client Application', new_client_application_path if current_user.admin? %><br>
@@ -128,11 +136,15 @@
 
 <%= link_to "Add User", new_user_path%><br>
 
-<%= link_to "Create Notification Rule", notification_rules_path%><br>
+<% if @client_application.external_application == false || @client_application.external_application.nil? %>
+  <%= link_to "Create Notification Rule", notification_rules_path%><br>
+  <%= link_to "Roles", roles_path%><br>
+  <%= link_to "Status" , statuses_path %><br>
+<%end %>
 
 <%= link_to "Service Providers", service_provider_details_path%><br>
-<%= link_to "Roles", roles_path%><br>
-<%= link_to "Status" , statuses_path %><br>
+
+
 <%= link_to "New Catalogue Rules" , contact_management_details_path %><br>
 <%= link_to "Catalogue Management" , scraping_rules_path %><br>
 <%#= link_to "Plug-in Link", "https://drive.google.com/uc?id=1oYTrCH6JmNqaA3VjADNWmilWeQGczUJu&export=dowload"%>
