@@ -9,7 +9,10 @@ class ClientApplicationsController < ApplicationController
     @client_application = current_user.client_application
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
-    logger.debug("the session count is *********************: #{user.sign_in_count}")
+    # @referred_applications = LedgerStatus.where(referred_application_id: @client_application.id.to_s)
+    @referred_applications = LedgerStatus.all
+
+    logger.debug("the session count is *********************: #{user.sign_in_count}, LEDGER STATIS : #{@referred_applications.entries}")
     logger.debug("the params are *********************: #{params.inspect}")
     if user.sign_in_count.to_s == "1" && user.admin == true
       # rr = RegistrationRequest.find_by(user_email: user.email)
@@ -304,6 +307,30 @@ class ClientApplicationsController < ApplicationController
 
   end
 
+  def get_patients
+    user = current_user
+    client_application_id = current_user.client_application.id.to_s
+    @patients = Patient.where(client_application_id: client_application_id).order(last_name: :asc)
+    @referrals = Referral.where(client_application_id: client_application_id).order(created_at: :desc).limit(3)
+
+  end
+
+  def send_task
+    input = {task_id: params[:task_id], external_application_id: "5ab9145d58f01ad9374afd11" }
+    uri = URI("http://localhost:3000/api/send_patient")
+    header = {'Content-Type' => 'application/json'}
+    http = Net::HTTP.new(uri.host, uri.port)
+    puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+    # http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, header)
+    request.body = input.to_json
+
+    # Send the request
+    response = http.request(request)
+    puts "response #{response.body}"
+    puts JSON.parse(response.body)
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -314,7 +341,7 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals, #users_attributes: [:name, :email, :_destroy],
+    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals,:client_speciality, #users_attributes: [:name, :email, :_destroy],
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end

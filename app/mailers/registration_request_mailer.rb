@@ -6,4 +6,11 @@ class RegistrationRequestMailer < ActionMailer::Base
     mail(to: rr.user_email, subject: "Requestion Application Registration")
   end
 
+  def referral_request(email,task_id, client_id)
+    @task_id = task_id
+    @client_id = client_id
+
+    mail(to: email, subject: "Patient Referral")
+  end
+
 end

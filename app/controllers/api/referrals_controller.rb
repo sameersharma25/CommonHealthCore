@@ -1,8 +1,8 @@
 module Api
   class ReferralsController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: []
-    load_and_authorize_resource class: :api
+    before_action :authenticate_user_from_token, except: [:ext_app_ledger]
+    load_and_authorize_resource class: :api, except: [:ext_app_ledger]
 
     def create_referral
       patient = Patient.find(params[:patient_id])
@@ -121,6 +121,7 @@ module Api
 
     def create_task
       referral = Referral.find(params[:referral_id])
+      patient_id = referral.patient.id.to_s
       task = Task.new
       task.referral_id = referral
       task.task_type = params[:task_type] if params[:task_type]
@@ -134,6 +135,11 @@ module Api
       task.task_description = params[:task_description] if params[:task_description]
       task.additional_fields = params[:additional_fields] if params[:additional_fields]
       if task.save
+        lm = LedgerMaster.new
+        lm.task_id = task.id.to_s
+        # lm.patient_id = patient_id
+        lm.save
+
         render :json=> {status: :ok, message: "Task Created"}
       end
 
@@ -261,6 +267,7 @@ module Api
           ref_patient = r.patient.last_name + r.patient.first_name
           date = active_referral_time_array.sort.last
           active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+          active_referral_array.push(active_referral_hash)
         elsif task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active")
           ref_id = r.id.to_s
           ref_patient = r.patient.last_name + r.patient.first_name
@@ -304,6 +311,36 @@ module Api
         end
       end
       render :json => {status: :ok,patient_document_array: patient_document_array}
+    end
+
+    def create_ledger_record
+
+      lr = LedgerRecord.new
+      lr.ledger_master_id = params[:ledger_master_id]
+      lr.referred_application_id = params[:referred_application_id]
+      lr.referred_change_type = params[:referred_change_type]
+      lr.referred_application_object_id = params[:referred_application_object_id]
+      lr.referred_application_object_type = params[:referred_application_object_type]
+      lr.save
+
+    end
+
+    def ext_app_ledger
+      lm = LedgerMaster.new
+      lm.task_id = params[:task_values][:task_id]
+      # lm.patient_id = patient_id
+      if lm.save
+        ledger_master_id = lm.id.to_s
+
+        led_stat = LedgerStatus.new
+        led_stat.referred_application_id = params[:task_values][:referred_application_id]
+        led_stat.ledger_master_id = ledger_master_id
+        led_stat.ledger_status = "Pending"
+        if led_stat.save
+          logger.debug("NOTIFICATION FOR REFERAL WILL BE SENT**********")
+        end
+      end
+
     end
 
   end

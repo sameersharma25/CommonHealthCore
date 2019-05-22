@@ -1,41 +1,248 @@
+require 'net/http'
+require 'uri'
+require 'json'
+
 module Api
   class ExternalApplicationsController < ActionController::Base
 
-
     def send_patient
-      # task_id = params[:task_id]
-      # task = Task.find(task_id)
+      task_id = params[:task_id]
+      task = Task.find(task_id)
+      patient = task.referral.patient
+
+      ledger_master = LedgerMaster.where(task_id: task_id).first
+      existing_status= ledger_master.ledger_statuses.where(referred_application_id: params[:external_application_id] ).first
 
       external_application_id = params[:external_application_id]
+      external_application = ClientApplication.find(external_application_id)
 
-      external_api = ExternalApiSetup.where(client_application_id: external_application_id, api_for: "send_patient").first
-      first_name = "Test"
-      patient_address = "Planet Earth"
-      logger.debug("the MAPPED PARAMETERS ARE: #{external_api.mapped_parameters.entries}")
-      external_api.mapped_parameters.each do|mp|
-        mp.external_parameter = mp.chc_parameter
-        logger.debug("the parameter value is : #{mp.external_parameter}, -----#{first_name}")
+
+      if external_application.external_application == true
+        external_api = ExternalApiSetup.where(client_application_id: external_application_id, api_for: "send_patient").first
+
+        patient_hash = Hash.new
+        logger.debug("the MAPPED PARAMETERS ARE: #{external_api.mapped_parameters.entries}")
+        external_api.mapped_parameters.each do|mp|
+          external_parameter = mp.external_parameter
+          chc_parameter = mp.chc_parameter # first_name
+          chc_value = patient[chc_parameter]
+          patient_hash[external_parameter] = chc_value
+          logger.debug("the parameter value is : EXTERNAL:  #{external_parameter}, CHC : #{chc_parameter} -----#{chc_value}")
+        end
+
+        input = {"patient_hash": patient_hash}
+        uri = URI("http://localhost:3001/api/add_external_patients")
+
+
+        header = {'Content-Type' => 'application/json'}
+
+        http = Net::HTTP.new(uri.host, uri.port)
+        puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+        # http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.path, header)
+        request.body = input.to_json
+
+        # Send the request
+        response = http.request(request)
+        puts "response #{response.body}"
+        puts JSON.parse(response.body)
+        result = JSON.parse(response.body)
+        logger.debug("the patient id is : #{result}")
+        if !result["p_id"].nil?
+          send_task(result["p_id"], task,external_application_id,existing_status)
+        else
+          logger.debug('the PATIENT ID WAS nil***************')
+        end
+      else
+        patient_check = Patient.where(client_application_id: external_application_id, first_name: patient.first_name).first
+        logger.debug("Creating patient for internal application******************* #{patient_check}")
+        if patient_check.nil?
+          logger.debug("Creating new Patient*********************")
+          new_patient = Patient.new
+          new_patient.client_application_id = external_application_id
+          new_patient.first_name = patient.first_name
+          new_patient.last_name = patient.last_name
+          new_patient.date_of_birth = patient.date_of_birth
+          new_patient.patient_email = patient.patient_email
+          new_patient.patient_phone = patient.patient_phone
+          new_patient.patient_coverage_id = patient.patient_coverage_id
+          new_patient.healthcare_coverage = patient.healthcare_coverage
+          new_patient.patient_address = patient.patient_address
+          new_patient.mode_of_contact = patient.mode_of_contact
+          new_patient.patient_zipcode = patient.patient_zipcode
+          new_patient.patient_status = patient.patient_status
+          new_patient.gender = patient.gender
+          new_patient.race = patient.race
+          new_patient.ethnicity = patient.ethnicity
+          new_patient.save
+
+          send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+
+        else
+          logger.debug("the patient IS ALREADY PRESENT*************")
+          send_task(patient_check.id.to_s, task,external_application_id, existing_status)
+        end
+
       end
-
-
-
 
 
     end
 
+
+    def send_task(p_id, task, ea_id, ledg_stat)
+      logger.debug("SENDING TASK TO EXTERNAL APPLICATION*************** #{p_id}, -----task is : #{task.inspect}")
+
+      external_application = ClientApplication.find(ea_id)
+
+      if external_application.external_application == true
+        external_api = ExternalApiSetup.where(client_application_id: ea_id, api_for: "remove_patient").first
+
+        task_hash = Hash.new
+        task_hash["patient_id"] = p_id
+        external_api.mapped_parameters.each do|mp|
+          external_parameter = mp.external_parameter
+          chc_parameter = mp.chc_parameter # first_name
+          chc_value = task[chc_parameter]
+          task_hash[external_parameter] = chc_value
+
+          logger.debug("the parameter value is : EXTERNAL:  #{external_parameter}, CHC : #{chc_parameter} -----#{chc_value}")
+        end
+
+        logger.debug("the task hash is : #{task_hash}")
+
+
+        input = {"task_hash": task_hash}
+        uri = URI("http://localhost:3001/api/add_external_tasks")
+
+
+        header = {'Content-Type' => 'application/json'}
+
+        http = Net::HTTP.new(uri.host, uri.port)
+        puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+        # http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.path, header)
+        request.body = input.to_json
+
+        # Send the request
+        response = http.request(request)
+        puts "response #{response.body}"
+        puts JSON.parse(response.body)
+        result = JSON.parse(response.body)
+        logger.debug("the patient id is : #{result}")
+      else
+
+        logger.debug("Creating REFERRAL FOR INTERNAL APPLICATION********************")
+        r = Referral.new
+        r.client_application_id = ea_id
+        r.patient_id = p_id
+        r.referral_name = "Test"
+        if r.save
+          logger.debug("Creating TASK FOR INTERNAL APPLICATION*************************")
+          t = Task.new
+          t.referral_id = r.id.to_s
+          t.task_type = task.task_type
+          t.task_status = task.task_status
+          t.task_deadline = task.task_deadline
+          t.task_description = task.task_description
+          t.additional_fields = task.additional_fields
+          if t.save
+            ledg_stat.ledger_status = "Accepted"
+            ledg_stat.external_object_id = t.id.to_s
+            ledg_stat.save
+          end
+
+          render :json=> {status: :ok, message: "Patient and Task were transferred successfully " }
+        end
+      end
+    end
+
     def client_list
-      all_client = ClientApplication.all
+      all_client = ClientApplication.where(accept_referrals: true)
+      # all_client = ClientApplication.all
       all_client_array = []
       all_client.each do |ac|
         name = ac.name
         id =  ac.id.to_s
-        client_hash = {name: name, id: id}
+        speciality = ac.client_speciality
+        client_hash = {name: name, id: id,speciality: speciality }
         all_client_array.push(client_hash)
       end
 
       # logger.debug("the list of the client is: #{all_client_array}")
       render :json=> {status: :ok, client_list: all_client_array.sort_by{|h| h[:name].downcase} }
+    end
 
+
+    def send_referral
+      task_id = params[:task_id]
+      referred_by_id = Task.find(params[:task_id]).referral.client_application.id.to_s
+      ledger_master = LedgerMaster.where(task_id: task_id).first
+      ledger_master_id = ledger_master.id.to_s
+      referred_applicaiton = ClientApplication.find(params[:referred_application_id])
+      client_user = referred_applicaiton.users.first
+      client_user_email = client_user.email
+
+      exixting_status= ledger_master.ledger_statuses.where(referred_application_id: params[:referred_application_id] )
+      logger.debug("the existing status value is : #{exixting_status.entries}")
+
+      if !exixting_status.empty?
+        logger.debug("the IF BLOCK OF EXISTING***************")
+      else
+        logger.debug("the ELSE BLOCK OF EXISTING***************")
+
+        logger.debug("the user is #{client_user}, ******** USER EMAIL IS : #{client_user_email}")
+        led_stat = LedgerStatus.new
+        led_stat.referred_application_id = params[:referred_application_id]
+        led_stat.ledger_master_id = ledger_master_id
+        led_stat.ledger_status = "Pending"
+        led_stat.referred_by_id = referred_by_id
+        if led_stat.save
+          logger.debug("NOTIFICATION FOR REFERAL WILL BE SENT**********")
+          RegistrationRequestMailer.referral_request(client_user_email,task_id, params[:referred_application_id] ).deliver
+          render :json=> {status: :ok, message: "Referral Request was sent" }
+        end
+      end
+
+    end
+
+    def referred_app_name
+      client_name_array = []
+      ledger_status = LedgerMaster.where(task_id: params[:task_id]).first.ledger_statuses
+      ledger_status.each do |led_stat|
+        client = ClientApplication.find(led_stat.referred_application_id)
+        client_name_array.push(client.name)
+      end
+
+      render :json=> {status: :ok, client_name_array: client_name_array }
+    end
+
+    def in_coming_referrals
+      in_rfl_array = []
+      incoming_referrals = LedgerStatus.where(referred_application_id: params[:application_id])
+      incoming_referrals.each do |in_rfl|
+        referred_from = ClientApplication.find(in_rfl.referred_by_id).name
+        task_id = in_rfl.ledger_master.task_id
+        task_description = Task.find(task_id).task_description
+        out_rfl_status = in_rfl.ledger_status
+        out_rfl_hash = {referred_from: referred_from, task_description: task_description, status: out_rfl_status }
+        in_rfl_array.push(out_rfl_hash)
+      end
+      render :json=> {status: :ok, incoming_referrals: in_rfl_array  }
+    end
+
+    def out_going_referrals
+      out_rfl_array = []
+      outgoing_referrals = LedgerStatus.where(referred_by_id: params[:application_id])
+      outgoing_referrals.each do |out_rfl|
+        referred_to = ClientApplication.find(out_rfl.referred_application_id).name
+        task_id = out_rfl.ledger_master.task_id
+        task_description = Task.find(task_id).task_description
+        out_rfl_status = out_rfl.ledger_status
+        out_rfl_hash = {referred_to: referred_to, task_description: task_description, status: out_rfl_status }
+        out_rfl_array.push(out_rfl_hash)
+      end
+
+      render :json=> {status: :ok, outgoing_referrals: out_rfl_array  }
     end
 
 

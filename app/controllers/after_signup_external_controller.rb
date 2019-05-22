@@ -53,6 +53,19 @@ class AfterSignupExternalController < ApplicationController
 
   end
 
+  def edit
+
+    logger.debug("IN the EDIT of the after signup External*******************")
+    @user = current_user
+    client_application = @user.client_application
+    @client_application_id = @user.client_application.id.to_s
+
+    @external_api_setups = ClientApplication.find(params[:id]).external_api_setups
+    @send_patient_api = ClientApplication.find(params[:id]).external_api_setups.where(api_for: "send_patient").first
+    @remove_patient_api = ClientApplication.find(params[:id]).external_api_setups.where(api_for: "remove_patient").first
+    logger.debug("after the WHEN api_setup #{@external_api_setups.entries}*************************************")
+  end
+
   def update
     # case step
     #   when :api_setup

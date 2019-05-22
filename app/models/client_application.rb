@@ -6,6 +6,7 @@ class ClientApplication
   field :service_provider_url, type: String
   field :external_application, type: Boolean
   field :accept_referrals, type: Boolean
+  field :client_speciality, type: String
   # field :client_representative_id, type: String
 
   # validates_presence_of :name, :application_url

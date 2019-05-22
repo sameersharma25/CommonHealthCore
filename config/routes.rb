@@ -53,6 +53,9 @@ Rails.application.routes.draw do
   get "/download_plugin", to: "client_applications#download_plugin"
   post "/get_contact_management", to: "client_applications#get_contact_management"
 
+  get "/get_patients", to: "client_applications#get_patients"
+  post "/send_task", to: "client_applications#send_task"
+
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
   post "filter_field_values", to: "service_provider_details#filter_field_values"
   post "/add_filter_fields", to: "service_provider_details#add_filter_fields"
@@ -115,6 +118,9 @@ Rails.application.routes.draw do
     post "tsk_get", to: "referrals#get_task"
     post "tsk_status", to: "referrals#get_task_status"
     post "tsk_dashboard", to: "referrals#dashboard_tasks"
+    post "ledg_rec_create", to: "referrals#create_ledger_record"
+    post "ext_app_ledger", to: "referrals#ext_app_ledger"
+
 
     post "msg_send", to: "communications#send_message"
     post "msg_get", to: "communications#get_messages"
@@ -134,7 +140,9 @@ Rails.application.routes.draw do
     #API's for External Application
     post "/send_patient", to: "external_applications#send_patient"
     get "/client_list", to: "external_applications#client_list"
-
+    post "ref_send", to: "external_applications#send_referral"
+    post "rfl_out", to: "external_applications#out_going_referrals"
+    post "rfl_in", to: "external_applications#in_coming_referrals"
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

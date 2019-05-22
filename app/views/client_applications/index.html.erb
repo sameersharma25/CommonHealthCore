@@ -57,10 +57,13 @@
                   <!--<td>-&#45;&#45;</td>-->
               <%#end%>
               <% roles_array = []%>
-              <% u.roles.each do |r|%>
-                <% role_name = Role.find(r).role_name%>
-                <% roles_array.push(role_name) %>
+              <%if u.roles %>
+                <% u.roles.each do |r|%>
+                  <% role_name = Role.find(r).role_name%>
+                  <% roles_array.push(role_name) %>
+                <%end %>
               <%end %>
+
 
               <td><%=  roles_array.join(', ') %></td>
               <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
@@ -70,6 +73,37 @@
       </tbody>
     </table>
 <%end%>
+
+
+<h1>Ledger Status Table</h1>
+<% if @referred_applications.count > 0 %>
+  <table class="table table-responsive table-bordered">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%@referred_applications.each do |ra| %>
+        <%ledger_master = ra.ledger_master%>
+        <% task = Task.find(ledger_master.task_id)%>
+        <tr>
+          <td> <%= task.task_description %></td>
+          <td> <%= ra.ledger_status%></td>
+          <% if ra.ledger_status == "Pending" %>
+            <td> <%= link_to "Accept Referral", api_send_patient_path(task_id: ledger_master.task_id ,external_application_id: ra.referred_application_id),method: :post%></td>
+          <%elsif ra.ledger_status == "Accepted"%>
+              <td> Accepted </td>
+          <%end%>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+
+<% end %>
+
+
 
 <% if @client_application.external_application == false || @client_application.external_application.nil? %>
   <h1>Notification Rules Table</h1>
@@ -144,17 +178,23 @@
 
 <%= link_to "Service Providers", service_provider_details_path%><br>
 
+<% if @client_application.external_application == true %>
+    <%= link_to "External Apis", edit_after_signup_external_path(:id => @client_application.id.to_s ) %><br>
+<%end%>
 
 <%= link_to "New Catalogue Rules" , contact_management_details_path %><br>
 <%= link_to "Catalogue Management" , scraping_rules_path %><br>
 <%#= link_to "Plug-in Link", "https://drive.google.com/uc?id=1oYTrCH6JmNqaA3VjADNWmilWeQGczUJu&export=dowload"%>
 <%#= link_to "Plug-in Page", plugin_page_path %>
-<%= link_to 'Plug-in Page', plugin_page_path,  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}  %>
+<%= link_to 'Plug-in Page', plugin_page_path,  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}  %><br>
 <div id="modal-window" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content"></div>
   </div>
 </div>
+
+
+<%= link_to "Patients List", get_patients_path%>
 
 <%#= link_to "Filter Page" , filter_page_path %><br>
 

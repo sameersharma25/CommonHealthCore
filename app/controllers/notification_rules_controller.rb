@@ -59,7 +59,7 @@ class NotificationRulesController < ApplicationController
   def update
     respond_to do |format|
       if @notification_rule.update(notification_rule_params)
-        format.html { redirect_to @notification_rule, notice: 'Notification rule was successfully updated.' }
+        format.html { redirect_to notification_rules_path, notice: 'Notification rule was successfully updated.' }
         format.json { render :show, status: :ok, location: @notification_rule }
       else
         format.html { render :edit }

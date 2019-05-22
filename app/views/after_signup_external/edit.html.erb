@@ -1,0 +1,28 @@
+
+
+<h1> API SETUP </h1>
+
+
+1) Send Patient Details : <%= text_field_tag "send_patient",@send_patient_api.api_name, class: "external_api_text_field"  %>  <%= link_to "Define Parameters", define_parameters_path(api_for: "send_patient", client_application_id: @client_application_id  ), {method: :post,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> <br>
+<br>
+2) Remove Patient Details : <%= text_field_tag "remove_patient",@remove_patient_api.api_name, class: "external_api_text_field"  %>  <%= link_to "Define Parameters", define_parameters_path(api_for: "remove_patient", client_application_id: @client_application_id), {method: :post,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> <br>
+<br>
+3) Send Task Details : <%= text_field_tag "send_task",nil, class: "external_api_text_field"  %>  <%= link_to "Define Parameters", define_parameters_path(api_for: "send_task", client_application_id: @client_application_id), {method: :post,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> <br>
+
+<%= hidden_field_tag "client_application_id", @client_application_id %>
+
+
+<div id="modal-window" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+<div class="" id="my_centered_buttons" >
+  <%#= link_to 'Previous', previous_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
+  <%= link_to "Finish", root_path,class: "btn btn-primary wizard_next_button external_api_setup" %>
+  <%#= button_tag "Finish",class: "btn btn-primary wizard_next_button external_api_setup", type: "button" %>
+  <%#= f.submit "Finish",class: "btn btn-primary wizard_next_button" %>
+</div>
+
+<% #end %>
