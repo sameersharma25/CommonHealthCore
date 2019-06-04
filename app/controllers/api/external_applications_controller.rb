@@ -145,6 +145,7 @@ module Api
           t.task_deadline = task.task_deadline
           t.task_description = task.task_description
           t.additional_fields = task.additional_fields
+          t.task_referred_from = ledg_stat.referred_by_id
           if t.save
             ledg_stat.ledger_status = "Accepted"
             ledg_stat.external_object_id = t.id.to_s
@@ -223,9 +224,11 @@ module Api
         referred_from = ClientApplication.find(in_rfl.referred_by_id).name
         task_id = in_rfl.ledger_master.task_id
         task_description = Task.find(task_id).task_description
-        out_rfl_status = in_rfl.ledger_status
-        out_rfl_hash = {referred_from: referred_from, task_description: task_description, status: out_rfl_status }
-        in_rfl_array.push(out_rfl_hash)
+        t_id = Task.find(task_id).id.to_s
+        in_rfl_status = in_rfl.ledger_status
+        in_rfl_hash = {referred_from: referred_from,task_id:t_id, task_description: task_description, status: in_rfl_status,
+                       external_application_id: in_rfl.referred_application_id}
+        in_rfl_array.push(in_rfl_hash)
       end
       render :json=> {status: :ok, incoming_referrals: in_rfl_array  }
     end
@@ -243,6 +246,24 @@ module Api
       end
 
       render :json=> {status: :ok, outgoing_referrals: out_rfl_array  }
+    end
+
+    def new_ledger_record
+      task_id = params[:task_id]
+      task = Task.find(task_id)
+      ledgger_master = LedgerMaster.where(task_id: task_id).first
+      ledger_status = ledgger_master.ledger_statuses.first
+      lr = LedgerRecord.new
+      lr.ledger_status_id = ledger_status.id.to_s
+      lr.changed_fields = params[:changed_fields].to_unsafe_h
+      lr.save
+      # lr.ledger_status_id =
+
+    end
+
+    def ledger_record_list
+
+
     end
 
 
