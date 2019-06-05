@@ -13,6 +13,7 @@ class Task
   field :task_deadline, type: DateTime
   field :task_description, type: String
   field :additional_fields, type: Hash
+  field :task_referred_from, type: String
   mount_uploader :patient_document , PatientFileUploader
 
   belongs_to :referral
