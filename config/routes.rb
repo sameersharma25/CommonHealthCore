@@ -140,9 +140,28 @@ Rails.application.routes.draw do
     #API's for External Application
     post "/send_patient", to: "external_applications#send_patient"
     get "/client_list", to: "external_applications#client_list"
-    post "ref_send", to: "external_applications#send_referral"
+    post "rfl_send", to: "external_applications#send_referral"
     post "rfl_out", to: "external_applications#out_going_referrals"
     post "rfl_in", to: "external_applications#in_coming_referrals"
+    post "tsk_changes", to: "external_applications#new_ledger_record"
+
+    #API's for Interview
+    post "/int_create", to: "interviews#new_interview"
+    post "/int_update", to: "interviews#update_interview"
+
+    post "/need_create", to: "interviews#new_need"
+    post "/need_update", to: "interviews#update_need"
+
+
+    post "/obstacle_create", to: "interviews#new_obstacle"
+    post "/obstacle_update", to: "interviews#update_obstacle"
+
+    post "/sol_create", to: "interviews#new_solution"
+    post "/sol_update", to: "interviews#update_soulution"
+
+
+
+
   end
   # patch "update" => "users#update", as: :user_update
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
