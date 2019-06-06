@@ -8,6 +8,8 @@ module Api
 
       new_call = Interview.new
       new_call.caller_first_name = params[:caller_first_name]
+      call.caller_last_name = params[:caller_last_name] if params[:caller_last_name]
+      call.caller_dob = params[:caller_dob] if params[:caller_dob]
       new_call.client_application_id = client_application.id.to_s
       new_call.save
 
@@ -35,6 +37,7 @@ module Api
       new_need = Need.new
       new_need.need_title = params[:need_title]
       new_need.interview_id = params[:interview_id]
+      need.need_description = params[:need_description] if params[:need_description]
       new_need.save
 
       render :json => {status: :ok, need_id: new_need.id.to_s}
@@ -86,12 +89,29 @@ module Api
     end
 
     def update_soulution
-      solution = Solution.find(params[:sol_id])
+      solution = Solution.find(params[:solution_id])
       solution.solution_title = params[:solution_title] if params[:solution_title]
       solution.solution_description = params[:solution_description] if params[:solution_description]
       solution.save
+
+      render :json => {status: :ok }
     end
 
+    def interview_list
+      client_application_id = User.find_by(email: params[:email]).client_application_id
+      client_interviews = Interview.where(client_application_id: client_application_id)
+      interview_list_array = []
+      client_interviews.each do |ci|
+        caller_first_name = ci.caller_first_name
+        need_title = ci.needs.first.need_title if ci.needs.first
+        obstacle_title = ci.needs.first.obstable.first.obstacle_title if (ci.needs.first && ci.needs.first.obstable.first)
+        interview_hash = {caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
+        interview_list_array.push(interview_hash)
+      end
+
+      render :json => {status: :ok, interview_list: interview_list_array}
+
+    end
 
   end
 end

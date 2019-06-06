@@ -148,6 +148,7 @@ Rails.application.routes.draw do
     #API's for Interview
     post "/int_create", to: "interviews#new_interview"
     post "/int_update", to: "interviews#update_interview"
+    post "/int_list", to: "interviews#interview_list"
 
     post "/need_create", to: "interviews#new_need"
     post "/need_update", to: "interviews#update_need"
@@ -158,7 +159,6 @@ Rails.application.routes.draw do
 
     post "/sol_create", to: "interviews#new_solution"
     post "/sol_update", to: "interviews#update_soulution"
-
 
 
 
