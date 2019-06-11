@@ -8,8 +8,8 @@ module Api
 
       new_call = Interview.new
       new_call.caller_first_name = params[:caller_first_name]
-      call.caller_last_name = params[:caller_last_name] if params[:caller_last_name]
-      call.caller_dob = params[:caller_dob] if params[:caller_dob]
+      new_call.caller_last_name = params[:caller_last_name] if params[:caller_last_name]
+      new_call.caller_dob = params[:caller_dob] if params[:caller_dob]
       new_call.client_application_id = client_application.id.to_s
       new_call.save
 
@@ -37,7 +37,7 @@ module Api
       new_need = Need.new
       new_need.need_title = params[:need_title]
       new_need.interview_id = params[:interview_id]
-      need.need_description = params[:need_description] if params[:need_description]
+      new_need.need_description = params[:need_description] if params[:need_description]
       new_need.save
 
       render :json => {status: :ok, need_id: new_need.id.to_s}
@@ -59,6 +59,7 @@ module Api
     def new_obstacle
       new_obstacle = Obstacle.new
       new_obstacle.obstacle_title = params[:obstacle_title]
+      new_obstacle.obstacle_description = params[:obstacle_description] if params[:obstacle_description]
       new_obstacle.need_id = params[:need_id]
       new_obstacle.save
 
@@ -102,15 +103,35 @@ module Api
       client_interviews = Interview.where(client_application_id: client_application_id)
       interview_list_array = []
       client_interviews.each do |ci|
+        interview_id = ci.id.to_s
         caller_first_name = ci.caller_first_name
         need_title = ci.needs.first.need_title if ci.needs.first
-        obstacle_title = ci.needs.first.obstable.first.obstacle_title if (ci.needs.first && ci.needs.first.obstable.first)
-        interview_hash = {caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
+        obstacle_title = ci.needs.first.obstacles.first.obstacle_title if (ci.needs.first && ci.needs.first.obstacles.first)
+        interview_hash = {interview_id: interview_id, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
         interview_list_array.push(interview_hash)
       end
 
       render :json => {status: :ok, interview_list: interview_list_array}
+    end
 
+
+    def interview_details
+      interview = Interview.find(params[:interview_id])
+      need = interview.needs.first
+      obstacle = need.obstacles.first if (need && need.obstacles)
+
+      interview_hash = {caller_first_name: interview.caller_first_name, caller_last_name: interview.caller_last_name,
+                        caller_dob: interview.caller_dob, caller_address: interview.caller_address,
+                        caller_zipcode: interview.caller_zipcode, caller_state: interview.caller_state}
+
+      need_hash = {need_title: need.need_title, need_description: need.need_description, need_note: need.need_notes,
+                   need_urgency: need.need_urgency, need_status: need.need_status} if need
+
+      obstacle_hash = {obstacle_title: obstacle.obstacle_title, obstacle_description: obstacle.obstacle_description,
+                       obstacle_notes: obstacle.obstacle_notes, obstacle_urgency: obstacle.obstacle_urgency,
+                       obstacle_status: obstacle.obstacle_status} if obstacle
+
+      render :json => {status: :ok, interview_hash: interview_hash, need_hash: need_hash, obstacle_hash: obstacle_hash }
     end
 
   end
