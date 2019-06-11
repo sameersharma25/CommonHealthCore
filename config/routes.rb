@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   get "/filter_page", to: "service_provider_details#filter_page"
 
 
+
   post "/wizard_add_status", to: "statuses#wizard_add_status"
 
 
@@ -136,6 +137,7 @@ Rails.application.routes.draw do
     post "spd_filter", to: "service_provider_details#filter_provider"
     post "/scrappy_response", to: "service_provider_details#scrappy_doo_response"
     post "/authenticate_email", to: "service_provider_details#authenticate_user_email"
+    post "/get_catalogue_entry", to: "service_provider_details#contact_management_details_for_plugin"
 
     #API's for External Application
     post "/send_patient", to: "external_applications#send_patient"
@@ -149,6 +151,7 @@ Rails.application.routes.draw do
     post "/int_create", to: "interviews#new_interview"
     post "/int_update", to: "interviews#update_interview"
     post "/int_list", to: "interviews#interview_list"
+    post "/int_details", to: "interviews#interview_details"
 
     post "/need_create", to: "interviews#new_need"
     post "/need_update", to: "interviews#update_need"

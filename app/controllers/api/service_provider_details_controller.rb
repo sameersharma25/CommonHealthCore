@@ -60,6 +60,29 @@ module Api
 
     end
 
+    def contact_management_details_for_plugin
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              url: params["org_url"]
+          }
+          # projection_expression: "url",
+          # filter_expression: "url = test1.com"
+      }
+
+      result = dynamodb.get_item(parameters)[:item]
+      if result.nil?
+        result = {}
+      end
+
+      # logger.debug("the Result of the get entry is : #{result}")
+      render :json => {status: :ok, result: result }
+    end
+
     def authenticate_user_email
       user = User.where(email: params[:email])
       logger.debug("the email being authenticated is : #{user.inspect}")
