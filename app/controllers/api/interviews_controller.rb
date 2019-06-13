@@ -93,6 +93,7 @@ module Api
       solution = Solution.find(params[:solution_id])
       solution.solution_title = params[:solution_title] if params[:solution_title]
       solution.solution_description = params[:solution_description] if params[:solution_description]
+      solution.solution_provider = params[:solution_provider] if params[:solution_provider]
       solution.save
 
       render :json => {status: :ok }
@@ -117,21 +118,77 @@ module Api
 
     def interview_details
       interview = Interview.find(params[:interview_id])
-      need = interview.needs.first
-      obstacle = need.obstacles.first if (need && need.obstacles)
+      # need = interview.needs.first
+      # obstacle = need.obstacles.first if (need && need.obstacles)
+
+      details_array = []
+      needs = interview.needs
+
+      #{need_array: [{need_id: 1, need_title: "title", obstacles_array: [{obstacle_id: o1, obs_title: "OT", solution_array: []] }]}
+
+      # {need_array: [{need_id: 1, need_title: "title", obstacles_array: [{}] }]}
+      # o_h = {obstacle_id: o1, obs_title: "OT"}
+      needs.each do |need|
+        need_id = need.id.to_s
+        need_title =  need.need_title,
+        need_description = need.need_description,
+        need_note = need.need_notes,
+        need_urgency = need.need_urgency,
+        need_status = need.need_status
+
+        logger.debug("******************the need Title is : #{need.inspect}")
+        need_hash = {need_id: need_id, need_title: need_title.first, need_description: need_description,
+                     need_note: need_note, need_urgency: need_urgency, need_status: need_status,
+                      obstacles_array: []}
+        logger.debug("******************the need HASH is : #{need_hash}")
+
+        need_obstacles = need.obstacles
+        need_obstacles.each do |obstacle|
+          obstacle_id = obstacle.id.to_s
+          obstacle_title = obstacle.obstacle_title,
+          obstacle_description = obstacle.obstacle_description,
+          obstacle_notes = obstacle.obstacle_notes,
+          obstacle_urgency = obstacle.obstacle_urgency,
+          obstacle_status = obstacle.obstacle_status
+
+          obstacle_hash = { obstacle_id: obstacle_id,obstacle_title: obstacle_title.first,
+                            obstacle_description: obstacle_description,
+                           obstacle_notes: obstacle_notes, obstacle_urgency: obstacle_urgency,
+                           obstacle_status: obstacle_status, solutions_array: []}
+
+
+          obstacle_solutions = obstacle.solutions
+          obstacle_solutions.each do |solution|
+            solution_id = solution.id.to_s
+            solution_title = solution.solution_title
+            solution_description = solution.solution_description
+            solution_provider = solution.solution_provider
+
+            solution_hash = {solution_id: solution_id, solution_title: solution_title,
+                             solution_description: solution_description, solution_provider: solution_provider }
+            obstacle_hash[:solutions_array].push(solution_hash) if solution_hash
+          end
+          need_hash[:obstacles_array].push(obstacle_hash)
+        end
+
+        details_array.push(need_hash)
+      end
+
+
 
       interview_hash = {caller_first_name: interview.caller_first_name, caller_last_name: interview.caller_last_name,
                         caller_dob: interview.caller_dob, caller_address: interview.caller_address,
                         caller_zipcode: interview.caller_zipcode, caller_state: interview.caller_state}
 
-      need_hash = {need_title: need.need_title, need_description: need.need_description, need_note: need.need_notes,
-                   need_urgency: need.need_urgency, need_status: need.need_status} if need
+      # need_hash = {need_title: need.need_title, need_description: need.need_description, need_note: need.need_notes,
+      #              need_urgency: need.need_urgency, need_status: need.need_status} if need
 
-      obstacle_hash = {obstacle_title: obstacle.obstacle_title, obstacle_description: obstacle.obstacle_description,
-                       obstacle_notes: obstacle.obstacle_notes, obstacle_urgency: obstacle.obstacle_urgency,
-                       obstacle_status: obstacle.obstacle_status} if obstacle
+      # obstacle_hash = {obstacle_title: obstacle.obstacle_title, obstacle_description: obstacle.obstacle_description,
+      #                  obstacle_notes: obstacle.obstacle_notes, obstacle_urgency: obstacle.obstacle_urgency,
+      #                  obstacle_status: obstacle.obstacle_status} if obstacle
 
-      render :json => {status: :ok, interview_hash: interview_hash, need_hash: need_hash, obstacle_hash: obstacle_hash }
+      render :json => {status: :ok, interview_hash: interview_hash, details_array: details_array  }
+
     end
 
   end
