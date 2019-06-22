@@ -1,8 +1,11 @@
 module Api
   class ServiceProviderDetailsController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email]
-    load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email]
+    before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email, :update_catalogue_site_by_id,
+                                                          :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
+    :catalogue_program_list]
+    load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email,:update_catalogue_site_by_id,
+    :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,:catalogue_program_list]
 
     def create_provider
       client_application = User.find_by(email: params[:email]).client_application_id.to_s
@@ -82,6 +85,159 @@ module Api
       # logger.debug("the Result of the get entry is : #{result}")
       render :json => {status: :ok, result: result }
     end
+
+
+    def get_catalogue_site_by_id
+
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              # url: params["org_url"]
+              url: params["url"]
+          }
+      }
+
+      result = dynamodb.get_item(parameters)[:item]["orgSites"].select{|item| item["sideID"] == params["sideID"]}
+      # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
+
+
+      # logger.debug("the Result of the get entry is : #{result}")
+      render :json => {status: :ok, result: result }
+
+    end
+
+    def update_catalogue_site_by_id
+      #
+      # dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      # table_name = 'contact_management'
+      #
+      # parameters = {
+      #     table_name: table_name,
+      #     key: {
+      #         # OrganizationName_Text: params["org_name"]
+      #         # url: params["org_url"]
+      #         url: "test3.com"
+      #     }
+      #     # projection_expression: "url",
+      #     # filter_expression: "url = test1.com"
+      # }
+      #
+      # result = dynamodb.get_item(parameters)[:item]["OrgSites"]
+      # # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
+      #
+      # result.delete_if {|h| h["ID"] == "1"}
+      # new_hash = params[:NewHash]
+      #
+      # logger.debug("the new hash IS : #{new_hash}")
+      #
+      # result << new_hash
+      #
+      # new_result = result
+      #
+      # logger.debug("the new result is : #{new_result}")
+      #
+      # parameters = {
+      #     table_name: table_name,
+      #     key: {
+      #         # OrganizationName_Text: params["org_name"]
+      #         # url: params["org_url"]
+      #         url: "test3.com"
+      #     },
+      #     update_expression: "set info.OrgSites = :r ",
+      #     expression_attribute_values: {
+      #     ":r" => new_result
+      # },
+      #     return_values: "UPDATED_NEW"
+      # }
+      #
+      # dynamodb.update_item(parameters)
+      #
+      # # logger.debug("the Result of the get entry is : #{result}")
+      # render :json => {status: :ok, result: result }
+
+    end
+
+    def catalogue_site_list
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              url: params["url"]
+              # url: "test1.com"
+          }
+          # projection_expression: "url",
+          # filter_expression: "url = test1.com"
+      }
+
+
+      result = dynamodb.get_item(parameters)[:item]["orgSites"].collect{|item| [item["siteID"],item["locationName_Text"]]}
+
+
+      # logger.debug("the Result of the get entry is : #{result}")
+      render :json => {status: :ok, result: result }
+    end
+
+
+    def get_catalogue_program_by_id
+
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              # url: params["org_url"]
+              url: params["url"]
+          }
+      }
+
+      result = dynamodb.get_item(parameters)[:item]["programs"].select{|item| item["programID"] == params["programID"]}
+      # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
+
+
+      # logger.debug("the Result of the get entry is : #{result}")
+      render :json => {status: :ok, result: result }
+
+    end
+
+    def update_catalogue_program_by_id
+
+
+    end
+
+    def catalogue_program_list
+
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              url: params["url"]
+              # url: "test1.com"
+          }
+          # projection_expression: "url",
+          # filter_expression: "url = test1.com"
+      }
+
+
+      result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| item["programID"]}
+
+
+      # logger.debug("the Result of the get entry is : #{result}")
+      render :json => {status: :ok, result: result }
+    end
+
+
 
     def authenticate_user_email
       user = User.where(email: params[:email])
