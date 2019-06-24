@@ -140,12 +140,13 @@ Rails.application.routes.draw do
     post "/authenticate_email", to: "service_provider_details#authenticate_user_email"
     post "/get_catalogue_entry", to: "service_provider_details#contact_management_details_for_plugin"
 
-    post "/update_entry_site_by_id", to: "service_provider_details#update_catalogue_site_by_id"
+    post "/site_update", to: "service_provider_details#site_update"
     post "/site_list",to: "service_provider_details#catalogue_site_list"
     post "/program_list", to: "service_provider_details#catalogue_program_list"
 
     post "/get_site_by_id", to: "service_provider_details#get_catalogue_site_by_id"
     post "/get_program_by_id", to: "service_provider_details#get_catalogue_program_by_id"
+    post "/program_update", to: "service_provider_details#program_update"
 
     #API's for External Application
     post "/send_patient", to: "external_applications#send_patient"

@@ -1,11 +1,12 @@
 module Api
   class ServiceProviderDetailsController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email, :update_catalogue_site_by_id,
+    before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email, :site_update,
                                                           :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
-    :catalogue_program_list]
-    load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email,:update_catalogue_site_by_id,
-    :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,:catalogue_program_list]
+                                                          :catalogue_program_list,:program_update]
+    load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email,:site_update,
+                                                      :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
+                                                      :catalogue_program_list,:program_update]
 
     def create_provider
       client_application = User.find_by(email: params[:email]).client_application_id.to_s
@@ -106,58 +107,61 @@ module Api
 
 
       # logger.debug("the Result of the get entry is : #{result}")
-      render :json => {status: :ok, result: result }
+      render :json => {status: :ok, result: result.first }
 
     end
 
-    def update_catalogue_site_by_id
-      #
-      # dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      # table_name = 'contact_management'
-      #
-      # parameters = {
-      #     table_name: table_name,
-      #     key: {
-      #         # OrganizationName_Text: params["org_name"]
-      #         # url: params["org_url"]
-      #         url: "test3.com"
-      #     }
-      #     # projection_expression: "url",
-      #     # filter_expression: "url = test1.com"
-      # }
-      #
-      # result = dynamodb.get_item(parameters)[:item]["OrgSites"]
-      # # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
-      #
-      # result.delete_if {|h| h["ID"] == "1"}
-      # new_hash = params[:NewHash]
-      #
-      # logger.debug("the new hash IS : #{new_hash}")
-      #
-      # result << new_hash
-      #
-      # new_result = result
-      #
-      # logger.debug("the new result is : #{new_result}")
-      #
-      # parameters = {
-      #     table_name: table_name,
-      #     key: {
-      #         # OrganizationName_Text: params["org_name"]
-      #         # url: params["org_url"]
-      #         url: "test3.com"
-      #     },
-      #     update_expression: "set info.OrgSites = :r ",
-      #     expression_attribute_values: {
-      #     ":r" => new_result
-      # },
-      #     return_values: "UPDATED_NEW"
-      # }
-      #
-      # dynamodb.update_item(parameters)
-      #
-      # # logger.debug("the Result of the get entry is : #{result}")
-      # render :json => {status: :ok, result: result }
+    def site_update
+
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              # url: params["org_url"]
+              url: params["url"]
+          }
+          # projection_expression: "url",
+          # filter_expression: "url = test1.com"
+      }
+
+      result = dynamodb.get_item(parameters)[:item]["orgSites"]
+      # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
+      site_id = params[:siteID]
+
+      result.delete_if {|h| h["siteID"] == site_id }
+      new_hash = params[:newHash].first.to_unsafe_h
+
+      logger.debug("the new hash IS : #{new_hash}")
+
+      result.push(new_hash)
+
+      logger.debug("the new result is : #{result}")
+
+      dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              # url: params["org_url"]
+              url: params["url"]
+          },
+          update_expression: "set orgSites = :r ",
+          expression_attribute_values: {
+          ":r" => result
+      },
+          return_values: "UPDATED_NEW"
+      }
+
+      begin
+        dynamodb1.update_item(parameters)
+        render :json => {status: :ok, message: "Site Updated" }
+
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end
 
     end
 
@@ -204,11 +208,61 @@ module Api
 
 
       # logger.debug("the Result of the get entry is : #{result}")
-      render :json => {status: :ok, result: result }
+      render :json => {status: :ok, result: result.first }
 
     end
 
-    def update_catalogue_program_by_id
+    def program_update
+
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              # url: params["org_url"]
+              url: params["url"]
+          }
+          # projection_expression: "url",
+          # filter_expression: "url = test1.com"
+      }
+
+      result = dynamodb.get_item(parameters)[:item]["programs"]
+      # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
+      program_id = params[:programID]
+
+      result.delete_if {|h| h["programID"] == program_id }
+      new_hash = params[:newHash].first.to_unsafe_h
+
+      logger.debug("the new hash IS : #{new_hash}")
+
+      result.push(new_hash)
+
+      logger.debug("the new result is : #{result}")
+
+      dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
+      parameters = {
+          table_name: table_name,
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              # url: params["org_url"]
+              url: params["url"]
+          },
+          update_expression: "set programs = :r ",
+          expression_attribute_values: {
+              ":r" => result
+          },
+          return_values: "UPDATED_NEW"
+      }
+
+      begin
+        dynamodb1.update_item(parameters)
+        render :json => {status: :ok, message: "Program Updated" }
+
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end
 
 
     end
