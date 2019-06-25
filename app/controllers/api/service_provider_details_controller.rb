@@ -72,7 +72,7 @@ module Api
           table_name: table_name,
           key: {
               # OrganizationName_Text: params["org_name"]
-              url: params["org_url"]
+              url: params["url"]
           }
           # projection_expression: "url",
           # filter_expression: "url = test1.com"
@@ -80,11 +80,14 @@ module Api
 
       result = dynamodb.get_item(parameters)[:item]
       if result.nil?
-        result = {}
+        # result = {status: :ok, messagge: "Catalogue does not exists."}
+        render :json => {status: :ok, message: "Catalogue does not exists."}
+      else
+        # logger.debug("the Result of the get entry is : #{result}")
+        render :json => {status: :ok, message: "Catalogue does exists.", result: result }
       end
 
-      # logger.debug("the Result of the get entry is : #{result}")
-      render :json => {status: :ok, result: result }
+
     end
 
 
@@ -102,12 +105,13 @@ module Api
           }
       }
 
-      result = dynamodb.get_item(parameters)[:item]["orgSites"].select{|item| item["sideID"] == params["sideID"]}
+      site_result = dynamodb.get_item(parameters)[:item]["orgSites"].select{|item| item["sideID"] == params["sideID"]}
+
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
 
 
       # logger.debug("the Result of the get entry is : #{result}")
-      render :json => {status: :ok, result: result.first }
+      render :json => {status: :ok, result: result }
 
     end
 
@@ -165,7 +169,7 @@ module Api
 
     end
 
-    def catalogue_site_list
+    def site_program_list
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
       table_name = 'contact_management'
 
@@ -181,11 +185,12 @@ module Api
       }
 
 
-      result = dynamodb.get_item(parameters)[:item]["orgSites"].collect{|item| [item["siteID"],item["locationName_Text"]]}
+      site_result = dynamodb.get_item(parameters)[:item]["orgSites"].collect{|item| [item["siteID"],item["locationName_Text"]]}
 
+      program_result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| [item["programID"],item[:programName]]}
 
-      # logger.debug("the Result of the get entry is : #{result}")
-      render :json => {status: :ok, result: result }
+      logger.debug("the Result of the get entry is : #{program_result}")
+      render :json => {status: :ok, site: site_result, program: program_result }
     end
 
 
@@ -267,29 +272,29 @@ module Api
 
     end
 
-    def catalogue_program_list
-
-      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
-
-      parameters = {
-          table_name: table_name,
-          key: {
-              # OrganizationName_Text: params["org_name"]
-              url: params["url"]
-              # url: "test1.com"
-          }
-          # projection_expression: "url",
-          # filter_expression: "url = test1.com"
-      }
-
-
-      result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| item["programID"]}
-
-
-      # logger.debug("the Result of the get entry is : #{result}")
-      render :json => {status: :ok, result: result }
-    end
+    # def catalogue_program_list
+    #
+    #   dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    #   table_name = 'contact_management'
+    #
+    #   parameters = {
+    #       table_name: table_name,
+    #       key: {
+    #           # OrganizationName_Text: params["org_name"]
+    #           url: params["url"]
+    #           # url: "test1.com"
+    #       }
+    #       # projection_expression: "url",
+    #       # filter_expression: "url = test1.com"
+    #   }
+    #
+    #
+    #   result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| item["programID"]}
+    #
+    #
+    #   # logger.debug("the Result of the get entry is : #{result}")
+    #   render :json => {status: :ok, result: result }
+    # end
 
 
 

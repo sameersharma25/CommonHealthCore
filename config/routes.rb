@@ -141,8 +141,9 @@ Rails.application.routes.draw do
     post "/get_catalogue_entry", to: "service_provider_details#contact_management_details_for_plugin"
 
     post "/site_update", to: "service_provider_details#site_update"
-    post "/site_list",to: "service_provider_details#catalogue_site_list"
-    post "/program_list", to: "service_provider_details#catalogue_program_list"
+    post "/site_program_list",to: "service_provider_details#site_program_list"
+
+    # post "/program_list", to: "service_provider_details#catalogue_program_list"
 
     post "/get_site_by_id", to: "service_provider_details#get_catalogue_site_by_id"
     post "/get_program_by_id", to: "service_provider_details#get_catalogue_program_by_id"
