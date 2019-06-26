@@ -3,10 +3,10 @@ module Api
     include UsersHelper
     before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email, :site_update,
                                                           :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
-                                                          :catalogue_program_list,:program_update]
+                                                          :catalogue_program_list,:program_update,:contact_management_details_for_plugin]
     load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email,:site_update,
                                                       :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
-                                                      :catalogue_program_list,:program_update]
+                                                      :catalogue_program_list,:program_update,:contact_management_details_for_plugin]
 
     def create_provider
       client_application = User.find_by(email: params[:email]).client_application_id.to_s
@@ -105,7 +105,7 @@ module Api
           }
       }
 
-      site_result = dynamodb.get_item(parameters)[:item]["orgSites"].select{|item| item["sideID"] == params["sideID"]}
+      result = dynamodb.get_item(parameters)[:item]["orgSites"].select{|item| item["selectSiteID"] == params["selectSiteID"]}
 
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
 
@@ -133,9 +133,9 @@ module Api
 
       result = dynamodb.get_item(parameters)[:item]["orgSites"]
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
-      site_id = params[:siteID]
+      site_id = params[:selectSiteID]
 
-      result.delete_if {|h| h["siteID"] == site_id }
+      result.delete_if {|h| h["selectSiteID"] == site_id }
       new_hash = params[:newHash].first.to_unsafe_h
 
       logger.debug("the new hash IS : #{new_hash}")
@@ -185,9 +185,9 @@ module Api
       }
 
 
-      site_result = dynamodb.get_item(parameters)[:item]["orgSites"].collect{|item| [item["siteID"],item["locationName_Text"]]}
+      site_result = dynamodb.get_item(parameters)[:item]["orgSites"].collect{|item| [item["selectSiteID"],item["locationName_Text"]]}
 
-      program_result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| [item["programID"],item[:programName]]}
+      program_result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| [item["selectprogramID"],item[:programName]]}
 
       logger.debug("the Result of the get entry is : #{program_result}")
       render :json => {status: :ok, site: site_result, program: program_result }
@@ -208,7 +208,7 @@ module Api
           }
       }
 
-      result = dynamodb.get_item(parameters)[:item]["programs"].select{|item| item["programID"] == params["programID"]}
+      result = dynamodb.get_item(parameters)[:item]["programs"].select{|item| item["selectprogramID"] == params["selectprogramID"]}
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
 
 
@@ -235,9 +235,9 @@ module Api
 
       result = dynamodb.get_item(parameters)[:item]["programs"]
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
-      program_id = params[:programID]
+      program_id = params[:selectprogramID]
 
-      result.delete_if {|h| h["programID"] == program_id }
+      result.delete_if {|h| h["selectprogramID"] == program_id }
       new_hash = params[:newHash].first.to_unsafe_h
 
       logger.debug("the new hash IS : #{new_hash}")
@@ -289,7 +289,7 @@ module Api
     #   }
     #
     #
-    #   result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| item["programID"]}
+    #   result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| item["selectprogramID"]}
     #
     #
     #   # logger.debug("the Result of the get entry is : #{result}")
