@@ -165,13 +165,16 @@ Rails.application.routes.draw do
 
     post "/need_create", to: "interviews#new_need"
     post "/need_update", to: "interviews#update_need"
+    post "/need_remove", to: "interviews#remove_need"
 
 
     post "/obstacle_create", to: "interviews#new_obstacle"
     post "/obstacle_update", to: "interviews#update_obstacle"
+    post "/obstacle_remove", to: "interviews#remove_obstacle"
 
     post "/sol_create", to: "interviews#new_solution"
     post "/sol_update", to: "interviews#update_soulution"
+    post "/sol_remove", to: "interviews#remove_solution"
 
 
 

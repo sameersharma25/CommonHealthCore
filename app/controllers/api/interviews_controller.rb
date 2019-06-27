@@ -6,14 +6,35 @@ module Api
       user = User.find_by(email: params[:email])
       client_application = user.client_application
 
-      new_call = Interview.new
-      new_call.caller_first_name = params[:caller_first_name]
-      new_call.caller_last_name = params[:caller_last_name] if params[:caller_last_name]
-      new_call.caller_dob = params[:caller_dob] if params[:caller_dob]
-      new_call.client_application_id = client_application.id.to_s
-      new_call.save
+      # new_call = Interview.new
+      # new_call.caller_first_name = params[:caller_first_name]
+      # new_call.caller_last_name = params[:caller_last_name] if params[:caller_last_name]
+      # new_call.caller_dob = params[:caller_dob] if params[:caller_dob]
+      # new_call.client_application_id = client_application.id.to_s
+      # new_call.save
+      patient = Patient.new
+      patient.first_name = params[:caller_first_name]
+      patient.last_name = params[:caller_last_name] if params[:caller_last_name]
+      patient.date_of_birth = params[:caller_dob] if params[:caller_dob]
+      patient.client_application_id = client_application.id.to_s
+      if patient.save
+        referral = Referral.new
+        referral.referral_name = "Interview Call"
+        referral.source = "Call"
+        referral.client_application_id = client_application.id.to_s
+        referral.patient_id = patient.id.to_s
+        if referral.save
+          task = Task.new
+          task.task_type = "Interview"
+          task.referral_id = referral.id.to_s
+          task.save
+        end
 
-      render :json => {status: :ok , interview_id: new_call.id.to_s }
+        render :json => {status: :ok , interview_id: patient.id.to_s }
+      end
+
+
+
 
     end
 
@@ -45,6 +66,7 @@ module Api
 
     def update_need
       need = Need.find(params[:need_id])
+      need.need_title = params[:need_title] if params[:need_title]
       need.need_description = params[:need_description] if params[:need_description]
       need.need_notes = params[:need_notes] if params[:need_notes]
       need.need_urgency = params[:need_urgency] if params[:need_urgency]
@@ -68,6 +90,7 @@ module Api
 
     def update_obstacle
       obstacle = Obstacle.find(params[:obstacle_id])
+      obstacle.obstacle_title = params[:obstacle_title] if params[:obstacle_title]
       obstacle.obstacle_description = params[:obstacle_description] if params[:obstacle_description]
       obstacle.obstacle_notes = params[:obstacle_notes] if params[:obstacle_notes]
       obstacle.obstacle_urgency = params[:obstacle_urgency] if params[:obstacle_urgency]
@@ -83,6 +106,8 @@ module Api
       new_sol = Solution.new
       new_sol.solution_title = params[:solution_title]
       new_sol.obstacle_id = params[:obstacle_id]
+      new_sol.solution_description = params[:solution_description] if params[:solution_description]
+      new_sol.solution_provider = params[:solution_provider] if params[:solution_provider]
       new_sol.save
 
       render :json => {status: :ok, solution_id: new_sol.id.to_s}
@@ -111,8 +136,39 @@ module Api
         interview_hash = {interview_id: interview_id, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
         interview_list_array.push(interview_hash)
       end
+      interview_list = interview_list_array.order(caller_first_name: :asc)
+      render :json => {status: :ok, interview_list: interview_list}
+    end
 
-      render :json => {status: :ok, interview_list: interview_list_array}
+    def remove_need
+      need = Need.find(params[:need_id])
+      obstacles = need.obstacles
+      obstacles.each do |obs|
+        soultions = obs.solutions
+        soultions.each do |solu|
+          sol_id = solu.id.to_s
+          Solution.find(sol_id).destroy
+        end
+        obs.destroy
+      end
+      need.destroy
+      render :json => {status: :ok, message: "Need Removed"}
+    end
+
+    def remove_obstacle
+      obstacle = Obstacle.find(params[:obstacle_id])
+      soultions = obstacle.solutions
+      soultions.each do |solu|
+        sol_id = solu.id.to_s
+        Solution.find(sol_id).destroy
+      end
+      obstacle.destroy
+      render :json => {status: :ok, message: "Obstacle Removed"}
+    end
+
+    def remove_solution
+      Solution.find(params[:solution_id]).destroy
+      render :json => {status: :ok, messageg: "Solution Removedd"}
     end
 
 
@@ -178,7 +234,8 @@ module Api
 
       interview_hash = {caller_first_name: interview.caller_first_name, caller_last_name: interview.caller_last_name,
                         caller_dob: interview.caller_dob, caller_address: interview.caller_address,
-                        caller_zipcode: interview.caller_zipcode, caller_state: interview.caller_state}
+                        caller_zipcode: interview.caller_zipcode, caller_state: interview.caller_state,
+                        caller_additional_fields: interview.caller_additional_fields}
 
       # need_hash = {need_title: need.need_title, need_description: need.need_description, need_note: need.need_notes,
       #              need_urgency: need.need_urgency, need_status: need.need_status} if need
