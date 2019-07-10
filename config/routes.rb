@@ -140,6 +140,9 @@ Rails.application.routes.draw do
     post "/authenticate_email", to: "service_provider_details#authenticate_user_email"
     post "/get_catalogue_entry", to: "service_provider_details#contact_management_details_for_plugin"
 
+    post "/create_catalog", to: "service_provider_details#create_catalog_entry"
+    post "/update_catalog", to: "service_provider_details#update_catalog_entry"
+
     post "/site_update", to: "service_provider_details#site_update"
     post "/site_program_list",to: "service_provider_details#site_program_list"
 

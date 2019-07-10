@@ -3,10 +3,10 @@ module Api
     include UsersHelper
     before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email, :site_update,
                                                           :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
-                                                          :catalogue_program_list,:program_update,:contact_management_details_for_plugin]
+                                                          :site_program_list,:program_update,:contact_management_details_for_plugin]
     load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email,:site_update,
                                                       :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
-                                                      :catalogue_program_list,:program_update,:contact_management_details_for_plugin]
+                                                      :site_program_list,:program_update,:contact_management_details_for_plugin]
 
     def create_provider
       client_application = User.find_by(email: params[:email]).client_application_id.to_s
@@ -185,9 +185,9 @@ module Api
       }
 
 
-      site_result = dynamodb.get_item(parameters)[:item]["orgSites"].collect{|item| [item["selectSiteID"],item["locationName_Text"]]}
+      site_result = dynamodb.get_item(parameters)[:item]["orgSites"].collect{|item| [item["selectSiteID"],item["locationName"]]}
 
-      program_result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| [item["selectprogramID"],item[:programName]]}
+      program_result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| [item["selectprogramID"],item["programName"]]}
 
       logger.debug("the Result of the get entry is : #{program_result}")
       render :json => {status: :ok, site: site_result, program: program_result }
@@ -271,6 +271,106 @@ module Api
 
 
     end
+
+    def create_catalog_entry
+
+      item = params[:catalog_data].to_unsafe_h
+      user = User.find_by(email: params[:email])
+      client_application_id = user.client_application_id.to_s
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      item["customer_id"] = client_application_id
+      item["status"] = "New"
+      created_at = DateTime.now.strftime("%F %T")
+      item["created_at"] = created_at
+
+      logger.debug("the item is : #{item}")
+
+      params = {
+          table_name: table_name,
+          item: item
+      }
+
+      begin
+        dynamodb.put_item(params)
+        render :json => { status: :ok, message: "Entry created successfully"  }
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end
+
+    end
+
+    def update_catalog_entry
+      geoScope = params[:geoScope].to_unsafe_h if params[:geoScope]
+      organizationName = params[:organizationName].to_unsafe_h if params[:organizationName]
+
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+
+      if geoScope && organizationName
+        parameters = {
+            table_name: table_name,
+            key: {
+                url: params["url"]
+            },
+            update_expression: "set geoScope = :g , organizationName = :o ",
+            expression_attribute_values: {
+                ":g" => geoScope,
+                ":o" => organizationName
+            },
+            return_values: "UPDATED_NEW"
+        }
+      elsif geoScope && !organizationName
+        parameters = {
+            table_name: table_name,
+            key: {
+                url: params["url"]
+            },
+            update_expression: "set geoScope = :g ",
+            expression_attribute_values: {
+                ":g" => geoScope,
+            },
+            return_values: "UPDATED_NEW"
+        }
+      elsif organizationName && !geoScope
+        parameters = {
+            table_name: table_name,
+            key: {
+                url: params["url"]
+            },
+            update_expression: "set organizationName = :o ",
+            expression_attribute_values: {
+                ":o" => organizationName
+            },
+            return_values: "UPDATED_NEW"
+        }
+
+      end
+      # parameters = {
+      #     table_name: table_name,
+      #     key: {
+      #         # OrganizationName_Text: params["org_name"]
+      #         # url: params["org_url"]
+      #         url: params["url"]
+      #     },
+      #     update_expression: "set programs = :r ",
+      #     expression_attribute_values: {
+      #         ":r" => result
+      #     },
+      #     return_values: "UPDATED_NEW"
+      # }
+
+      begin
+        dynamodb.update_item(parameters)
+        render :json => {status: :ok, message: "Catalog Updated" }
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end
+
+
+    end
+
 
     # def catalogue_program_list
     #
