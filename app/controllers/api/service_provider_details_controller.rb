@@ -399,11 +399,23 @@ module Api
 
 
     def authenticate_user_email
-      user = User.where(email: params[:email])
-      logger.debug("the email being authenticated is : #{user.inspect}")
+      user = User.find_by(email: params[:email])
+      authentication_token = user.authentication_token
+      ability_array = []
+      user_roles = user.roles
+      user_roles.each do |ur|
+        role = Role.find(ur)
+        abilities = role.role_abilities.first["action"]
+        abilities.each do |a|
+          ability_array.push(a)
+        end
+      end
 
-      if !user.empty?
-        render :json=> {status: :ok, :message=> "Valid User"  }
+      logger.debug("the email being authenticated is : #{user.inspect}")
+      logger.debug("******************the ability array is : #{ability_array}")
+
+      if user
+        render :json=> {status: :ok, :message=> "Valid User", "user-token" => authentication_token, "abilities" => ability_array  }
       else
         render :json=> {status: :unauthorized, :message=> "Invalid User" }
       end
