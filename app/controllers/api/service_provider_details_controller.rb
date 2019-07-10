@@ -1,10 +1,10 @@
 module Api
   class ServiceProviderDetailsController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email, :site_update,
+    before_action :authenticate_user_from_token, except: [:create_catalog_entry,:update_catalog_entry,:scrappy_doo_response, :authenticate_user_email, :site_update,
                                                           :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
                                                           :site_program_list,:program_update,:contact_management_details_for_plugin]
-    load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email,:site_update,
+    load_and_authorize_resource class: :api, except: [:create_catalog_entry,:update_catalog_entry,:scrappy_doo_response, :authenticate_user_email,:site_update,
                                                       :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
                                                       :site_program_list,:program_update,:contact_management_details_for_plugin]
 
@@ -284,6 +284,7 @@ module Api
       item["status"] = "New"
       created_at = DateTime.now.strftime("%F %T")
       item["created_at"] = created_at
+      item["catalog_id"] = SecureRandom.hex(13)
 
       logger.debug("the item is : #{item}")
 
