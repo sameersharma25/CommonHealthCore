@@ -4,7 +4,7 @@ class ClientApplicationsController < ApplicationController
 
   # GET /client_applications
   # GET /client_applications.json
-  def index
+  def index  
     user = current_user
     @client_application = current_user.client_application
     @registration_request = RegistrationRequest.all
@@ -171,6 +171,30 @@ class ClientApplicationsController < ApplicationController
     @result = dynamodb.get_item(parameters)[:item]
 
     logger.debug("the Result of the get entry is : #{@result}")
+    @result.each do |k,v| 
+
+      if k == "status"
+        logger.debug("FOUND #{k}::: #{v}")
+      elsif k == "userName"
+        logger.debug("FOUND #{k}::: #{v}")
+      elsif k == "geoScope"
+        logger.debug("FOUND #{k}::: #{v}")
+          @geoScope = v
+      elsif k == "programs"
+        logger.debug("FOUND #{k}::: #{v}")
+          @programs = v
+      elsif k == "orgSites"
+        logger.debug("FOUND #{k}::: #{v}")
+          @orgSites = v
+      elsif k == "organizationName"
+        logger.debug("FOUND #{k}::: #{v}")
+          @organizationName = v
+      end 
+          
+          
+    end 
+
+
 
     respond_to do |format|
       format.html
@@ -330,6 +354,14 @@ class ClientApplicationsController < ApplicationController
     puts "response #{response.body}"
     puts JSON.parse(response.body)
   end
+
+  ###Start Mason
+  def send_for_approval
+    logger.debug("YOU STILL KNOW RAILS")
+  end 
+  def reject_catalog
+    logger.debug("YOU STILL KNOW RAILS2")
+  end 
 
 
   private

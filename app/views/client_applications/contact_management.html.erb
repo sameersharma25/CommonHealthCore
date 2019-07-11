@@ -12,6 +12,7 @@
       <!--<th >Scope</th>-->
       <th ></th>
       <th ></th>
+      <th ></th>
     </tr>
   </thead>
   <tbody>
@@ -35,7 +36,8 @@
             <td><%= r["status"] %></td>
             <!--<td><%#= r["created_at"] %></td>-->
             <!--<td><%#= r["primeScope"] %></td>-->
-            <td><%= link_to "Add", "#", class: "add_rule", id: "rule_#{i}", :remote => true %> </td>
+            <td><%= link_to "Send For Approval", send_for_approval_path, class: "add_rule", id: "rule_#{i}", :remote => true %> </td>
+            <td><%= link_to "Reject", reject_catalog_path, class: "reject_rule", id: "rule_#{i}", :remote => true %></td>
             <!--<td><%#= link_to "See More", get_contact_management_path(org_name: r["OrganizationName_Text"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
             <td><%= link_to "See More", get_contact_management_path(org_url: r["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
           </tr>

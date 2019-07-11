@@ -55,6 +55,10 @@ Rails.application.routes.draw do
 
   get "/get_patients", to: "client_applications#get_patients"
   post "/send_task", to: "client_applications#send_task"
+  ###THINGS THAT MASON ADDED
+  get "send_for_approval", to: "client_applications#send_for_approval"
+  get "reject_catalog", to: "client_applications#reject_catalog"
+  ### End mason
 
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
   post "filter_field_values", to: "service_provider_details#filter_field_values"
