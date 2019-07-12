@@ -22,7 +22,7 @@
           <% i += 1 %>
           <tr id= <%="rule_#{i}" %>  >
             <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
-            <td id=<%= "nameOfOrg_#{i}"%> ><%= r["organizationName"]["organizationName_Text"] if r["organizationName"] %></td>
+            <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["organizationName_Text"] if r["organizationName"] %></td>
             <td id= <%= "Orgdescription_#{i}" %> ><%= r["organizationDescription"]["organizationDescription_Text"].truncate(50) if r["organizationDescription_Text"]  %></td>
             <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
             <%= hidden_field_tag r["organizationDescription_URL"] ,i, :id => "orgdescription_url_#{i}" %>
@@ -36,7 +36,7 @@
             <td><%= r["status"] %></td>
             <!--<td><%#= r["created_at"] %></td>-->
             <!--<td><%#= r["primeScope"] %></td>-->
-            <td><%= link_to "Send For Approval", send_for_approval_path, class: "add_rule", id: "rule_#{i}", :remote => true %> </td>
+            <td><%= link_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true %> </td>
             <td><%= link_to "Reject", reject_catalog_path, class: "reject_rule", id: "rule_#{i}", :remote => true %></td>
             <!--<td><%#= link_to "See More", get_contact_management_path(org_name: r["OrganizationName_Text"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
             <td><%= link_to "See More", get_contact_management_path(org_url: r["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>

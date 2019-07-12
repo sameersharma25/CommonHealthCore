@@ -172,7 +172,6 @@ class ClientApplicationsController < ApplicationController
 
     logger.debug("the Result of the get entry is : #{@result}")
     @result.each do |k,v| 
-
       if k == "status"
         logger.debug("FOUND #{k}::: #{v}")
       elsif k == "userName"
@@ -189,9 +188,7 @@ class ClientApplicationsController < ApplicationController
       elsif k == "organizationName"
         logger.debug("FOUND #{k}::: #{v}")
           @organizationName = v
-      end 
-          
-          
+      end     
     end 
 
 
@@ -357,10 +354,65 @@ class ClientApplicationsController < ApplicationController
 
   ###Start Mason
   def send_for_approval
-    logger.debug("YOU STILL KNOW RAILS")
-  end 
+    logger.debug("YOU STILL KNOW RAILS #{params}" )
+#####
+      dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
+      parameters = {
+          table_name: 'contact_management',
+          key: {
+              # OrganizationName_Text: params["org_name"]
+              # url: params["org_url"]
+              #url: params["url"]
+              url: "http://www.nicecream.com/"
+          },
+          update_expression: "set status = :s ",
+          expression_attribute_values: {
+              ":s" => 'approved'
+          },
+          return_values: "UPDATED_NEW"
+      }
+
+      begin
+        dynamodb1.update_item(parameters)
+        render :json => {status: :ok, message: "Catalog Updated" }
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end
+    #######
+    #dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    #table_name = 'contact_management'
+    #parameters = {
+    #    table_name: table_name,
+    #    key: {
+    #        url: "http://www.nicecream.com/"
+    #    }
+    #}
+    #@result = dynamodb.get_item(parameters)[:item]
+    #logger.debug("HERE********************* #{@result}")
+#
+#    #new_hash = @result
+#    #  new_hash.each do |k,v| 
+#    #    if k == "status"
+#    #      v = "approved"
+#    #      new_hash.delete(k)
+#    #    end 
+#    #  end 
+#    #  new_hash['status'] = 'approved'
+    #  logger.debug("dadadada, #{new_hash}")
+
+##########
+      
+  end
+
+
   def reject_catalog
     logger.debug("YOU STILL KNOW RAILS2")
+    #change the status of that id 
+  end 
+  def delete_catalog
+    logger.debug("YOU STILL KNOW RAILS2")
+    #change the status of that id 
+    #find by id and delete 
   end 
 
 
