@@ -30,7 +30,8 @@ class Role
 
     method_exceptions = ["authenticate_user_from_token","appointments_referred_to_me","create","create_message_list_hash","create_appointment",
                          "crete_appointment_for_patient", "destroy","get_user_appointments", "give_appointment_details_for_notification",
-                         "patient_appointments","password"]
+                         "patient_appointments","password","contact_management_details_for_plugin", "mandatory_parameters_check_after_update",
+                          "mandatory_parameters_check","check_mandatory_field"]
     arr.each do |controller|
       puts("the controller is #{controller}")
       controller.action_methods.each do |method|
@@ -45,3 +46,36 @@ class Role
     actions
   end
 end
+
+
+#  ClientApplication.all.each do |ca|
+#    NotificationRule.where(client_application_id: ca.id.to_s).each do |nr|
+#      print("the NOTIFICATION RULE IS: #{nr.id.to_s}")
+#      if !nr.appointment_status.nil? && !nr.appointment_status.blank?
+#        if nr.appointment_status.length < 20
+#          puts("the status are #{Status.where(client_application_id: ca.id.to_s, status: nr.appointment_status).inspect}")
+#          status = Status.where(client_application_id: ca.id.to_s, status: nr.appointment_status).first.id.to_s
+#          nr.appointment_status = status
+#          nr.save
+#        end
+#      end
+#    end
+#  end
+#
+#
+#
+# ClientApplication.all.each do |ca|
+#   NotificationRule.where(client_application_id: ca.id.to_s).each do |nr|
+#     print("the NOTIFICATION RULE IS: #{nr.id.to_s}")
+#     if nr.appointment_status.nil? or nr.appointment_status.blank?
+#       puts("the status are #{Status.where(client_application_id: ca.id.to_s).inspect}")
+#       status = Status.where(client_application_id: ca.id.to_s).first.id.to_s
+#       nr.appointment_status = status
+#       nr.save
+#     end
+#   end
+# end
+
+
+
+
