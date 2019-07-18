@@ -75,13 +75,15 @@
 <%end%>
 
 
-<h1>Ledger Status Table</h1>
+<h1>Incoming Referrals</h1>
 <% if @referred_applications.count > 0 %>
   <table class="table table-responsive table-bordered">
     <thead>
       <tr>
+        <th>Application Name</th>
         <th>Description</th>
         <th>Status</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -89,6 +91,7 @@
         <%ledger_master = ra.ledger_master%>
         <% task = Task.find(ledger_master.task_id)%>
         <tr>
+          <td></td>
           <td> <%= task.task_description %></td>
           <td> <%= ra.ledger_status%></td>
           <% if ra.ledger_status == "Pending" %>
@@ -176,7 +179,9 @@
   <%= link_to "Status" , statuses_path %><br>
 <%end %>
 
-<%= link_to "Service Providers", service_provider_details_path%><br>
+<% if @client_application.master_application_status == true %>
+  <%= link_to "Service Providers", service_provider_details_path%><br>
+<%end%>
 
 <% if @client_application.external_application == true %>
     <%= link_to "External Apis", edit_after_signup_external_path(:id => @client_application.id.to_s ) %><br>
