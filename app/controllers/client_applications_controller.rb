@@ -122,6 +122,7 @@ class ClientApplicationsController < ApplicationController
     ca.name = rr.application_name
     ca.application_url = rr.application_url
     ca.external_application = rr.external_application
+    ca.master_application_status = false
 
     if ca.save
       admin_role = Role.create(client_application_id: ca.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
