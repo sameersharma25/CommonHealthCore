@@ -1,59 +1,63 @@
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal">x</button>
-  <h4 class="modal-title" id="myModalLabel"><%= @result["organizationName"]["organizationName_Text"]%>'s Details</h4>
+  <h4 class="modal-title" id="myModalLabel">Details</h4>
 </div>
 
 <div class="modal-body">
 
   <h3> Organization Details</h3>
 
-  <strong>Organization Name : </strong> <%= @result["organizationName"]["organizationName_Text"]%><br>
-  <strong>Organization Description : </strong> <%= @result["organizationDescription"]["organizationDescription_Text"]%><br>
+  <strong>Organization Name : </strong> <%= @organizationName['organizationName_Text'] %> <br>
+  <strong>Organization Description : </strong> <%= @organizationName['OrgDescription'][0]['text'] %><br>
 
   <h3>Geographic Scope</h3>
-  <strong>Service Area Name : </strong><%= @result["geoScope"]["serviceAreaName_Text"] %><br>
-  <strong>Scope : </strong><%= @result["geoScope"]["scope"] %><br>
+  <strong>Service Area Name : </strong><%= @result["geoScope"]["serviceAreaName"] %><br>
+  <strong>Scope : </strong><%= @result["geoScope"]["geoScope"] %><br>
   <strong>Country : </strong><%= @result["geoScope"]["country"] %><br>
   <strong>Region : </strong><%= @result["geoScope"]["region"] %><br>
-  <strong>State : </strong><%= @result["geoScope"]["state"] %><br>
-  <strong>City : </strong><%= @result["geoScope"]["city"] %><br>
-  <strong>Neighborhood : </strong><%= @result["geoScope"]["neighborhood"] %><br>
+  <strong>State : </strong><%= @result["geoScope"]["State"] %><br>
+  <strong>City : </strong><%= @result["geoScope"]["City"] %><br>
+  <strong>County : </strong><%= @result["geoScope"]["County"] %><br>
+  <strong>Neighborhood : </strong><%= @result["geoScope"]["Neighborhoods"] %><br>
 
   <h3>Program Name</h3>
-  <strong>Program Name : </strong><%= @result["programName_Text"] %><br>
-  <strong>Program Description : </strong><%= @result["programDescription_Text"] %><br>
-  <strong>Program References : </strong><%= @result["programReferences_Text"] %><br>
-  <strong>Program Service Groups : </strong><%= @result["programServiceGroup"] %><br>
-  <strong>Service Tags : </strong><%= @result["serviceTag"] %><br>
-  <strong>Service Description : </strong><%= @result["serviceDescription.Text"] %><br>
-  <strong>Population Groups : </strong><%= @result["programPopulationGroup"] %><br>
-  <strong>Population Tags : </strong><%= @result["PopulationTags"] %><br>
-  <strong>Population Description : </strong><%= @result["PopulationDescription_Text"] %><br>
+  <strong>Program Name : </strong> <%= @programs[0]['programName'] %><br>
+  <strong>Program Description : </strong> <%= @programs[0]['ProgramDescription'][0]['text'] %><br>
+  <strong>Program References : </strong><%= @programs[0]['ProgramReferences'][0]['text'] %><br>
+  <strong>Program Service Groups : </strong><%= @programs[0]['ServiceGroups'] %><br>
+  <strong>Service Tags : </strong><br>
+  <strong>Service Description : </strong><%= @programs[0]['ServiceDescription'][0]['text'] %><br>
+  <strong>Population Groups : </strong><br>
+  <strong>Population Tags : </strong><br>
+  <strong>Population Description : </strong><%= @programs[0]['ProgramDescription'][0]['text'] %><br>
 
   <h3>Program Location</h3>
 
-  <strong>Location Name : </strong><%= @result["ProgramLocationLocationName_Text"] %><br>
-  <strong>Service Delivery Site : </strong><%= @result["ProgramLocation_serviceDeliverySite"] %><br>
-  <strong>Location Type : </strong><%= @result["ProgramLocation_locationType"] %><br>
-  <strong>Region : </strong><%= @result["ProgramLocation_Region"] %><br>
+  <strong>Location Name : </strong><br>
+  <strong>Service Delivery Site : </strong><br>
+  <strong>Location Type : </strong><br>
+  <strong>Region : </strong><br>
 
 
   <h3>Program Address</h3>
-  <strong>Address 1  : </strong><%= @result["ProgramLocationsAddressAddr1_Text"] %><br>
-  <strong>Address 2 : </strong><%= @result["ProgramLocationsAddressAddr2_Text"] %><br>
-  <strong>City : </strong><%= @result["ProgramLocationsAddressCity_Text"] %><br>
-  <strong>State : </strong><%= @result["ProgramLocationsAddressState_Text"] %><br>
-  <strong>Zip : </strong><%= @result["ProgramLocationsAddressZip_Text"] %><br>
+  <strong>Address 1  : </strong><br>
+  <strong>Address 2 : </strong><br>
+  <strong>City : </strong><br>
+  <strong>State : </strong><br>
+  <strong>Zip : </strong><br>
 
   <h3>Point of Contact</h3>
-  <strong>Name : </strong><%= @result["POCName_Text"] %><br>
-  <strong>Mobile Phone : </strong><%= @result["POCMobilePhone_Text"] %><br>
-  <strong>Office Phone : </strong><%= @result["POCOfficePhone_Text"] %><br>
-  <strong>Email : </strong><%= @result["POCEmail_Text"] %><br>
-  <strong>Title : </strong><%= @result["POCTitle_Text"] %><br>
+  <strong>Name : </strong><br>
+  <strong>Mobile Phone : </strong><br>
+  <strong>Office Phone : </strong><br>
+  <strong>Email : </strong><br>
+  <strong>Title : </strong><br>
 
 
 
 </div>
+
+
+
 
 

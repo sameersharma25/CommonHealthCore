@@ -4,7 +4,7 @@ class ClientApplicationsController < ApplicationController
 
   # GET /client_applications
   # GET /client_applications.json
-  def index
+  def index  
     user = current_user
     @client_application = current_user.client_application
     @registration_request = RegistrationRequest.all
@@ -151,11 +151,35 @@ class ClientApplicationsController < ApplicationController
 
     @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
-    logger.debug("the RESULT OF THE SCAN IS : #{@result}************************")
+    logger.debug("the RESULT OF THE SCAN IS : ************************")
+
+    @result.each do |q| 
+      logger.debug("IN THE LOOP KEY #{q}")
+        q.each do |k,v|
+              if k == "status"
+                logger.debug("FOUND #{k}::: #{v}")
+                @status = v
+              elsif k == "userName"
+                logger.debug("FOUND #{k}::: #{v}")
+              elsif k == "geoScope"
+                logger.debug("FOUND #{k}::: #{v}")
+                  @geoScope = v
+              elsif k == "programs"
+                logger.debug("FOUND #{k}::: #{v}")
+                  @programs = v
+              elsif k == "orgSites"
+                logger.debug("FOUND #{k}::: #{v}")
+                  @orgSites = v
+              elsif k == "organizationName"
+                logger.debug("FOUND #{k}::: #{v}")
+                  @organizationName = v
+              end     
+        end
+    end 
 
   end
 
-  def get_contact_management
+  def get_contact_management #modal
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
     table_name = 'contact_management'
 
@@ -171,7 +195,29 @@ class ClientApplicationsController < ApplicationController
 
     @result = dynamodb.get_item(parameters)[:item]
 
-    logger.debug("the Result of the get entry is : #{@result}")
+    #logger.debug("the Result of the get entry is : #{@result}")
+    @result.each do |k,v| 
+      logger.debug("Key::: #{k}: Value::: #{v}")
+      if k == "status"
+        logger.debug("FOUND #{k}::: #{v}")
+      elsif k == "userName"
+        logger.debug("FOUND #{k}::: #{v}")
+      elsif k == "geoScope"
+        logger.debug("FOUND #{k}::: #{v}")
+          @geoScope = v
+      elsif k == "programs"
+        logger.debug("FOUND #{k}::: #{v}")
+          @programs = v
+      elsif k == "orgSites"
+        logger.debug("FOUND #{k}::: #{v}")
+          @orgSites = v
+      elsif k == "organizationName"
+        logger.debug("FOUND #{k}::: #{v}")
+          @organizationName = v
+      end     
+    end 
+
+
 
     respond_to do |format|
       format.html
@@ -331,6 +377,110 @@ class ClientApplicationsController < ApplicationController
     puts "response #{response.body}"
     puts JSON.parse(response.body)
   end
+
+  ###Start Mason
+  def send_for_approval
+  logger.debug("YOU STILL KNOW RAILS")
+  logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
+  dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
+  parameters = {
+      table_name: 'contact_management',
+      key: {
+          url: params["url"]
+      },
+      update_expression: "set #st = :s ",
+      expression_attribute_values: {
+          ":s" => 'pending'
+      },
+      expression_attribute_names: { 
+          "#st" => "status"
+      },
+      return_values: "UPDATED_NEW"
+  }
+
+      begin
+        dynamodb1.update_item(parameters)
+        render :json => {status: :ok, message: "Catalog Updated" }
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end      
+  end
+
+  def approve_catalog
+
+  logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
+  dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
+  parameters = {
+      table_name: 'contact_management',
+      key: {
+          url: params["url"]
+      },
+      update_expression: "set #st = :s ",
+      expression_attribute_values: {
+          ":s" => 'Approved'
+      },
+      expression_attribute_names: { 
+          "#st" => "status"
+      },
+      return_values: "UPDATED_NEW"
+  }
+
+      begin
+        dynamodb1.update_item(parameters)
+        render :json => {status: :ok, message: "Catalog Updated" }
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end 
+  end 
+
+
+  def reject_catalog   #@@@
+    logger.debug("YOU STILL KNOW RAILS2 #{[params]}")
+    logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
+    dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
+    parameters = {
+        table_name: 'contact_management',
+        key: {
+            url: params["url"]
+        },
+        update_expression: "set #st = :s ",
+        expression_attribute_values: {
+            ":s" => 'Rejected'
+        },
+        expression_attribute_names: { 
+            "#st" => "status"
+        },
+        return_values: "UPDATED_NEW"
+    }
+
+        begin
+          dynamodb1.update_item(parameters)
+          render :json => {status: :ok, message: "Catalog Updated" }
+        rescue  Aws::DynamoDB::Errors::ServiceError => error
+          render :json => {message: error  }
+        end 
+
+  end 
+  def delete_catalog
+    logger.debug("YOU STILL KNOW RAILS2 #{params['url']}")
+    dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
+    parameters = {
+        table_name: 'contact_management',
+        key: {
+            url: params["url"]
+            #url: 'https://valleyymca.org'
+        }
+      }
+
+    begin
+      dynamodb1.delete_item(parameters)
+      puts 'Deleted this rule'
+    rescue  Aws::DynamoDB::Errors::ServiceError => error
+      puts 'Unable to delete movie:'
+      puts error.message
+    end
+    #find by id and delete 
+  end 
 
 
   private

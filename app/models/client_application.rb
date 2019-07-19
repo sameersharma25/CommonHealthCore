@@ -8,6 +8,7 @@ class ClientApplication
   field :accept_referrals, type: Boolean
   field :client_speciality, type: String
   # field :client_representative_id, type: String
+
   field :master_application_status, type: Boolean
 
   # validates_presence_of :name, :application_url
@@ -27,3 +28,4 @@ class ClientApplication
   accepts_nested_attributes_for :notification_rules, reject_if: :all_blank, allow_destroy: true
 
 end
+ 
