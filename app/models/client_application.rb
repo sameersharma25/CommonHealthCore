@@ -7,7 +7,8 @@ class ClientApplication
   field :external_application, type: Boolean
   field :accept_referrals, type: Boolean
   field :client_speciality, type: String
-  #
+  # field :client_representative_id, type: String
+
   field :master_application_status, type: Boolean
 
   # validates_presence_of :name, :application_url
@@ -21,6 +22,7 @@ class ClientApplication
   has_many :roles
   has_many :statuses
   has_many :external_api_setups
+  has_many :interviews
   # has_many :mapped_parameters
   accepts_nested_attributes_for :users, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notification_rules, reject_if: :all_blank, allow_destroy: true
