@@ -7,13 +7,6 @@ class ClientApplication
   field :external_application, type: Boolean
   field :accept_referrals, type: Boolean
   field :client_speciality, type: String
-<<<<<<< HEAD
-  #
-  field :master_application_status, type: Boolean
-=======
-  # field :client_representative_id, type: String
->>>>>>> 52d0060589f187f03702d429fad37aea147858b9
-
   field :master_application_status, type: Boolean
 
   # validates_presence_of :name, :application_url

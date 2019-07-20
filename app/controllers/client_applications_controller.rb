@@ -152,35 +152,10 @@ class ClientApplicationsController < ApplicationController
     @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
     logger.debug("the RESULT OF THE SCAN IS : ************************")
-<<<<<<< HEAD
+
     #@masterStatus = @client_application.master_application_status
     @masterStatus = true
-=======
 
-    @result.each do |q| 
-      logger.debug("IN THE LOOP KEY #{q}")
-        q.each do |k,v|
-              if k == "status"
-                logger.debug("FOUND #{k}::: #{v}")
-                @status = v
-              elsif k == "userName"
-                logger.debug("FOUND #{k}::: #{v}")
-              elsif k == "geoScope"
-                logger.debug("FOUND #{k}::: #{v}")
-                  @geoScope = v
-              elsif k == "programs"
-                logger.debug("FOUND #{k}::: #{v}")
-                  @programs = v
-              elsif k == "orgSites"
-                logger.debug("FOUND #{k}::: #{v}")
-                  @orgSites = v
-              elsif k == "organizationName"
-                logger.debug("FOUND #{k}::: #{v}")
-                  @organizationName = v
-              end     
-        end
-    end 
->>>>>>> 2a45a21f85d4f70d83384c8057c24c66541ddf44
 
   end
 
@@ -385,7 +360,6 @@ class ClientApplicationsController < ApplicationController
 
   ###Start Mason
   def send_for_approval
-<<<<<<< HEAD
     logger.debug("YOU STILL KNOW RAILS")
     logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
     dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
@@ -411,33 +385,6 @@ class ClientApplicationsController < ApplicationController
           render :json => {message: error  }
         end      
 
-
-=======
-  logger.debug("YOU STILL KNOW RAILS")
-  logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
-  dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
-  parameters = {
-      table_name: 'contact_management',
-      key: {
-          url: params["url"]
-      },
-      update_expression: "set #st = :s ",
-      expression_attribute_values: {
-          ":s" => 'pending'
-      },
-      expression_attribute_names: { 
-          "#st" => "status"
-      },
-      return_values: "UPDATED_NEW"
-  }
-
-      begin
-        dynamodb1.update_item(parameters)
-        render :json => {status: :ok, message: "Catalog Updated" }
-      rescue  Aws::DynamoDB::Errors::ServiceError => error
-        render :json => {message: error  }
-      end      
->>>>>>> 2a45a21f85d4f70d83384c8057c24c66541ddf44
   end
 
   def approve_catalog
