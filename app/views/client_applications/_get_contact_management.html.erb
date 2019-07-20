@@ -7,7 +7,7 @@
 
   <h3> Organization Details</h3>
 
-  <strong>Organization Name : </strong> <%= @organizationName['organizationName_Text'] %> <br>
+  <strong>Organization Name : </strong> <%= @organizationName['organizationName_Text'][0]['text'] %> <br>
   <strong>Organization Description : </strong> <%= @organizationName['OrgDescription'][0]['text'] %><br>
 
   <h3>Geographic Scope</h3>
@@ -20,38 +20,41 @@
   <strong>County : </strong><%= @result["geoScope"]["County"] %><br>
   <strong>Neighborhood : </strong><%= @result["geoScope"]["Neighborhoods"] %><br>
 
-  <h3>Program Name</h3>
+  <h3>Program</h3>
   <strong>Program Name : </strong> <%= @programs[0]['programName'] %><br>
   <strong>Program Description : </strong> <%= @programs[0]['ProgramDescription'][0]['text'] %><br>
   <strong>Program References : </strong><%= @programs[0]['ProgramReferences'][0]['text'] %><br>
   <strong>Program Service Groups : </strong><%= @programs[0]['ServiceGroups'] %><br>
-  <strong>Service Tags : </strong><br>
+  <strong>Service Tags : </strong><%= @programs[0]['serviceTag'] %><br>
   <strong>Service Description : </strong><%= @programs[0]['ServiceDescription'][0]['text'] %><br>
+  <strong>Population Tags : </strong><%= @programs[0]['populationTags'] %><br>
+  <strong>Population Description : </strong><%= @programs[0]['PopulationDescription'][0]['text'] %><br>
   <strong>Population Groups : </strong><br>
-  <strong>Population Tags : </strong><br>
-  <strong>Population Description : </strong><%= @programs[0]['ProgramDescription'][0]['text'] %><br>
+  
+  <h3>Geographic Scope</h3>
+    <% @geoScope.each do |k,v| %>
+       <strong><%= k %> :</strong><%= v %> <br>
+    <% end %>
 
-  <h3>Program Location</h3>
+  <h3>Organization Sites</h3>
+  <strong> Location Name:</strong> <%= @orgSites[0]['locationName']%><br>
+  <strong> Site Reference:</strong> <%= @orgSites[0]['SiteReference_TEXT'][0]['text']%><br>
+  <strong> Street Address:</strong> <%= @orgSites[0]['addrOne_Text'][0]['text']%><br>
+  <strong> City:</strong> <%= @orgSites[0]['Adrcity']%><br>
+  <strong> Adrstate:</strong> <%= @orgSites[0]['Adrstate']%><br>
+  <strong> Zipcode:</strong> <%= @orgSites[0]['Adrzip']%><br>
 
-  <strong>Location Name : </strong><br>
-  <strong>Service Delivery Site : </strong><br>
-  <strong>Location Type : </strong><br>
-  <strong>Region : </strong><br>
+  <strong> POC Office Phone:</strong> <%= @orgSites[0]['POCs'][0]['OfficePhone']%><br>
+  <strong> POC Email:</strong> <%= @orgSites[0]['POCs'][0]['Email']%><br>
+  <strong> POC Referrals:</strong> <%= @orgSites[0]['POCs'][0]['Referrals']%><br>
+  <strong> POC ContactPage:</strong> <%= @orgSites[0]['POCs'][0]['ContactPage']%><br>
+  <strong> POC Title:</strong> <%= @orgSites[0]['POCs'][0]['Title']%><br>
+  <strong> POC Name:</strong> <%= @orgSites[0]['POCs'][0]['Name']%><br>
+  <strong> POC MobilePhone:</strong> <%= @orgSites[0]['POCs'][0]['MobilePhone']%><br>
 
 
-  <h3>Program Address</h3>
-  <strong>Address 1  : </strong><br>
-  <strong>Address 2 : </strong><br>
-  <strong>City : </strong><br>
-  <strong>State : </strong><br>
-  <strong>Zip : </strong><br>
 
-  <h3>Point of Contact</h3>
-  <strong>Name : </strong><br>
-  <strong>Mobile Phone : </strong><br>
-  <strong>Office Phone : </strong><br>
-  <strong>Email : </strong><br>
-  <strong>Title : </strong><br>
+
 
 
 

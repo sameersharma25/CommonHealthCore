@@ -19,13 +19,13 @@
   <tbody>
     <% i  = 1 %>
     <% @result.each do |r|%>
-      <%if r["status"] == "New"%>
+      <%if r["status"] == "New" || r["status"] == "Rejected"%>
           <% i += 1 %>
-          <tr id= <%="rule_#{i}" %>  >
+          <tr class="currentRow" id= <%="rule_#{i}" %>  >
             <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
             <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %>
-            <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["organizationName_Text"] if r["organizationName"] %></td>
-            <td id= <%= "Orgdescription_#{i}" %> ><%= r["organizationDescription"]["organizationDescription_Text"].truncate(50) if r["organizationDescription_Text"]  %></td>
+            <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["organizationName_Text"][0]['text'] if r["organizationName"] %></td>
+            <td id= <%= "Orgdescription_#{i}" %> ><%= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]  %></td>
             <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
             <%= hidden_field_tag r["organizationDescription_URL"] ,i, :id => "orgdescription_url_#{i}" %>
             <%= hidden_field_tag r["url"] ,i, :id => "url_#{i}" %>
@@ -51,34 +51,38 @@
 
 <br>
 <br>
-<h1>Super Duper Master </h1>
+<% if @masterStatus == true %>
+    <h1>Master Table</h1>
 
-<table class="table table-responsive table-bordered user-display">
-  <thead>
-    <tr>
-      <th>URL</th>
-      <th>Organization</th>
-      <th>Status</th> 
-      <th>Approve</th>
-      <th>Reject</th>
-      <th>See More</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% i  = 1 %>
-    <% @result.each do |x| %>
-    <% i += 1 %>
-      <tr>
-      <td><%= x["url"] %></td>
-      <td><%= x["organizationName"]["organizationName_Text"] if x["organizationName"]%></td>
-      <td> <%= x['status'] %> </td> 
-      <td><%= link_to "Approve", '#', class: "approve_rule", id: "#{i}", :remote => true %> </td>
-      <td><%= link_to "Reject", '#', class: "reject_rule", id: "#{i}", :remote => true %></td>
-      <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <table class="table table-responsive table-bordered user-display">
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Organization</th>
+          <th>Status</th> 
+          <th>Approve</th>
+          <th>Reject</th>
+          <th>See More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% e  = 1 %>
+          <% @result.each do |x| %>
+          <%if x["status"] == "New" || x["status"] == "pending" %>
+          <% e += 1 %>
+            <tr id= <%="masterRule_#{e}" %>>
+            <td><%= x["url"] %></td>
+            <td class = "nameOrg" ><%= x["organizationName"]["organizationName_Text"][0]['text'] if x["organizationName"] %></td>
+            <td> <%= x['status'] %> </td> 
+            <td><%= link_to "Approve", '#', class: "approve_rule", id: "#{e}", :remote => true %> </td>
+            <td><%= link_to "Reject", '#', class: "reject_rule", id: "#{e}", :remote => true %></td>
+            <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+<% end %>
 
 <div id="modal-window" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
