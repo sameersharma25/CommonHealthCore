@@ -40,9 +40,14 @@ jQuery ($) ->
 
   #Send for approval 
   $(document).on("click", ".add_rule", ->
+<<<<<<< HEAD
     
     row_id = $(this).attr("id")
     console.log("in the add rule function", row_id)
+=======
+    console.log("in the add rule function")
+    row_id = $(this).attr("id")
+>>>>>>> 2a45a21f85d4f70d83384c8057c24c66541ddf44
     numVal = parseInt(row_id) - 2
     catalogName = $('.nameOrg')[numVal].innerHTML
     url_id = $('.myURL')[numVal].innerHTML
@@ -56,6 +61,7 @@ jQuery ($) ->
 
   #Delete Catalog Entry  
   $(document).on("click", ".delete_rule", ->
+<<<<<<< HEAD
     
     row_id = $(this).attr("id")
     console.log("in the delete rule function", row_id)
@@ -93,6 +99,32 @@ jQuery ($) ->
     url_id = $('.myURL')[numVal].innerHTML
     woof = $('#masterRule_' + row_id)
     woof.hide();
+=======
+    console.log("in the delete rule function")
+    row_id = $(this).attr("id")
+    numVal = parseInt(row_id) - 2
+    url_id = $('.myURL')[numVal].innerHTML
+    $.post "/delete_catalog",
+      url: url_id
+    return
+    )
+  #Approve Catalog Entry  
+  $(document).on("click", ".approve_rule", ->
+    console.log("in the approve rule function")
+    row_id = $(this).attr("id")
+    numVal = parseInt(row_id) - 2
+    url_id = $('.myURL')[numVal].innerHTML
+    $.post "/approve_catalog",
+      url: url_id
+    return
+    )
+  #Reject Catalog Entry  
+  $(document).on("click", ".reject_rule", ->
+    console.log("in the reject rule function")
+    row_id = $(this).attr("id")
+    numVal = parseInt(row_id) - 2
+    url_id = $('.myURL')[numVal].innerHTML
+>>>>>>> 2a45a21f85d4f70d83384c8057c24c66541ddf44
     $.post "/reject_catalog",
       url: url_id
     return

@@ -7,7 +7,11 @@
 
   <h3> Organization Details</h3>
 
+<<<<<<< HEAD
   <strong>Organization Name : </strong> <%= @organizationName['organizationName_Text'][0]['text'] %> <br>
+=======
+  <strong>Organization Name : </strong> <%= @organizationName['organizationName_Text'] %> <br>
+>>>>>>> 2a45a21f85d4f70d83384c8057c24c66541ddf44
   <strong>Organization Description : </strong> <%= @organizationName['OrgDescription'][0]['text'] %><br>
 
   <h3>Geographic Scope</h3>
@@ -20,11 +24,16 @@
   <strong>County : </strong><%= @result["geoScope"]["County"] %><br>
   <strong>Neighborhood : </strong><%= @result["geoScope"]["Neighborhoods"] %><br>
 
+<<<<<<< HEAD
   <h3>Program</h3>
+=======
+  <h3>Program Name</h3>
+>>>>>>> 2a45a21f85d4f70d83384c8057c24c66541ddf44
   <strong>Program Name : </strong> <%= @programs[0]['programName'] %><br>
   <strong>Program Description : </strong> <%= @programs[0]['ProgramDescription'][0]['text'] %><br>
   <strong>Program References : </strong><%= @programs[0]['ProgramReferences'][0]['text'] %><br>
   <strong>Program Service Groups : </strong><%= @programs[0]['ServiceGroups'] %><br>
+<<<<<<< HEAD
   <strong>Service Tags : </strong><%= @programs[0]['serviceTag'] %><br>
   <strong>Service Description : </strong><%= @programs[0]['ServiceDescription'][0]['text'] %><br>
   <strong>Population Tags : </strong><%= @programs[0]['populationTags'] %><br>
@@ -43,6 +52,13 @@
   <strong> City:</strong> <%= @orgSites[0]['Adrcity']%><br>
   <strong> Adrstate:</strong> <%= @orgSites[0]['Adrstate']%><br>
   <strong> Zipcode:</strong> <%= @orgSites[0]['Adrzip']%><br>
+=======
+  <strong>Service Tags : </strong><br>
+  <strong>Service Description : </strong><%= @programs[0]['ServiceDescription'][0]['text'] %><br>
+  <strong>Population Groups : </strong><br>
+  <strong>Population Tags : </strong><br>
+  <strong>Population Description : </strong><%= @programs[0]['ProgramDescription'][0]['text'] %><br>
+>>>>>>> 2a45a21f85d4f70d83384c8057c24c66541ddf44
 
   <strong> POC Office Phone:</strong> <%= @orgSites[0]['POCs'][0]['OfficePhone']%><br>
   <strong> POC Email:</strong> <%= @orgSites[0]['POCs'][0]['Email']%><br>
@@ -52,9 +68,31 @@
   <strong> POC Name:</strong> <%= @orgSites[0]['POCs'][0]['Name']%><br>
   <strong> POC MobilePhone:</strong> <%= @orgSites[0]['POCs'][0]['MobilePhone']%><br>
 
+<<<<<<< HEAD
 
 
 
+=======
+  <strong>Location Name : </strong><br>
+  <strong>Service Delivery Site : </strong><br>
+  <strong>Location Type : </strong><br>
+  <strong>Region : </strong><br>
+
+
+  <h3>Program Address</h3>
+  <strong>Address 1  : </strong><br>
+  <strong>Address 2 : </strong><br>
+  <strong>City : </strong><br>
+  <strong>State : </strong><br>
+  <strong>Zip : </strong><br>
+
+  <h3>Point of Contact</h3>
+  <strong>Name : </strong><br>
+  <strong>Mobile Phone : </strong><br>
+  <strong>Office Phone : </strong><br>
+  <strong>Email : </strong><br>
+  <strong>Title : </strong><br>
+>>>>>>> 2a45a21f85d4f70d83384c8057c24c66541ddf44
 
 
 

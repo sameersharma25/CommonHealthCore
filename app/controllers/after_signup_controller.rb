@@ -12,7 +12,9 @@ class AfterSignupController < ApplicationController
     #   @user = User.find_by(email: params[:email])
     if !current_step_index.nil?
       @current_step = current_step_index + 1
-      @total_steps = steps.count
+      actual_total_steps = steps.count
+      @total_steps = actual_total_steps - 1
+      logger.debug("*******************the total steps are : #{@total_steps}")
     end
 
     @user = current_user
@@ -38,6 +40,9 @@ class AfterSignupController < ApplicationController
       @statuses = Status.where(client_application_id: client_application)
 
     when :service_provider
+      if client_application.master_application_status == false
+        jump_to(:wicked_finish)
+      end
       @service_provider_detail = ServiceProviderDetail.new
 
     when :alert_workflow
@@ -118,13 +123,25 @@ class AfterSignupController < ApplicationController
         service_provider_detail.provider_type = params[:service_provider_detail][:service_provider_name]
         service_provider_detail.data_storage_type = params[:service_provider_detail][:data_storage_type]
         service_provider_detail.service_provider_api = params[:service_provider_detail][:service_provider_api]
+        service_provider_detail.provider_data_file = params[:service_provider_detail][:provider_data_file]
         service_provider_detail.client_application_id = params[:client_id]
-       if service_provider_detail.save
-        jump_to(:wicked_finish)
-          render_wizard service_provider_detail
+        if !params[:service_provider_detail][:service_provider_name].empty?
+          if service_provider_detail.save
+            jump_to(:wicked_finish)
+            render_wizard service_provider_detail
 
-          # next_step
+            # next_step
+          else
+            respond_to :json
+            logger.debug("the service provider not saved******")
+            format.json { render json: @service_provider_detail.errors, status: :unprocessable_entity }
+          end
+        else
+          logger.debug("the service provider is EMPTY******")
+          jump_to(:wicked_finish)
+          redirect_to root_path
         end
+
         # jump_to(:wicked_finish)
         # next_step
     end

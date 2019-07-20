@@ -1,10 +1,10 @@
 module Api
   class ServiceProviderDetailsController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: [:scrappy_doo_response, :authenticate_user_email, :site_update,
+    before_action :authenticate_user_from_token, except: [:create_catalog_entry,:update_catalog_entry,:scrappy_doo_response, :authenticate_user_email, :site_update,
                                                           :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
                                                           :site_program_list,:program_update,:contact_management_details_for_plugin]
-    load_and_authorize_resource class: :api, except: [:scrappy_doo_response, :authenticate_user_email,:site_update,
+    load_and_authorize_resource class: :api, except: [:create_catalog_entry,:update_catalog_entry,:scrappy_doo_response, :authenticate_user_email,:site_update,
                                                       :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
                                                       :site_program_list,:program_update,:contact_management_details_for_plugin]
 
@@ -161,6 +161,7 @@ module Api
 
       begin
         dynamodb1.update_item(parameters)
+        mandatory_parameters_check_after_update(params["url"], "Updating")
         render :json => {status: :ok, message: "Site Updated" }
 
       rescue  Aws::DynamoDB::Errors::ServiceError => error
@@ -284,12 +285,14 @@ module Api
       item["status"] = "New"
       created_at = DateTime.now.strftime("%F %T")
       item["created_at"] = created_at
+      item["catalog_id"] = SecureRandom.hex(13)
 
-      logger.debug("the item is : #{item}")
+      item1=  mandatory_parameters_check(item, "Creating")
+      logger.debug(")))))))))))))))))))))))))))))))))))))))))))the item is : #{item1}")
 
       params = {
           table_name: table_name,
-          item: item
+          item: item1
       }
 
       begin
@@ -347,28 +350,111 @@ module Api
         }
 
       end
-      # parameters = {
-      #     table_name: table_name,
-      #     key: {
-      #         # OrganizationName_Text: params["org_name"]
-      #         # url: params["org_url"]
-      #         url: params["url"]
-      #     },
-      #     update_expression: "set programs = :r ",
-      #     expression_attribute_values: {
-      #         ":r" => result
-      #     },
-      #     return_values: "UPDATED_NEW"
-      # }
 
       begin
         dynamodb.update_item(parameters)
+        mandatory_parameters_check_after_update(params["url"], "Updating")
         render :json => {status: :ok, message: "Catalog Updated" }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
         render :json => {message: error  }
       end
 
 
+    end
+
+    def mandatory_parameters_check_after_update(item, event)
+      result = mandatory_parameters_check(item, event)
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = 'contact_management'
+      parameters = {
+          table_name: table_name,
+          key: {
+              url: params["url"]
+          },
+          update_expression: "set missing_mandatory_fields = :o ",
+          expression_attribute_values: {
+              ":o" => result["missing_mandatory_fields"]
+          },
+          return_values: "UPDATED_NEW"
+      }
+      begin
+        dynamodb.update_item(parameters)
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end
+    end
+
+    def mandatory_parameters_check(item, event)
+
+      if event == "Updating"
+        dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+        table_name = 'contact_management'
+
+        parameters = {
+            table_name: table_name,
+            key: {
+                # OrganizationName_Text: params["org_name"]
+                # url: params["org_url"]
+                url: item
+            }
+        }
+
+        item = dynamodb.get_item(parameters)[:item]
+      end
+
+      scope = item["geoScope"]["geoScope"]
+      if scope == "Virtual"
+        home_page_url = item["organizationName"]["homepageURL"]
+        check_mandatory_field(home_page_url,item)
+
+      elsif scope == "County"
+        county = item["geoScope"]["County"]
+        check_mandatory_field(county,item)
+
+      elsif scope == "Region"
+        region = item["geoScope"]["region"]
+        # logger.debug("CHECKING THE REGION***************** #{region}")
+        check_mandatory_field(region,item)
+
+      elsif scope == "State"
+        state = item["geoScope"]["State"]
+        check_mandatory_field(state,item)
+
+      elsif scope == "National"
+        national = item["geoScope"]["country"]
+        check_mandatory_field(national,item)
+
+      elsif scope == "On Site"
+        sites = item["orgSites"]
+        address_text_array = []
+        sites.each do |site|
+          site_text = site["addrOne_Text"]
+          if !site_text.nil?
+            address_text_array.push(site_text)
+          end
+        end
+        # logger.debug("CHECKING THE site address ***************** #{address_text_array}")
+
+        address_ok = address_text_array.empty? ? nil : "true"
+
+        check_mandatory_field(address_ok,item)
+      elsif scope.nil?
+        check_mandatory_field(nil,item)
+      end
+
+      # logger.debug("------------------------In the mandatory_parameters_check #{item} ")
+      item
+    end
+
+    def check_mandatory_field(field,item)
+      # logger.debug("**************************in teh check_mandatory_field")
+      if !field.nil? || !field.blank?
+        item["missing_mandatory_fields"] = "0"
+      else
+        item["missing_mandatory_fields"] = "1"
+      end
+      # logger.debug("**************************in teh check_mandatory_field #{item}")
+      item
     end
 
 
@@ -399,11 +485,23 @@ module Api
 
 
     def authenticate_user_email
-      user = User.where(email: params[:email])
-      logger.debug("the email being authenticated is : #{user.inspect}")
+      user = User.find_by(email: params[:email])
+      authentication_token = user.authentication_token
+      ability_array = []
+      user_roles = user.roles
+      user_roles.each do |ur|
+        role = Role.find(ur)
+        abilities = role.role_abilities.first["action"]
+        abilities.each do |a|
+          ability_array.push(a)
+        end
+      end
 
-      if !user.empty?
-        render :json=> {status: :ok, :message=> "Valid User"  }
+      logger.debug("the email being authenticated is : #{user.inspect}")
+      logger.debug("******************the ability array is : #{ability_array}")
+
+      if user
+        render :json=> {status: :ok, :message=> "Valid User", "user-token" => authentication_token, "abilities" => ability_array  }
       else
         render :json=> {status: :unauthorized, :message=> "Invalid User" }
       end
@@ -454,6 +552,13 @@ module Api
       render :json=> {status: :ok, :provider_data=> JSON.parse(response.body) }
 
     end
+
+
+
+
+
+
+
 
   end
 end
