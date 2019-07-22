@@ -188,9 +188,37 @@ class ClientApplicationsController < ApplicationController
       elsif k == "programs"
         logger.debug("FOUND #{k}::: #{v}")
           @programs = v
+          i=0
+          while i < @programs.length do 
+                  @programs[i].each do |q,w|
+                    logger.debug("CLEAR *****************")
+                    logger.debug("KEY::: #{q}:VALUE:::#{w}")
+                  end
+                  logger.debug("BREAK ####}")
+              i+=1
+          end 
       elsif k == "orgSites"
         logger.debug("FOUND #{k}::: #{v}")
           @orgSites = v
+          logger.debug("what is the length #{@orgSites.length}")
+
+
+          i=0
+          while i < @orgSites.length do 
+                  @orgSites[i].each do |q,w|
+                    logger.debug("CLEAR *****************")
+                    logger.debug("KEY::: #{q}::VALUE:::#{w}")
+                      case q
+                          when 'SiteReference_TEXT'
+                            logger.debug("SITE")
+                          when 'addrOne_Text'
+                          when 'locationName'
+                      end 
+                  end 
+              i+=1
+          end 
+
+
       elsif k == "organizationName"
         logger.debug("FOUND #{k}::: #{v}")
           @organizationName = v
@@ -370,7 +398,7 @@ class ClientApplicationsController < ApplicationController
         },
         update_expression: "set #st = :s ",
         expression_attribute_values: {
-            ":s" => 'pending'
+            ":s" => 'Pending'
         },
         expression_attribute_names: { 
             "#st" => "status"
