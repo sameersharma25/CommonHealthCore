@@ -286,6 +286,7 @@ module Api
       created_at = DateTime.now.strftime("%F %T")
       item["created_at"] = created_at
       item["catalog_id"] = SecureRandom.hex(13)
+      item["rejectReason"] = "N/A"
 
       item1=  mandatory_parameters_check(item, "Creating")
       logger.debug(")))))))))))))))))))))))))))))))))))))))))))the item is : #{item1}")
