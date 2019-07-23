@@ -8,10 +8,29 @@
   <h3> Organization Details</h3>
   <strong>Organization Name : </strong> <%= @organizationName['organizationName_Text'][0]['text'] %> <br>
   <strong>Organization Description : </strong> <%= @organizationName['OrgDescription'][0]['text'] %><br>
+  
+  <h3>Geographic Scope</h3>
+    <% @geoScope.each do |k,v| %>
+       <strong><%= k %> :</strong><%= v %> <br>
+    <% end %>
 
+  <h3>Organization Sites</h3>
+    <% @siteHash.each do |k,v| %>
+       <strong><%= k %> :</strong><%= v %> <br>
+    <% end %>
 
+    <h3>POC</h3>
+    <% @poc.each do |k,v| %>
+       <strong><%= k %> :</strong><%= v %> <br>
+    <% end %>
 
-  <h3>Program</h3>
+  <h1>Program Details</h1>
+    <% @programHash.each do |k,v| %>
+       <strong><%= k %> :</strong><%= v %> <br>
+    <% end %>
+   
+  <!--
+<h3>Program</h3>
   <strong>Program Name : </strong> <%= @programs[0]['programName'] %><br>
   <strong>Program Description : </strong> <%= @programs[0]['ProgramDescription'][0]['text'] %><br>
   <strong>Program References : </strong><%= @programs[0]['ProgramReferences'][0]['text'] %><br>
@@ -20,14 +39,7 @@
   <strong>Service Description : </strong><%= @programs[0]['ServiceDescription'][0]['text'] %><br>
   <strong>Population Tags : </strong><%= @programs[0]['populationTags'] %><br>
   <strong>Population Description : </strong><%= @programs[0]['PopulationDescription'][0]['text'] %><br>
-  <strong>Population Groups : </strong><br>
-  
-  <h3>Geographic Scope</h3>
-    <% @geoScope.each do |k,v| %>
-       <strong><%= k %> :</strong><%= v %> <br>
-    <% end %>
-
-  <h3>Organization Sites</h3>
+  <strong>Population Groups : </strong><br> 
   <strong> Location Name:</strong> <%= @orgSites[0]['locationName']%><br>
   <strong> Site Reference:</strong> <%= @orgSites[0]['SiteReference_TEXT'][0]['text']%><br>
   <strong> Street Address:</strong> <%= @orgSites[0]['addrOne_Text'][0]['text']%><br>
@@ -49,6 +61,7 @@
   <strong> POC Name:</strong> <%= @orgSites[0]['POCs'][0]['Name']%><br>
   <strong> POC MobilePhone:</strong> <%= @orgSites[0]['POCs'][0]['MobilePhone']%><br>
 
+-->
 
 
 

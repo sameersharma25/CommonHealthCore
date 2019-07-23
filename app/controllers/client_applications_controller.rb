@@ -179,20 +179,54 @@ class ClientApplicationsController < ApplicationController
     @result.each do |k,v| 
       logger.debug("Key::: #{k}: Value::: #{v}")
       if k == "status"
-        logger.debug("FOUND #{k}::: #{v}")
+        #logger.debug("FOUND #{k}::: #{v}")
       elsif k == "userName"
-        logger.debug("FOUND #{k}::: #{v}")
+        #logger.debug("FOUND #{k}::: #{v}")
       elsif k == "geoScope"
-        logger.debug("FOUND #{k}::: #{v}")
+        #logger.debug("FOUND #{k}::: #{v}")
           @geoScope = v
       elsif k == "programs"
-        logger.debug("FOUND #{k}::: #{v}")
+        #logger.debug("FOUND #{k}::: #{v}")
           @programs = v
+          @programHash = {}
           i=0
           while i < @programs.length do 
                   @programs[i].each do |q,w|
-                    logger.debug("CLEAR *****************")
                     logger.debug("KEY::: #{q}:VALUE:::#{w}")
+                      case q
+                          when 'ProgramDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @programHash[q] = textOnlyArray
+                          when 'ProgramReferences'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @programHash[q] = textOnlyArray
+                          when 'ServiceDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @programHash[q] = textOnlyArray
+                          when 'PopulationDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @programHash[q] = textOnlyArray
+                      end 
+                      if w.class != Array
+                        @programHash[q] = w
+                      end 
+
                   end
                   logger.debug("BREAK ####}")
               i+=1
@@ -200,23 +234,55 @@ class ClientApplicationsController < ApplicationController
       elsif k == "orgSites"
         logger.debug("FOUND #{k}::: #{v}")
           @orgSites = v
-          logger.debug("what is the length #{@orgSites.length}")
-
-
+          @siteHash = {}
+          @poc = {}
           i=0
           while i < @orgSites.length do 
                   @orgSites[i].each do |q,w|
-                    logger.debug("CLEAR *****************")
-                    logger.debug("KEY::: #{q}::VALUE:::#{w}")
+                    logger.debug("KEY::: #{q}:VALUE:::#{w}")
                       case q
                           when 'SiteReference_TEXT'
-                            logger.debug("SITE")
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @siteHash[q] = textOnlyArray
                           when 'addrOne_Text'
-                          when 'locationName'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @siteHash[q] = textOnlyArray
+                          when 'ServiceDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @siteHash[q] = textOnlyArray
+                          when 'ProgramDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @siteHash[q] = textOnlyArray
+                          when 'POCs'
+                            logger.debug("HERE #{w}")
+                            w[0].each do |k,v|
+                                @poc[k]= v
+                            end 
                       end 
-                  end 
+                      if w.class != Array
+                        @siteHash[q] = w
+                      end 
+
+                  end
+                  logger.debug("BREAK ####}")
               i+=1
-          end 
+          end
 
 
       elsif k == "organizationName"
