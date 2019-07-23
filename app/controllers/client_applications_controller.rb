@@ -452,6 +452,66 @@ class ClientApplicationsController < ApplicationController
     puts JSON.parse(response.body)
   end
 
+  def check_duplicate_entries
+    logger.debug("IN THE DUPLICATE METHOD*************")
+    catalog = params[:catalog]
+    dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    table_name = 'master_provider'
+    org_url = params[:org_url]
+    params = {
+        table_name: table_name,
+        key_condition_expression: " #ur = :u",
+        expression_attribute_names: {
+            "#ur" => "url"
+        },
+        expression_attribute_values: {
+            ":u" => org_url
+        }
+    }
+    begin
+      result = dynamodb.query(params)
+      # puts "Query succeeded."
+      logger.debug("the RESULT IS : #{result[:items]}")
+      if !result[:items].empty?
+        items = result[:items]
+        logger.debug("RESULT IS NOT EMPTY!!!!!!!!!!!*****************")
+        duplicates = check_for_sites(catalog, items)
+      else
+        logger.debug("THE RESULT IS EMPTY!!!!!!!!!!*****************")
+        duplicates = []
+      end
+    rescue  Aws::DynamoDB::Errors::ServiceError => error
+      puts "Unable to query table:"
+      puts "#{error.message}"
+    end
+      @duplicates = duplicates
+  end
+
+  def check_for_sites(catalog, items)
+
+    catlog_zip = []
+    item_zip = []
+    duplicate_array = []
+    catalog["orgSites"].each do|site|
+      zip = site["Adrzip"]
+      catlog_zip.push(zip)
+    end
+
+    items.each do |i|
+
+      i["orgSites"].each do|site|
+        zip = site["Adrzip"]
+        item_zip.push(zip)
+      end
+      if item_zip == catlog_zip
+        duplicate_array.push(i)
+      end
+    end
+    logger.debug("**************THE DUPLICATE ARRAY IS : #{duplicate_array}")
+    duplicate_array
+
+  end
+
   ###Start Mason
   def send_for_approval
     logger.debug("YOU STILL KNOW RAILS")

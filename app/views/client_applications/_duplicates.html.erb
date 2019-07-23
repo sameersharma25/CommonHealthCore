@@ -1,0 +1,39 @@
+<%#= @duplicates%>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal">x</button>
+  <h4 class="modal-title" id="myModalLabel">Duplicates</h4>
+</div>
+<div class="modal-body">
+  <% if !@duplicates.empty?%>
+    <table class="table table-responsive table-bordered user-display">
+      <thead>
+      <tr>
+        <th>URL</th>
+        <th>Organization</th>
+        <th>Status</th>
+        <!--<th>Approve</th>-->
+        <!--<th>Reject</th>-->
+        <!--<th>See More</th>-->
+        <!--<th></th>-->
+      </tr>
+      </thead>
+      <tbody>
+      <% i  = 1 %>
+      <% @duplicates.each do |x| %>
+          <% i += 1 %>
+          <tr>
+            <td><%= x["url"] %></td>
+            <td><%= x["organizationName"]["organizationName_Text"] if x["organizationName"]%></td>
+            <td> <%= x['status'] %> </td>
+            <!--<td><%#= link_to "Approve", '#', class: "approve_rule", id: "#{i}", :remote => true %> </td>-->
+            <!--<td><%#= link_to "Reject", '#', class: "reject_rule", id: "#{i}", :remote => true %></td>-->
+            <!--<td><%#= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
+            <!--<td><%#= link_to "Check Duplicates", check_duplicates_path(org_url: x["url"], catalog: x ),{ method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}%></td>-->
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <%else %>
+      <p>There are no duplicates for this entry </p>
+  <%end%>
+</div>
