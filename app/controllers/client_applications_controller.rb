@@ -153,29 +153,9 @@ class ClientApplicationsController < ApplicationController
 
     logger.debug("the RESULT OF THE SCAN IS : ************************")
 
-    @result.each do |q| 
-      logger.debug("IN THE LOOP KEY #{q}")
-        q.each do |k,v|
-              if k == "status"
-                logger.debug("FOUND #{k}::: #{v}")
-                @status = v
-              elsif k == "userName"
-                logger.debug("FOUND #{k}::: #{v}")
-              elsif k == "geoScope"
-                logger.debug("FOUND #{k}::: #{v}")
-                  @geoScope = v
-              elsif k == "programs"
-                logger.debug("FOUND #{k}::: #{v}")
-                  @programs = v
-              elsif k == "orgSites"
-                logger.debug("FOUND #{k}::: #{v}")
-                  @orgSites = v
-              elsif k == "organizationName"
-                logger.debug("FOUND #{k}::: #{v}")
-                  @organizationName = v
-              end     
-        end
-    end 
+    #@masterStatus = @client_application.master_application_status
+    @masterStatus = true
+
 
   end
 
@@ -199,18 +179,112 @@ class ClientApplicationsController < ApplicationController
     @result.each do |k,v| 
       logger.debug("Key::: #{k}: Value::: #{v}")
       if k == "status"
-        logger.debug("FOUND #{k}::: #{v}")
+        #logger.debug("FOUND #{k}::: #{v}")
       elsif k == "userName"
-        logger.debug("FOUND #{k}::: #{v}")
+        #logger.debug("FOUND #{k}::: #{v}")
       elsif k == "geoScope"
-        logger.debug("FOUND #{k}::: #{v}")
+        #logger.debug("FOUND #{k}::: #{v}")
           @geoScope = v
       elsif k == "programs"
-        logger.debug("FOUND #{k}::: #{v}")
+        #logger.debug("FOUND #{k}::: #{v}")
           @programs = v
+          @programHash = {}
+          i=0
+          while i < @programs.length do 
+                  @programs[i].each do |q,w|
+                    logger.debug("KEY::: #{q}:VALUE:::#{w}")
+                      case q
+                          when 'ProgramDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @programHash[q] = textOnlyArray
+                          when 'ProgramReferences'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @programHash[q] = textOnlyArray
+                          when 'ServiceDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @programHash[q] = textOnlyArray
+                          when 'PopulationDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @programHash[q] = textOnlyArray
+                      end 
+                      if w.class != Array
+                        @programHash[q] = w
+                      end 
+
+                  end
+                  logger.debug("BREAK ####}")
+              i+=1
+          end 
       elsif k == "orgSites"
         logger.debug("FOUND #{k}::: #{v}")
           @orgSites = v
+          @siteHash = {}
+          @poc = {}
+          i=0
+          while i < @orgSites.length do 
+                  @orgSites[i].each do |q,w|
+                    logger.debug("KEY::: #{q}:VALUE:::#{w}")
+                      case q
+                          when 'SiteReference_TEXT'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @siteHash[q] = textOnlyArray
+                          when 'addrOne_Text'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @siteHash[q] = textOnlyArray
+                          when 'ServiceDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @siteHash[q] = textOnlyArray
+                          when 'ProgramDescription'
+                            textOnlyArray = []
+                            w.each do |x|
+                                textvalue = x['text']
+                                textOnlyArray.push(textvalue)
+                            end 
+                            @siteHash[q] = textOnlyArray
+                          when 'POCs'
+                            logger.debug("HERE #{w}")
+                            w[0].each do |k,v|
+                                @poc[k]= v
+                            end 
+                      end 
+                      if w.class != Array
+                        @siteHash[q] = w
+                      end 
+
+                  end
+                  logger.debug("BREAK ####}")
+              i+=1
+          end
+
+
       elsif k == "organizationName"
         logger.debug("FOUND #{k}::: #{v}")
           @organizationName = v
@@ -440,30 +514,31 @@ class ClientApplicationsController < ApplicationController
 
   ###Start Mason
   def send_for_approval
-  logger.debug("YOU STILL KNOW RAILS")
-  logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
-  dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
-  parameters = {
-      table_name: 'contact_management',
-      key: {
-          url: params["url"]
-      },
-      update_expression: "set #st = :s ",
-      expression_attribute_values: {
-          ":s" => 'pending'
-      },
-      expression_attribute_names: { 
-          "#st" => "status"
-      },
-      return_values: "UPDATED_NEW"
-  }
+    logger.debug("YOU STILL KNOW RAILS")
+    logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
+    dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
+    parameters = {
+        table_name: 'contact_management',
+        key: {
+            url: params["url"]
+        },
+        update_expression: "set #st = :s ",
+        expression_attribute_values: {
+            ":s" => 'Pending'
+        },
+        expression_attribute_names: { 
+            "#st" => "status"
+        },
+        return_values: "UPDATED_NEW"
+    }
 
-      begin
-        dynamodb1.update_item(parameters)
-        render :json => {status: :ok, message: "Catalog Updated" }
-      rescue  Aws::DynamoDB::Errors::ServiceError => error
-        render :json => {message: error  }
-      end      
+        begin
+          dynamodb1.update_item(parameters)
+          render :json => {status: :ok, message: "Catalog Updated" }
+        rescue  Aws::DynamoDB::Errors::ServiceError => error
+          render :json => {message: error  }
+        end      
+
   end
 
   def approve_catalog

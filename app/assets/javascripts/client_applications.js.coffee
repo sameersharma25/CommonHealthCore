@@ -40,8 +40,8 @@ jQuery ($) ->
 
   #Send for approval 
   $(document).on("click", ".add_rule", ->
-    console.log("in the add rule function")
     row_id = $(this).attr("id")
+    console.log("in the add rule function", row_id)
     numVal = parseInt(row_id) - 2
     catalogName = $('.nameOrg')[numVal].innerHTML
     url_id = $('.myURL')[numVal].innerHTML
@@ -54,32 +54,62 @@ jQuery ($) ->
     )
 
   #Delete Catalog Entry  
-  $(document).on("click", ".delete_rule", ->
-    console.log("in the delete rule function")
+  $(document).on("click", ".delete_rule", ->    
     row_id = $(this).attr("id")
+    console.log("in the delete rule function", row_id)
     numVal = parseInt(row_id) - 2
     url_id = $('.myURL')[numVal].innerHTML
+    woof = $('#rule_' + row_id)
+    woof.hide();
+
     $.post "/delete_catalog",
       url: url_id
     return
+
     )
+
   #Approve Catalog Entry  
   $(document).on("click", ".approve_rule", ->
-    console.log("in the approve rule function")
     row_id = $(this).attr("id")
+    console.log("in the approve rule function", row_id)
     numVal = parseInt(row_id) - 2
     url_id = $('.myURL')[numVal].innerHTML
+    woof = $('#masterRule_' + row_id)
+    woof.hide();
     $.post "/approve_catalog",
       url: url_id
     return
     )
+
   #Reject Catalog Entry  
   $(document).on("click", ".reject_rule", ->
-    console.log("in the reject rule function")
     row_id = $(this).attr("id")
+    console.log("in the reject rule function", row_id)
     numVal = parseInt(row_id) - 2
     url_id = $('.myURL')[numVal].innerHTML
+
+
+    #Display Reason
+    displayObjects = $('.displayReason_' + row_id)
+    displayObjects.show();
+
+    ) 
+  #submitReject Reason  
+  $(document).on("click", "#submitReason", ->
+    row_id = $(this).attr("class")    
+    idVal = row_id.split('_')[1]
+    numVal = parseInt(idVal) - 2
+    url_id = $('.masterURL')[numVal].innerHTML
+
+    textValue = $('#rejectText_' + idVal)
+    console.log("he ha har", textValue[0].value, "my url", url_id)
+    #
+    woof = $('#masterRule_' + idVal)
+    woof.hide();
+    
     $.post "/reject_catalog",
       url: url_id
+      rejectReason: textValue[0].value
     return
+
     )
