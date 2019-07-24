@@ -1,0 +1,36 @@
+<% if @client_application.master_application_status == true %>
+    <h1>Master Table</h1>
+
+    <table class="table table-responsive table-bordered user-display" id="masterTable">
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Organization</th>
+          <th>Status</th> 
+          <th>Approve</th>
+          <th id="rejectHeader_"> Reject</th>
+          <th> Reason </th>
+          <th>See More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% e  = 1 %>
+          <% @result.each do |x| %>
+          <%if x["status"] == "Pending" %>
+          <% e += 1 %>
+            <tr id= <%="masterRule_#{e}" %>>
+            <td class = "masterURL"><%= x["url"] %></td>
+            <td class = "nameOrg" ><%= x["organizationName"]["organizationName_Text"][0]['text'] if x["organizationName"] %></td>
+            <td> <%= x['status'] %> </td> 
+            <td><%= link_to "Approve", '#', class: "approve_rule", id: "#{e}", :remote => true %> </td>
+            <td id="rejectRow_"><%= link_to "Reject", '#', class: "reject_rule", id: "#{e}", :remote => true %></td>
+
+            <td > <input type="reason" name="reason" style="display:none;" id = <%= "rejectText_#{e}" %> class= <%= "displayReason_#{e}" %>> <button  type="button" style="display:none;" id ="submitReason" class= <%= "displayReason_#{e}" %>> submit</button> </td>
+
+            <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+<% end %>

@@ -157,9 +157,14 @@ class ClientApplicationsController < ApplicationController
 
     #@masterStatus = @client_application.master_application_status
 
-    user = current_user
+    user = current_user 
     @client_application = current_user.client_application
     @masterStatus = @client_application.master_application_status
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
 
 
   end
@@ -298,10 +303,7 @@ class ClientApplicationsController < ApplicationController
 
 
 
-    respond_to do |format|
-      format.html
-      format.js
-    end
+ 
 
   end
 
@@ -620,12 +622,15 @@ class ClientApplicationsController < ApplicationController
         key: {
             url: params["url"]
         },
-        update_expression: "set #st = :s ",
+        update_expression: "set #st = :s, #rr = :r ",
         expression_attribute_values: {
-            ":s" => 'Rejected'
+            ":s" => 'Rejected',
+            ":r" => params["rejectReason"]
+
         },
         expression_attribute_names: { 
-            "#st" => "status"
+            "#st" => "status",
+            "#rr" => "rejectReason"
         },
         return_values: "UPDATED_NEW"
     }
