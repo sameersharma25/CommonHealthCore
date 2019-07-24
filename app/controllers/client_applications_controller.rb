@@ -163,8 +163,6 @@ class ClientApplicationsController < ApplicationController
     # @masterStatus = @client_application.master_application_status
   end
 
-
-
   def contact_management
     # dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
     #
@@ -178,7 +176,6 @@ class ClientApplicationsController < ApplicationController
     # @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
     @result = helpers.catalog_table_content
-
     @pending_results = @result.select{|p| p["status"] == "Pending"}
 
     logger.debug("the RESULT OF THE SCAN IS : ************************")
