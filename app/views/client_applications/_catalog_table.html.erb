@@ -1,0 +1,46 @@
+<% i  = 1 %>
+<% result.each do |r|%>
+    <%if r["status"] == "New" || r["status"] == "Rejected"%>
+        <% i += 1 %>
+        <% if r["missing_mandatory_fields"] == "1" %>
+            <tr class="currentRow missing_fields" id= <%="rule_#{i}"%>  >
+        <%elsif r["missing_mandatory_fields"] == "0" %>
+            <tr class="currentRow" id= <%="rule_#{i}" %>  >
+        <%end%>
+        <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
+        <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %>
+        <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["organizationName_Text"][0]['text'] if r["organizationName"] %></td>
+        <td id= <%= "Orgdescription_#{i}" %> ><%= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]  %></td>
+
+        <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
+        <%= hidden_field_tag r["organizationDescription_URL"] ,i, :id => "orgdescription_url_#{i}" %>
+        <%= hidden_field_tag r["url"] ,i, :id => "url_#{i}" %>
+
+        <%= hidden_field_tag r["organizationName_xpath"] ,i, :id => "orgName_xpath_#{i}" %>
+        <%= hidden_field_tag r["organizationName_URL"] ,i, :id => "orgName_url_#{i}" %>
+
+        <!--<td><%#= r["geographicScope"] %></td>-->
+        <!--<td><%#= r["state"] %></td>-->
+        <td><%= r["status"] %></td>
+        <!--<td><%#= r["created_at"] %></td>-->
+        <!--<td><%#= r["primeScope"] %></td>-->
+        <% if r["missing_mandatory_fields"] == "1" %>
+            <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :disabled => true, :remote => true , type: "button"%> </td>
+        <%elsif r["missing_mandatory_fields"] == "0" %>
+            <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true,type: "button" %> </td>
+        <%end%>
+
+        <td><%= link_to "Delete", '#', class: "delete_rule", id: "#{i}", :remote => true %></td>
+        <!--<td><%#= link_to "See More", get_contact_management_path(org_name: r["OrganizationName_Text"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
+        <td><%= link_to "See More", get_contact_management_path(org_url: r["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
+        </tr>
+
+        <% if r['status'] == "Rejected"%>
+            <script type="text/javascript">
+                var myID = 'rule_' + <%= i %>
+                document.getElementById(myID).style.color = "red";
+            </script>
+        <% end %>
+
+    <%end%>
+<%end%>
