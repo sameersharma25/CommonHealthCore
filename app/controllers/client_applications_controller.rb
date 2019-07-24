@@ -139,6 +139,31 @@ class ClientApplicationsController < ApplicationController
 
   end
 
+  def master_provider
+    dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+
+    table_name = 'master_provider'
+    params = {
+        table_name: table_name,
+        # projection_expression: "url",
+        # filter_expression: "url = test1.com"
+    }
+
+    @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
+
+    # @pending_results = @result.select{|p| p["status"] == "Pending"}
+
+    logger.debug("the RESULT OF THE SCAN IS : ************************ {@result}")
+
+    #@masterStatus = @client_application.master_application_status
+
+    # user = current_user
+    # @client_application = current_user.client_application
+    # @masterStatus = @client_application.master_application_status
+  end
+
+
+
   def contact_management
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
 

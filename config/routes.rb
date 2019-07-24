@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   post "/copy_default_settings", to: "client_applications#copy_default_settings"
   post "send_application_invitation", to: "client_applications#send_application_invitation"
   get "/contact_management_details", to: "client_applications#contact_management"
+  get "/master_provider", to: "client_applications#master_provider"
   get "/plugin_page", to: "client_applications#plugin"
 
   post "/define_parameters", to: "client_applications#define_parameters"
@@ -56,6 +57,7 @@ Rails.application.routes.draw do
   get "/get_patients", to: "client_applications#get_patients"
   post "/send_task", to: "client_applications#send_task"
   post "/check_duplicates", to: "client_applications#check_duplicate_entries"
+
   ###THINGS THAT MASON ADDED
   post "send_for_approval", to: "client_applications#send_for_approval"
   post "reject_catalog", to: "client_applications#reject_catalog"
