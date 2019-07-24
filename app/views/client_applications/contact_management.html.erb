@@ -81,11 +81,12 @@
           <th id="rejectHeader_"> Reject</th>
           <th> Reason </th>
           <th>See More</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <% e  = 1 %>
-          <% @result.each do |x| %>
+          <% @pending_results.each do |x| %>
           <%if x["status"] == "New" || x["status"] == "Pending" %>
           <% e += 1 %>
             <tr id= <%="masterRule_#{e}" %>>
