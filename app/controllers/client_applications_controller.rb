@@ -1,4 +1,5 @@
 class ClientApplicationsController < ApplicationController
+  include ClientApplicationsHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:new, :create, :contact_management]
 
@@ -162,20 +163,19 @@ class ClientApplicationsController < ApplicationController
     # @masterStatus = @client_application.master_application_status
   end
 
-
-
   def contact_management
-    dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    # dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    #
+    # table_name = 'contact_management'
+    # params = {
+    #     table_name: table_name,
+    #     # projection_expression: "url",
+    #     # filter_expression: "url = test1.com"
+    # }
+    #
+    # @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
-    table_name = 'contact_management'
-    params = {
-        table_name: table_name,
-        # projection_expression: "url",
-        # filter_expression: "url = test1.com"
-    }
-
-    @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
-
+    @result = helpers.catalog_table_content
     @pending_results = @result.select{|p| p["status"] == "Pending"}
 
     logger.debug("the RESULT OF THE SCAN IS : ************************")
@@ -564,11 +564,32 @@ class ClientApplicationsController < ApplicationController
 
         begin
           dynamodb1.update_item(parameters)
-          render :json => {status: :ok, message: "Catalog Updated" }
+          # render :json => {status: :ok, message: "Catalog Updated" }
         rescue  Aws::DynamoDB::Errors::ServiceError => error
           render :json => {message: error  }
-        end      
+        end
 
+    # dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    #
+    # table_name = 'contact_management'
+    # params = {
+    #     table_name: table_name,
+    #     # projection_expression: "url",
+    #     # filter_expression: "url = test1.com"
+    # }
+    #
+    # @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
+    @result = helpers.catalog_table_content
+
+    @pending_results = @result.select{|p| p["status"] == "Pending"}
+
+    logger.debug("the RESULT OF THE SCAN IS : ************************")
+
+    #@masterStatus = @client_application.master_application_status
+
+    # user = current_user
+    # @client_application = current_user.client_application
+    # @masterStatus = @client_application.master_application_status
   end
 
   def approve_catalog
@@ -657,10 +678,12 @@ class ClientApplicationsController < ApplicationController
 
         begin
           dynamodb1.update_item(parameters)
-          render :json => {status: :ok, message: "Catalog Updated" }
+          # render :json => {status: :ok, message: "Catalog Updated" }
         rescue  Aws::DynamoDB::Errors::ServiceError => error
           render :json => {message: error  }
-        end 
+        end
+
+    @result = helpers.catalog_table_content
 
   end 
   def delete_catalog

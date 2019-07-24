@@ -1,0 +1,2 @@
+$('#master_catalog_table').html("<%= j render(:partial => "master_catalog", locals: {pending_results: @pending_results}) %>")
+$('#catalog_table').html("<%= j render(:partial => "catalog_table", locals: {result: @result}) %>")
