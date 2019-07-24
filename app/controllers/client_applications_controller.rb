@@ -151,10 +151,15 @@ class ClientApplicationsController < ApplicationController
 
     @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
+    @pending_results = @result.select{|p| p["status"] == "Pending"}
+
     logger.debug("the RESULT OF THE SCAN IS : ************************")
 
     #@masterStatus = @client_application.master_application_status
-    @masterStatus = true
+
+    user = current_user
+    @client_application = current_user.client_application
+    @masterStatus = @client_application.master_application_status
 
 
   end
@@ -562,11 +567,48 @@ class ClientApplicationsController < ApplicationController
 
       begin
         dynamodb1.update_item(parameters)
+        insert_in_master_provider(params["url"])
         render :json => {status: :ok, message: "Catalog Updated" }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
         render :json => {message: error  }
       end 
-  end 
+  end
+
+  def insert_in_master_provider(url)
+
+    dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+    table_name = 'contact_management'
+
+    parameters = {
+        table_name: table_name,
+        key: {
+            # OrganizationName_Text: params["org_name"]
+            url: url
+        }
+        # projection_expression: "url",
+        # filter_expression: "url = test1.com"
+    }
+    result = dynamodb.get_item(parameters)[:item]
+    logger.debug("******************insert_in_master_provider #{result}")
+
+    table_name1 = 'master_provider'
+
+    params1 = {
+        table_name: table_name1,
+        item: result
+    }
+
+    begin
+      dynamodb.put_item(params1)
+      # render :json => { status: :ok, message: "Entry created successfully"  }
+    rescue  Aws::DynamoDB::Errors::ServiceError => error
+      render :json => {message: error  }
+    end
+
+
+
+  end
+
 
 
   def reject_catalog   #@@@

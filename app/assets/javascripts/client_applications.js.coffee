@@ -73,7 +73,7 @@ jQuery ($) ->
     row_id = $(this).attr("id")
     console.log("in the approve rule function", row_id)
     numVal = parseInt(row_id) - 2
-    url_id = $('.myURL')[numVal].innerHTML
+    url_id = $('.masterURL')[numVal].innerHTML
     woof = $('#masterRule_' + row_id)
     woof.hide();
     $.post "/approve_catalog",
@@ -86,7 +86,7 @@ jQuery ($) ->
     row_id = $(this).attr("id")
     console.log("in the reject rule function", row_id)
     numVal = parseInt(row_id) - 2
-    url_id = $('.myURL')[numVal].innerHTML
+    url_id = $('.masterURL')[numVal].innerHTML
 
 
     #Display Reason
