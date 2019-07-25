@@ -190,8 +190,43 @@ class ClientApplicationsController < ApplicationController
   end
 
   def get_contact_management #modal
+
+    # details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
+    #            programHash: @programHash, geoScope: @geoScope, programs: @programs }
+    details = get_catalog_details("contact_management")
+    # logger.debug("the detail are : #{details}")
+    @organizationName = details[:organizationName]
+    logger.debug("the orgName is : #{@organizationName}")
+    @siteHash = details[:siteHash]
+    @poc = details[:poc]
+    @orgSites = details[:orgSites]
+    @programHash = details[:programHash]
+    @geoScope = details[:geoScope]
+    @programs = details[:programs]
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
+
+  def duplicate_entry_details
+    details = get_catalog_details("master_provider")
+    # logger.debug("the detail are : #{details}")
+    @organizationName = details[:organizationName]
+    logger.debug("the orgName is : #{@organizationName}")
+    @siteHash = details[:siteHash]
+    @poc = details[:poc]
+    @orgSites = details[:orgSites]
+    @programHash = details[:programHash]
+    @geoScope = details[:geoScope]
+    @programs = details[:programs]
+  end
+
+  def get_catalog_details(table_name)
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-    table_name = 'contact_management'
+    table_name = table_name
 
     parameters = {
         table_name: table_name,
@@ -206,7 +241,7 @@ class ClientApplicationsController < ApplicationController
     @result = dynamodb.get_item(parameters)[:item]
 
     #logger.debug("the Result of the get entry is : #{@result}")
-    @result.each do |k,v| 
+    @result.each do |k,v|
       logger.debug("Key::: #{k}: Value::: #{v}")
       if k == "status"
         #logger.debug("FOUND #{k}::: #{v}")
@@ -214,121 +249,119 @@ class ClientApplicationsController < ApplicationController
         #logger.debug("FOUND #{k}::: #{v}")
       elsif k == "geoScope"
         #logger.debug("FOUND #{k}::: #{v}")
-          @geoScope = v
+        @geoScope = v
       elsif k == "programs"
         #logger.debug("FOUND #{k}::: #{v}")
-          @programs = v
-          @programHash = {}
-          i=0
-          while i < @programs.length do 
-                  @programs[i].each do |q,w|
-                    logger.debug("KEY::: #{q}:VALUE:::#{w}")
-                      case q
-                          when 'ProgramDescription'
-                            textOnlyArray = []
-                            w.each do |x|
-                                textvalue = x['text']
-                                textOnlyArray.push(textvalue)
-                            end 
-                            @programHash[q] = textOnlyArray
-                          when 'ProgramReferences'
-                            textOnlyArray = []
-                            w.each do |x|
-                                textvalue = x['text']
-                                textOnlyArray.push(textvalue)
-                            end 
-                            @programHash[q] = textOnlyArray
-                          when 'ServiceDescription'
-                            textOnlyArray = []
-                            w.each do |x|
-                                textvalue = x['text']
-                                textOnlyArray.push(textvalue)
-                            end 
-                            @programHash[q] = textOnlyArray
-                          when 'PopulationDescription'
-                            textOnlyArray = []
-                            w.each do |x|
-                                textvalue = x['text']
-                                textOnlyArray.push(textvalue)
-                            end 
-                            @programHash[q] = textOnlyArray
-                      end 
-                      if w.class != Array
-                        @programHash[q] = w
-                      end 
+        @programs = v
+        @programHash = {}
+        i=0
+        while i < @programs.length do
+          @programs[i].each do |q,w|
+            logger.debug("KEY::: #{q}:VALUE:::#{w}")
+            case q
+              when 'ProgramDescription'
+                textOnlyArray = []
+                w.each do |x|
+                  textvalue = x['text']
+                  textOnlyArray.push(textvalue)
+                end
+                @programHash[q] = textOnlyArray
+              when 'ProgramReferences'
+                textOnlyArray = []
+                w.each do |x|
+                  textvalue = x['text']
+                  textOnlyArray.push(textvalue)
+                end
+                @programHash[q] = textOnlyArray
+              when 'ServiceDescription'
+                textOnlyArray = []
+                w.each do |x|
+                  textvalue = x['text']
+                  textOnlyArray.push(textvalue)
+                end
+                @programHash[q] = textOnlyArray
+              when 'PopulationDescription'
+                textOnlyArray = []
+                w.each do |x|
+                  textvalue = x['text']
+                  textOnlyArray.push(textvalue)
+                end
+                @programHash[q] = textOnlyArray
+            end
+            if w.class != Array
+              @programHash[q] = w
+            end
 
-                  end
-                  logger.debug("BREAK ####}")
-              i+=1
-          end 
+          end
+          logger.debug("BREAK ####}")
+          i+=1
+        end
       elsif k == "orgSites"
         logger.debug("FOUND #{k}::: #{v}")
-          @orgSites = v
-          @siteHash = {}
-          @poc = {}
-          i=0
-          while i < @orgSites.length do 
-                  @orgSites[i].each do |q,w|
-                    logger.debug("KEY::: #{q}:VALUE:::#{w}")
-                      case q
-                          when 'SiteReference_TEXT'
-                            textOnlyArray = []
-                            w.each do |x|
-                                textvalue = x['text']
-                                textOnlyArray.push(textvalue)
-                            end 
-                            @siteHash[q] = textOnlyArray
-                          when 'addrOne_Text'
-                            textOnlyArray = []
-                            w.each do |x|
-                                textvalue = x['text']
-                                textOnlyArray.push(textvalue)
-                            end 
-                            @siteHash[q] = textOnlyArray
-                          when 'ServiceDescription'
-                            textOnlyArray = []
-                            w.each do |x|
-                                textvalue = x['text']
-                                textOnlyArray.push(textvalue)
-                            end 
-                            @siteHash[q] = textOnlyArray
-                          when 'ProgramDescription'
-                            textOnlyArray = []
-                            w.each do |x|
-                                textvalue = x['text']
-                                textOnlyArray.push(textvalue)
-                            end 
-                            @siteHash[q] = textOnlyArray
-                          when 'POCs'
-                            logger.debug("HERE #{w}")
-                            w[0].each do |k,v|
-                                @poc[k]= v
-                            end 
-                      end 
-                      if w.class != Array
-                        @siteHash[q] = w
-                      end 
+        @orgSites = v
+        @siteHash = {}
+        @poc = {}
+        i=0
+        while i < @orgSites.length do
+          @orgSites[i].each do |q,w|
+            logger.debug("KEY::: #{q}:VALUE:::#{w}")
+            case q
+              when 'SiteReference_TEXT'
+                textOnlyArray = []
+                w.each do |x|
+                  textvalue = x['text']
+                  textOnlyArray.push(textvalue)
+                end
+                @siteHash[q] = textOnlyArray
+              when 'addrOne_Text'
+                textOnlyArray = []
+                w.each do |x|
+                  textvalue = x['text']
+                  textOnlyArray.push(textvalue)
+                end
+                @siteHash[q] = textOnlyArray
+              when 'ServiceDescription'
+                textOnlyArray = []
+                w.each do |x|
+                  textvalue = x['text']
+                  textOnlyArray.push(textvalue)
+                end
+                @siteHash[q] = textOnlyArray
+              when 'ProgramDescription'
+                textOnlyArray = []
+                w.each do |x|
+                  textvalue = x['text']
+                  textOnlyArray.push(textvalue)
+                end
+                @siteHash[q] = textOnlyArray
+              when 'POCs'
+                logger.debug("HERE #{w}")
+                w[0].each do |k,v|
+                  @poc[k]= v
+                end
+            end
+            if w.class != Array
+              @siteHash[q] = w
+            end
 
-                  end
-                  logger.debug("BREAK ####}")
-              i+=1
           end
+          logger.debug("BREAK ####}")
+          i+=1
+        end
 
 
       elsif k == "organizationName"
         logger.debug("FOUND #{k}::: #{v}")
-          @organizationName = v
-      end     
-    end 
-
-
-
-    respond_to do |format|
-      format.html
-      format.js
+        @organizationName = v
+      end
     end
 
+    details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
+               programHash: @programHash, geoScope: @geoScope, programs: @programs }
+
   end
+
+
 
   def plugin
 
