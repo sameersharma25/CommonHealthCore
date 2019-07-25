@@ -12,7 +12,7 @@ module ClientApplicationsHelper
     result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
   end
-
+  
   def get_catalog(url)
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
     table_name = 'contact_management'
