@@ -58,7 +58,7 @@ jQuery ($) ->
     row_id = $(this).attr("id")
     console.log("in the delete rule function", row_id)
     numVal = parseInt(row_id) - 2
-    url_id = $('.myURL')[numVal].innerHTML
+    url_id = $('.myURL')[numVal].innerHTML.replace(/^\s+|\s+$/g, '')
     woof = $('#rule_' + row_id)
     woof.hide();
 
@@ -87,7 +87,6 @@ jQuery ($) ->
     console.log("in the reject rule function", row_id)
     numVal = parseInt(row_id) - 2
     url_id = $('.masterURL')[numVal].innerHTML
-
 
     #Display Reason
     displayObjects = $('.displayReason_' + row_id)
