@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get "/get_patients", to: "client_applications#get_patients"
   post "/send_task", to: "client_applications#send_task"
   post "/check_duplicates", to: "client_applications#check_duplicate_entries"
+  post "/duplicate_entry_details", to: "client_applications#duplicate_entry_details"
 
   ###THINGS THAT MASON ADDED
   post "send_for_approval", to: "client_applications#send_for_approval"

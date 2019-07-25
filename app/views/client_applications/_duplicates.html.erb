@@ -1,4 +1,5 @@
 <%#= @duplicates%>
+<div>
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal">x</button>
   <h4 class="modal-title" id="myModalLabel">Duplicates</h4>
@@ -11,6 +12,7 @@
         <th>URL</th>
         <th>Organization</th>
         <th>Status</th>
+        <th></th>
         <!--<th>Approve</th>-->
         <!--<th>Reject</th>-->
         <!--<th>See More</th>-->
@@ -23,8 +25,9 @@
           <% i += 1 %>
           <tr>
             <td><%= x["url"] %></td>
-            <td><%= x["organizationName"]["organizationName_Text"] if x["organizationName"]%></td>
+            <td><%= x["organizationName"]["organizationName_Text"][0]["text"] if x["organizationName"]%></td>
             <td> <%= x['status'] %> </td>
+            <td> <%= link_to "See Details", duplicate_entry_details_path(org_url: x["url"]), target: "_blank", method: :post  %></td>
             <!--<td><%#= link_to "Approve", '#', class: "approve_rule", id: "#{i}", :remote => true %> </td>-->
             <!--<td><%#= link_to "Reject", '#', class: "reject_rule", id: "#{i}", :remote => true %></td>-->
             <!--<td><%#= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
@@ -36,4 +39,5 @@
   <%else %>
       <p>There are no duplicates for this entry </p>
   <%end%>
+</div>
 </div>
