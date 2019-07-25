@@ -10,7 +10,7 @@
         <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
         <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %>
         <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["organizationName_Text"][0]['text'] if r["organizationName"] %></td>
-        <td id= <%= "Orgdescription_#{i}" %> ><%= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]  %></td>
+        <td id= <%= "Orgdescription_#{i}" %> ><%= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]["OrgDescription"]  %></td>
 
         <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
         <%= hidden_field_tag r["organizationDescription_URL"] ,i, :id => "orgdescription_url_#{i}" %>
@@ -27,7 +27,7 @@
         <% if r["missing_mandatory_fields"] == "1" %>
             <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :disabled => true, :remote => true , type: "button"%> </td>
         <%elsif r["missing_mandatory_fields"] == "0" %>
-            <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true,type: "button" %> </td>
+            <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true,type: "button", method: :get %> </td>
         <%end%>
 
         <td><%= link_to "Delete", '#', class: "delete_rule", id: "#{i}", :remote => true %></td>
