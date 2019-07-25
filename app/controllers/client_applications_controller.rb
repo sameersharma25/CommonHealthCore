@@ -484,7 +484,7 @@ class ClientApplicationsController < ApplicationController
 
   def check_duplicate_entries
     logger.debug("IN THE DUPLICATE METHOD*************")
-    catalog = params[:catalog]
+    # catalog = params[:catalog]
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
     table_name = 'master_provider'
     org_url = params[:org_url]
@@ -501,6 +501,7 @@ class ClientApplicationsController < ApplicationController
     begin
       result = dynamodb.query(params)
       # puts "Query succeeded."
+      catalog = helpers.get_catalog(org_url)
       logger.debug("the RESULT IS : #{result[:items]}")
       if !result[:items].empty?
         items = result[:items]

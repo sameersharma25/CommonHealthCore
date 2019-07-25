@@ -1,5 +1,5 @@
 
-<h2> New Catalogue Rules </h2>
+<h2> Catalog Entries  </h2>
 <table id="contact_management_table" class="table table-responsive table-bordered user-display">
   <thead>
     <tr>
@@ -16,53 +16,9 @@
       <th >...</th>
     </tr>
   </thead>
-  <tbody>
-    <% i  = 1 %>
-    <% @result.each do |r|%>
-      <%if r["status"] == "New" || r["status"] == "Rejected"%>
-          <% i += 1 %>
-          <% if r["missing_mandatory_fields"] == "1" %>
-              <tr class="currentRow missing_fields" id= <%="rule_#{i}"%>  >
-          <%elsif r["missing_mandatory_fields"] == "0" %>
-            <tr class="currentRow" id= <%="rule_#{i}" %>  >
-          <%end%>
-            <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
-            <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %>
-            <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["organizationName_Text"][0]['text'] if r["organizationName"] %></td>
-            <td id= <%= "Orgdescription_#{i}" %> ><%= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]  %></td>
+  <tbody id="catalog_table">
+  <%= render partial: "catalog_table", locals: {result: @result}%>
 
-            <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
-            <%= hidden_field_tag r["organizationDescription_URL"] ,i, :id => "orgdescription_url_#{i}" %>
-            <%= hidden_field_tag r["url"] ,i, :id => "url_#{i}" %>
-
-            <%= hidden_field_tag r["organizationName_xpath"] ,i, :id => "orgName_xpath_#{i}" %>
-            <%= hidden_field_tag r["organizationName_URL"] ,i, :id => "orgName_url_#{i}" %>
-
-            <!--<td><%#= r["geographicScope"] %></td>-->
-            <!--<td><%#= r["state"] %></td>-->
-            <td><%= r["status"] %></td>
-            <!--<td><%#= r["created_at"] %></td>-->
-            <!--<td><%#= r["primeScope"] %></td>-->
-            <% if r["missing_mandatory_fields"] == "1" %>
-                <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :disabled => true, :remote => true , type: "button"%> </td>
-            <%elsif r["missing_mandatory_fields"] == "0" %>
-                <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true,type: "button" %> </td>
-            <%end%>
-
-            <td><%= link_to "Delete", '#', class: "delete_rule", id: "#{i}", :remote => true %></td>
-            <!--<td><%#= link_to "See More", get_contact_management_path(org_name: r["OrganizationName_Text"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
-            <td><%= link_to "See More", get_contact_management_path(org_url: r["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
-          </tr>
-
-        <% if r['status'] == "Rejected"%>
-          <script type="text/javascript">
-            var myID = 'rule_' + <%= i %>
-            document.getElementById(myID).style.color = "red";
-          </script>
-        <% end %>
-
-      <%end%>
-    <%end%>
   </tbody>
 </table>
 
@@ -84,25 +40,8 @@
           <th></th>
         </tr>
       </thead>
-      <tbody>
-        <% e  = 1 %>
-          <% @pending_results.each do |x| %>
-          <%if x["status"] == "New" || x["status"] == "Pending" %>
-          <% e += 1 %>
-            <tr id= <%="masterRule_#{e}" %>>
-            <td class = "masterURL"><%= x["url"] %></td>
-            <td class = "nameOrg" ><%= x["organizationName"]["organizationName_Text"][0]['text'] if x["organizationName"] %></td>
-            <td> <%= x['status'] %> </td> 
-            <td><%= link_to "Approve", '#', class: "approve_rule", id: "#{e}", :remote => true %> </td>
-            <td id="rejectRow_"><%= link_to "Reject", '#', class: "reject_rule", id: "#{e}", :remote => true %></td>
-
-            <td > <input type="reason" name="reason" style="display:none;" id = <%= "rejectText_#{e}" %> class= <%= "displayReason_#{e}" %>> <button  type="button" style="display:none;" id ="submitReason" class= <%= "displayReason_#{e}" %>> submit</button> </td>
-
-            <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
-            <td><%= link_to "Check Duplicates", check_duplicates_path(org_url: x["url"], catalog: x ),{ method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}%></td>
-        </tr>
-          <% end %>
-        <% end %>
+      <tbody id="master_catalog_table">
+        <%= render partial: "master_catalog", locals: {pending_results: @pending_results}%>
       </tbody>
     </table>
 <% end %>
