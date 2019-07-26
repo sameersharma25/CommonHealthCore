@@ -222,6 +222,29 @@ class ClientApplicationsController < ApplicationController
     @programHash = details[:programHash]
     @geoScope = details[:geoScope]
     @programs = details[:programs]
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
+  def master_provider_details
+
+    details = get_catalog_details("master_provider")
+    # logger.debug("the detail are : #{details}")
+    @organizationName = details[:organizationName]
+    logger.debug("the orgName is : #{@organizationName}")
+    @siteHash = details[:siteHash]
+    @poc = details[:poc]
+    @orgSites = details[:orgSites]
+    @programHash = details[:programHash]
+    @geoScope = details[:geoScope]
+    @programs = details[:programs]
+    respond_to do |format|
+      format.html
+      format.js
+    end
+
   end
 
   def get_catalog_details(table_name)

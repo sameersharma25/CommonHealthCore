@@ -53,6 +53,7 @@ Rails.application.routes.draw do
 
   get "/download_plugin", to: "client_applications#download_plugin"
   post "/get_contact_management", to: "client_applications#get_contact_management"
+  post "/master_provider_details", to: "client_applications#master_provider_details"
 
   get "/get_patients", to: "client_applications#get_patients"
   post "/send_task", to: "client_applications#send_task"
