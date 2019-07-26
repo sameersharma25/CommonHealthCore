@@ -222,6 +222,7 @@ class ClientApplicationsController < ApplicationController
     @programHash = details[:programHash]
     @geoScope = details[:geoScope]
     @programs = details[:programs]
+    
     respond_to do |format|
       format.html
       format.js
@@ -244,7 +245,6 @@ class ClientApplicationsController < ApplicationController
       format.html
       format.js
     end
-
   end
 
   def get_catalog_details(table_name)
