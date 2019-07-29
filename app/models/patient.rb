@@ -18,6 +18,7 @@ class Patient
   field :gender, type: String
   field :race, type: String
   field :ethnicity, type: String
+  field :security_keys, type: String
 
   belongs_to :client_application
   has_many :appointments
