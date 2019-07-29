@@ -1,8 +1,5 @@
 class PiiTable
   include Mongoid::Document
-
-    field :field_name , type: Hash
-
-	has_many :task
-	has_many :patient
+ 	field :pii_key , type: String
+    field :pii_value , type: Hash
 end
