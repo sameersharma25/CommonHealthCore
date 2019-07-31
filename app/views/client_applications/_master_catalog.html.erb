@@ -1,5 +1,5 @@
 <% e  = 1 %>
-<% pending_results.each do |x| %>
+<% pending_results.each do |x| %> 
     <%if x["status"] == "New" || x["status"] == "Pending" %>
         <% e += 1 %>
         <tr id= <%="masterRule_#{e}" %>>
@@ -13,6 +13,8 @@
 
           <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
           <td><%= link_to "Check Duplicates", check_duplicates_path(org_url: x["url"] ),{ method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}%></td>
+
+           <%= hidden_field_tag x["orgSites"][0]['POCs'][0]['Email'] , e , :class =>'hiddenEmail' %>  
         </tr>
     <% end %>
 <% end %>

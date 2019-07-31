@@ -178,7 +178,7 @@ class ClientApplicationsController < ApplicationController
     @result = helpers.catalog_table_content
     @pending_results = @result.select{|p| p["status"] == "Pending"}
 
-    logger.debug("the RESULT OF THE SCAN IS : ************************")
+    logger.debug("the RESULT OF THE SCAN IS : ************************ #{@pending_results}")
 
     #@masterStatus = @client_application.master_application_status
 
@@ -599,7 +599,6 @@ class ClientApplicationsController < ApplicationController
 
   end
 
-  ###Start Mason
   def send_for_approval
     logger.debug("YOU STILL KNOW RAILS")
     logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
@@ -651,7 +650,7 @@ class ClientApplicationsController < ApplicationController
 
   def approve_catalog
 
-  logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
+  logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']} &&&& #{params['pocEmail']}")
   dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
   parameters = {
       table_name: 'contact_management',
@@ -665,23 +664,24 @@ class ClientApplicationsController < ApplicationController
       expression_attribute_names: { 
           "#st" => "status"
       },
-      return_values: "UPDATED_NEW"
+      return_values: "UPDATED_NEW" 
   }
+
 
       begin
         dynamodb1.update_item(parameters)
-        insert_in_master_provider(params["url"])
+        insert_in_master_provider(params["url"], params['pocEmail'])
         render :json => {status: :ok, message: "Catalog Updated" }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
         render :json => {message: error  }
       end 
   end
 
-  def insert_in_master_provider(url)
+  def insert_in_master_provider(url, pocEMAIL)
+
 
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
     table_name = 'contact_management'
-
     parameters = {
         table_name: table_name,
         key: {
@@ -691,7 +691,16 @@ class ClientApplicationsController < ApplicationController
         # projection_expression: "url",
         # filter_expression: "url = test1.com"
     }
+
     result = dynamodb.get_item(parameters)[:item]
+    
+    if pocEMAIL != ''
+      result['poc_emailed'] = true
+      PocMailer.poc_welcome(pocEMAIL).deliver
+    else 
+      result['poc_emailed'] = false
+    end 
+
     logger.debug("******************insert_in_master_provider #{result}")
 
     table_name1 = 'master_provider'
@@ -709,12 +718,11 @@ class ClientApplicationsController < ApplicationController
     end
 
 
-
   end
 
 
 
-  def reject_catalog   #@@@
+  def reject_catalog   
     logger.debug("YOU STILL KNOW RAILS2 #{[params]}")
     logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
     dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")

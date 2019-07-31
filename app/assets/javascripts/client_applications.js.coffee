@@ -74,10 +74,12 @@ jQuery ($) ->
     console.log("in the approve rule function", row_id)
     numVal = parseInt(row_id) - 2
     url_id = $('.masterURL')[numVal].innerHTML
+    pocEmail = $('.hiddenEmail')[0].name
     woof = $('#masterRule_' + row_id)
     woof.hide();
     $.post "/approve_catalog",
       url: url_id
+      pocEmail: pocEmail
     return
     )
 
