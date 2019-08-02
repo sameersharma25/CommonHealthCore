@@ -2,68 +2,60 @@ module PatientsHelper
 
 
   def self.security_keys_for_patients(values)
-    security_keys_array = []
-    PhiTable.each do |k,v| 
-        allTrue = []
-          values.each do |o,p|
-              if v.include?(values[o]) && p != nil && p != ''
-                  allTrue.push(true)
-              else
-                  allTrue.push(false)
-              end 
-          end 
-
-          if allTrue.include?(false)
-              #break
-          else
-              #Patient.security_keys.push(k)
-              security_keys_array.push(k)
-          end 
-        
-    end 
+	security_keys = []
     ##
-    PiiTable.each do |k,v| 
-        allTrue = []
-          values.each do |o,p|
-              if v.include?(values[o]) && p != nil && p != ''
-                  allTrue.push(true)
-              else
-                  allTrue.push(false)
-              end 
-          end 
-
-          if allTrue.include?(false)
-              #break
-          else
-              #Patient.security_keys.push(k)
-              security_keys_array.push(k)
-          end 
-        
-    end
+	PiiTable.each do |key, value|
+	  truthy = []
+	      value.each do |x|
+	            p "CHECK", x
+	            obj2.each do |k,v|
+	                p v
+	                if x == k && v != "" && v != nil
+	                #if x == v 
+	                  truthy.push(true)
+	                end  
+	            end 
+	            if truthy.length == value.length   
+	              security_keys.push(key)  
+	            end 
+	      end 
+	      p security_keys
+	end 
     ##
-    SadTable.each do |k,v| 
-        allTrue = []
-          values.each do |o,p|
-              if v.include?(values[o]) && p != nil && p != ''
-                  allTrue.push(true)
-              else
-                  allTrue.push(false)
-              end 
-          end 
-
-          if allTrue.include?(false)
-              #break
-          else
-              #Patient.security_keys.push(k)
-              security_keys_array.push(k)
-          end 
-        
-    end
-    return security_keys_array 
-  end
-
-
-
-
-
+    SadTable.each do |key, value|
+	  truthy = []
+	      value.each do |x|
+	            p "CHECK", x
+	            obj2.each do |k,v|
+	                p v
+	                if x == k && v != "" && v != nil
+	                #if x == v 
+	                  truthy.push(true)
+	                end  
+	            end 
+	            if truthy.length == value.length   
+	              security_keys.push(key)  
+	            end 
+	      end 
+	      p security_keys
+	end 
+	##
+	PhiTable.each do |key, value|
+		  truthy = []
+		      value.each do |x|
+		            p "CHECK", x
+		            obj2.each do |k,v|
+		                p v
+		                if x == k && v != "" && v != nil
+		                #if x == v 
+		                  truthy.push(true)
+		                end  
+		            end 
+		            if truthy.length == value.length   
+		              security_keys.push(key)  
+		            end 
+		      end 
+		      p security_keys
+		end 
+		return security_keys
 end
