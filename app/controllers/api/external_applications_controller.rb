@@ -16,6 +16,22 @@ module Api
       external_application_id = params[:external_application_id]
       external_application = ClientApplication.find(external_application_id)
 
+      ###
+#### Mason
+      if patient.security_keys.length > 0
+          #check the BAA  
+            #Where are we storing the BAA (in client_application.agreement_signed~~~~ agreement_type~~~)
+              #template Types CE-A, CE-B, BA-1, BA-B, NHE ( only send if they have the same Types..// else send email requeisting form)
+          #if BAA from external_application allows/matches this BAA agreement
+            #send
+          #else 
+            #don't send 
+          #end 
+      else 
+        #send the patient/task
+      end 
+      ###
+
 
       if external_application.external_application == true
         external_api = ExternalApiSetup.where(client_application_id: external_application_id, api_for: "send_patient").first
