@@ -65,12 +65,12 @@ gem 'mongoid_orderable'
 #gem 'acts_as_list'
 
 gem 'zip-codes'
-gem 'carrierwave', :git => "git://github.com/jnicklas/carrierwave.git"
+gem 'carrierwave'#, :git => "git://github.com/jnicklas/carrierwave.git"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem 'mini_magick', :git => 'git://github.com/probablycorey/mini_magick.git'
-# gem "fog-aws"
+gem "fog-aws"
 gem "recaptcha", '3.4.0', require: "recaptcha/rails"
-
+# gem 'fog'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

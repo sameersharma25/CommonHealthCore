@@ -1,0 +1,40 @@
+<h1> Agreement Template Management</h1>
+
+<div>
+  <h3>CE-A</h3>
+
+  <div id="CE-A">
+    <%= render :partial => "agreement_management", locals: {agreements: @ceas }%>
+  </div>
+  <br>
+  <%#= link_to "Add new CE-A", add_cea_path %>
+</div><br>
+
+<div>
+  <h3>CE-B</h3>
+
+    <div id="CE-B">
+      <%= render :partial => "agreement_management", locals: {agreements: @cebs }%>
+    </div>
+</div><br>
+
+<div>
+  <h3>BA-1</h3>
+  <div id="BA-1">
+    <%= render :partial => "agreement_management", locals: {agreements: @ba1s }%>
+  </div>
+  <br>
+  <%#= link_to "Add new CE-B", add_agreement_template_path %>
+</div><br>
+
+<div>
+  <h3>CE-B</h3>
+
+  <div id="CE-B">
+    <%= render :partial => "agreement_management", locals: {agreements: @babs }%>
+  </div>
+  <br>
+  <%#= link_to "Add new CE-B", add_agreement_template_path %>
+</div><br>
+
+<%= link_to "Add New Agreement", add_agreement_template_path %>
