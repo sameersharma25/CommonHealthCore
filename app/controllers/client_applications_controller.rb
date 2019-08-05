@@ -762,8 +762,64 @@ class ClientApplicationsController < ApplicationController
       puts error.message
     end
     #find by id and delete 
-  end 
+  end
 
+  def agreement_management
+
+    @ceas = AgreementTemplate.where(agreement_type: "CE-A")
+    @cebs = AgreementTemplate.where(agreement_type: "CE-B")
+    @ba1s = AgreementTemplate.where(agreement_type: "BA-1")
+    @babs = AgreementTemplate.where(agreement_type: "BA-B")
+
+  end
+
+  def add_agreement_template
+    @agreement_template = AgreementTemplate.new
+  end
+
+  def create_agreement_template
+    logger.debug("you are in the creeate cea METHOD************** #{params.inspect}")
+    agreement_template = AgreementTemplate.new
+    agreement_template.file_name = params["agreement_template"]["file_name"]
+    agreement_template.agreement_doc = params["agreement_template"]["agreement_doc"]
+    agreement_template.agreement_type = params["agreement_template"]["agreement_type"]
+    agreement_template.save
+
+    redirect_to agreement_management_path
+  end
+
+  def change_status_of_agreement_template
+    logger.debug("IN THE change_status_of_agreement_template--------------- the id is #{params[:id]}")
+    agt = AgreementTemplate.find(params[:id])
+    agt.active = true
+    agt.save
+
+    @agt_type = agt.agreement_type
+
+    AgreementTemplate.where(agreement_type: @agt_type ).each do |at|
+      if at.id.to_s != params[:id]
+        at.active = false
+        at.save
+      end
+    end
+
+    case @agt_type
+      when "CE-A"
+        @agreement = AgreementTemplate.where(agreement_type: "CE-A")
+      when "CE-B"
+        @agreement = AgreementTemplate.where(agreement_type: "CE-B")
+      when "BA-1"
+        @agreement = AgreementTemplate.where(agreement_type: "BA-1")
+      when "BA-B"
+        @agreement = AgreementTemplate.where(agreement_type: "BA-B")
+    end
+    # @ceas = AgreementTemplate.where(agreement_type: "CE-A")
+    # @cebs = AgreementTemplate.where(agreement_type: "CE-B")
+    # @ba1s = AgreementTemplate.where(agreement_type: "BA-1")
+    # @babs = AgreementTemplate.where(agreement_type: "BA-B")
+
+
+  end
 
   private
   # Use callbacks to share common setup or constraints between actions.

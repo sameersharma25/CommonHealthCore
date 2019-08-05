@@ -182,11 +182,13 @@
 <% if @client_application.master_application_status == true %>
   <%= link_to "Service Providers", service_provider_details_path%><br>
   <%= link_to "Master Providers", master_provider_path %><br>
+  <%= link_to "Agreement Managemet", agreement_management_path %><br>
 <%end%>
 
 <% if @client_application.external_application == true %>
     <%= link_to "External Apis", edit_after_signup_external_path(:id => @client_application.id.to_s ) %><br>
 <%end%>
+
 
 <%= link_to "Catalog Management" , contact_management_details_path %><br>
 <%#= link_to "Catalogue Management" , scraping_rules_path %><br>

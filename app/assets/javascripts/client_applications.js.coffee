@@ -112,3 +112,11 @@ jQuery ($) ->
     return
 
     )
+  $(document).on("click",".agreement_activate_button", ->
+    id = $(this).attr("id")
+    console.log("the id of the activate button is", id)
+    $.post "/change_status_of_agreement_template",
+      id: id
+    return
+
+  )

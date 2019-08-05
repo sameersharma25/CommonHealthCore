@@ -60,6 +60,11 @@ Rails.application.routes.draw do
   post "/check_duplicates", to: "client_applications#check_duplicate_entries"
   post "/duplicate_entry_details", to: "client_applications#duplicate_entry_details"
 
+  get "/agreement_management", to: "client_applications#agreement_management"
+  get "/add_agreement_template", to: "client_applications#add_agreement_template"
+  post "/create_agreement_template", to: "client_applications#create_agreement_template"
+  post "/change_status_of_agreement_template", to: "client_applications#change_status_of_agreement_template"
+
   ###THINGS THAT MASON ADDED
   post "send_for_approval", to: "client_applications#send_for_approval"
   post "reject_catalog", to: "client_applications#reject_catalog"

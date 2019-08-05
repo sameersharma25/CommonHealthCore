@@ -8,6 +8,8 @@ class ClientApplication
   field :accept_referrals, type: Boolean
   field :client_speciality, type: String
   field :master_application_status, type: Boolean
+  field :organization_type, type: String
+  field :organization_group, type: String
 
   # validates_presence_of :name, :application_url
 

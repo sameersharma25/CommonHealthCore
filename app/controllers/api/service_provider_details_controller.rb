@@ -280,8 +280,10 @@ module Api
       client_application_id = user.client_application_id.to_s
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
       table_name = 'contact_management'
-      domain_name = Addressable::URI.parse(params[:catalog_data]["url"]).host
-      item["url"] = domain_name
+      # domain_name = Addressable::URI.parse(params[:catalog_data]["url"]).host
+      # item["url"] = "https://"+domain_name+"/"
+      url_split = params[:catalog_data]["url"].split("/")
+      item["url"] = url_split[0]+"//"+url_split[2]+"/"
       item["customer_id"] = client_application_id
       item["status"] = "New"
       created_at = DateTime.now.strftime("%F %T")
