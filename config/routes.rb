@@ -90,6 +90,11 @@ Rails.application.routes.draw do
 
   post "/after_signup_external/api_setup", to: "after_signup_external#update"
 
+  get "/security_keys", to: "security_keys#index"
+  post '/security_keys', to: 'security_keys#create' 
+  post '/delete_keys', to: 'security_keys#delete' 
+  post '/update_keys', to: 'security_keys#update' 
+
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]
     # post 'generate_end_point', to: 'minors#generate_end_point'

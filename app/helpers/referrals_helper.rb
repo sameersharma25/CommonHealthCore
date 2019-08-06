@@ -1,59 +1,47 @@
 module ReferralsHelper
 
-  def self.security_keys_for_referrals(values)
-  	security_keys = []
-	PiiTable.each do |key, value|
-	  truthy = []
-	      value.each do |x|
-	            p "CHECK", x
-	            obj2.each do |k,v|
-	                p v
-	                if x == k && v != "" && v != nil
-	                #if x == v 
-	                  truthy.push(true)
-	                end  
-	            end 
-	            if truthy.length == value.length   
-	              security_keys.push(key)  
-	            end 
-	      end 
-	      p security_keys
-	end 
-    ##
-    SadTable.each do |key, value|
-	  truthy = []
-	      value.each do |x|
-	            p "CHECK", x
-	            obj2.each do |k,v|
-	                p v
-	                if x == k && v != "" && v != nil
-	                #if x == v 
-	                  truthy.push(true)
-	                end  
-	            end 
-	            if truthy.length == value.length   
-	              security_keys.push(key)  
-	            end 
-	      end 
-	      p security_keys
-	end 
-	##
-	PhiTable.each do |key, value|
-		  truthy = []
-		      value.each do |x|
-		            p "CHECK", x
-		            obj2.each do |k,v|
-		                p v
-		                if x == k && v != "" && v != nil
-		                #if x == v 
-		                  truthy.push(true)
-		                end  
-		            end 
-		            if truthy.length == value.length   
-		              security_keys.push(key)  
-		            end 
-		      end 
-		      p security_keys
+	def security_keys_for_referrals(values)
+		patient_array = []
+		security_keys = []
+
+		values.each do |k,v|
+		  if v != '' && v != nil
+		    patient_array.push(v)
+		  end 
+		end
+
+		PiiTable.each do |k,v|
+		  p 'security key set', v
+		  p 'patient set', patient_array 
+		  if (v - patient_array) == []
+		  	patient_array.push(k)
+		  else 
+		    p patient_array, '!=', v
+		  end 
+		  p '*** BREAK ***'
+		end 
+		##
+		PhiTable.each do |k,v|
+		  p 'security key set', v
+		  p 'patient set', patient_array 
+		  if (v - patient_array) == []
+		  	patient_array.push(k)
+		  else 
+		    p patient_array, '!=', v
+		  end 
+		  p '*** BREAK ***'
+		end 
+		##
+		SadTable.each do |k,v|
+		  p 'security key set', v
+		  p 'patient set', patient_array 
+		  if (v - patient_array) == []
+		  	patient_array.push(k)
+		  else 
+		    p patient_array, '!=', v
+		  end 
+		  p '*** BREAK ***'
 		end 
 		return security_keys
+	end #end def 
 end
