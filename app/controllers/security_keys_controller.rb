@@ -1,7 +1,9 @@
 class SecurityKeysController < ApplicationController
 
 
-	def index
+	def index 
+		@user = current_user
+
 		@pii = PiiTable.all 
 		@phi = PhiTable.all
 		@sad = SadTable.all
@@ -10,6 +12,10 @@ class SecurityKeysController < ApplicationController
 	end 
 
 	def create
+		@pii = PiiTable.all 
+		@phi = PhiTable.all
+		@sad = SadTable.all
+
 		case params['key_type'] 
 			when 'pii'
 				pii = PiiTable.new 
@@ -27,9 +33,10 @@ class SecurityKeysController < ApplicationController
 				sad.sad_value = params['key_value']
 				sad.save
 		end 
+
 			
 		#pass params key, values and what table. Create
-	end 
+	end  
 
 	def update
 		find_table = params['key_name'].split("_")[0]
@@ -48,6 +55,9 @@ class SecurityKeysController < ApplicationController
 	end 
 
 	def delete
+		@pii = PiiTable.all 
+		@phi = PhiTable.all
+		@sad = SadTable.all
 		#naming convention needs to be enforced
 		find_table = params['key_name'].split("_")[0]
 		logger.debug("training #{find_table}")
@@ -61,6 +71,7 @@ class SecurityKeysController < ApplicationController
 		end 
 
 		value_delete.delete
+
 	end 
 
 end

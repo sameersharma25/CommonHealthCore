@@ -182,6 +182,7 @@
 <% if @client_application.master_application_status == true %>
   <%= link_to "Service Providers", service_provider_details_path%><br>
   <%= link_to "Master Providers", master_provider_path %><br>
+  <%= link_to "Security Keys", security_keys_path %><br>
 <%end%>
 
 <% if @client_application.external_application == true %>

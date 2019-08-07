@@ -51,6 +51,7 @@
 	      key_value: keyValues,
 	      key_type: 'sad'
     ) 
+    #
   $(document).on("click", ".delete", -> 
    		row_id = $(this).attr('id')
    		id = row_id.split('_')[1]
@@ -60,13 +61,17 @@
    		$.post "/delete_keys",
    			key_name: keyName
    )
+   #
   $(document).on("click", ".edit", -> 
-   		row_id = $(this).attr('id')
-   		id = row_id.split('_')[1]
-   		row = $('#key_' + id)
-   		keyName = row[0].cells[0].innerText
-   		console.log("Look", keyName, 'length',keyName.length)
-   		$.post "/update_keys",
-   			key_name: keyName
+      theInput = $('#keyName')
+      console.log("here", theInput)
+      row_id = $(this).attr('id')
+      id = row_id.split("_")[1]
+      theRow = $('#key_' + id)
+      console.log("row", theRow[0].cells[0].innerText)
+      theValues = theRow[0].cells[1].innerText
+      keyValues = JSON.parse(theValues)
+      console.log("asdf", keyValues)
+      theInput[0].value = theRow[0].cells[0].innerText
 
-   )
+  )

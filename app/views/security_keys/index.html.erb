@@ -9,97 +9,49 @@
       <th>Values</th>
       <th>Actions</th>
     </tr>
-  </thead>
+  </thead> 
+ 
+	  <tbody id="security_table"> 
+	  		<%= render partial: "security_table", locals: {pii: @pii, phi: @phi, sad: @sad}%>
+	  </tbody>
 
-  <tbody>
-  	<% i = 0 %>
-  	<% @pii.each do |x| %>
-  		<% i+=1 %>
-	    <tr id = <%= "key_#{i}" %> > 
-	    	<td> <%= x.pii_key %> </td>
-	    	<td> <%= x.pii_value %> </td>
-	    	<td> 
-	    		<button class="delete" id = <%= "delete_#{i}" %> > delete </button>
-	    		<button class="edit" id = <%= "edit_#{i}" %> > edit </button> 
-	    	</td>
-
-	    </tr>
-    <% end %>
-    <% @phi.each do |r| %>
-    	<% i+=1 %>
-	    <tr id = <%= "key_#{i}" %> > 
-	    	<td> <%= r.phi_key %> </td>
-	    	<td> <%= r.phi_value %> </td>
-	    	<td> 
-	    		<button class="delete" id = <%= "delete_#{i}" %> > delete </button>
-	    		<button class="edit" id = <%= "edit_#{i}" %> > edit </button> 
-	    	 </td>
-	    </tr>
-    <% end %>
-    <% @sad.each do |s| %>
-    	<% i+=1 %>
-	    <tr id = <%= "key_#{i}" %> > 
-	    	<td> <%= s.sad_key %> </td>
-	    	<td> <%= s.sad_value %> </td>
-	    	<td>
-	    		<button class="delete" id = <%= "delete_#{i}" %> > delete </button>
-	    		<button class="edit" id = <%= "edit_#{i}" %> > edit </button> 
-	    	</td>
-	    </tr>
-    <% end %>
-  </tbody>
 </table>
 
 
 <br>
-<h1>Add Key</h1>
-
-<div class="container-fluid">
- 
-	<div class="row">
-		<div class="col-md-3">
-			<label for="keyName">Key Name:</label>
-			<input type="" id ="keyName" name="key_name" placeholder="pii_something_key">
-		</div>
-
-		<div id="key_value_div" class="col-md-6"> 
-			<% e = 0 %>
-			<% @patient.each_with_index do |x|%>
-
-				<% if x.to_s == '_id' || x.to_s == 'security_keys' || x.to_s == 'created_at' || x.to_s == 'updated_at' %>
-
-				<% else %>
-					<% e += 1 %>
-					<label for="<%= x %>"> <%= x %> </label>
-					<input class="berkley" type="checkbox" name="" id="<%=x %>">
+<% if @user.admin == true %>
+	<h1>Add Key</h1>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-3">
+				<label for="keyName">Key Name:</label>
+				<input type="" id ="keyName" name="key_name" placeholder="pii_something_key">
+			</div>
+			<div id="key_value_div" class="col-md-6"> 
+				<% e = 0 %>
+				<% @patient.each_with_index do |x|%>
+					<% if x.to_s == '_id' || x.to_s == 'security_keys' || x.to_s == 'created_at' || x.to_s == 'updated_at' %>
+					<% else %>
+						<% e += 1 %>
+						<label for="<%= x %>"> <%= x %> </label>
+						<input class="berkley" type="checkbox" name="" id="<%=x %>">
+					<% end %>
 				<% end %>
 
-				<% if e%3 == 0 %>
-					<br>
+				<% @task.each do |t| %>
+					<% if t.to_s == '_id' || t.to_s == 'security_keys' || t.to_s == 'created_at' || t.to_s == 'updated_at' %>
+					<% else %>
+						<% e += 1 %>
+						<label for="<%= t %>"> <%= t %> </label>
+						<input class="berkley" type="checkbox" name="" id="<%=t %>">
+					<% end %>
 				<% end %>
-			<% end %>
-
-			<% @task.each do |t| %>
-				<% if t.to_s == '_id' || t.to_s == 'security_keys' || t.to_s == 'created_at' || t.to_s == 'updated_at' %>
-
-				<% else %>
-					<% e += 1 %>
-					<label for="<%= t %>"> <%= t %> </label>
-					<input class="berkley" type="checkbox" name="" id="<%=t %>">
-				<% end %>
-
-				<% if e%3 == 0 %>
-					<br>
-				<% end %>
-			<% end %>
-			
-		</div>
-		<div class="col-md-3">
-			<button id = "phi_button" type="button" class="btn btn-primary">Add PHI Key</button>
-			<button id = "pii_button" type="button" class="btn btn-primary">Add PII Key</button>
-			<button id = "sad_button" type="button" class="btn btn-primary">Add SAD Key</button>
+			</div>
+			<div class="col-md-3">
+				<%= link_to "Add PHI Key", '#', id: "phi_button", :remote => true %><br>
+				<%= link_to "Add PII Key", '#', id: "pii_button", :remote => true %><br>
+				<%= link_to "Add SAD Key", '#', id: "sad_button", :remote => true %><br>
+			</div>
 		</div>
 	</div>
-
-
-</div>
+<% end %>
