@@ -105,6 +105,7 @@ class ClientApplicationsController < ApplicationController
     # @client_application = @client_application
     user = current_user
     @client_application = current_user.client_application
+
   end
 
   def save_all_details
@@ -830,7 +831,7 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals,:client_speciality, #users_attributes: [:name, :email, :_destroy],
+    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals,:client_speciality, :client_agreement, :agreement_type ,#users_attributes: [:name, :email, :_destroy],
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end

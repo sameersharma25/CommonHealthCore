@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :show_templates
+  resources :baa_language_segments
+  resources :questions
   resources :scraping_rules
   resources :statuses do
     collection do
@@ -40,7 +43,7 @@ Rails.application.routes.draw do
   post "/wizard_add_user", to: "users#wizard_add_user"
 
   get "/all_details", to: "client_applications#all_details"
-  get "/save_all_details", to: "client_applications#save_all_details"
+  post "/save_all_details", to: "client_applications#save_all_details"
   post "/copy_default_settings", to: "client_applications#copy_default_settings"
   post "send_application_invitation", to: "client_applications#send_application_invitation"
   get "/contact_management_details", to: "client_applications#contact_management"
@@ -94,6 +97,11 @@ Rails.application.routes.draw do
   post "/wizard_add_new_role", to: "roles#wizard_add_new_role"
 
   post "/after_signup_external/api_setup", to: "after_signup_external#update"
+
+
+
+  post "/save_question_response", to: "question_response#save_question_response"
+  get "/question_form", to: "question_response#question_form"
 
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]

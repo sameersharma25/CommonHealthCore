@@ -1,6 +1,6 @@
 <h1>Application Details</h1>
 
-<%= form_for @client_application, url: save_all_details_path, method: :get do |f| %>
+<%= form_for @client_application, url: save_all_details_path, method: :post,:html => { :multipart => true } do |f| %>
 
 
     <div class="field">
@@ -27,6 +27,22 @@
       <%= f.label :client_speciality %>
       <%= f.text_field :client_speciality, id: :client_speciality %>
     </div>
+
+    <div class="field">
+      <%= f.label :agreement_type %>
+      <%= f.select :agreement_type, ['CE-A', 'CE-B', 'BA-1', 'BA-B']%>
+    </div>
+    <div class="field">
+
+      <%= f.file_field :client_agreement%>
+    </div>
+
+
+    <div>
+      <%= f.label :signed_documents%><br>
+      <%=  link_to @client_application.client_agreement.url.split('/')[-1], @client_application.client_agreement.url, target: '_blank'  %>
+    </div>
+
     <%#= f.hidden_field :email,:value => @user.email, readonly: true %>
     <!--<h3>Users</h3>-->
     <!--<div id='users'>-->
@@ -48,7 +64,8 @@
       <!--</div>-->
     <!--</div>-->
 
-
-    <%= f.submit 'Save' %>
+    <div>
+      <%= f.submit 'Save' %>
+    </div>
 
 <%end %>

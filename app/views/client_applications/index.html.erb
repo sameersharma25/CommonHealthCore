@@ -9,6 +9,11 @@
   <%end %>
 <%end %>
 
+<% if @client_application.client_agreement.nil? %>
+    <div style="color: red"><%= link_to "Agreement was not signed. Please click here to complete the agreement process", question_form_path %></div>
+<%end%>
+
+
 <h1>Client Applications</h1>
 
 <table id="client_application" class="table table-responsive table-bordered user-display">
