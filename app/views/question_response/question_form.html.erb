@@ -1,0 +1,25 @@
+<%= form_for @question_response , url: save_question_response_path, method: :post, :remote => true do |f| %>
+
+
+  <%@questions.each do |q|%>
+    <div class="field">
+      <%= label_tag q.question %><br>
+      <%#= f.radio_button("question_response", "question_response", "yes") %>
+      <%= radio_button_tag q.question.parameterize.underscore, 'yes'%>
+      <%= label_tag "Yes"%>
+      <%= radio_button_tag q.question.parameterize.underscore, 'no'%>
+      <%= label_tag "No"%>
+      <%#= f.radio_button("question_response", "question_response", "no") %>
+
+    </div><br>
+  <%end%>
+    <%= hidden_field_tag :client_application_id, @customer_id%>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+
+<% end %>
+
+<div id="agreement_template" class="">
+
+</div>
