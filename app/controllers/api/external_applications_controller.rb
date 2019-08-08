@@ -16,22 +16,7 @@ module Api
       external_application_id = params[:external_application_id]
       external_application = ClientApplication.find(external_application_id)
 
-      ###
-#### Mason
-      if patient.security_keys.length > 0
-          #check the BAA  
-            #Where are we storing the BAA (in client_application.agreement_signed~~~~ agreement_type~~~)
-              #template Types CE-A, CE-B, BA-1, BA-B, NHE ( only send if they have the same Types..// else send email requeisting form)
-          #if BAA from external_application allows/matches this BAA agreement
-            #send
-          #else 
-            #don't send 
-          #end 
-      else 
-        #send the patient/task
-      end 
-      ###
-
+      client_application = ClientApplication.find(patient.client_application_id)
 
       if external_application.external_application == true
         external_api = ExternalApiSetup.where(client_application_id: external_application_id, api_for: "send_patient").first
@@ -87,16 +72,43 @@ module Api
           new_patient.mode_of_contact = patient.mode_of_contact
           new_patient.patient_zipcode = patient.patient_zipcode
           new_patient.patient_status = patient.patient_status
+          new_patient.security_keys = patient.security_keys
           new_patient.gender = patient.gender
           new_patient.race = patient.race
           new_patient.ethnicity = patient.ethnicity
           new_patient.save
 
-          send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+          if patient.security_keys.length > 0 || task.security_keys.length > 0
+                  if client_application.agreement_type == external_application.agreement_type
+                       if client_application.client_agreement.url.nil? && external_application.client_agreement.url.nil?
+                          send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+                       else 
+                        #Do Not Send: Email: Sorry, the agreement types do not match
+                       end 
+                  else
+                      #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                  end 
+          else 
+            send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+          end 
+
+          
 
         else
           logger.debug("the patient IS ALREADY PRESENT*************")
-          send_task(patient_check.id.to_s, task,external_application_id, existing_status)
+          if patient.security_keys.length > 0 || task.security_keys.length > 0
+                  if client_application.agreement_type == external_application.agreement_type
+                       if client_application.client_agreement.url.nil? && external_application.client_agreement.url.nil?
+                          send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+                       else 
+                        #Do Not Send: Email: Sorry, the agreement types do not match
+                       end 
+                  else
+                      #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                  end 
+          else 
+            send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+          end   
         end
 
       end
