@@ -37,7 +37,7 @@ module Api
           task.patient_document = params[:patient_document] if params[:patient_document]
           task.referral_id = referral.id.to_s
 
-          task.security_keys = helpers.security_keys_for_referrals(task)
+          task.security_keys = helpers.security_keys_for_patients(patient)
 
           task.save
         end
