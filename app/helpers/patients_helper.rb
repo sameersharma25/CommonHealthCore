@@ -4,47 +4,38 @@ module PatientsHelper
 		patient_array = []
 		security_keys = []
 
-		values.each do |k,v|
-		  if v != '' && v != nil
-		    patient_array.push(v)
+		#build an array with the value that the patient DOES have.
+		values.attributes.each do |k,v|
+			logger.debug("**KEY:::: #{k}, VALUE :::#{v}")
+		  if v != '' && v != nil && k != 'client_application_id' && v != 'id'
+		    patient_array.push(k)
 		  end 
 		end
 
-		PiiTable.each do |k,v|
-		  p 'security key set', v
-		  p 'patient set', patient_array 
-		  if (v - patient_array) == []
-		  	patient_array.push(k)
-		  else 
-		    p patient_array, '!=', v
-		  end 
-		  p '*** BREAK ***'
+		PiiTable.each do |key|
+			if key['pii_value'] - patient_array == []
+				security_keys.push(key['pii_key'])
+			else 
+			end 
 		end 
-		##
-		PhiTable.each do |k,v|
-		  p 'security key set', v
-		  p 'patient set', patient_array 
-		  if (v - patient_array) == []
-		  	patient_array.push(k)
-		  else 
-		    p patient_array, '!=', v
-		  end 
-		  p '*** BREAK ***'
-		end 
-		##
-		SadTable.each do |k,v|
-		  p 'security key set', v
-		  p 'patient set', patient_array 
-		  if (v - patient_array) == []
-		  	patient_array.push(k)
-		  else 
-		    p patient_array, '!=', v
-		  end 
-		  p '*** BREAK ***'
-		end 
+		###
+		PhiTable.each do |key|
+			if key['phi_value'] - patient_array == []
+				security_keys.push(key['phi_key'])
+			else 
+			end 
+		end
+		####
+		SadTable.each do |key|
+			if key['sad_value'] - patient_array == []
+				security_keys.push(key['sad_key'])
+			else 
+			end 
+		end
 		return security_keys
 	end #end def 
 
 
 end
+
 

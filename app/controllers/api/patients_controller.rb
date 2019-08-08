@@ -77,6 +77,7 @@ module Api
       patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
       patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
+
       if ZipCodes.identify(params[:patient_zipcode]).nil?
         logger.debug("Inside the zip validations*********************")
         render :json=> {message: "Please enter a valid zipcode"}
@@ -87,8 +88,7 @@ module Api
       patient.ethnicity = params[:ethnicity] if params[:ethnicity]
       patient.gender = params[:gender] if params[:gender]
       patient.patient_status = "New"
-
-      patient.security_keys = helpers.security_keys_for_patients(task)
+      patient.security_keys = helpers.security_keys_for_patients(patient)
       if patient.save
         render :json=> {status: :ok, message: "Patient Created Successfully"}
       end
