@@ -43,7 +43,6 @@ class QuestionResponseController < ApplicationController
     qr.league_segments = league_segment
     qr.save
 
-
     agreement_type = helpers.check_for_template_type(league_segment)[0]
 
     @template = helpers.get_agreement_template(agreement_type).first
