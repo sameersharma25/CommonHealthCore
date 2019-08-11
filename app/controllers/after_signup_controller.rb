@@ -1,8 +1,9 @@
 class AfterSignupController < ApplicationController
   include Wicked::Wizard
+  include QuestionResponseHelper
 
   # steps :update_details_and_add_users#, :notification_rules
-  steps :role,:users,:status,:alert_workflow, :service_provider, :default_settings#, :notification_rules
+  steps :role,:users,:status,:alert_workflow, :agreement_template, :service_provider, :default_settings#, :notification_rules
 
 
   def show
@@ -51,6 +52,11 @@ class AfterSignupController < ApplicationController
       @notification_rules = NotificationRule.where(client_application_id: client_application)
     when :users
       @user = User.new
+    when :agreement_template
+      @questions = Question.all
+      @question_response = QuestionResponse.new
+      @customer_id = current_user.client_application_id.to_s
+      @template = "nothing"
 
     when :default_settings   #wicked_finish
       logger.debug("IN SHOW default setting *****************")
@@ -95,6 +101,40 @@ class AfterSignupController < ApplicationController
         client_application = @user.client_application
         @roles = Role.where(client_application_id: client_application)
         render_wizard @user
+      when :agreement_template
+        league_segment = []
+        if (params["are_you_referral_source"] == "yes" || params["are_you_referral_destination"] == "yes" ) && params["are_you_a_covered_entity"] == "yes"
+          league_segment.push("2")
+        end
+        if params["are_you_referral_source"] == "yes" && params["are_you_a_business_associate"] == "yes"
+          league_segment.push("3")
+        end
+
+        if params["are_you_referral_destination"] == "yes" && params["are_you_a_business_associate"] == "yes"
+          league_segment.push("4")
+        end
+        if params["are_you_a_covered_entity"] == "yes" && params["are_you_interested_in_providding_care_coordination_activities"] == "yes"
+          league_segment.push("5")
+        end
+        if params["are_you_interested_in_providding_care_coordination_activities"] == "yes" && params["are_you_a_business_associate"] == "yes"
+          logger.debug("***********before 6------------")
+          league_segment.push("6")
+        end
+
+        @question_response  = QuestionResponse.new
+        @question_response .client_application_id = params["client_application_id"]
+        @question_response .league_segments = league_segment
+        @question_response .save
+
+
+        agreement_type = helpers.check_for_template_type(league_segment)[0]
+
+        @template = helpers.get_agreement_template(agreement_type).first
+
+          logger.debug("IN THE RENDER CODER****************")
+          render :template => "question_response/save_question_response.js.erb"
+
+        # render_wizard @question_response
       when :status
         @status = Status.new
         @status.status = params[:status][:status]

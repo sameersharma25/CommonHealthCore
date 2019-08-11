@@ -40,7 +40,9 @@
 
     <div>
       <%= f.label :signed_documents%><br>
-      <%=  link_to @client_application.client_agreement.url.split('/')[-1], @client_application.client_agreement.url, target: '_blank'  %>
+      <%if !@client_application.client_agreement.url.nil? %>
+        <%=  link_to @client_application.client_agreement.url.split('/')[-1], @client_application.client_agreement.url, target: '_blank'  %>
+      <%end%>
     </div>
 
     <%#= f.hidden_field :email,:value => @user.email, readonly: true %>
