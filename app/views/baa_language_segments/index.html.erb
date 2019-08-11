@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Baa Language Segments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @baa_language_segments.each do |baa_language_segment| %>
+      <tr>
+        <td><%= link_to 'Show', baa_language_segment %></td>
+        <td><%= link_to 'Edit', edit_baa_language_segment_path(baa_language_segment) %></td>
+        <td><%= link_to 'Destroy', baa_language_segment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Baa Language Segment', new_baa_language_segment_path %>

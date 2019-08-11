@@ -9,6 +9,12 @@
   <%end %>
 <%end %>
 
+<% if @client_application.client_agreement.url.nil? %>
+
+    <div style="color: red"><%= link_to "Agreement was not signed. Please click here to complete the agreement process", question_form_path %></div>
+<%end%>
+
+
 <h1>Client Applications</h1>
 
 <table id="client_application" class="table table-responsive table-bordered user-display">
@@ -183,11 +189,14 @@
   <%= link_to "Service Providers", service_provider_details_path%><br>
   <%= link_to "Master Providers", master_provider_path %><br>
   <%= link_to "Security Keys", security_keys_path %><br>
+  <%= link_to "Agreement Managemet", agreement_management_path %><br>
+
 <%end%>
 
 <% if @client_application.external_application == true %>
     <%= link_to "External Apis", edit_after_signup_external_path(:id => @client_application.id.to_s ) %><br>
 <%end%>
+
 
 <%= link_to "Catalog Management" , contact_management_details_path %><br>
 <%#= link_to "Catalogue Management" , scraping_rules_path %><br>

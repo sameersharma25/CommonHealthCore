@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :show_templates
+  resources :baa_language_segments
+  resources :questions
   resources :scraping_rules
   resources :statuses do
     collection do
@@ -40,7 +43,7 @@ Rails.application.routes.draw do
   post "/wizard_add_user", to: "users#wizard_add_user"
 
   get "/all_details", to: "client_applications#all_details"
-  get "/save_all_details", to: "client_applications#save_all_details"
+  post "/save_all_details", to: "client_applications#save_all_details"
   post "/copy_default_settings", to: "client_applications#copy_default_settings"
   post "send_application_invitation", to: "client_applications#send_application_invitation"
   get "/contact_management_details", to: "client_applications#contact_management"
@@ -59,6 +62,11 @@ Rails.application.routes.draw do
   post "/send_task", to: "client_applications#send_task"
   post "/check_duplicates", to: "client_applications#check_duplicate_entries"
   post "/duplicate_entry_details", to: "client_applications#duplicate_entry_details"
+
+  get "/agreement_management", to: "client_applications#agreement_management"
+  get "/add_agreement_template", to: "client_applications#add_agreement_template"
+  post "/create_agreement_template", to: "client_applications#create_agreement_template"
+  post "/change_status_of_agreement_template", to: "client_applications#change_status_of_agreement_template"
 
   ###THINGS THAT MASON ADDED
   post "send_for_approval", to: "client_applications#send_for_approval"
@@ -94,6 +102,10 @@ Rails.application.routes.draw do
   post '/security_keys', to: 'security_keys#create' 
   post '/delete_keys', to: 'security_keys#delete' 
   post '/update_keys', to: 'security_keys#update' 
+
+  post "/save_question_response", to: "question_response#save_question_response"
+  get "/question_form", to: "question_response#question_form"
+
 
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]
