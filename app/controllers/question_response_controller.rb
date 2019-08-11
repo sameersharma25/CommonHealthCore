@@ -1,5 +1,5 @@
 class QuestionResponseController < ApplicationController
-
+  include QuestionResponseHelper
 
   def question_form
 
@@ -43,10 +43,9 @@ class QuestionResponseController < ApplicationController
     qr.league_segments = league_segment
     qr.save
 
+    agreement_type = helpers.check_for_template_type(league_segment)[0]
 
-    agreement_type = check_for_template_type(league_segment)[0]
-
-    @template = get_agreement_template(agreement_type).first
+    @template = helpers.get_agreement_template(agreement_type).first
 
 
     logger.debug("the league segment is #{league_segment}: #{qr}-----------#{agreement_type.inspect}")
