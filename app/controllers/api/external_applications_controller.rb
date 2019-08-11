@@ -61,11 +61,11 @@ module Api
                                 send_task(result["p_id"], task,external_application_id,existing_status)
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
-                              SendPatientTaskMailer.patient_not_sent(client_application.application_url).deliver
+                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                              end 
                         else
                             #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                            SendPatientTaskMailer.patient_not_sent(client_application.application_url).deliver
+                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                         end 
                 else 
                     send_task(result["p_id"], task,external_application_id,existing_status)
@@ -110,11 +110,11 @@ module Api
                                 send_task(result["p_id"], task,external_application_id,existing_status)
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
-                              SendPatientTaskMailer.patient_not_sent(client_application.application_url).deliver
+                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                              end 
                         else
                             #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                            SendPatientTaskMailer.patient_not_sent(client_application.application_url).deliver
+                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                         end 
                 else 
                     send_task(result["p_id"], task,external_application_id,existing_status)
@@ -132,11 +132,11 @@ module Api
                                 send_task(result["p_id"], task,external_application_id,existing_status)
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
-                              SendPatientTaskMailer.patient_not_sent(client_application.application_url).deliver
+                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                              end 
                         else
                             #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                            SendPatientTaskMailer.patient_not_sent(client_application.application_url).deliver
+                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                         end 
                 else 
                     send_task(result["p_id"], task,external_application_id,existing_status)
