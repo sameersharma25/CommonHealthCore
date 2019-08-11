@@ -6,7 +6,7 @@ module Api
 
 
 
-  def update_patient
+  def update_patient 
       patient = Patient.find(params[:patient_id])
       patient.first_name = params[:first_name].titleize if params[:first_name]
       patient.last_name = params[:last_name].titleize if params[:last_name]
@@ -16,6 +16,7 @@ module Api
       patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
       patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
+
       if ZipCodes.identify(params[:patient_zipcode]).nil?
         logger.debug("Inside the zip validations*********************")
         render :json=> {message: "Please enter a valid zipcode"}
@@ -25,6 +26,9 @@ module Api
       patient.ethnicity = params[:ethnicity] if params[:ethnicity]
       patient.gender = params[:gender] if params[:gender]
       patient.patient_address = params[:patient_address] if params[:patient_address]
+
+      patient.security_keys = helpers.security_keys_for_patients(patient)
+
       patient.save
 
       patient_name = patient.first_name+" "+ patient.last_name
@@ -73,6 +77,7 @@ module Api
       patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
       patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
       patient.mode_of_contact = params[:mode_of_contact] if params[:mode_of_contact]
+
       if ZipCodes.identify(params[:patient_zipcode]).nil?
         logger.debug("Inside the zip validations*********************")
         render :json=> {message: "Please enter a valid zipcode"}
@@ -83,6 +88,7 @@ module Api
       patient.ethnicity = params[:ethnicity] if params[:ethnicity]
       patient.gender = params[:gender] if params[:gender]
       patient.patient_status = "New"
+      patient.security_keys = helpers.security_keys_for_patients(patient)
       if patient.save
         render :json=> {status: :ok, message: "Patient Created Successfully"}
       end

@@ -4,7 +4,7 @@ module Api
     before_action :authenticate_user_from_token, except: [:ext_app_ledger]
     load_and_authorize_resource class: :api, except: [:ext_app_ledger]
 
-    def create_referral
+    def create_referral 
       patient = Patient.find(params[:patient_id])
       client_id = patient.client_application_id.to_s
       referral = Referral.new
@@ -36,6 +36,9 @@ module Api
           task.task_description = t[:task_description]
           task.patient_document = params[:patient_document] if params[:patient_document]
           task.referral_id = referral.id.to_s
+
+          task.security_keys = helpers.security_keys_for_patients(patient)
+
           task.save
         end
 
@@ -130,6 +133,8 @@ module Api
       task.provider = params[:provider] if params[:provider]
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
       task.patient_document = params[:patient_document] if params[:patient_document]
+      
+      task.security_keys = helpers.security_keys_for_referrals(task)
       #task.task_deadline = params[:task_deadline].to_datetime.strftime('%m/%d/%Y') if params[:task_deadline]
 
       task.task_description = params[:task_description] if params[:task_description]
@@ -187,6 +192,10 @@ module Api
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
       task.task_description = params[:task_description] if params[:task_description]
       task.patient_document = params[:patient_document] if params[:patient_document]
+
+      task.security_keys = []
+      task.security_keys = helpers.security_keys_for_referrals(task)
+
       if task.save
         render :json=> {status: :ok, message: "Task Updated"}
       end
