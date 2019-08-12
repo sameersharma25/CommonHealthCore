@@ -15,6 +15,7 @@ class Task
   field :additional_fields, type: Hash
   field :task_referred_from, type: String
   field :medical_case, type: Boolean, default: false
+  field :security_keys, type: Array
   mount_uploader :patient_document , PatientFileUploader
 
   belongs_to :referral

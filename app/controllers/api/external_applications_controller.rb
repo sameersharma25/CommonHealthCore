@@ -5,7 +5,7 @@ require 'json'
 module Api
   class ExternalApplicationsController < ActionController::Base
 
-    def send_patient
+    def send_patient #Which person should I email if it fails???
       task_id = params[:task_id]
       task = Task.find(task_id)
       patient = task.referral.patient
@@ -15,6 +15,7 @@ module Api
 
       external_application_id = params[:external_application_id]
       external_application = ClientApplication.find(external_application_id)
+      client_application = ClientApplication.find(patient.client_application_id)
 
 
       if external_application.external_application == true
@@ -48,11 +49,31 @@ module Api
         puts JSON.parse(response.body)
         result = JSON.parse(response.body)
         logger.debug("the patient id is : #{result}")
-        if !result["p_id"].nil?
-          send_task(result["p_id"], task,external_application_id,existing_status)
-        else
-          logger.debug('the PATIENT ID WAS nil***************')
-        end
+          if !result["p_id"].nil?
+            logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+                ###
+                if patient.security_keys.length > 0 || task.security_keys.length > 0
+                    #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
+                        if client_application.agreement_type == external_application.agreement_type
+                            #logger.debug("client_application #{client_application.inspect}")
+                              #logger.debug("external_application #{external_application.inspect}")
+                             if client_application.client_agreement.url.nil? && external_application.client_agreement.url.nil?
+                                send_task(result["p_id"], task,external_application_id,existing_status)
+                             else 
+                              #Do Not Send: Email: Sorry, the agreement types do not match
+                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                             end 
+                        else
+                            #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                        end 
+                else 
+                    send_task(result["p_id"], task,external_application_id,existing_status)
+                end 
+                ###
+          else
+            logger.debug('the PATIENT ID WAS nil***************')
+          end
       else
         patient_check = Patient.where(client_application_id: external_application_id, first_name: patient.first_name).first
         logger.debug("Creating patient for internal application******************* #{patient_check}")
@@ -74,13 +95,53 @@ module Api
           new_patient.gender = patient.gender
           new_patient.race = patient.race
           new_patient.ethnicity = patient.ethnicity
+          #
+          new_patient.security_keys = patient.security_keys
           new_patient.save
 
-          send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+          logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
+                if new_patient.security_keys.length > 0 #|| task.security_keys.length > 0
+                    #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
+                        if client_application.agreement_type == external_application.agreement_type
+                            #logger.debug("client_application #{client_application.inspect}")
+                              #logger.debug("external_application #{external_application.inspect}")
+                             if client_application.client_agreement.url.nil? && external_application.client_agreement.url.nil?
+                                send_task(result["p_id"], task,external_application_id,existing_status)
+                             else 
+                              #Do Not Send: Email: Sorry, the agreement types do not match
+                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                             end 
+                        else
+                            #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                        end 
+                else 
+                    send_task(result["p_id"], task,external_application_id,existing_status)
+                end 
 
         else
-          logger.debug("the patient IS ALREADY PRESENT*************")
-          send_task(patient_check.id.to_s, task,external_application_id, existing_status)
+          logger.debug("the patient IS ALREADY PRESENT************* #{patient.inspect} ******** #{task.inspect}")
+
+                if patient.security_keys.length > 0 || task.security_keys.length > 0
+                    #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
+                        if client_application.agreement_type == external_application.agreement_type
+                            #logger.debug("client_application #{client_application.inspect}")
+                              #logger.debug("external_application #{external_application.inspect}")
+                             if client_application.client_agreement.url.nil? && external_application.client_agreement.url.nil?
+                                send_task(result["p_id"], task,external_application_id,existing_status)
+                             else 
+                              #Do Not Send: Email: Sorry, the agreement types do not match
+                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                             end 
+                        else
+                            #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                        end 
+                else 
+                    send_task(result["p_id"], task,external_application_id,existing_status)
+                end 
+
         end
 
       end
@@ -158,8 +219,8 @@ module Api
     end
 
     def client_list
-      all_client = ClientApplication.where(accept_referrals: true)
-      # all_client = ClientApplication.all
+      #all_client = ClientApplication.where(accept_referrals: true)
+      all_client = ClientApplication.all
       all_client_array = []
       all_client.each do |ac|
         name = ac.name

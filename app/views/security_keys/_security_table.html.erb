@@ -1,0 +1,39 @@
+  	<% i = 0 %>
+  	<% @pii.each do |x| %>
+  		<% i+=1 %>
+	    <tr id = <%= "key_#{i}" %> > 
+	    	<td> <%= x.pii_key %> </td>
+	    	<td> <%= x.pii_value %> </td>
+	    	<% if @user.admin == true %>
+	    	<td> 
+	    		<%= link_to "Delete", '#', class: "delete", id: "delete_#{i}", :remote => true %>
+	    	</td>
+	    	<% end %>
+
+	    </tr>
+    <% end %>
+    <% @phi.each do |r| %>
+    	<% i+=1 %>
+	    <tr id = <%= "key_#{i}" %> > 
+	    	<td> <%= r.phi_key %> </td>
+	    	<td> <%= r.phi_value %> </td>
+	    	<% if @user.admin == true %>
+	    	<td> 
+	    		<%= link_to "Delete", '#', class: "delete", id: "delete_#{i}", :remote => true %>
+	    	 </td>
+	    	 <% end %>
+
+	    </tr>
+    <% end %>
+    <% @sad.each do |s| %>
+    	<% i+=1 %>
+	    <tr id = <%= "key_#{i}" %> > 
+	    	<td> <%= s.sad_key %> </td>
+	    	<td> <%= s.sad_value %> </td>
+	    	<% if @user.admin == true %>
+	    	<td>
+	    		<%= link_to "Delete", '#', class: "delete", id: "delete_#{i}", :remote => true %>
+	    	</td>
+	    	<% end %>
+	    </tr>
+    <% end %>

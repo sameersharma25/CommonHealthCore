@@ -23,6 +23,7 @@ class Patient
   field :ethnicity, type: String
   field :through_call, type: Boolean
   field :caller_additional_fields, type: Hash
+  field :security_keys, type: Array
 
   belongs_to :client_application
   has_many :appointments
