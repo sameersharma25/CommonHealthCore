@@ -18,7 +18,6 @@
         <%else%>
           <td><%= link_to "Deactivate", "#", :id => "#{agreement.id}" ,:class => "agreement_activate_button" ,:remote => true%></td>
         <%end%>
-        <td><%= agreement.active%></td>
       </tr>
     <%end%>
   </tbody>

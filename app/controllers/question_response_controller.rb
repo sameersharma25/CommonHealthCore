@@ -6,8 +6,14 @@ class QuestionResponseController < ApplicationController
     @questions = Question.all
     @question_response = QuestionResponse.new
     @customer_id = current_user.client_application_id.to_s
+    @client_application = ClientApplication.find(@customer_id)
     @template = "nothing"
-
+    @client_responses = ClientApplication.find(@customer_id).question_responses.first
+    if !@client_responses.nil?
+      segment = ClientApplication.find(@customer_id).question_responses.first.league_segments.sort
+      agreement_type = ShowTemplate.where(league_segments: segment ).first.agreement_type
+      @ag = AgreementTemplate.where(agreement_type: agreement_type, active: true )
+    end
 
   end
 
@@ -38,10 +44,22 @@ class QuestionResponseController < ApplicationController
       league_segment.push("6")
     end
 
-    qr = QuestionResponse.new
+    client_application_response = ClientApplication.find(params["client_application_id"]).question_responses
+
+    if client_application_response.empty?
+      logger.debug("CREATING NEW RESPONSES************************")
+      qr = QuestionResponse.new
+    else
+      logger.debug("EXISTING RESPONSE***************")
+      qr_id = client_application_response.first.id.to_s
+      qr = QuestionResponse.find(qr_id)
+    end
+
+
     qr.client_application_id = params["client_application_id"]
     qr.league_segments = league_segment
     qr.save
+
 
     agreement_type = helpers.check_for_template_type(league_segment)[0]
 
