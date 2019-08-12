@@ -10,6 +10,7 @@
 <%end %>
 
 <% if @client_application.client_agreement.url.nil? %>
+
     <div style="color: red"><%= link_to "Agreement was not signed. Please click here to complete the agreement process", question_form_path %></div>
 <%end%>
 
