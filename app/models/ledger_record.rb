@@ -6,6 +6,7 @@ class LedgerRecord
   field :referred_change_type, type: String
   field :referred_application_object_id, type: String
   field :referred_application_object_type, type: String
+  field :changed_fields, type: Hash
 
   belongs_to :ledger_status
 
