@@ -134,7 +134,7 @@ module Api
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
       task.patient_document = params[:patient_document] if params[:patient_document]
       
-      task.security_keys = helpers.security_keys_for_referrals(task)
+      task.security_keys = helpers.security_keys_for_patients(task)
       #task.task_deadline = params[:task_deadline].to_datetime.strftime('%m/%d/%Y') if params[:task_deadline]
 
       task.task_description = params[:task_description] if params[:task_description]

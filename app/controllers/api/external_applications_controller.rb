@@ -58,7 +58,7 @@ module Api
                             #logger.debug("client_application #{client_application.inspect}")
                               #logger.debug("external_application #{external_application.inspect}")
                              if client_application.client_agreement.url.nil? && external_application.client_agreement.url.nil?
-                                send_task(result["p_id"], task,external_application_id,existing_status)
+                               send_task(result["p_id"], task,external_application_id,existing_status)
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
@@ -96,18 +96,18 @@ module Api
           new_patient.race = patient.race
           new_patient.ethnicity = patient.ethnicity
           #
-          new_patient.security_keys = patient.security_keys
+          new_patient.security_keys =  helpers.security_keys_for_patients(patient)
           new_patient.save
 
           logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-                if new_patient.security_keys.length > 0 #|| task.security_keys.length > 0
+                if new_patient.security_keys.length > 0 || task.security_keys.length > 0
                     #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
                         if client_application.agreement_type == external_application.agreement_type
                             #logger.debug("client_application #{client_application.inspect}")
                               #logger.debug("external_application #{external_application.inspect}")
                              if client_application.client_agreement.url.nil? && external_application.client_agreement.url.nil?
-                                send_task(result["p_id"], task,external_application_id,existing_status)
+                                send_task(new_patient.id.to_s, task,external_application_id, existing_status)
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
@@ -117,19 +117,19 @@ module Api
                             SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                         end 
                 else 
-                    send_task(result["p_id"], task,external_application_id,existing_status)
+                    send_task(new_patient.id.to_s, task,external_application_id, existing_status)
                 end 
 
         else
           logger.debug("the patient IS ALREADY PRESENT************* #{patient.inspect} ******** #{task.inspect}")
 
-                if patient.security_keys.length > 0 || task.security_keys.length > 0
+                if patient.security_keys.length > 0  || task.security_keys.length > 0 
                     #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
                         if client_application.agreement_type == external_application.agreement_type
                             #logger.debug("client_application #{client_application.inspect}")
                               #logger.debug("external_application #{external_application.inspect}")
                              if client_application.client_agreement.url.nil? && external_application.client_agreement.url.nil?
-                                send_task(result["p_id"], task,external_application_id,existing_status)
+                                send_task(patient_check.id.to_s, task,external_application_id, existing_status) 
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
@@ -139,7 +139,9 @@ module Api
                             SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                         end 
                 else 
-                    send_task(result["p_id"], task,external_application_id,existing_status)
+                    logger.debug("NIL NIL NIL NIL NIL NIL NIL")
+ 
+                    send_task(patient_check.id.to_s, task,external_application_id, existing_status) 
                 end 
 
         end
@@ -207,6 +209,7 @@ module Api
           t.task_description = task.task_description
           t.additional_fields = task.additional_fields
           t.task_referred_from = ledg_stat.referred_by_id
+          t.security_keys = helpers.security_keys_for_patients(t)
           if t.save
             ledg_stat.ledger_status = "Accepted"
             ledg_stat.external_object_id = t.id.to_s

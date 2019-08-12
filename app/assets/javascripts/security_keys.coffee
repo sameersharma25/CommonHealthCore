@@ -10,10 +10,8 @@
   		console.log("ket name",keyName)
   		keyValues = []
   		theDiv.each (x) ->
-  			console.log("alive", theDiv[x])
   			if theDiv[x].checked == true
   				keyValues.push(theDiv[x].id)
-  		console.log("my array",keyValues)
   		$.post "/security_keys",
 	      key_name: keyName,
 	      key_value: keyValues,
@@ -42,7 +40,6 @@
   		console.log("ket name",keyName)
   		keyValues = []
   		theDiv.each (x) ->
-  			console.log("alive", theDiv[x])
   			if theDiv[x].checked == true
   				keyValues.push(theDiv[x].id)
   		console.log("my array",keyValues)

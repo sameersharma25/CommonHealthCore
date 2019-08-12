@@ -32,6 +32,7 @@ module PatientsHelper
 			else 
 			end 
 		end
+		logger.debug("THE KEYS BEING ADDED ARE::: #{security_keys}")
 		return security_keys
 	end #end def 
 

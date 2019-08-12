@@ -3,7 +3,6 @@ class SecurityKeysController < ApplicationController
 
 	def index 
 		@user = current_user
-
 		@pii = PiiTable.all 
 		@phi = PhiTable.all
 		@sad = SadTable.all
@@ -12,30 +11,30 @@ class SecurityKeysController < ApplicationController
 	end 
 
 	def create
+		@user = current_user
 		@pii = PiiTable.all 
 		@phi = PhiTable.all
 		@sad = SadTable.all
+		@patient = Patient.attribute_names
+		@task = Task.attribute_names
 
 		case params['key_type'] 
 			when 'pii'
 				pii = PiiTable.new 
-				pii.pii_key = params['key_name']
+				pii.pii_key = 'pii_' + params['key_name']
 				pii.pii_value = params['key_value']
 				pii.save
 			when 'phi'
 				phi = PhiTable.new
-				phi.phi_key = params['key_name']
+				phi.phi_key = 'phi_' + params['key_name']
 				phi.phi_value = params['key_value']
 				phi.save
 			when 'sad'
 				sad = SadTable.new 
-				sad.sad_key = params['key_name']
+				sad.sad_key = 'sad_' + params['key_name']
 				sad.sad_value = params['key_value']
 				sad.save
 		end 
-
-			
-		#pass params key, values and what table. Create
 	end  
 
 	def update
@@ -55,6 +54,7 @@ class SecurityKeysController < ApplicationController
 	end 
 
 	def delete
+		@user = current_user
 		@pii = PiiTable.all 
 		@phi = PhiTable.all
 		@sad = SadTable.all
