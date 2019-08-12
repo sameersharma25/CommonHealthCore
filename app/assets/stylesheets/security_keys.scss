@@ -4,4 +4,23 @@
 
 .labelSpace{
 	padding-left: 1em;
+	padding-right: 0.5em;
 }
+
+.all_ability_list{
+
+  height: 300px;
+  //border: 1px solid #c3c3c3;
+  margin: 0 auto;
+  background-color:#eaf6f9;
+  overflow: auto;
+}
+
+
+.key_checkbox{
+	width: 30%;
+	height: 25px;
+	display: inline-flex;
+}
+
+
