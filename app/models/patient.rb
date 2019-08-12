@@ -4,6 +4,8 @@ class Patient
   include Geocoder::Model::Mongoid
   # include Geocoder::Model::MongoMapper
 
+  # json {firstName: first_name, lastNname: last_name}
+
   field :first_name, type: String
   field :last_name, type: String
   field :date_of_birth, type: String
@@ -14,16 +16,20 @@ class Patient
   field :patient_address, type: String
   field :mode_of_contact, type: String
   field :patient_zipcode, type: String
+  field :patient_state, type: String
   field :patient_status, type: String
   field :gender, type: String
   field :race, type: String
   field :ethnicity, type: String
   field :security_keys, type: Array, default: []
+  field :through_call, type: Boolean
+  field :caller_additional_fields, type: Hash
 
   belongs_to :client_application
   has_many :appointments
   has_many :referrals
   has_many :notes
+  has_many :needs
   geocoded_by :patient_zipcode
 
   def self.update_patient_status

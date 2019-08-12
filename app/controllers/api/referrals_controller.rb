@@ -36,10 +36,19 @@ module Api
           task.task_description = t[:task_description]
           task.patient_document = params[:patient_document] if params[:patient_document]
           task.referral_id = referral.id.to_s
-
           task.security_keys = helpers.security_keys_for_patients(patient)
-
-          task.save
+          if task.save
+            create_ledger_master_and_status(task)
+            # lm = LedgerMaster.new
+            # lm.task_id = task.id.to_s
+            # # lm.patient_id = patient_id
+            # if lm.save
+            #   led_stat = LedgerStatus.new
+            #   led_stat.ledger_master_id = lm.id.to_s
+            #   led_stat.ledger_status = "Accepted"
+            #   led_stat.save
+            # end
+          end
         end
 
         # if task.save
@@ -47,6 +56,19 @@ module Api
         # else
         #   render :json=> {status: :ok, message: "Referral and Task not Created"}
         # end
+      end
+    end
+
+
+    def create_ledger_master_and_status(task)
+      lm = LedgerMaster.new
+      lm.task_id = task.id.to_s
+      # lm.patient_id = patient_id
+      if lm.save
+        led_stat = LedgerStatus.new
+        led_stat.ledger_master_id = lm.id.to_s
+        led_stat.ledger_status = "Accepted"
+        led_stat.save
       end
     end
 
@@ -140,11 +162,16 @@ module Api
       task.task_description = params[:task_description] if params[:task_description]
       task.additional_fields = params[:additional_fields] if params[:additional_fields]
       if task.save
-        lm = LedgerMaster.new
-        lm.task_id = task.id.to_s
-        # lm.patient_id = patient_id
-        lm.save
-
+        create_ledger_master_and_status(task)
+        # lm = LedgerMaster.new
+        # lm.task_id = task.id.to_s
+        # # lm.patient_id = patient_id
+        # if lm.save
+        #   led_stat = LedgerStatus.new
+        #   led_stat.ledger_master_id = lm.id.to_s
+        #   led_stat.ledger_status = "Accepted"
+        #   led_stat.save
+        # end
         render :json=> {status: :ok, message: "Task Created"}
       end
 
@@ -192,6 +219,9 @@ module Api
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
       task.task_description = params[:task_description] if params[:task_description]
       task.patient_document = params[:patient_document] if params[:patient_document]
+      #Create Ledger Record
+      #new_ledger = LedgerRecord.new
+
 
       task.security_keys = []
       task.security_keys = helpers.security_keys_for_referrals(task)
@@ -237,12 +267,13 @@ module Api
       new_referral_array = Array.new
       active_referral_array = Array.new
       pending_referral_array = Array.new
-      task_type_collection_array = Array.new
+      # task_type_collection_array = Array.new
       active_referral_time_array = Array.new
       pending_referral_time_array = Array.new
       new_referral_time_array = Array.new
 
       referrals.each do |r|
+        task_type_collection_array = Array.new
         r.tasks.each do |t|
           if t.task_deadline == Date.today
             ref_id = r.id.to_s

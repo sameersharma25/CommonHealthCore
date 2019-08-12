@@ -1,0 +1,33 @@
+<h3><%= "Step #{@current_step} of #{@total_steps - 1}" %></h3>
+<h1>Agreement Template Questionnaire</h1>
+
+<%= form_for @question_response , url: after_signup_path(id: "agreement_template"), method: :PUT , :remote => true do |f| %>
+
+
+    <%@questions.each do |q|%>
+        <div class="field">
+          <%= label_tag q.question %><br>
+          <%#= f.radio_button("question_response", "question_response", "yes") %>
+          <%= radio_button_tag q.question.parameterize.underscore, 'yes'%>
+          <%= label_tag "Yes"%>
+          <%= radio_button_tag q.question.parameterize.underscore, 'no'%>
+          <%= label_tag "No"%>
+          <%#= f.radio_button("question_response", "question_response", "no") %>
+
+        </div><br>
+    <%end%>
+    <%= hidden_field_tag :client_application_id, @customer_id%>
+    <div class="actions">
+      <%= f.submit "Submit" %>
+    </div>
+
+<% end %>
+
+<div id="agreement_template" class="">
+
+</div>
+
+<div class="" id="my_centered_buttons">
+  <%= link_to 'Previous', previous_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
+  <%= link_to 'Next',next_wizard_path,type: "button" ,class: "btn btn-primary wizard_next_button" %>
+</div>

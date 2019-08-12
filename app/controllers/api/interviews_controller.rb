@@ -17,6 +17,7 @@ module Api
       patient.last_name = params[:caller_last_name] if params[:caller_last_name]
       patient.date_of_birth = params[:caller_dob] if params[:caller_dob]
       patient.client_application_id = client_application.id.to_s
+      patient.through_call = true
       if patient.save
         referral = Referral.new
         referral.referral_name = "Interview Call"
@@ -40,16 +41,27 @@ module Api
 
     def update_interview
 
-      call = Interview.find(params[:interview_id])
-      call.caller_last_name = params[:caller_last_name] if params[:caller_last_name]
-      call.caller_dob = params[:caller_dob] if params[:caller_dob]
-      call.caller_address = params[:caller_address] if params[:caller_address]
-      call.caller_zipcode = params[:caller_zipcode] if params[:caller_zipcode]
-      call.caller_state = params[:caller_state] if params[:caller_state]
-      add_fields = params["caller_additional_fields"]
-      logger.debug("the ADDITIONAL FIELDS ARE: #{add_fields}******************")
-      call.caller_additional_fields = params["caller_additional_fields"].to_unsafe_h if params[:caller_additional_fields]
-      call.save
+      patient = Patient.find(params[:interview_id])
+      patient.first_name = params[:caller_first_name] if params[:caller_first_name]
+      patient.last_name = params[:caller_last_name] if params[:caller_last_name]
+      patient.date_of_birth = params[:caller_dob] if params[:caller_dob]
+      patient.patient_address = params[:caller_address] if params[:caller_address]
+      patient.patient_zipcode = params[:caller_zipcode] if params[:caller_zipcode]
+      patient.patient_state = params[:caller_state] if params[:caller_state]
+      patient.caller_additional_fields = params["caller_additional_fields"].to_unsafe_h if params[:caller_additional_fields]
+      patient.save
+      # call = Interview.find(params[:interview_id])
+      # call.caller_last_name = params[:caller_last_name] if params[:caller_last_name]
+      # call.caller_dob = params[:caller_dob] if params[:caller_dob]
+      # call.caller_address = params[:caller_address] if params[:caller_address]
+      # call.caller_zipcode = params[:caller_zipcode] if params[:caller_zipcode]
+      # call.caller_state = params[:caller_state] if params[:caller_state]
+
+
+      # add_fields = params["caller_additional_fields"]
+      # logger.debug("the ADDITIONAL FIELDS ARE: #{add_fields}******************")
+      # call.caller_additional_fields = params["caller_additional_fields"].to_unsafe_h if params[:caller_additional_fields]
+      # call.save
 
       render :json => {status: :ok}
     end
@@ -57,7 +69,7 @@ module Api
     def new_need
       new_need = Need.new
       new_need.need_title = params[:need_title]
-      new_need.interview_id = params[:interview_id]
+      new_need.patient_id = params[:interview_id]
       new_need.need_description = params[:need_description] if params[:need_description]
       new_need.save
 
@@ -126,17 +138,18 @@ module Api
 
     def interview_list
       client_application_id = User.find_by(email: params[:email]).client_application_id
-      client_interviews = Interview.where(client_application_id: client_application_id)
+      client_interviews = Patient.where(client_application_id: client_application_id, through_call: true )
       interview_list_array = []
       client_interviews.each do |ci|
-        interview_id = ci.id.to_s
-        caller_first_name = ci.caller_first_name
+        patient_id = ci.id.to_s
+        caller_first_name = ci.first_name
+        int_created_at = ci.created_at
         need_title = ci.needs.first.need_title if ci.needs.first
         obstacle_title = ci.needs.first.obstacles.first.obstacle_title if (ci.needs.first && ci.needs.first.obstacles.first)
-        interview_hash = {interview_id: interview_id, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
+        interview_hash = {interview_id: patient_id ,created_at: int_created_at, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
         interview_list_array.push(interview_hash)
       end
-      interview_list = interview_list_array.order(caller_first_name: :asc)
+      interview_list = interview_list_array#.order(caller_first_name: :asc)
       render :json => {status: :ok, interview_list: interview_list}
     end
 
@@ -173,7 +186,8 @@ module Api
 
 
     def interview_details
-      interview = Interview.find(params[:interview_id])
+      # interview = Interview.find(params[:interview_id])
+      interview = Patient.find(params[:interview_id])
       # need = interview.needs.first
       # obstacle = need.obstacles.first if (need && need.obstacles)
 
@@ -232,9 +246,9 @@ module Api
 
 
 
-      interview_hash = {caller_first_name: interview.caller_first_name, caller_last_name: interview.caller_last_name,
-                        caller_dob: interview.caller_dob, caller_address: interview.caller_address,
-                        caller_zipcode: interview.caller_zipcode, caller_state: interview.caller_state,
+      interview_hash = {caller_first_name: interview.first_name, caller_last_name: interview.last_name,
+                        caller_dob: interview.date_of_birth, caller_address: interview.patient_address,
+                        caller_zipcode: interview.patient_zipcode, caller_state: interview.patient_state,
                         caller_additional_fields: interview.caller_additional_fields}
 
       # need_hash = {need_title: need.need_title, need_description: need.need_description, need_note: need.need_notes,
