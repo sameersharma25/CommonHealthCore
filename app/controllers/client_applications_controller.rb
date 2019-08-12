@@ -10,8 +10,8 @@ class ClientApplicationsController < ApplicationController
     @client_application = current_user.client_application
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
-    # @referred_applications = LedgerStatus.where(referred_application_id: @client_application.id.to_s)
-    @referred_applications = LedgerStatus.all
+    @referred_applications = LedgerStatus.where(referred_application_id: @client_application.id.to_s)
+    # @referred_applications = LedgerStatus.all
 
     logger.debug("the session count is *********************: #{user.sign_in_count}, LEDGER STATIS : #{@referred_applications.entries}")
     logger.debug("the params are *********************: #{params.inspect}")

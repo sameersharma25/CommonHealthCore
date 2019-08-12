@@ -114,6 +114,26 @@ module Api
 
     end
 
+    def med_patient
+      med_arry = []
+      patient = Patient.find(params[:patient_id])
+      patient.referrals.each do |rfl|
+        rfl.tasks.each do |tsk|
+          if tsk.medical_case == true
+            med_arry.push("true")
+          end
+        end
+      end
+
+      if med_arry.include?("true")
+        response = true
+      else
+        response = false
+      end
+
+      render :json => {status: :ok, response: response}
+    end
+
 
   end
 end
