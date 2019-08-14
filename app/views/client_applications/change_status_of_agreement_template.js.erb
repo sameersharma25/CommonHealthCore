@@ -1,1 +1,2 @@
-$('#'+<%=@agt_type%>).html("<%= j render(:partial => "agreement_management", locals: {agreements: @agreement}) %>")
+
+$("#<%=@agt_type%>").html("<%= j render(:partial => "agreement_management", locals: {agreements: @agreement}) %>")
