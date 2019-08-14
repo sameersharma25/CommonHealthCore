@@ -36,7 +36,7 @@ module Api
           task.task_description = t[:task_description]
           task.patient_document = params[:patient_document] if params[:patient_document]
           task.referral_id = referral.id.to_s
-          task.security_keys = helpers.security_keys_for_patients(patient)
+          task.security_keys = helpers.security_keys_for_patients(task)
           if task.save
             create_ledger_master_and_status(task)
             # lm = LedgerMaster.new
