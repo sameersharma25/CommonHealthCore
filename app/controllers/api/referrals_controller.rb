@@ -36,7 +36,7 @@ module Api
           task.task_description = t[:task_description]
           task.patient_document = params[:patient_document] if params[:patient_document]
           task.referral_id = referral.id.to_s
-          task.security_keys = helpers.security_keys_for_patients(task)
+          task.security_keys = helpers.security_keys_for_task(task, patient)
           if task.save
             create_ledger_master_and_status(task)
             # lm = LedgerMaster.new
@@ -156,7 +156,7 @@ module Api
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
       task.patient_document = params[:patient_document] if params[:patient_document]
       
-      task.security_keys = helpers.security_keys_for_patients(task)
+      task.security_keys = helpers.security_keys_for_task(task, referral.patient)
       #task.task_deadline = params[:task_deadline].to_datetime.strftime('%m/%d/%Y') if params[:task_deadline]
 
       task.task_description = params[:task_description] if params[:task_description]
@@ -212,6 +212,7 @@ module Api
 
     def update_task
       task = Task.find(params[:task_id])
+      patient = Task.find(params[:task_id]).referral.patient
       task.task_type = params[:task_type] if params[:task_type]
       task.task_status = params[:task_status] if params[:task_status]
       task.task_owner = params[:task_owner] if params[:task_owner]
@@ -224,7 +225,7 @@ module Api
 
 
       task.security_keys = []
-      task.security_keys = helpers.security_keys_for_referrals(task)
+      task.security_keys = helpers.security_keys_for_task(task, patient)
 
       if task.save
         render :json=> {status: :ok, message: "Task Updated"}

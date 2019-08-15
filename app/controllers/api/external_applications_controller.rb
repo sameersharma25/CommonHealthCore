@@ -102,7 +102,7 @@ module Api
 
           logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-                if new_patient.security_keys.length > 0 || task.security_keys.length > 0
+                if new_patient.security_keys.length > 0 || task.security_keys.length > 0 
                     #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
                         if client_application.agreement_type == external_application.agreement_type
                             #logger.debug("client_application #{client_application.inspect}")
@@ -202,6 +202,9 @@ module Api
         r = Referral.new
         r.client_application_id = ea_id
         r.patient_id = p_id
+        #need a patient !!!
+        patient = Patient.find(p_id)
+        
         r.referral_name = "Test"
         if r.save
           logger.debug("Creating TASK FOR INTERNAL APPLICATION*************************")
@@ -213,7 +216,7 @@ module Api
           t.task_description = task.task_description
           t.additional_fields = task.additional_fields
           t.task_referred_from = ledg_stat.referred_by_id
-          t.security_keys = helpers.security_keys_for_patients(t)
+          t.security_keys = helpers.security_keys_for_task(task, patient)
           if t.save
             ledg_stat.ledger_status = "Accepted"
             ledg_stat.external_object_id = t.id.to_s

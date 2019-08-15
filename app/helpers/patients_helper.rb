@@ -4,7 +4,7 @@ module PatientsHelper
 		patient_array = []
 		security_keys = []
 
-		#build an array with the value that the patient DOES have.
+
 		values.attributes.each do |k,v|
 			logger.debug("**KEY:::: #{k}, VALUE :::#{v}")
 		  if v != '' && v != nil && k != 'client_application_id' && v != 'id'
@@ -21,6 +21,7 @@ module PatientsHelper
 		###
 		PhiTable.each do |key|
 			if key['phi_value'] - patient_array == []
+				#[first_name,dob,task_description,task_status]  - [patient details and task details ]
 				security_keys.push(key['phi_key'])
 			else 
 			end 
