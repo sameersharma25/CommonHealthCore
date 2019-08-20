@@ -1,4 +1,7 @@
 <p id="notice"><%= notice %></p>
+
+
+
 <% if @client_application.users.count == 0 %>
     <div style="color: red"><%= link_to "You donn't have any users. Please click here to create users", new_user_path%></div>
 <%end%>
@@ -178,6 +181,9 @@
 <%= link_to "Application Details", "/all_details"%><br>
 
 <%= link_to "Add User", new_user_path%><br>
+
+<%= link_to "Change your password", edit_user_registration_path %><br>
+<%= link_to "Reset User password", reset_password_path %><br>
 
 <% if @client_application.external_application == false || @client_application.external_application.nil? %>
   <%= link_to "Create Notification Rule", notification_rules_path%><br>
