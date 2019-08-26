@@ -1,0 +1,14 @@
+
+var stepOne = $("#step-1");
+var stepTwo = $("#step-2");
+
+stepOne.addClass("hidden");
+stepTwo.removeClass("hidden");
+
+var email = stepOne.find("#user_email").val();
+stepTwo.find("#user_email").val(email);
+stepTwo.find("#user_password").focus();
+
+<% if @two_factor_enabled %>
+  $("#step-2-otp").removeClass("hidden");
+<% end %>
