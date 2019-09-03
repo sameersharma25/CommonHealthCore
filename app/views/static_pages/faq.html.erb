@@ -1,0 +1,12 @@
+<h1>FAQ</h1> 
+ 
+<div>
+	<% @faq.each do |x| %>
+	<strong>Question:</strong>
+	<%= x.question %><br/>
+
+	<strong>Answer:</strong>
+	<%= raw(x.answer) %><br/>
+
+	<% end %>
+</div>

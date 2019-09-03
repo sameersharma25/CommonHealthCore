@@ -18,6 +18,11 @@
       <%= f.text_field :application_url, id: :application_url %>
     </div>
 
+    <div class="field">
+      <%= f.label :logo %><br>
+      <%= f.file_field :logo %>
+    </div>
+
     <h3>Users</h3>
     <div id='users'>
       <%= f.fields_for :users do |user| %>
@@ -30,4 +35,4 @@
 
     <%= f.submit 'Save' %>
 
-<% end %>
+<% end %> 

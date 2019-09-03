@@ -1,0 +1,21 @@
+<%= form_with(model: about_u, local: true) do |form| %>
+  <% if about_u.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(about_u.errors.count, "error") %> prohibited this about_u from being saved:</h2>
+
+      <ul>
+      <% about_u.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-sm-8">
+    <%= cktext_area_tag 'body', @about_u.body, ckeditor: {toolbar: 'full'} %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :terms_privacies
+  resources :about_us
+  resources :faqs
   resources :show_templates
   resources :baa_language_segments
   resources :questions
@@ -19,8 +22,12 @@ Rails.application.routes.draw do
   resources :patients
   resources :registration_requests
   resources :client_applications
+    mount Ckeditor::Engine => '/ckeditor'
   resources :after_signup
   resources :after_signup_external
+  resource :two_factor
+  
+
   # resources :users
   # get 'users/index'
   #
@@ -30,10 +37,18 @@ Rails.application.routes.draw do
   # get 'users/create'
   # get 'user/show'
 
-  devise_for :users, :controllers =>{invitations: 'invitations'}
-      # devise_for :users, controllers: { registrations: 'registrations'}
-  root "client_applications#index"
+  #devise_for :users, :controllers =>{invitations: 'invitations'}
+  # devise_for :users, controllers: { registrations: 'registrations'}
 
+
+  devise_for :users, :controllers =>{invitations: 'invitations', sessions: "users/sessions"}
+      devise_scope :user do 
+        scope :users, as: :users do 
+          post 'pre_otp', to: 'users/sessions#pre_otp' 
+        end 
+      end 
+  
+  root "client_applications#index"
 
   get "edit" => "users#edit", as: :user_edit
   get "show" => "users#show", as: :user_show
@@ -73,6 +88,9 @@ Rails.application.routes.draw do
   post "reject_catalog", to: "client_applications#reject_catalog"
   post "delete_catalog", to: "client_applications#delete_catalog"
   post "approve_catalog", to: "client_applications#approve_catalog"
+
+  get "about_us_page", to: "static_pages#about"
+  get "faq_page", to: "static_pages#faq"
   ### End mason
 
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"
@@ -130,7 +148,8 @@ Rails.application.routes.draw do
     post "med_patient", to: "patients#med_patient"
 
     post 'update_notifications', to: "users#update_notifications"
-    resource :sessions, only: [:create, :destroy]
+    resource :sessions, only: [:create, :destroy, :verify]
+    post 'verify', to: "sessions#verify"
     resource :invitations, only: [:update]
     post 'user_accept_invitation', to: "users#set_password"
     post "password", to: "invitations#password"

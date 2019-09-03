@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   include CanCan::ControllerAdditions
   rescue_from CanCan::AccessDenied do |exception|
@@ -15,7 +16,7 @@ class ApplicationController < ActionController::Base
   #   end
   # end
 
-  private
+  #private
 
   # def token
   #   value = request.headers["Authorization"]

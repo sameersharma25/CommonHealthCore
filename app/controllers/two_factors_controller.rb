@@ -13,6 +13,6 @@ class TwoFactorsController < ApplicationController
 	def destroy
 		current_user.update(
 			otp_required_for_login: false
-			)
+		)
 	end 
 end

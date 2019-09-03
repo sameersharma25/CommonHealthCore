@@ -181,9 +181,10 @@
 <%= link_to "Application Details", "/all_details"%><br>
 
 <%= link_to "Add User", new_user_path%><br>
-
 <%= link_to "Change your password", edit_user_registration_path %><br>
-<%= link_to "Reset User password", reset_password_path %><br>
+<%= link_to "About_Us", about_us_page_path %><br>
+<%= link_to "FAQ", faq_page_path %><br>
+
 
 <% if @client_application.external_application == false || @client_application.external_application.nil? %>
   <%= link_to "Create Notification Rule", notification_rules_path%><br>
@@ -196,6 +197,8 @@
   <%= link_to "Master Providers", master_provider_path %><br>
   <%= link_to "Security Keys", security_keys_path %><br>
   <%= link_to "Agreement Managemet", agreement_management_path %><br>
+  <%= link_to "Edit About Us ", about_us_path %><br>
+  <%= link_to "Edit FAQ", faqs_path %><br>
 
 <%end%>
 

@@ -21,6 +21,11 @@
     <%= form.text_field :application_url, id: :application_url %>
   </div>
 
+  <div class="field">
+    <%= form.label :logo %><br>
+    <%= form.file_field :logo %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

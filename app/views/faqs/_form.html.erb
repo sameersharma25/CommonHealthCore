@@ -1,0 +1,26 @@
+<%= form_with(model: faq, local: true) do |form| %>
+  <% if faq.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(faq.errors.count, "error") %> prohibited this faq from being saved:</h2>
+
+      <ul>
+      <% faq.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class ="form-control">
+    <%= form.label :question %>
+    <%= form.text_field :question %><br/>
+  </div>
+
+    <div class="col-sm-8">
+    <%= cktext_area_tag 'answer', @faq.answer, ckeditor: {toolbar: 'full'} %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -12,7 +12,9 @@ class ClientApplication
   field :organization_group, type: String
   field :agreement_signed, type: Boolean, default: false
   field :agreement_type, type: String
+  field :logo, type: String 
 
+  mount_uploader :logo, LogoUploader
   mount_uploader :client_agreement , ClientAgreementUploader
 
   # validates_presence_of :name, :application_url

@@ -49,6 +49,8 @@ class ClientApplicationsController < ApplicationController
   # POST /client_applications
   # POST /client_applications.json
   def create
+    @client_application.logo = params['client_application']['logo']
+    @client_application.save
     logger.debug("************THE PARAMETERS IN create Client Applicaiton ARE: #{params.inspect}")
     @client_application = ClientApplication.new(client_application_params)
     respond_to do |format|
@@ -79,6 +81,8 @@ class ClientApplicationsController < ApplicationController
   # PATCH/PUT /client_applications/1
   # PATCH/PUT /client_applications/1.json
   def update
+    @client_application.logo = params['client_application']['logo']
+    @client_application.save
     respond_to do |format|
       if @client_application.update(client_application_params)
         logger.debug("IN THE APPLICATION UPDATE*************************")
