@@ -140,6 +140,12 @@ Rails.application.routes.draw do
     post 'patient_details', to: "users#patient_details"
     post 'patient_appointments', to: "users#patient_appointments"
 
+    post 'get_faq', to: "users#get_faq"
+    post 'get_about_us', to: "users#get_about_us"
+    post 'get_terms', to: "users#get_terms"
+    post 'get_logo', to: "users#get_logo"
+
+
     post 'update_patient', to: "patients#update_patient"
     post 'create_patient', to: "patients#create_patient"
     post 'crete_appointment_for_patient', to: "patients#crete_appointment_for_patient"
