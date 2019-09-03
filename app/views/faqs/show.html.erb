@@ -1,0 +1,8 @@
+<p id="notice"><%= notice %></p>
+<p>question</p>
+<%= @faq.question %>
+<p> Answer </p>
+<%= cktext_area_tag 'answer', @faq.answer, ckeditor: {toolbar: 'mini'}, readOnly: true %>
+
+<%= link_to 'Edit', edit_faq_path(@faq) %> |
+<%= link_to 'Back', faqs_path %>

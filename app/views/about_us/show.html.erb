@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+
+
+<div>
+	<%= cktext_area_tag 'body', @about_u.body, ckeditor: {toolbar: 'full'}, readOnly: true  %>
+</div>
+
+
+<%= link_to 'Edit', edit_about_u_path(@about_u) %> |
+<%= link_to 'Back', about_us_path %>
