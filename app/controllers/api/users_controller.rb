@@ -42,7 +42,10 @@ module Api
       if user&.valid_password?(params[:password])
         user.password = params['new_password']
         user.save! 
+        if user.save
+            render :json =>{status: :ok, message: "Password Updated"}
       end 
+
     end 
 
     def get_theme
