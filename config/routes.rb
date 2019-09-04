@@ -144,6 +144,9 @@ Rails.application.routes.draw do
     post 'get_about_us', to: "users#get_about_us"
     post 'get_terms', to: "users#get_terms"
     post 'get_logo', to: "users#get_logo"
+    post 'change_user_password', to: 'users#change_user_password'
+    post 'get_theme', to: 'users#get_theme'
+    post 'set_theme', to: 'users#set_theme'
 
 
     post 'update_patient', to: "patients#update_patient"

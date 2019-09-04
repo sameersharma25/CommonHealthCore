@@ -1,0 +1,21 @@
+<%= form_with(model: terms_privacy, local: true) do |form| %>
+  <% if terms_privacy.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(terms_privacy.errors.count, "error") %> prohibited this terms_privacy from being saved:</h2>
+
+      <ul>
+      <% terms_privacy.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-sm-8">
+    <%= cktext_area_tag 'body', @terms_privacy.body, ckeditor: {toolbar: 'full'} %>
+  </div>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+ 

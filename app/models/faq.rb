@@ -3,5 +3,6 @@ class Faq
   
   field :question, type: String
   field :answer, type: String
+  belongs_to :client_application
 
 end
