@@ -24,13 +24,10 @@ class FaqsController < ApplicationController
   # POST /faqs
   # POST /faqs.json
   def create
-    logger.debug("am i getting #{faq_params}")
-    logger.debug("Question/answer #{params['answer']}")
     @faq = Faq.new
       @faq.question = faq_params['question']
       @faq.answer = params['answer']
-      @faq.save 
-
+      @faq.client_application_id = current_user.client_application.id
     respond_to do |format|
       if @faq.save
         format.html { redirect_to @faq, notice: 'Faq was successfully created.' }

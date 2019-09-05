@@ -44,8 +44,8 @@ module Api
         user.save! 
         if user.save
             render :json =>{status: :ok, message: "Password Updated"}
+        end 
       end 
-
     end 
 
     def get_theme
@@ -426,19 +426,29 @@ module Api
     end
 
     def get_faq
-      @faqs = Faq.all
+      
+      user = User.find_by(email: params['email'])
+      cc_id = user.client_application_id
+      @faqs = Faq.where(client_application_id: cc_id).entries
+
       render :json => { status: :ok, faqs: @faqs}
     end 
 
     def get_about_us
-      @about_us = AboutU.all
-      render json: @about_us
+      
+      user = User.find_by(email: params['email'])
+      cc_id = user.client_application_id
+
+      @about_us = AboutU.where(client_application_id: cc_id).entries
+
       render :json => { status: :ok, about_us: @about_us}
     end 
 
     def get_terms
-      @terms = TermsPrivacy.all 
-
+      
+      user = User.find_by(email: params['email'])
+      cc_id = user.client_application_id
+      @terms = TermsPrivacy.where(client_application_id: cc_id).entries
        render :json => { status: :ok, terms: @terms}
 
     end 

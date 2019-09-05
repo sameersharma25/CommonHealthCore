@@ -9,13 +9,15 @@
       <% end %>
       </ul>
     </div>
-  <% end %>
+  <% end %> 
 
   <div class="col-sm-8">
+    <%= form.text_field :body, hidden: true %>
     <%= cktext_area_tag 'body', @terms_privacy.body, ckeditor: {toolbar: 'full'} %>
   </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>
-<% end %>
+<% end %> 
  

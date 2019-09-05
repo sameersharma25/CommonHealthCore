@@ -2,8 +2,17 @@
 
 <%#= render 'form', client_application: @client_application %>
 
-<%#= link_to 'Show', @client_application %> |
+<%#= link_to 'Show', @client_application %> 
 <%#= link_to 'Back', client_applications_path %>
+
+
+<ul>  
+    <li style="display: inline;"><%= image_tag @client_application.logo.thumb.url %></li>
+    <li style="display: inline;"><%= link_to "Edit About Us ", about_us_path %></li>
+    <li style="display: inline;"><%= link_to "Edit FAQ", faqs_path %></li>
+    <li style="display: inline;"><%= link_to "Edit Terms & Privacy", terms_privacies_path %></li>
+</ul>
+
 
 <%= form_for @client_application do |f| %>
 
