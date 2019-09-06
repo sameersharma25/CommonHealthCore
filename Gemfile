@@ -70,6 +70,9 @@ gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem 'mini_magick', :git => 'git://github.com/probablycorey/mini_magick.git'
 gem "fog-aws"
 gem "recaptcha", '3.4.0', require: "recaptcha/rails"
+gem 'ckeditor', github: 'galetahub/ckeditor'
+gem 'devise-two-factor'
+gem 'rqrcode', '~> 0.10.1'
 # gem 'fog'
 
 group :development, :test do
@@ -81,6 +84,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'rb-readline' 
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'

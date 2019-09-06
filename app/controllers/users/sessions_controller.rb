@@ -6,15 +6,9 @@ class Users::SessionsController < Devise::SessionsController
     @two_factor_enabled = user && user.otp_required_for_login
     #user.otp_secret = User.generate_otp_secret
     #user.save!
-    dundun = user.current_otp
-
-    logger.debug("LETS GO #{dundun}")
-
     respond_to do |format|
       format.js
-      logger.debug("Look here #{dundun}")
     end
-    
 
   end
 

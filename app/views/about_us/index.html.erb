@@ -2,16 +2,20 @@
 
 <h1>About Us</h1>
 
-<table>
+
+<table class="table table-responsive table-bordered user-display">
   <thead>
     <tr>
-      <th colspan="3"></th>
-    </tr>
+      <th> Body</th>
+      <td></td>
+      <td></td>
+      <td></td>
   </thead>
 
   <tbody>
     <% @about_us.each do |about_u| %>
       <tr>
+        <td> <%= raw(about_u.body) %></td>
         <td><%= link_to 'Show', about_u %></td>
         <td><%= link_to 'Edit', edit_about_u_path(about_u) %></td>
         <td><%= link_to 'Destroy', about_u, method: :delete, data: { confirm: 'Are you sure?' } %></td>

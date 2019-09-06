@@ -27,6 +27,7 @@ class AboutUsController < ApplicationController
 
     @about_u = AboutU.new
     @about_u.body = params['body']
+    @about_u.client_application_id = current_user.client_application.id
     @about_u.save
 
     respond_to do |format|

@@ -41,7 +41,8 @@ Rails.application.routes.draw do
   # devise_for :users, controllers: { registrations: 'registrations'}
 
 
-  devise_for :users, :controllers =>{invitations: 'invitations', sessions: "users/sessions"}
+
+  devise_for :users, :controllers =>{invitations: 'invitations', sessions: 'users/sessions'}
       devise_scope :user do 
         scope :users, as: :users do 
           post 'pre_otp', to: 'users/sessions#pre_otp' 
@@ -139,6 +140,15 @@ Rails.application.routes.draw do
     post 'patients_list', to: "users#patients_list"
     post 'patient_details', to: "users#patient_details"
     post 'patient_appointments', to: "users#patient_appointments"
+
+    post 'get_faq', to: "users#get_faq"
+    post 'get_about_us', to: "users#get_about_us"
+    post 'get_terms', to: "users#get_terms"
+    post 'get_logo', to: "users#get_logo"
+    post 'change_user_password', to: 'users#change_user_password'
+    post 'get_theme', to: 'users#get_theme'
+    post 'set_theme', to: 'users#set_theme'
+
 
     post 'update_patient', to: "patients#update_patient"
     post 'create_patient', to: "patients#create_patient"

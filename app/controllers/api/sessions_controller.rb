@@ -3,24 +3,20 @@ module Api
     include UsersHelper
     before_action :authenticate_user_from_token, except: [:create, :verify]
 
-
-
     def verify
-      #user send email over from WordPress and email is verified and checked 
         my_user = User.find_by(email: params[:email])
         otp_required = my_user.otp_required_for_login
-        #my_user.otp_secret = User.generate_otp_secret
-
-        @otp_is = current_otp(my_user)
-        logger.debug("EMAIL/TEXT THIS VALUE::: #{@otp_is}")
-        #A mailer/text will need to be installed
-
+      
         if otp_required == true
           #mail/text the OTP
+          @otp_is = current_otp(my_user)
+          logger.debug("EMAIL/TEXT THIS VALUE::: #{@otp_is}")
+          TwoFactorMailer.sendOTP(@otp_is, my_user.email).deliver
+          render :json => {staus: :ok, two_factor_enabled: otp_required, message: 'Please check your email for your one time password.' }
         else
-          #don't mail 
+          render :json => {status: :ok, two_factor_enabled: otp_required} 
         end 
-        render :json => { two_factor_enabled: otp_required }
+
     end 
 
     def create 
@@ -30,8 +26,6 @@ module Api
       user = User.find_by(email: params[:email])
       client_url = user.client_application.application_url
       otp_required = user.otp_required_for_login
-
-
       if otp_required == true # check the otp_attemp
 
           if params[:otp_attempt] == current_otp(user)
