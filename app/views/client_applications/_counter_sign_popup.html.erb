@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal">x</button>
+  <h4 class="modal-title" id="myModalLabel">Counter Sign For <%= @customer.name%></h4>
+</div>
+<div class="modal-body">
+  <%= form_for @customer, url: upload_countersign_doc_path, method: :post,:html => { :multipart => true } do |f| %>
+
+      <div class="field">
+        <%= f.file_field :client_agreement%>
+      </div>
+      <div class="field">
+        <%= f.hidden_field :id,:value => @customer.id.to_s, readonly: true%>
+      </div>
+
+      <div>
+        <%= f.submit 'Save' %>
+      </div>
+
+  <%end%>
+</div>

@@ -123,3 +123,21 @@ jQuery ($) ->
     return
 
   )
+  # AgreementTemplateShowReasonForReject
+  $(document).on("click", ".reject_agreement", ->
+    row_id = $(this).attr("id")
+    console.log("the row id is:", row_id)
+    $(".reason_for_reject_"+row_id).removeClass("hide")
+  )
+
+  $(document).on("click",".submit_reason_for_agreement_reject", ->
+    id = $(this).attr("id")
+    text = $(".reason_for_agreement_reject_"+id).val()
+    cus_id = $(".reason_for_agreement_reject_"+id).attr("id")
+    console.log("the text is: ", text)
+    $.post "/reject_agreement_template",
+      reason_for_reject: text,
+      cus_id: cus_id
+    return
+
+  )

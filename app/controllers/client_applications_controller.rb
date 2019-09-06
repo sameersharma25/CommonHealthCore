@@ -111,9 +111,13 @@ class ClientApplicationsController < ApplicationController
   def save_all_details
 
     @client_application = current_user.client_application
+    if params[:client_application][:client_agreement].present?
+      logger.debug("IN the counter sign if statement**************************")
+      @client_application.agreement_counter_sign = "Pending"
+      # @client_application.save
+    end
     @client_application.update(client_application_params)
     redirect_to root_path
-
   end
 
   def send_application_invitation
@@ -828,6 +832,34 @@ class ClientApplicationsController < ApplicationController
     # @babs = AgreementTemplate.where(agreement_type: "BA-B")
 
 
+  end
+
+  def pending_agreements
+
+    @applications = ClientApplication.where(agreement_counter_sign: "Pending")
+
+  end
+
+  def counter_sign_popup
+    @customer = ClientApplication.find(params[:id])
+
+  end
+
+  def upload_countersign_doc
+    customer = ClientApplication.find(params[:client_application][:id])
+    customer.client_agreement = params[:client_application][:client_agreement]
+    customer.agreement_counter_sign = "Done"
+    customer.save
+
+    redirect_to pending_agreements_path
+  end
+
+  def reject_agreement_template
+    customer = ClientApplication.find(params[:cus_id])
+    customer.agreement_counter_sign = "Rejected"
+    customer.reason_for_agreement_reject = params[:reason_for_reject]
+    customer.save
+    redirect_to pending_agreements_path
   end
 
   private

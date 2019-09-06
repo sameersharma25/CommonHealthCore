@@ -49,6 +49,10 @@ Rails.application.routes.draw do
   get "/contact_management_details", to: "client_applications#contact_management"
   get "/master_provider", to: "client_applications#master_provider"
   get "/plugin_page", to: "client_applications#plugin"
+  get "/pending_agreements", to: "client_applications#pending_agreements"
+  post "/counter_sign_popup", to: "client_applications#counter_sign_popup"
+  post "/upload_countersign_doc", to: "client_applications#upload_countersign_doc"
+  post "/reject_agreement_template", to: "client_applications#reject_agreement_template"
 
   post "/define_parameters", to: "client_applications#define_parameters"
   post "/external_api_setup", to: "client_applications#external_api_setup"

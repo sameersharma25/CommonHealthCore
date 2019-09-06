@@ -1,0 +1,36 @@
+<table class="table table-responsive table-bordered user-display">
+  <thead>
+  <tr>
+    <th >Name</th>
+    <th >URL</th>
+    <th ></th>
+    <th >Reason for Reject</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% i = 1%>
+  <%@applications.each do |a|%>
+      <tr>
+        <td><%= a.name%></td>
+        <td><%= link_to a.client_agreement.url.split('/')[-1], a.client_agreement.url, target: '_blank'%> </td>
+        <td><%= link_to "Upload Document", counter_sign_popup_path(id: a.id.to_s),  {:remote => true ,method: :post,'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %></td>
+        <!--<td><%#= file_field_tag :client_agreement%></td>-->
+        <td>
+          <div class="hide reason_for_reject_<%=i%>" >
+          <%= text_area_tag "reason_for_reject", nil,:class => "reason_for_agreement_reject_#{i}", :id => a.id.to_s%>
+          <%= link_to "Submit", "#", :remote => true,:class => "submit_reason_for_agreement_reject", :id => i %>
+          </div>
+        </td>
+        <td><%= link_to "Reject", "#", :class => "reject_agreement", :id => i  %></td>
+      </tr>
+    <%i+=1%>
+  <%end%>
+  </tbody>
+</table>
+
+<div id="modal-window" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>

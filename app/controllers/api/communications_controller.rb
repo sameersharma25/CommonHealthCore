@@ -166,12 +166,13 @@ module Api
       referrals = Referral.where(client_application_id: client_application.id.to_s)
 
       referrals.each do |r|
+        patint_id = r.patient.id.to_s
         r.tasks.each do |t|
           t.communications.each do |c|
             msg_id = c.id.to_s
             message = c.comm_message
             created_at = c.created_at
-            message_hash = {msg_id: msg_id, message: message, created_at: created_at}
+            message_hash = {msg_id: msg_id, message: message, created_at: created_at, task_id: t.id.to_s, patient_id: patint_id}
             message_array.push(message_hash )
           end
         end

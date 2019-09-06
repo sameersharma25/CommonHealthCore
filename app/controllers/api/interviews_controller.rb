@@ -28,6 +28,7 @@ module Api
           task = Task.new
           task.task_type = "Interview"
           task.referral_id = referral.id.to_s
+          task.security_keys = helpers.security_keys_for_task(task, patient)
           task.save
         end
 

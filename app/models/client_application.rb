@@ -11,7 +11,9 @@ class ClientApplication
   field :organization_type, type: String
   field :organization_group, type: String
   field :agreement_signed, type: Boolean, default: false
+  field :agreement_counter_sign, type: String
   field :agreement_type, type: String
+  field :reason_for_agreement_reject, type: String
 
   mount_uploader :client_agreement , ClientAgreementUploader
 
