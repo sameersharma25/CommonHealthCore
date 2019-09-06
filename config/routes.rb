@@ -92,6 +92,9 @@ Rails.application.routes.draw do
 
   get "about_us_page", to: "static_pages#about"
   get "faq_page", to: "static_pages#faq"
+
+  get "/reset_password", to: "reset_password#reset_password"
+  post "/reset_password_part_two", to: "reset_password#reset_password_part_two" 
   ### End mason
 
   post "internal_extrnal_storage", to: "service_provider_details#internal_extrnal_storage"

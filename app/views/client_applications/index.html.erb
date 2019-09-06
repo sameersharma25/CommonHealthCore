@@ -51,6 +51,7 @@
           <th>Role</th>
           <th></th>
           <th></th>
+          <th>Reset Password</th>
         </tr>
       </thead>
       <tbody>
@@ -77,6 +78,7 @@
               <td><%=  roles_array.join(', ') %></td>
               <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
               <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
+               <td><%= link_to 'Reset Password', reset_password_part_two_path(:email => u.email), method: :post, data: {confirm: 'Are you sure?'} %></td>
             </tr>
         <% end %>
       </tbody>
