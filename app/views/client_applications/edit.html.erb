@@ -1,47 +1,67 @@
-<h1>Editing Client Application</h1>
 
+<h1>Editing Client Application</h1>
 <%#= render 'form', client_application: @client_application %>
 
 <%#= link_to 'Show', @client_application %> 
 <%#= link_to 'Back', client_applications_path %>
 
 
-<ul>  
-    <li style="display: inline;"><%= image_tag @client_application.logo.thumb.url %></li>
-    <li style="display: inline;"><%= link_to "Edit About Us ", about_us_path %></li>
-    <li style="display: inline;"><%= link_to "Edit FAQ", faqs_path %></li>
-    <li style="display: inline;"><%= link_to "Edit Terms & Privacy", terms_privacies_path %></li>
-</ul>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+        <%= form_for @client_application do |f| %>
 
 
-<%= form_for @client_application do |f| %>
+            <div class="field">
+              <%= f.label :name %>
+              <%= f.text_field :name, id: :client_name %>
+            </div>
+
+            <div class="field">
+              <%= f.label :application_url %>
+              <%= f.text_field :application_url, id: :application_url %>
+            </div>
+
+            <div class="field">
+              <%= f.label :logo %> 
+              <%= image_tag("question_mark1.png", class: 'woof', size: '25x25', 'data-toggle'=>'tooltip', title: 'Supported Formats: jpg jpeg gif png & displayed as 220x80') %>
+              <span title="Lets see what happens"></span><br>
+              <%= image_tag @client_application.logo.url, class: 'client_logo', size:'220x80' %>
+              <%= f.file_field :logo %>
+            </div>
 
 
-    <div class="field">
-      <%= f.label :name %>
-      <%= f.text_field :name, id: :client_name %>
+
+            <h3>Users</h3>
+            <div class="col-md-8" id='users'>
+              <%= f.fields_for :users do |user| %>
+                  <%= render 'user_fields', :f => user %>
+              <% end %>
+                <div class='links col-md-8'>
+                  <%= link_to_add_association 'add user', f, :users %> 
+                </div>
+                <div class="col-md-8">
+                  <%= f.submit 'Save' %>
+                </div>
+            </div>
+
+
+
+
+        <% end %> 
     </div>
+  </div>
+</div>
+<br>
 
-    <div class="field">
-      <%= f.label :application_url %>
-      <%= f.text_field :application_url, id: :application_url %>
-    </div>
+      <ul style="list-style-position: inside;">  
+          <li style="display: inline-block;"><%= button_to "Edit About Us", about_us_path, method: :get, class: 'btn btn-primary ' %></li>
+          <li style="display: inline-block;"><%= button_to "Edit FAQ", faqs_path, method: :get, class: 'btn btn-primary ' %></li>
+          <li style="display: inline-block;"> <%= button_to "Edit Terms & Privacy", terms_privacies_path, method: :get, class: 'btn btn-primary ' %></li>
+      </ul>
 
-    <div class="field">
-      <%= f.label :logo %><br>
-      <%= f.file_field :logo %>
-    </div>
 
-    <h3>Users</h3>
-    <div id='users'>
-      <%= f.fields_for :users do |user| %>
-          <%= render 'user_fields', :f => user %>
-      <% end %>
-      <div class='links'>
-        <%= link_to_add_association 'add user', f, :users %>
-      </div>
-    </div>
 
-    <%= f.submit 'Save' %>
 
-<% end %> 
