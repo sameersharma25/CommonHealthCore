@@ -4,3 +4,4 @@ class AboutU
 
     belongs_to :client_application
 end 
+

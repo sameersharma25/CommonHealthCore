@@ -1,10 +1,10 @@
 class User
   include Mongoid::Document
 
+
   devise :two_factor_authenticatable, :two_factor_backupable, :otp_secret_encryption_key => Rails.application.secrets.otp_key
     # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-
 
   devise :invitable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
@@ -88,9 +88,6 @@ class User
     self[:encrypted_otp_secret_salt]
   end
 
-  def otp_code
-    puts current_otp
-  end 
   
   def otp_qr_code
     issuer = 'CommonHealthCore'

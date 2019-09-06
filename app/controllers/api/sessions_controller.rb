@@ -3,10 +3,7 @@ module Api
     include UsersHelper
     before_action :authenticate_user_from_token, except: [:create, :verify]
 
-
-
     def verify
-
         my_user = User.find_by(email: params[:email])
         otp_required = my_user.otp_required_for_login
       
@@ -19,6 +16,7 @@ module Api
         else
           render :json => {status: :ok, two_factor_enabled: otp_required} 
         end 
+
     end 
 
     def create 
@@ -28,8 +26,6 @@ module Api
       user = User.find_by(email: params[:email])
       client_url = user.client_application.application_url
       otp_required = user.otp_required_for_login
-
-
       if otp_required == true # check the otp_attemp
 
           if params[:otp_attempt] == current_otp(user)

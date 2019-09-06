@@ -28,6 +28,7 @@ class FaqsController < ApplicationController
       @faq.question = faq_params['question']
       @faq.answer = params['answer']
       @faq.client_application_id = current_user.client_application.id
+
     respond_to do |format|
       if @faq.save
         format.html { redirect_to @faq, notice: 'Faq was successfully created.' }

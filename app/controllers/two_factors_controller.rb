@@ -6,14 +6,9 @@ class TwoFactorsController < ApplicationController
 		current_user.update(
 			otp_required_for_login: true,
 			otp_secret: User.generate_otp_secret,
-			encrypted_otp_secret: User.encrypted_otp_secret,
-			encrypted_otp_secret_iv: User.encrypted_otp_secret_iv,
-			encrypted_otp_secret_salt: User.encrypted_otp_secret_salt
 		)
-
 	end 
-
-
+  
 	def destroy
 		current_user.update(
 			otp_required_for_login: false
