@@ -14,7 +14,10 @@ class ClientApplication
   field :agreement_counter_sign, type: String
   field :agreement_type, type: String
   field :reason_for_agreement_reject, type: String
+  field :logo, type: String 
+  field :theme, type: String
 
+  mount_uploader :logo, LogoUploader
   mount_uploader :client_agreement , ClientAgreementUploader
 
   # validates_presence_of :name, :application_url
@@ -30,9 +33,27 @@ class ClientApplication
   has_many :external_api_setups
   has_many :interviews
   has_many :question_responses
+  has_many :faq
+  has_many :about_u
+  has_many :terms_privacy
   # has_many :mapped_parameters
   accepts_nested_attributes_for :users, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notification_rules, reject_if: :all_blank, allow_destroy: true
 
+  THEME = {
+    'red': '#DE0903',
+    'orange': '#FE5E00',
+    'yellow': '#FFFF00',
+    'green': '#348017',
+    'blue': '#0000FF',
+    'indigo': '#4B0082',
+    'violet': '#8D38C9',
+    'black': '#000000',
+    'grey': '#666362'
+  }
+
+  def humanized_theme
+    THEME.invert[self.theme]
+  end 
 end
  

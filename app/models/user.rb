@@ -1,14 +1,29 @@
 class User
   include Mongoid::Document
-  # Include default devise modules. Others available are:
+
+
+  devise :two_factor_authenticatable, :two_factor_backupable, :otp_secret_encryption_key => Rails.application.secrets.otp_key
+    # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, :registerable,
+
+  devise :invitable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+
 
   ## Token Authenticatable
   acts_as_token_authenticatable
   field :authentication_token
 
+  #two Factor stuff 
+  field :otp_backup_codes, type: Array, default: []
+
+  field :encrypted_otp_secret , type: String, default: ""
+  field :encrypted_otp_secret_iv , type: String, default: ""
+  field :encrypted_otp_secret_salt , type: String, default: ""
+  
+  field :consumed_timestep , type: Integer, default:  0
+  field :otp_required_for_login , type: Boolean, default: false
   ## Database authenticatable
   field :email,              type: String, default: ""
   field :encrypted_password, type: String, default: ""
@@ -60,4 +75,24 @@ class User
   belongs_to :client_application, inverse_of: :users
   has_many :appointments
   # belongs_to :role
+
+  def encrypted_otp_secret
+    self[:encrypted_otp_secret]
+  end
+
+  def encrypted_otp_secret_iv
+    self[:encrypted_otp_secret_iv]
+  end
+
+  def encrypted_otp_secret_salt
+    self[:encrypted_otp_secret_salt]
+  end
+
+  
+  def otp_qr_code
+    issuer = 'CommonHealthCore'
+    label = "#{issuer}:#{email}"
+    qrcode = RQRCode::QRCode.new(otp_provisioning_uri(label, issuer: issuer))
+    qrcode.as_svg(module_size: 4)
+  end
 end

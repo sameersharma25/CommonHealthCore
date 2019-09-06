@@ -5,6 +5,10 @@ require 'json'
 module Api
   class ExternalApplicationsController < ActionController::Base
 
+    def render_script
+      render html: '<div>html goes here</div>'.html_safe
+    end 
+
     def send_patient #Which person should I email if it fails???
       task_id = params[:task_id]
       task = Task.find(task_id)

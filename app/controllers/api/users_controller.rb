@@ -35,8 +35,37 @@ module Api
 
     end
 
+    def change_user_password
+      logger.debug("In here #{params}")
+      user = User.find_by(email: params[:email])
+      
+      if user&.valid_password?(params[:password])
+        user.password = params['new_password']
+        user.save! 
+        if user.save
+            render :json =>{status: :ok, message: "Password Updated"}
+        end 
+      end 
+    end 
+
+    def get_theme
+      user = User.find_by(email: params[:email])
+      current_theme = user.client_application.theme
+      render :json => {status: :ok, themes: ClientApplication::THEME, user_theme: current_theme}
+
+    end 
+
+    def set_theme
+      user = User.find_by(email: params[:email])
+      user.client_application.theme = params['theme']
+      user.save 
+      if user.save
+         render :json=> {status: :ok, message: "Theme Set"}
+       end 
+    end 
+
+
     def create_appointment
-      logger.debug("")
       user = User.find_by(email: params[:email])
       client_application = user.client_application
       if user.cc == true
@@ -395,6 +424,44 @@ module Api
         respond_with_navigational(resource){ render :edit }
       end
     end
+
+    def get_faq
+      
+      user = User.find_by(email: params['email'])
+      cc_id = user.client_application_id
+      @faqs = Faq.where(client_application_id: cc_id).entries
+
+      render :json => { status: :ok, faqs: @faqs}
+    end 
+
+    def get_about_us
+      
+      user = User.find_by(email: params['email'])
+      cc_id = user.client_application_id
+
+      @about_us = AboutU.where(client_application_id: cc_id).entries
+
+      render :json => { status: :ok, about_us: @about_us}
+    end 
+
+    def get_terms
+      
+      user = User.find_by(email: params['email'])
+      cc_id = user.client_application_id
+      @terms = TermsPrivacy.where(client_application_id: cc_id).entries
+       render :json => { status: :ok, terms: @terms}
+
+    end 
+
+    def get_logo
+      logger.debug("Params #{params}")
+      user = User.find_by(email: params['email'])
+      @logo = user.client_application.logo.url
+
+      #render :json => { status: :ok, faqs: @logo}
+      render json: @logo, type: :jpeg, content_type: 'image/jpeg'
+
+    end 
 
   end
 end
