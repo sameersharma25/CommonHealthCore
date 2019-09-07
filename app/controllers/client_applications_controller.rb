@@ -118,6 +118,7 @@ class ClientApplicationsController < ApplicationController
     if params[:client_application][:client_agreement].present?
       logger.debug("IN the counter sign if statement**************************")
       @client_application.agreement_counter_sign = "Pending"
+      @client_application.agreement_signed = false
       # @client_application.save
     end
     @client_application.update(client_application_params)
@@ -842,6 +843,8 @@ class ClientApplicationsController < ApplicationController
 
     @applications = ClientApplication.where(agreement_counter_sign: "Pending")
 
+    @all_agreements = ClientApplication.where(:client_agreement.ne => nil)
+
   end
 
   def counter_sign_popup
@@ -853,6 +856,7 @@ class ClientApplicationsController < ApplicationController
     customer = ClientApplication.find(params[:client_application][:id])
     customer.client_agreement = params[:client_application][:client_agreement]
     customer.agreement_counter_sign = "Done"
+    customer.agreement_signed = true
     customer.save
 
     redirect_to pending_agreements_path

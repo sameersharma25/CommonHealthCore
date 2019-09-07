@@ -29,6 +29,28 @@
   </tbody>
 </table>
 
+<h3>All Agreement List </h3>
+<table class="table table-responsive table-bordered user-display">
+  <thead>
+  <tr>
+    <th >Name</th>
+    <th >URL</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% i = 1%>
+  <%@applications.each do |a|%>
+      <tr>
+        <td><%= a.name%></td>
+        <td><%= link_to a.client_agreement.url.split('/')[-1], a.client_agreement.url, target: '_blank'%> </td>
+      </tr>
+      <%i+=1%>
+  <%end%>
+  </tbody>
+</table>
+
+
+
 <div id="modal-window" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content"></div>
