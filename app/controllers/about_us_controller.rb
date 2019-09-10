@@ -4,12 +4,18 @@ class AboutUsController < ApplicationController
   # GET /about_us
   # GET /about_us.json
   def index
-    @about_us = AboutU.all
+    @about = AboutU.all
+    @about_us = AboutU.first
+    if !@about_us.present? 
+      redirect_to new_about_u_path 
+    end 
+
   end
 
   # GET /about_us/1
   # GET /about_us/1.json
   def show
+
   end
 
   # GET /about_us/new
@@ -32,7 +38,7 @@ class AboutUsController < ApplicationController
 
     respond_to do |format|
       if @about_u.save
-        format.html { redirect_to @about_u, notice: 'About u was successfully created.' }
+        format.html { redirect_to @about_u, notice: 'About us was successfully created.' }
         format.json { render :show, status: :created, location: @about_u }
       else
         format.html { render :new }
@@ -49,7 +55,7 @@ class AboutUsController < ApplicationController
 
     respond_to do |format|
       if @about_u.update(about_u_params)
-        format.html { redirect_to @about_u, notice: 'About u was successfully updated.' }
+        format.html { redirect_to @about_u, notice: 'About us was successfully updated.' }
         format.json { render :show, status: :ok, location: @about_u }
       else
         format.html { render :edit }
@@ -63,7 +69,7 @@ class AboutUsController < ApplicationController
   def destroy
     @about_u.destroy
     respond_to do |format|
-      format.html { redirect_to about_us_url, notice: 'About u was successfully destroyed.' }
+      format.html { redirect_to about_us_url, notice: 'About us was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

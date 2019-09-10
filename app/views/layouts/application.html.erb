@@ -15,5 +15,14 @@
     <%#= render 'layouts/side_nav'%>
     <%= yield %>
   </div>
+
+  <footer>
+      <ul>
+        <li style="color: white"> <button class="btn btn-primary" > <%= link_to 'Home', root_path if current_user.present?%> </button></li>
+      </ul>
+      
+  </footer>
+
+
   </body>
 </html>
