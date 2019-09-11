@@ -43,6 +43,9 @@ class FaqsController < ApplicationController
   # PATCH/PUT /faqs/1
   # PATCH/PUT /faqs/1.json
   def update
+      @faq.question = faq_params['question']
+      @faq.answer = params['answer']
+      @faq.save
     respond_to do |format|
       if @faq.update(faq_params)
         format.html { redirect_to @faq, notice: 'Faq was successfully updated.' }

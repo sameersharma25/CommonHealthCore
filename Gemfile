@@ -73,6 +73,7 @@ gem "recaptcha", '3.4.0', require: "recaptcha/rails"
 gem 'ckeditor', github: 'galetahub/ckeditor'
 gem 'devise-two-factor'
 gem 'rqrcode', '~> 0.10.1'
+gem 'omniauth-google-oauth2'
 # gem 'fog'
 
 group :development, :test do
