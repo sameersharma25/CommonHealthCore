@@ -4,7 +4,8 @@ class FaqsController < ApplicationController
   # GET /faqs
   # GET /faqs.json
   def index
-    @faqs = Faq.all
+    ca_id = current_user.client_application_id
+    @faqs = Faq.where(client_application_id: ca_id).entries
   end
 
   # GET /faqs/1
@@ -15,7 +16,7 @@ class FaqsController < ApplicationController
   # GET /faqs/new
   def new
     @faq = Faq.new
-  end
+  end 
 
   # GET /faqs/1/edit
   def edit

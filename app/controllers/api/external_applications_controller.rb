@@ -240,6 +240,8 @@ module Api
         name = ac.name
         id =  ac.id.to_s
         speciality = ac.client_speciality
+        agreement_type = ac.agreement_type
+        agreement_signed = ac.agreement_signed
         client_hash = {name: name, id: id,speciality: speciality }
         all_client_array.push(client_hash)
       end

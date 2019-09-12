@@ -4,8 +4,11 @@ class AboutUsController < ApplicationController
   # GET /about_us
   # GET /about_us.json
   def index
-    @about = AboutU.all
-    @about_us = AboutU.first
+    ca_id = current_user.client_application_id
+    @about = AboutU.where(client_application_id: ca_id).entries
+
+    logger.debug("The Id #{ca_id}")
+    @about_us = @about.first
     if !@about_us.present? 
       redirect_to new_about_u_path 
     end 
@@ -14,7 +17,7 @@ class AboutUsController < ApplicationController
 
   # GET /about_us/1
   # GET /about_us/1.json
-  def show
+  def show 
 
   end
 
@@ -25,6 +28,8 @@ class AboutUsController < ApplicationController
 
   # GET /about_us/1/edit
   def edit
+        client_application_id = current_user.client_application_id.to_s
+
   end
 
   # POST /about_us

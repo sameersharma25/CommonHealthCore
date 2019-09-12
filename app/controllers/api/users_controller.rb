@@ -429,6 +429,7 @@ module Api
       
       user = User.find_by(email: params['email'])
       cc_id = user.client_application_id
+      
       @faqs = Faq.where(client_application_id: cc_id).entries
 
       render :json => { status: :ok, faqs: @faqs}

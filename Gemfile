@@ -67,6 +67,7 @@ gem 'mongoid_orderable'
 gem 'zip-codes'
 gem 'carrierwave'#, :git => "git://github.com/jnicklas/carrierwave.git"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+gem 'mongoid-paperclip', require: 'mongoid_paperclip'
 gem 'mini_magick', :git => 'git://github.com/probablycorey/mini_magick.git'
 gem "fog-aws"
 gem "recaptcha", '3.4.0', require: "recaptcha/rails"

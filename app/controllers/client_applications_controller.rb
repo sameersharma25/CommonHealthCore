@@ -35,6 +35,7 @@ class ClientApplicationsController < ApplicationController
   # GET /client_applications/1
   # GET /client_applications/1.json
   def show
+    @contact_details = current_user.client_application
   end
 
   # GET /client_applications/new
