@@ -26,6 +26,7 @@ class User
   field :otp_required_for_login , type: Boolean, default: false
   ## Database authenticatable
   field :email,              type: String, default: ""
+  field :phone_number,              type: String, default: ""
   field :encrypted_password, type: String, default: ""
 
   ## Recoverable

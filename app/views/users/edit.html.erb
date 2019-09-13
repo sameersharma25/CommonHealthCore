@@ -12,6 +12,10 @@
       <%= f.text_field :email, id: :email %>
     </div>
     <div class="field">
+      <%= f.label :phone_number %>
+      <%= f.text_field :phone_number  %>
+    </div>
+    <div class="field">
       <%= f.label :roles %>:
       <%#= f.select :role_id, options_from_collection_for_select(@roles, 'id',"role_name", @user.role) %>
       <% @roles.each do |role|%>

@@ -19,6 +19,7 @@
 
 
 <h1>Client Applications</h1>
+<%= link_to 'Admin Contact Details', admin_contact_path %>
 
 <table id="client_application" class="table table-responsive table-bordered user-display">
   <thead>
@@ -26,7 +27,7 @@
       <th>Name</th>
       <th></th>
       <th></th>
-      <th></th>
+
     </tr>
   </thead>
 
@@ -35,10 +36,12 @@
       <td><%= @client_application.name%></td>
       <td><%= link_to 'Show', @client_application %></td>
       <td><%= link_to 'Edit', edit_client_application_path(@client_application) %></td>
-      <td><%= link_to 'Destroy', @client_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
     </tr>
   </tbody>
+
 </table>
+
 
 <br>
 <h1>Users in the Application</h1>

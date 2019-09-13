@@ -96,6 +96,7 @@ Rails.application.routes.draw do
 
   get "about_us_page", to: "static_pages#about"
   get "faq_page", to: "static_pages#faq"
+  get "admin_contact", to: "static_pages#admin_contact"
 
   get "/reset_password", to: "reset_password#reset_password"
   post "/reset_password_part_two", to: "reset_password#reset_password_part_two" 

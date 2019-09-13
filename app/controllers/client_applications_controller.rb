@@ -840,10 +840,9 @@ class ClientApplicationsController < ApplicationController
 
   end
 
-  def pending_agreements
+  def pending_agreements 
 
-    @applications = ClientApplication.where(agreement_counter_sign: "Pending")
-
+    @applications = ClientApplication.all #where(agreement_counter_sign: "Pending")
     @all_agreements = ClientApplication.where(:client_agreement.ne => nil)
 
   end
