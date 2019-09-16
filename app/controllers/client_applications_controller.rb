@@ -1,7 +1,9 @@
 class ClientApplicationsController < ApplicationController
   include ClientApplicationsHelper
+  include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:new, :create, :contact_management]
+  # before_action :authenticate_user!, except: [:new, :create, :contact_management]
+  before_action :authenticate_admin_user_from_token, except: [:new, :create, :contact_management]
 
   # GET /client_applications
   # GET /client_applications.json
@@ -879,7 +881,7 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals,:client_speciality, :client_agreement, :agreement_type ,#users_attributes: [:name, :email, :_destroy],
+    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals,:client_speciality, :client_agreement, :agreement_type, :logo ,#users_attributes: [:name, :email, :_destroy],
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end

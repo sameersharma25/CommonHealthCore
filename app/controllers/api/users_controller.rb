@@ -430,7 +430,7 @@ module Api
       user = User.find_by(email: params['email'])
       cc_id = user.client_application_id
       
-      @faqs = Faq.where(client_application_id: cc_id).entries
+      @faqs = Faq.where(client_application_id: cc_id)
 
       render :json => { status: :ok, faqs: @faqs}
     end 
@@ -440,7 +440,7 @@ module Api
       user = User.find_by(email: params['email'])
       cc_id = user.client_application_id
 
-      @about_us = AboutU.where(client_application_id: cc_id).entries
+      @about_us = AboutU.where(client_application_id: cc_id)
 
       render :json => { status: :ok, about_us: @about_us}
     end 
@@ -449,7 +449,7 @@ module Api
       
       user = User.find_by(email: params['email'])
       cc_id = user.client_application_id
-      @terms = TermsPrivacy.where(client_application_id: cc_id).entries
+      @terms = TermsPrivacy.where(client_application_id: cc_id)
        render :json => { status: :ok, terms: @terms}
 
     end 
@@ -459,8 +459,8 @@ module Api
       user = User.find_by(email: params['email'])
       @logo = user.client_application.logo.url
 
-      #render :json => { status: :ok, faqs: @logo}
-      render json: @logo, type: :jpeg, content_type: 'image/jpeg'
+      render :json => { status: :ok, logo: @logo}
+      # render json: @logo, type: :jpeg, content_type: 'image/jpeg'
 
     end 
 
