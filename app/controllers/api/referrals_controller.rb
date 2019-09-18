@@ -85,8 +85,15 @@ module Api
         due_date = r.due_date
         source = r.source
         task_count = r.tasks.count
+
+        status = r.status
+        follow_up_date = r.follow_up_date
+        agreement_notification_flag = r.agreement_notification_flag
+
+
         referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
-                            urgency: urgency, due_date: due_date,source: source, task_count: task_count }
+                            urgency: urgency, due_date: due_date,source: source, task_count: task_count,  status: status, 
+                            follow_up_date: follow_up_date, agreement_notification_flag: agreement_notification_flag}
         referral_list.push(referral_details)
       end
 
@@ -103,8 +110,12 @@ module Api
       due_date = r.due_date
       source = r.source
       task_count = r.tasks.count
+      status = r.status
+      follow_up_date = r.follow_up_date
+      agreement_notification_flag = r.agreement_notification_flag
       referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
-                          urgency: urgency, due_date: due_date,source: source, task_count: task_count }
+                          urgency: urgency, due_date: due_date,source: source, task_count: task_count,  status: status, 
+                            follow_up_date: follow_up_date, agreement_notification_flag: agreement_notification_flag}
       render :json => {status: :ok, referral_details: referral_details }
     end
 
@@ -116,6 +127,10 @@ module Api
       referral.referral_description = params[:referral_description] if params[:referral_description]
       referral.urgency = params[:urgency] if params[:urgency]
       referral.due_date = params[:due_date] if params[:due_date]
+
+      referral.status = params[:status, } if params[:status]
+      referral.follow_up_date = params[:follow_up_date} if params[:follow_up_date]
+      referral.agreement_notification_flag = params[:agreement_notification_flag} if params[:agreement_notification_flag]
       if referral.save
         render :json=> {status: :ok, message: "Referral Updated"}
       end
