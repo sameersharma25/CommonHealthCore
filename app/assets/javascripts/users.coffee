@@ -3,6 +3,21 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 jQuery ($) ->
+
+  get_data = (evt) ->
+    alert(evt.data)
+    $("#user_email_1").val("defaultuser@test.com")
+#    $("#user_password").val("1234567")
+    $("#next_login").trigger("click")
+    $("#user_email").val("firstu@test.com")
+    $("#user_password").val("123456")
+    $("#step-2").submit()
+
+
+  $(document).ready ->
+    window.addEventListener("message", get_data,false)
+#    alert("after the listner")
+
   $(document).on("click",".wizard_add_new_user", ->
     console.log("clicked checkde button" )
     name = $("#user_name").val()
@@ -23,3 +38,9 @@ jQuery ($) ->
       role_ids: id
     return
   )
+
+
+
+#  window.parent.document.getElementById("element_id");
+
+
