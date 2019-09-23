@@ -19,6 +19,7 @@
 
 
 <h1>Client Applications</h1>
+<%= link_to 'Admin Contact Details', admin_contact_path %>
 
 <table id="client_application" class="table table-responsive table-bordered user-display">
   <thead>
@@ -26,7 +27,7 @@
       <th>Name</th>
       <th></th>
       <th></th>
-      <th></th>
+
     </tr>
   </thead>
 
@@ -35,10 +36,12 @@
       <td><%= @client_application.name%></td>
       <td><%= link_to 'Show', @client_application %></td>
       <td><%= link_to 'Edit', edit_client_application_path(@client_application) %></td>
-      <td><%= link_to 'Destroy', @client_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
     </tr>
   </tbody>
+
 </table>
+
 
 <br>
 <h1>Users in the Application</h1>
@@ -78,7 +81,7 @@
               <td><%=  roles_array.join(', ') %></td>
               <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
               <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
-               <td><%= link_to 'Reset Password', reset_password_part_two_path(:email => u.email), method: :post, data: {confirm: 'Are you sure?'} %></td>
+               <td><%= link_to 'Reset Password', reset_password_part_two_path(:user_email => u.email), method: :post, data: {confirm: 'Are you sure?'} %></td>
             </tr>
         <% end %>
       </tbody>
@@ -180,12 +183,16 @@
 
 <%#= link_to 'New Client Application', new_client_application_path if current_user.admin? %><br>
 
-<%= link_to "Application Details", "/all_details"%><br>
+<%= link_to "Application Details", all_details_path%><br>
 
 <%= link_to "Add User", new_user_path%><br>
 <%= link_to "Change your password", edit_user_registration_path %><br>
-<%= link_to "About_Us", about_us_page_path %><br>
-<%= link_to "FAQ", faq_page_path %><br>
+<% if @about.present? %>
+  <%= link_to "About_Us", about_us_page_path %><br>
+<% end %>
+<% if @faqs.present? %>
+  <%= link_to "FAQ", faq_page_path %><br>
+<% end %>
 
 
 <% if @client_application.external_application == false || @client_application.external_application.nil? %>
@@ -220,7 +227,7 @@
 </div>
 
 
-<%= link_to "Patients List", get_patients_path%>
+<%#= link_to "Patients List", get_patients_path%>
 
 <%#= link_to "Filter Page" , filter_page_path %><br>
 

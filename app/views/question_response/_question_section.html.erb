@@ -1,0 +1,35 @@
+<%#= form_for question_response , url: save_question_response_path, method: :post, :remote => true do |f| %>
+
+
+    <%#@questions.each do |q|%>
+        <!--<div class="field">-->
+          <%#= label_tag q.question %><br>
+          <!--<%#= f.radio_button("question_response", "question_response", "yes") %>-->
+          <!--<%#= radio_button_tag q.question.parameterize.underscore, 'yes'%>-->
+          <!--<%#= label_tag "Yes"%>-->
+          <!--<%#= radio_button_tag q.question.parameterize.underscore, 'no'%>-->
+          <!--<%#= label_tag "No"%>-->
+          <!--<%#= f.radio_button("question_response", "question_response", "no") %>-->
+
+        <!--</div><br>-->
+    <%#end%>
+<% if question %>
+    <%= hidden_field_tag :client_application_id, @customer_id%>
+    <div class="actions">
+      <%#= f.submit %>
+    </div>
+
+<%# end %>
+<%= hidden_field_tag :question_id, question.id.to_s%>
+<div class="field">
+  <%= label_tag question.question %><br>
+  <%= radio_button_tag question.question.parameterize.underscore, 'yes'%>
+  <%= label_tag "Yes"%>
+  <%= radio_button_tag question.question.parameterize.underscore, 'no'%>
+  <%= label_tag "No"%>
+</div>
+
+<div class="actions">
+  <%=link_to "Next","#", :class => "next_question", :remote => true %>
+</div>
+<%end %>

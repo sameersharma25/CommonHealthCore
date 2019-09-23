@@ -15,16 +15,23 @@ class ShowTemplatesController < ApplicationController
   # GET /show_templates/new
   def new
     @show_template = ShowTemplate.new
+    @all_questions = Question.all
   end
 
   # GET /show_templates/1/edit
   def edit
+    @all_questions = Question.all
   end
 
   # POST /show_templates
   # POST /show_templates.json
   def create
     @show_template = ShowTemplate.new(show_template_params)
+    league_segment = params[:show_template][:league_segments]
+    league_segment.delete("0")
+    @show_template.league_segments = league_segment
+    @show_template.save
+
 
     respond_to do |format|
       if @show_template.save
@@ -40,6 +47,10 @@ class ShowTemplatesController < ApplicationController
   # PATCH/PUT /show_templates/1
   # PATCH/PUT /show_templates/1.json
   def update
+    league_segment = params[:show_template][:league_segments]
+    league_segment.delete("0")
+    @show_template.league_segments = league_segment
+    @show_template.save
     respond_to do |format|
       if @show_template.update(show_template_params)
         format.html { redirect_to @show_template, notice: 'Show template was successfully updated.' }
@@ -69,6 +80,7 @@ class ShowTemplatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def show_template_params
-      params.fetch(:show_template, {})
+      # params.fetch(:show_template, {})
+      params.require(:show_template).permit(:league_segments, :agreement_type)
     end
 end

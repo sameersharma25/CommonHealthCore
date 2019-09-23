@@ -1,0 +1,6 @@
+
+$("#questions").html("<%= j render(:partial => "question_response/question_section", locals: {question: @next_question}) %>");
+
+<%if @template%>
+  $("#agreement_template").html("<%= j render(:partial => "question_response/show_agreement_template", locals: {template: @template}) %>");
+<%end%>

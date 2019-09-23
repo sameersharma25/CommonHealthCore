@@ -4,7 +4,8 @@ class TermsPrivaciesController < ApplicationController
   # GET /terms_privacies
   # GET /terms_privacies.json
   def index
-    @terms_privacies = TermsPrivacy.all
+    ca_id = current_user.client_application_id
+    @terms_privacies = TermsPrivacy.where(client_application_id: ca_id).entries
   end
 
   # GET /terms_privacies/1
@@ -37,7 +38,7 @@ class TermsPrivaciesController < ApplicationController
         format.json { render json: @terms_privacy.errors, status: :unprocessable_entity }
       end
     end
-  end
+  end 
 
   # PATCH/PUT /terms_privacies/1
   # PATCH/PUT /terms_privacies/1.json

@@ -4,7 +4,8 @@ class FaqsController < ApplicationController
   # GET /faqs
   # GET /faqs.json
   def index
-    @faqs = Faq.all
+    ca_id = current_user.client_application_id
+    @faqs = Faq.where(client_application_id: ca_id).entries
   end
 
   # GET /faqs/1
@@ -15,7 +16,7 @@ class FaqsController < ApplicationController
   # GET /faqs/new
   def new
     @faq = Faq.new
-  end
+  end 
 
   # GET /faqs/1/edit
   def edit
@@ -43,6 +44,9 @@ class FaqsController < ApplicationController
   # PATCH/PUT /faqs/1
   # PATCH/PUT /faqs/1.json
   def update
+      @faq.question = faq_params['question']
+      @faq.answer = params['answer']
+      @faq.save
     respond_to do |format|
       if @faq.update(faq_params)
         format.html { redirect_to @faq, notice: 'Faq was successfully updated.' }

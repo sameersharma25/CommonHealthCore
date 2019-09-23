@@ -42,7 +42,7 @@ Rails.application.routes.draw do
 
 
 
-  devise_for :users, :controllers =>{invitations: 'invitations', sessions: 'users/sessions'}
+  devise_for :users, :controllers =>{invitations: 'invitations', sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks'}
       devise_scope :user do 
         scope :users, as: :users do 
           post 'pre_otp', to: 'users/sessions#pre_otp' 
@@ -87,6 +87,8 @@ Rails.application.routes.draw do
   get "/add_agreement_template", to: "client_applications#add_agreement_template"
   post "/create_agreement_template", to: "client_applications#create_agreement_template"
   post "/change_status_of_agreement_template", to: "client_applications#change_status_of_agreement_template"
+  get "/question_sequence", to: "client_applications#question_sequence"
+  post "/update_sequence", to: "client_applications#update_sequence"
 
   ###THINGS THAT MASON ADDED
   post "send_for_approval", to: "client_applications#send_for_approval"
@@ -96,6 +98,7 @@ Rails.application.routes.draw do
 
   get "about_us_page", to: "static_pages#about"
   get "faq_page", to: "static_pages#faq"
+  get "admin_contact", to: "static_pages#admin_contact"
 
   get "/reset_password", to: "reset_password#reset_password"
   post "/reset_password_part_two", to: "reset_password#reset_password_part_two" 
@@ -131,6 +134,7 @@ Rails.application.routes.draw do
 
   post "/save_question_response", to: "question_response#save_question_response"
   get "/question_form", to: "question_response#question_form"
+  post "/next_question", to: "question_response#next_question"
 
 
   namespace :api do
@@ -155,6 +159,7 @@ Rails.application.routes.draw do
     post 'change_user_password', to: 'users#change_user_password'
     post 'get_theme', to: 'users#get_theme'
     post 'set_theme', to: 'users#set_theme'
+    get 'admin_details', to: 'users#admin_details'
 
 
     post 'update_patient', to: "patients#update_patient"

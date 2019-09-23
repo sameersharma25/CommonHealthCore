@@ -9,11 +9,22 @@ class QuestionResponseController < ApplicationController
     @client_application = ClientApplication.find(@customer_id)
     @template = "nothing"
     @client_responses = ClientApplication.find(@customer_id).question_responses.first
-    if !@client_responses.nil?
-      segment = ClientApplication.find(@customer_id).question_responses.first.league_segments.sort
-      agreement_type = ShowTemplate.where(league_segments: segment ).first.agreement_type
-      @ag = AgreementTemplate.where(agreement_type: agreement_type, active: true )
-    end
+    # customer_response_list = QuestionResponse.where(client_application_id: @customer_id)
+    # logger.debug("***********************the customer response list is : #{customer_response_list.entries}")
+    # if customer_response_list.empty?
+    #   Question.all.each do |q|
+    #     qr = QuestionResponse.new
+    #     qr.question_id = q.id.to_s
+    #     qr.client_application_id = @customer_id
+    #     qr.save
+    #   end
+    # end
+    @first_question = Question.where(pq: nil).first
+    # if !@client_responses.nil?
+    #   segment = ClientApplication.find(@customer_id).question_responses.first.league_segments.sort
+    #   agreement_type = ShowTemplate.where(league_segments: segment ).first.agreement_type
+    #   @ag = AgreementTemplate.where(agreement_type: agreement_type, active: true )
+    # end
 
   end
 
@@ -69,20 +80,86 @@ class QuestionResponseController < ApplicationController
     logger.debug("the league segment is #{league_segment}: #{qr}-----------#{agreement_type.inspect}")
   end
 
-  def check_for_template_type(league_segment)
 
-    agreement_type = []
-    ShowTemplate.all.each do |st|
+  def next_question
 
-      if st.league_segments.sort == league_segment.sort
+    @customer_id = params[:cus_id]
+    @client_application = ClientApplication.find(@customer_id)
+    q = Question.find(params[:ques_id])
+    qr = QuestionResponse.where(client_application_id: params[:cus_id], question_id: params[:ques_id]).first
 
-        agreement_type.push(st.agreement_type)
-        logger.debug("insite agreementtype is condition------ #{agreement_type}")
+    if qr.nil?
+      logger.debug("Creating new RESPONSE##############******************")
+      qr = QuestionResponse.new
+      qr.question_response = params[:answer]
+      qr.question_id = params[:ques_id]
+      qr.client_application_id = params[:cus_id]
+      if qr.save
+        logger.debug("QUESTION RESPONSER WASS SAVEDDDDDDDDDDDDDDDDDDDDDDDDDD")
+      else
+
+        logger.debug("WHY IS IT NOT SAVINGGGGGGGGGG #{qr.inspect}")
       end
+    else
+      logger.debug("UPDATING EXISTING RESPONSE**************************")
+      qr.question_response = params[:answer]
+      qr.question_id = params[:ques_id]
+      qr.client_application_id = params[:cus_id]
+      qr.save
     end
 
-    agreement_type
+    if params[:answer] == "yes"
+
+      if q.nqy.nil?
+        logger.debug("YES do something for no next question***********")
+        @template = display_template(@customer_id)
+      else
+        @next_question = Question.find(q.nqy)
+      end
+
+    elsif params[:answer] == "no"
+      if q.nqn.nil?
+        logger.debug("NO do something for no next quesiion**************")
+        @template = display_template(@customer_id)
+      else
+        @next_question = Question.find(q.nqn)
+      end
+
+    end
   end
+
+
+  def display_template(customer_id)
+    logger.debug("going into the DISPLAY TEMPLATE*****************")
+    true_array = []
+    customer = ClientApplication.find(customer_id)
+    customer.question_responses.each do |qr|
+      if qr.question_response == true
+        true_array.push(qr.question_id)
+      end
+    end
+    logger.debug("the true array is #{true_array}")
+    agreement_type = helpers.check_for_template_type(true_array)[0]
+    logger.debug("the AGREEMENT TYPE IS: #{agreement_type}")
+    customer.agreement_type = agreement_type
+    customer.save
+    template = helpers.get_agreement_template(agreement_type).first
+  end
+
+  # def check_for_template_type(league_segment)
+  #
+  #   agreement_type = []
+  #   ShowTemplate.all.each do |st|
+  #
+  #     if st.league_segments.sort == league_segment.sort
+  #
+  #       agreement_type.push(st.agreement_type)
+  #       logger.debug("insite agreementtype is condition------ #{agreement_type}")
+  #     end
+  #   end
+  #
+  #   agreement_type
+  # end
 
   def get_agreement_template(agreement_type)
     ag = AgreementTemplate.where(agreement_type: agreement_type, active: true )

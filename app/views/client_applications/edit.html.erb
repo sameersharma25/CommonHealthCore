@@ -28,7 +28,11 @@
               <%= f.label :logo %> 
               <%= image_tag("question_mark1.png", class: 'woof', size: '25x25', 'data-toggle'=>'tooltip', title: 'Supported Formats: jpg jpeg gif png & displayed as 220x80') %>
               <span title="Lets see what happens"></span><br>
-              <%= image_tag @client_application.logo.url, class: 'client_logo', size:'220x80' %>
+
+              <% if @client_application.logo.present? %>
+                <%= image_tag @client_application.logo.url, class: 'client_logo', size:'220x80' %>
+              <% end %>
+              
               <%= f.file_field :logo %>
             </div>
 

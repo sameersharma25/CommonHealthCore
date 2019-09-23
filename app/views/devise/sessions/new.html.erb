@@ -29,11 +29,11 @@
       <%= form_for(resource, as: resource_name, url: users_pre_otp_path, method: :post, remote: true, html: { id: "step-1" }) do |f| %>
         <div class="form-group">
           <%= f.label :email %><br />
-          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", id: "user_email_1" %>
         </div>
 
         <div class="form-group">
-          <%= f.submit "Next", class: "btn btn-primary btn-block btn-lg" %>
+          <%= f.submit "Next", class: "btn btn-primary btn-block btn-lg", id: "next_login" %>
         </div>
       <% end %>
 
@@ -61,7 +61,7 @@
       <% end -%>
 
       <div class="actions">
-        <%= f.submit "Log in", class: "btn btn-primary" %>
+        <%= f.submit "Log in", class: "btn btn-primary", id: "submit_login" %>
       </div>
     <% end %>
 

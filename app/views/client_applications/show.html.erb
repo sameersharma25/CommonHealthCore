@@ -1,43 +1,53 @@
 <p id="notice"><%= notice %></p>
-<h1> Client Application </h1>
-<p>
-  <strong>Name:</strong>
-  <%= @client_application.name %>
-</p>
+<div class = "container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+        <h1> Client Application </h1>
+        <p>
+          <strong>Name:</strong>
+          <%= @client_application.name %>
+        </p>
 
-<p>
-  <strong>URL:</strong>
-  <%= @client_application.application_url %>
-</p>
-<% if @client_application.users.count > 0 %>
-    <table>
-      <thead>
-      <tr>
-        <th>NAME</th>
-        <th>EMAIL</th>
-        <th colspan="3"></th>
-      </tr>
-      </thead>
+        <p>
+          <strong>URL:</strong>
+          <%= @client_application.application_url %>
+        </p>
+        <% if @client_application.users.count > 0 %>
+            <table>
+              <thead>
+              <tr>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th colspan="3"></th>
+              </tr>
+              </thead>
 
-      <tbody>
-      <% @client_application.users.each do |u| %>
-          <tr>
-            <td><%= u.name %></td>
-            <td><%= u.email %></td>
-            <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
-            <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
-            <td><%#= link_to 'Destroy', client_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-<%end%>
+              <tbody>
+              <% @client_application.users.each do |u| %>
+                  <tr>
+                    <td><%= u.name %></td>
+                    <td><%= u.email %></td>
+                    <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
+                    <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
+                    <td><%#= link_to 'Destroy', client_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+        <%end%> 
+        
+        <div>
+          <strong>Logo:</strong>
+          <p><%= image_tag @client_application.logo.thumb.url %></p>
+        </div>
 
-<div>
-  <strong>Logo:</strong>
-  <p><%= image_tag @client_application.logo.thumb.url %></p>
+
+
+        <%= link_to 'Edit', edit_client_application_path(@client_application) %> |
+        <%= link_to 'Back', root_path %>
+    </div>
+  </div>
 </div>
 
 
-<%= link_to 'Edit', edit_client_application_path(@client_application) %> |
-<%= link_to 'Back', root_path %>
+

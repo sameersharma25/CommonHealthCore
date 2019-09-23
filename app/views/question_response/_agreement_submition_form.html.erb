@@ -1,0 +1,26 @@
+<h1>Submit Agreement</h1>
+
+<%= form_for @client_application, url: save_all_details_path, method: :post,:html => { :multipart => true } do |f| %>
+
+    <div class="field">
+      <%= f.label :agreement_type %>
+      <%= f.text_field :agreement_type, :readonly => true %>
+    </div>
+    <div class="field">
+      <%= f.file_field :client_agreement%>
+    </div>
+
+
+    <div>
+      <%= f.label :signed_documents%><br>
+      <%if !@client_application.client_agreement.url.nil? %>
+          <%=  link_to @client_application.client_agreement.url.split('/')[-1], @client_application.client_agreement.url, target: '_blank'  %>
+      <%end%>
+
+    </div>
+
+    <div>
+      <%= f.submit 'Save' %>
+    </div>
+
+<%end %>

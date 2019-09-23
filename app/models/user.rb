@@ -7,7 +7,7 @@ class User
   # :confirmable, :lockable, :timeoutable and :omniauthable
 
   devise :invitable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, :omniauth_providers => [:google_oauth2]
 
 
 
@@ -26,6 +26,7 @@ class User
   field :otp_required_for_login , type: Boolean, default: false
   ## Database authenticatable
   field :email,              type: String, default: ""
+  field :phone_number,              type: String, default: ""
   field :encrypted_password, type: String, default: ""
 
   ## Recoverable
@@ -88,7 +89,20 @@ class User
     self[:encrypted_otp_secret_salt]
   end
 
-  
+  def self.from_omniauth(access_token)
+    data = access_token.info
+    user = User.where(:email => data["email"]).first
+
+    # Uncomment the section below if you want users to be created if they don't exist
+    # unless user
+    #     user = User.create(name: data["name"],
+    #        email: data["email"],
+    #        password: Devise.friendly_token[0,20]
+    #     )
+    # end
+    user
+  end
+
   def otp_qr_code
     issuer = 'CommonHealthCore'
     label = "#{issuer}:#{email}"

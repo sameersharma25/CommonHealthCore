@@ -1,7 +1,8 @@
 class ClientApplicationsController < ApplicationController
   include ClientApplicationsHelper
+  include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:new, :create, :contact_management]
+  before_action :authenticate_user!, except: [:new, :create, :contact_management]<
 
   # GET /client_applications
   # GET /client_applications.json
@@ -11,6 +12,8 @@ class ClientApplicationsController < ApplicationController
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
     @referred_applications = LedgerStatus.where(referred_application_id: @client_application.id.to_s)
+    @about = AboutU.where(client_application_id: @client_application.id.to_s).entries
+    @faqs = Faq.where(client_application_id: @client_application.id.to_s).entries
     # @referred_applications = LedgerStatus.all
 
     logger.debug("the session count is *********************: #{user.sign_in_count}, LEDGER STATIS : #{@referred_applications.entries}")
@@ -35,6 +38,7 @@ class ClientApplicationsController < ApplicationController
   # GET /client_applications/1
   # GET /client_applications/1.json
   def show
+    @contact_details = current_user.client_application
   end
 
   # GET /client_applications/new
@@ -44,13 +48,14 @@ class ClientApplicationsController < ApplicationController
 
   # GET /client_applications/1/edit
   def edit
+
   end
 
   # POST /client_applications
   # POST /client_applications.json
   def create
-    @client_application.logo = params['client_application']['logo']
-    @client_application.save
+    # @client_application.logo = params['client_application']['logo']
+    # @client_application.save
     logger.debug("************THE PARAMETERS IN create Client Applicaiton ARE: #{params.inspect}")
     @client_application = ClientApplication.new(client_application_params)
     respond_to do |format|
@@ -108,6 +113,7 @@ class ClientApplicationsController < ApplicationController
   def all_details
     # @client_application = @client_application
     user = current_user
+    logger.debug("*********************************************************THE CURRENT USER IS : #{user}")
     @client_application = current_user.client_application
 
   end
@@ -839,10 +845,9 @@ class ClientApplicationsController < ApplicationController
 
   end
 
-  def pending_agreements
+  def pending_agreements 
 
-    @applications = ClientApplication.where(agreement_counter_sign: "Pending")
-
+    @applications = ClientApplication.all #where(agreement_counter_sign: "Pending")
     @all_agreements = ClientApplication.where(:client_agreement.ne => nil)
 
   end
@@ -870,6 +875,28 @@ class ClientApplicationsController < ApplicationController
     redirect_to pending_agreements_path
   end
 
+  def question_sequence
+    @questions = Question.all
+
+  end
+
+  def update_sequence
+    question = Question.find(params[:question])
+    if params[:change_param] == "pre_que"
+      logger.debug("IN THE PRE QUE********************")
+      question.pq = params[:changed_value]
+    elsif params[:change_param] == "next_que_yes"
+      logger.debug("IN THE NEXT QUE YES ********************")
+      question.nqy = params[:changed_value]
+    elsif params[:change_param] == "next_que_no"
+      logger.debug("IN THE NEXT QUE NO ********************")
+      question.nqn = params[:changed_value]
+    end
+
+    question.save
+
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_client_application
@@ -879,7 +906,7 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals,:client_speciality, :client_agreement, :agreement_type ,#users_attributes: [:name, :email, :_destroy],
+    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :accept_referrals,:client_speciality, :client_agreement, :agreement_type, :logo ,#users_attributes: [:name, :email, :_destroy],
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end
