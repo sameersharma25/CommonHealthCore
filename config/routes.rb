@@ -87,6 +87,8 @@ Rails.application.routes.draw do
   get "/add_agreement_template", to: "client_applications#add_agreement_template"
   post "/create_agreement_template", to: "client_applications#create_agreement_template"
   post "/change_status_of_agreement_template", to: "client_applications#change_status_of_agreement_template"
+  get "/question_sequence", to: "client_applications#question_sequence"
+  post "/update_sequence", to: "client_applications#update_sequence"
 
   ###THINGS THAT MASON ADDED
   post "send_for_approval", to: "client_applications#send_for_approval"
@@ -132,6 +134,7 @@ Rails.application.routes.draw do
 
   post "/save_question_response", to: "question_response#save_question_response"
   get "/question_form", to: "question_response#question_form"
+  post "/next_question", to: "question_response#next_question"
 
 
   namespace :api do

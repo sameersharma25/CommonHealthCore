@@ -141,3 +141,17 @@ jQuery ($) ->
     return
 
   )
+
+  $(document).on("change", ".que_sequence", ->
+
+    question = $(this).attr("id")
+    changed_value = $(this).val()
+    change_param = $(this).attr("name")
+    console.log("IN the change method***", $(this).attr("id"), "tewoiwororwrhworw", $(this).val(), $(this).attr("name"))
+    $.post "/update_sequence",
+      question: question,
+      changed_value: changed_value,
+      change_param: change_param
+    return
+
+  )

@@ -128,9 +128,9 @@ module Api
       referral.urgency = params[:urgency] if params[:urgency]
       referral.due_date = params[:due_date] if params[:due_date]
 
-      referral.status = params[:status, } if params[:status]
-      referral.follow_up_date = params[:follow_up_date} if params[:follow_up_date]
-      referral.agreement_notification_flag = params[:agreement_notification_flag} if params[:agreement_notification_flag]
+      referral.status = params[:status] if params[:status]
+      referral.follow_up_date = params[:follow_up_date] if params[:follow_up_date]
+      referral.agreement_notification_flag = params[:agreement_notification_flag] if params[:agreement_notification_flag]
       if referral.save
         render :json=> {status: :ok, message: "Referral Updated"}
       end
@@ -322,19 +322,19 @@ module Api
           ref_id = r.id.to_s
           ref_patient = r.patient.last_name + r.patient.first_name
           date = active_referral_time_array.sort.last
-          active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+          active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency }
           active_referral_array.push(active_referral_hash)
         elsif task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active")
           ref_id = r.id.to_s
           ref_patient = r.patient.last_name + r.patient.first_name
           date = pending_referral_time_array.sort.last
-          pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date}
+          pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}
           pending_referral_array.push(pending_referral_hash)
         elsif !task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active") && task_type_collection_array.include?("new")
           ref_id = r.id.to_s
           ref_patient = r.patient.last_name + r.patient.first_name
           date = ""
-          new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+          new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}
           new_referral_array.push(new_referral_hash)
         end
 

@@ -2,8 +2,7 @@ class ClientApplicationsController < ApplicationController
   include ClientApplicationsHelper
   include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
-  # before_action :authenticate_user!, except: [:new, :create, :contact_management]
-  before_action :authenticate_admin_user_from_token, except: [:new, :create, :contact_management]
+  before_action :authenticate_user!, except: [:new, :create, :contact_management]
 
   # GET /client_applications
   # GET /client_applications.json
@@ -47,13 +46,14 @@ class ClientApplicationsController < ApplicationController
 
   # GET /client_applications/1/edit
   def edit
+    # binding.pry
   end
 
   # POST /client_applications
   # POST /client_applications.json
   def create
-    @client_application.logo = params['client_application']['logo']
-    @client_application.save
+    # @client_application.logo = params['client_application']['logo']
+    # @client_application.save
     logger.debug("************THE PARAMETERS IN create Client Applicaiton ARE: #{params.inspect}")
     @client_application = ClientApplication.new(client_application_params)
     respond_to do |format|
@@ -111,6 +111,7 @@ class ClientApplicationsController < ApplicationController
   def all_details
     # @client_application = @client_application
     user = current_user
+    logger.debug("*********************************************************THE CURRENT USER IS : #{user}")
     @client_application = current_user.client_application
 
   end
@@ -870,6 +871,28 @@ class ClientApplicationsController < ApplicationController
     customer.reason_for_agreement_reject = params[:reason_for_reject]
     customer.save
     redirect_to pending_agreements_path
+  end
+
+  def question_sequence
+    @questions = Question.all
+
+  end
+
+  def update_sequence
+    question = Question.find(params[:question])
+    if params[:change_param] == "pre_que"
+      logger.debug("IN THE PRE QUE********************")
+      question.pq = params[:changed_value]
+    elsif params[:change_param] == "next_que_yes"
+      logger.debug("IN THE NEXT QUE YES ********************")
+      question.nqy = params[:changed_value]
+    elsif params[:change_param] == "next_que_no"
+      logger.debug("IN THE NEXT QUE NO ********************")
+      question.nqn = params[:changed_value]
+    end
+
+    question.save
+
   end
 
   private

@@ -6,12 +6,18 @@ jQuery ($) ->
 
   get_data = (evt) ->
     alert(evt.data)
-    $("#user_email_1").val("defaultuser@test.com")
+#    $("#user_email_1").val("defaultuser@test.com")
+    user = evt.data.split(',')[0]
+    pwd = evt.data.split(',')[1]
+    $("#user_email_1").val(user)
 #    $("#user_password").val("1234567")
     $("#next_login").trigger("click")
-    $("#user_email").val("firstu@test.com")
-    $("#user_password").val("123456")
+#    $("#user_email").val("firstu@test.com")
+#    $("#user_password").val("123456")
+    $("#user_email").val(user)
+    $("#user_password").val(pwd)
     $("#step-2").submit()
+    alert("after login")
 
 
   $(document).ready ->

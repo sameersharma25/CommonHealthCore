@@ -1,0 +1,25 @@
+Question Sequence
+
+<table id="client_application" class="table table-responsive table-bordered user-display">
+  <thead>
+  <tr>
+    <th>Question</th>
+    <th>Previous Question</th>
+    <th>Next Question Yes</th>
+    <th>Next Question No </th>
+
+  </tr>
+  </thead>
+
+  <tbody>
+  <%@questions.each do |q| %>
+    <tr id="<%=q.id.to_s%>">
+      <td><%= q.question%></td>
+      <td><%= select_tag "pre_que", options_from_collection_for_select(@questions, "id", "question",q.pq),id: q.id.to_s, class: "que_sequence" ,include_blank: true %></td>
+      <td><%= select_tag "next_que_yes", options_from_collection_for_select(@questions, "id", "question",q.nqy),id: q.id.to_s,class: "que_sequence", include_blank: true%></td>
+      <td><%= select_tag "next_que_no", options_from_collection_for_select(@questions, "id", "question",q.nqn),id: q.id.to_s,class: "que_sequence", include_blank: true%></td>
+    </tr>
+  <%end%>
+  </tbody>
+
+</table>

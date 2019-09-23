@@ -18,14 +18,14 @@
   <tbody>
   <% i = 1%>
   <%@applications.each do |a|%>
-      <tr><
+      <tr>
         <td> <%= a.agreement_type  %></td>
         <td> <%= a.agreement_counter_sign %></td>
-        <td> <%= a.updated_at.strftime("%d/%m/%Y") %></td>
-        <td> <%= User.where(:client_application_id => a.id, :admin => true)[0].email %></td>
-        <td> <%= User.where(:client_application_id => a.id, :admin => true)[0].phone_number %> </td>
+        <td> <%#= a.updated_at.strftime("%d/%m/%Y") %></td>
+        <td> <%#= User.where(:client_application_id => a.id, :admin => true)[0].email %></td>
+        <td> <%#= User.where(:client_application_id => a.id, :admin => true)[0].phone_number %> </td>
         <td><%= a.name%></td>
-        <td><%= link_to a.client_agreement.url.split('/')[-1], a.client_agreement.url, target: '_blank'%> </td>
+        <td><%#= link_to a.client_agreement.url.split('/')[-1], a.client_agreement.url, target: '_blank'%> </td>
         <td><%= link_to "Upload Document", counter_sign_popup_path(id: a.id.to_s),  {:remote => true ,method: :post,'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %></td>
         <!--<td><%#= file_field_tag :client_agreement%></td>-->
         <td>
@@ -54,7 +54,12 @@
   <%@applications.each do |a|%>
       <tr>
         <td><%= a.name%></td>
-        <td><%= link_to a.client_agreement.url.split('/')[-1], a.client_agreement.url, target: '_blank'%> </td>
+        <%if !a.client_agreement.url.nil?%>
+            <td><%= link_to a.client_agreement.url.split('/')[-1], a.client_agreement.url, target: '_blank'%> </td>
+        <%else%>
+            <td> </td>
+        <%end%>
+
       </tr>
       <%i+=1%>
   <%end%>

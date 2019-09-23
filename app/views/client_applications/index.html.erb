@@ -81,7 +81,7 @@
               <td><%=  roles_array.join(', ') %></td>
               <td><%= link_to 'Show', user_show_path(:id => u.id) %></td>
               <td><%= link_to 'Edit', user_edit_path(:id => u.id) %></td>
-               <td><%= link_to 'Reset Password', reset_password_part_two_path(:email => u.email), method: :post, data: {confirm: 'Are you sure?'} %></td>
+               <td><%= link_to 'Reset Password', reset_password_part_two_path(:user_email => u.email), method: :post, data: {confirm: 'Are you sure?'} %></td>
             </tr>
         <% end %>
       </tbody>
@@ -183,7 +183,7 @@
 
 <%#= link_to 'New Client Application', new_client_application_path if current_user.admin? %><br>
 
-<%= link_to "Application Details", "/all_details"%><br>
+<%= link_to "Application Details", all_details_path%><br>
 
 <%= link_to "Add User", new_user_path%><br>
 <%= link_to "Change your password", edit_user_registration_path %><br>
@@ -223,7 +223,7 @@
 </div>
 
 
-<%= link_to "Patients List", get_patients_path%>
+<%#= link_to "Patients List", get_patients_path%>
 
 <%#= link_to "Filter Page" , filter_page_path %><br>
 

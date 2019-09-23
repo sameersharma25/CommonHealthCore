@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   # before_action :authenticate_user_from_token
   before_action :configure_permitted_parameters, if: :devise_controller?
+  # before_action :authenticate_admin_user_from_token
 
   include CanCan::ControllerAdditions
   rescue_from CanCan::AccessDenied do |exception|
@@ -17,10 +18,11 @@ class ApplicationController < ActionController::Base
   #   @token = value
   # end
 
-  def default_url_options
-    { email: current_user.email , admin_token: current_user.authentication_token } if !current_user.nil?
-
-  end
+  # def default_url_options
+  #   logger
+  #   { email: current_user.email , "user-token" => current_user.authentication_token } if !current_user.nil?
+  #
+  # end
 
   protected
 
