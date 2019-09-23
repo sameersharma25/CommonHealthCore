@@ -464,5 +464,10 @@ module Api
 
     end 
 
+    def admin_details 
+      admin_details = ClientApplication.where(master_application_status: true).first.users.first
+      render :json => { status: :ok, admin: admin_details}
+    end 
+
   end
 end

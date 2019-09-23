@@ -156,6 +156,7 @@ Rails.application.routes.draw do
     post 'change_user_password', to: 'users#change_user_password'
     post 'get_theme', to: 'users#get_theme'
     post 'set_theme', to: 'users#set_theme'
+    get 'admin_details', to: 'users#admin_details'
 
 
     post 'update_patient', to: "patients#update_patient"

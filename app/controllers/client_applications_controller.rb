@@ -2,8 +2,8 @@ class ClientApplicationsController < ApplicationController
   include ClientApplicationsHelper
   include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
-  # before_action :authenticate_user!, except: [:new, :create, :contact_management]
-  before_action :authenticate_admin_user_from_token, except: [:new, :create, :contact_management]
+  before_action :authenticate_user!, except: [:new, :create, :contact_management]
+  #before_action :authenticate_admin_user_from_token, except: [:new, :create, :contact_management]
 
   # GET /client_applications
   # GET /client_applications.json
@@ -13,6 +13,8 @@ class ClientApplicationsController < ApplicationController
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
     @referred_applications = LedgerStatus.where(referred_application_id: @client_application.id.to_s)
+    @about = AboutU.where(client_application_id: @client_application.id.to_s).entries
+    @faqs = Faq.where(client_application_id: @client_application.id.to_s).entries
     # @referred_applications = LedgerStatus.all
 
     logger.debug("the session count is *********************: #{user.sign_in_count}, LEDGER STATIS : #{@referred_applications.entries}")
@@ -47,6 +49,7 @@ class ClientApplicationsController < ApplicationController
 
   # GET /client_applications/1/edit
   def edit
+
   end
 
   # POST /client_applications

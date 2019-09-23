@@ -187,8 +187,12 @@
 
 <%= link_to "Add User", new_user_path%><br>
 <%= link_to "Change your password", edit_user_registration_path %><br>
-<%= link_to "About_Us", about_us_page_path %><br>
-<%= link_to "FAQ", faq_page_path %><br>
+<% if @about.present? %>
+  <%= link_to "About_Us", about_us_page_path %><br>
+<% end %>
+<% if @faqs.present? %>
+  <%= link_to "FAQ", faq_page_path %><br>
+<% end %>
 
 
 <% if @client_application.external_application == false || @client_application.external_application.nil? %>
