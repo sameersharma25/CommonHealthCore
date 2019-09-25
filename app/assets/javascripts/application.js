@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= requre iframe
 //= require jquery-ui
 //= require bootstrap-sprockets
 //= require rails-ujs
@@ -18,3 +19,5 @@
 //= require jquery.turbolinks
 //= require cocoon
 //= require_tree .
+
+
