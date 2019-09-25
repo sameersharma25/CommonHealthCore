@@ -2,7 +2,7 @@ class ClientApplicationsController < ApplicationController
   include ClientApplicationsHelper
   include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:new, :create, :contact_management]<
+  before_action :authenticate_user!, except: [:new, :create, :contact_management]
 
   # GET /client_applications
   # GET /client_applications.json
@@ -847,7 +847,7 @@ class ClientApplicationsController < ApplicationController
 
   def pending_agreements 
 
-    @applications = ClientApplication.all #where(agreement_counter_sign: "Pending")
+    @applications = ClientApplication.where(agreement_counter_sign: "Pending")
     @all_agreements = ClientApplication.where(:client_agreement.ne => nil)
 
   end
