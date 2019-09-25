@@ -26,7 +26,7 @@
   <div class="col-md-4 right_box" >
 
 
-      <%= form_for(resource, as: resource_name, url: users_pre_otp_path, method: :post, remote: true, html: { id: "step-1" }) do |f| %>
+      <%= form_for(resource, as: resource_name, url: users_pre_otp_path, method: :post, remote: true, html: { id: "step-A" }) do |f| %>
         <div class="form-group">
           <%= f.label :email %><br />
           <%= f.email_field :email, autofocus: true, autocomplete: "email", id: "user_email_1" %>
@@ -39,7 +39,7 @@
 
 
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "hidden", id: "step-2" } ) do |f| %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "hidden", id: "step-B" } ) do |f| %>
       <div class="form-group">
         <%= f.email_field :email, autofocus: true, placeholder: 'Email Address', class: 'form-control' %>
       </div>
@@ -50,7 +50,7 @@
       </div>
 
       <div class="form-group">
-        <%= f.text_field :otp_attempt, autocomplete: "off", placeholder: '2FA Code', class: 'form-control hidden', id: "step-2-otp" %>
+        <%= f.text_field :otp_attempt, autocomplete: "off", placeholder: '2FA Code', class: 'form-control hidden', id: "step-B-otp" %>
       </div>
 
       <% if devise_mapping.rememberable? -%>

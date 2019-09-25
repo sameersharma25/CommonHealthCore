@@ -1,4 +1,4 @@
-<!-- 
+
 <nav class="navbar navbar-default" style="background-color: #27aacc;">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -6,12 +6,13 @@
     </div>
     <ul class="nav navbar-nav">
       <li class="top_bar_elements"><%= link_to 'Home', root_path if current_user.present?%></li>
-      <li class="top_bar_elements"><%= link_to 'Logout', destroy_user_session_path, :method => :delete if current_user.present?%></li>
+      <li class="top_bar_elements" id="logoutID" ><%= link_to 'Logout', destroy_user_session_path, :method => :delete if current_user.present?%></li>
       <li class="top_bar_elements"><%= link_to "Sign up Request", new_registration_request_path if !current_user.present?%></li>
+      <li class="top_bar_elements" id="thirtythree"><%= link_to "Coolest",'#' %></li>
     </ul>
   </div>
 </nav>
--->
+
 
 <nav>
         <button class="btn btn-primary" > <%= link_to 'Home', root_path if current_user.present?%> </button>
