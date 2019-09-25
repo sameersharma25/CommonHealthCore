@@ -1,6 +1,6 @@
 
-var stepOne = $("#step-1");
-var stepTwo = $("#step-2");
+var stepOne = $("#step-A");
+var stepTwo = $("#step-B");
 
 stepOne.addClass("hidden");
 stepTwo.removeClass("hidden");
@@ -10,5 +10,5 @@ stepTwo.find("#user_email").val(email);
 //stepTwo.find("#user_password").focus();
 
 <% if @two_factor_enabled %>
-  $("#step-2-otp").removeClass("hidden");
+  $("#step-B-otp").removeClass("hidden");
 <% end %>
