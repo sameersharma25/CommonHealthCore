@@ -160,6 +160,8 @@ Rails.application.routes.draw do
     post 'get_theme', to: 'users#get_theme'
     post 'set_theme', to: 'users#set_theme'
     get 'admin_details', to: 'users#admin_details'
+    post 'user_profile', to: 'users#user_profile'
+    post 'edit_profile', to: 'users#edit_profile'
 
 
     post 'update_patient', to: "patients#update_patient"
