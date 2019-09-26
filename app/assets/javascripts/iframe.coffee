@@ -9,7 +9,3 @@ sayHello = ->
 		type: 'DELETE',
 		url: 'users/sign_out'
 		});
-
-
-
-
