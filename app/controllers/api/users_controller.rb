@@ -469,5 +469,36 @@ module Api
       render :json => { status: :ok, admin: admin_details}
     end 
 
+    def user_profile
+      user = User.find_by(email: params['email'])
+      @user_profile = {}
+        user.attributes.each do |k,v|
+            case k.to_s
+              when 'email'
+                @user_profile[k.to_s] = v.to_s
+              when 'active'
+                @user_profile[k.to_s] = v.to_s
+              when 'admin'
+                @user_profile[k.to_s] = v.to_s
+              when 'phone_number'
+                @user_profile[k.to_s] = v.to_s
+              when 'name'
+                @user_profile[k.to_s] = v.to_s
+            end 
+        end 
+      render :json => {status: :ok, profile: @user_profile}
+    end 
+
+    def edit_profile
+      user = User.find_by(email: params['email'])
+        user.email = params[:email] if params[:email]
+        user.active = params[:active] if params[:active]
+        user.admin = params[:admin] if params[:admin]
+        user.phone_number = params[:phone_number] if params[:phone_number]
+        user.name  = params[:name] if params[:name]
+        user.save
+        render :json => {status: :ok, message: "User Details have been updated" }
+    end 
+
   end
 end
