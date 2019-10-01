@@ -16,3 +16,16 @@ jQuery ($) ->
     return
 
   )
+
+  $(document).on("click", "#custom_agreement", ->
+    theAgreement = $('#custom_agreement')
+    theComment = $('#custom_agreement_comment')
+    theCommentLabel = $('#custom_agreement_comment_label')
+    console.log("found", theAgreement[0].checked)
+    if theAgreement[0].checked == true
+      theComment[0].hidden = false
+      theCommentLabel[0].hidden = false 
+    if theAgreement[0].checked == false
+      theComment[0].hidden = true
+      theCommentLabel[0].hidden = true 
+  )
