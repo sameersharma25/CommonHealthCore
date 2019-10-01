@@ -484,6 +484,8 @@ module Api
                 @user_profile[k.to_s] = v.to_s
               when 'name'
                 @user_profile[k.to_s] = v.to_s
+              when 'otp_required_for_login'
+                @user_profile[k.to_s] = v.to_s
             end 
         end 
       render :json => {status: :ok, profile: @user_profile}
@@ -496,6 +498,7 @@ module Api
         user.admin = params[:admin] if params[:admin]
         user.phone_number = params[:phone_number] if params[:phone_number]
         user.name  = params[:name] if params[:name]
+        user.otp_required_for_login = params[:otp_required_for_login] if params[:otp_required_for_login]
         user.save
         render :json => {status: :ok, message: "User Details have been updated" }
     end 

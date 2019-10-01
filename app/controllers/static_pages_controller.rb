@@ -12,9 +12,12 @@ class StaticPagesController < ApplicationController
 
 	def admin_contact
 		#find master application
-		master_app = ClientApplication.find_by(master_application_status: true)
-			logger.debug("master #{master_app.id}")
+		#master_app = ClientApplication.find_by(master_application_status: true)
 		#find users with master application ID and Admin == true
-		@admin_user = User.where(:admin => true, :client_application_id => master_app.id).entries
+		#@admin_user = User.where(:admin => true, :client_application_id => master_app.id).entries
+
+		@admin_user = ClientApplication.where(master_application_status: true).first.users.first
+
+
 	end 
 end
