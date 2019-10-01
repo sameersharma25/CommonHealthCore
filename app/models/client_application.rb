@@ -16,7 +16,8 @@ class ClientApplication
   field :reason_for_agreement_reject, type: String
   field :logo, type: String 
   field :theme, type: String
-
+  field :custom_agreement, type: Boolean, default: false 
+  field :custom_agreement_comment, type: String 
   mount_uploader :logo, LogoUploader
   mount_uploader :client_agreement , ClientAgreementUploader
 

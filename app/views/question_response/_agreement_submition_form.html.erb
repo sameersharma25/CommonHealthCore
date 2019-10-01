@@ -9,7 +9,17 @@
     <div class="field">
       <%= f.file_field :client_agreement%>
     </div>
+    
+    <div class="field">
+      <%= f.label :custom_agreement%>
+      <%= f.check_box :custom_agreement, id: :custom_agreement %>
+  
+    </div>
 
+    <div class="field">
+      <%= f.label :custom_agreement_comment, id: :custom_agreement_comment_label, hidden: :true %>
+      <%= f.text_field :custom_agreement_comment, id: :custom_agreement_comment, hidden: :true %>
+    </div>
 
     <div>
       <%= f.label :signed_documents%><br>
