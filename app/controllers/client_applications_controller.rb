@@ -33,6 +33,22 @@ class ClientApplicationsController < ApplicationController
       end
 
     end
+
+    ## To Be. Background Job check_expiration_date
+    all_ca = ClientApplication.all
+
+      all_ca.each do |ca|
+        logger.debug("Here we are")
+        logger.debug("Expiration Date #{ca.client_agreement_expiration}")
+        logger.debug("Today DAte #{Date.today}")
+        if ca.client_agreement_expiration = Date.today
+          ca.agreement_signed = false
+          ca.agreement_counter_sign = "pending"
+        else 
+        end 
+
+      end 
+    ##
   end
 
   # GET /client_applications/1
@@ -125,7 +141,11 @@ class ClientApplicationsController < ApplicationController
       logger.debug("IN the counter sign if statement**************************")
       @client_application.agreement_counter_sign = "Pending"
       @client_application.agreement_signed = false
-      # @client_application.save
+      @client_application.client_agreement_sign_date = Date.today
+      #Whoaaaa
+      @client_application.client_agreement_expiration = helper.check_expiration_date(@client_application)
+ 
+      #@client_application.save
     end
     @client_application.update(client_application_params)
     redirect_to root_path
@@ -774,7 +794,6 @@ class ClientApplicationsController < ApplicationController
         table_name: 'contact_management',
         key: {
             url: params["url"]
-            #url: 'https://valleyymca.org'
         }
       }
 
@@ -801,12 +820,20 @@ class ClientApplicationsController < ApplicationController
     @agreement_template = AgreementTemplate.new
   end
 
-  def create_agreement_template
+  def create_agreement_template #DOUBLE CHECK             
     logger.debug("you are in the creeate cea METHOD************** #{params.inspect}")
     agreement_template = AgreementTemplate.new
     agreement_template.file_name = params["agreement_template"]["file_name"]
     agreement_template.agreement_doc = params["agreement_template"]["agreement_doc"]
     agreement_template.agreement_type = params["agreement_template"]["agreement_type"]
+    # Valid Till Agreement
+    agreement_template.client_agreement_valid_til = params["agreement_template"]["client_agreement_valid_til"]
+    agreement_template.agreement_expiration_date = params["agreement_template"]["agreement_expiration_date"]
+    #Valid For Agreement
+    agreement_template.client_agreement_valid_for = params["agreement_template"]["client_agreement_valid_for"]
+    agreement_template.valid_for_integer = params["agreement_template"]["valid_for_integer"]
+    agreement_template.valid_for_interval = params["agreement_template"]["valid_for_interval"]
+
     agreement_template.save
 
     redirect_to agreement_management_path
@@ -862,6 +889,8 @@ class ClientApplicationsController < ApplicationController
     customer.client_agreement = params[:client_application][:client_agreement]
     customer.agreement_counter_sign = "Done"
     customer.agreement_signed = true
+    customer.client_agreement_sign_date = Date.today 
+    customer.client_agreement_expiration = helper.check_expiration_date(customer)
     customer.save
 
     redirect_to pending_agreements_path
@@ -906,7 +935,7 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :custom_agreement, :custom_agreement_comment, :accept_referrals,:client_speciality, :client_agreement, :agreement_type, :logo ,#users_attributes: [:name, :email, :_destroy],
+    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :custom_agreement, :custom_agreement_comment, :agreement_expiration_date, :valid_for_integer, :valid_for_interval, :client_agreement_valid_til, :client_agreement_valid_for, :client_agreement_expiration, :client_agreement_sign_date, :accept_referrals, :client_speciality, :client_agreement, :agreement_type, :logo ,#users_attributes: [:name, :email, :_destroy],
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end

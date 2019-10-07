@@ -153,8 +153,21 @@ jQuery ($) ->
       changed_value: changed_value,
       change_param: change_param
     return
-
   )
+
+  $(document).on("change", "#valid_for_box", ->
+    valid_for = $('#valid_for_box')
+    valid_til = $('#valid_til_box')
+    valid_for[0].checked = true
+    valid_til[0].checked = false
+  )
+  $(document).on("change", "#valid_til_box", ->
+    valid_for = $('#valid_for_box')
+    valid_til = $('#valid_til_box')
+    valid_for[0].checked = false
+    valid_til[0].checked = true
+  )
+
 
   $(document).on("click", "#custom_agreement", ->
     theAgreement = $('#custom_agreement')
