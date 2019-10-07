@@ -2,7 +2,8 @@ module ClientApplicationsHelper
   def catalog_table_content
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
 
-    table_name = 'contact_management'
+    # table_name = 'contact_management'
+    table_name = ENV["CATALOG_TABLE_NAME"]
     params = {
         table_name: table_name,
         # projection_expression: "url",
@@ -15,7 +16,7 @@ module ClientApplicationsHelper
   
   def get_catalog(url)
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-    table_name = 'contact_management'
+    table_name = ENV["CATALOG_TABLE_NAME"]
 
     parameters = {
         table_name: table_name,

@@ -1,5 +1,5 @@
 class RegistrationRequestMailer < ActionMailer::Base
-  default from: "test@example.com"
+  # default from: "test@example.com"
   def registation_request(rr)
     @request = rr
     logger.debug("INSIDE THE MAILER : #{rr.inspect}")

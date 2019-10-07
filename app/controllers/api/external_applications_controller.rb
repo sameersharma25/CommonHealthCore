@@ -133,7 +133,7 @@ module Api
 
                             logger.debug("client_application #{client_application.inspect}")
                             logger.debug("external_application #{external_application.inspect}")
-                        if client_application.agreement_type == external_application.agreement_type
+                        # if client_application.agreement_type == external_application.agreement_type
                             #logger.debug("client_application #{client_application.inspect}")
                               #logger.debug("external_application #{external_application.inspect}")
                              if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
@@ -142,10 +142,10 @@ module Api
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                              end 
-                        else
+                        # else
                             #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                        end 
+                            # SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                        # end
                 else 
                     logger.debug("NIL NIL NIL NIL NIL NIL NIL")
  
@@ -296,7 +296,9 @@ module Api
 
     def in_coming_referrals
       in_rfl_array = []
-      incoming_referrals = LedgerStatus.where(referred_application_id: params[:application_id])
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application
+      incoming_referrals = LedgerStatus.where(referred_application_id: client_application)
       incoming_referrals.each do |in_rfl|
         referred_from = ClientApplication.find(in_rfl.referred_by_id).name
         task_id = in_rfl.ledger_master.task_id

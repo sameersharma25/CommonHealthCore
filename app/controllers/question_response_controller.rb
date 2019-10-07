@@ -84,7 +84,7 @@ class QuestionResponseController < ApplicationController
   def next_question
 
     @customer_id = params[:cus_id]
-    @client_application = ClientApplication.find(@customer_id)
+
     q = Question.find(params[:ques_id])
     qr = QuestionResponse.where(client_application_id: params[:cus_id], question_id: params[:ques_id]).first
 
@@ -124,8 +124,8 @@ class QuestionResponseController < ApplicationController
       else
         @next_question = Question.find(q.nqn)
       end
-
     end
+    @client_application = ClientApplication.find(@customer_id)
   end
 
 
