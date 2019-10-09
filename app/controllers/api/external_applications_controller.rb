@@ -7,7 +7,20 @@ module Api
 
     def render_script
       render html: '<div>html goes here</div>'.html_safe
-    end 
+    end
+
+
+    def reject_request
+      task_id = params[:task_id]
+      task = Task.find(task_id)
+      ledger_master = LedgerMaster.where(task_id: task_id).first
+      existing_status= ledger_master.ledger_statuses.where(referred_application_id: params[:external_application_id] ).first
+
+      existing_status.ledger_status = "Rejected"
+      existing_status.request_reject_reason = params[:request_reject_reason]
+      existing_status.save
+
+    end
 
     def send_patient #Which person should I email if it fails???
       task_id = params[:task_id]
@@ -297,7 +310,7 @@ module Api
     def in_coming_referrals
       in_rfl_array = []
       user = User.find_by(email: params[:email])
-      client_application = user.client_application
+      client_application = user.client_application.id.to_s
       incoming_referrals = LedgerStatus.where(referred_application_id: client_application)
       incoming_referrals.each do |in_rfl|
         referred_from = ClientApplication.find(in_rfl.referred_by_id).name
@@ -308,12 +321,12 @@ module Api
         patient_name = patient.first_name + " "+ patient.last_name
         in_rfl_status = in_rfl.ledger_status
         ref = Task.find(task_id).referral
-        ref_name = ref.referral_name
+        ref_name = ref.referral_name + "- Copy"
         ref_source = ref.source
         ref_urgency = ref.urgency
         in_rfl_hash = {referred_from: referred_from,task_id:t_id, task_description: task_description, status: in_rfl_status,
                        external_application_id: in_rfl.referred_application_id,patient_name: patient_name,ref_name: ref_name,
-                       ref_source: ref_source,ref_urgency: ref_urgency }
+                       ref_source: referred_from,ref_urgency: ref_urgency }
         in_rfl_array.push(in_rfl_hash)
       end
       render :json=> {status: :ok, incoming_referrals: in_rfl_array  }

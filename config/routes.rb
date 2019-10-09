@@ -225,6 +225,7 @@ Rails.application.routes.draw do
 
     #API's for External Application
     post "/send_patient", to: "external_applications#send_patient"
+    post "/reject_request", to: "external_applications#reject_request"
     get "/client_list", to: "external_applications#client_list"
     post "rfl_send", to: "external_applications#send_referral"
     post "rfl_out", to: "external_applications#out_going_referrals"
