@@ -20,6 +20,7 @@ module Api
       existing_status.request_reject_reason = params[:request_reject_reason]
       existing_status.save
 
+      render :json=> {status: :ok, message: "Request Rejected " }
     end
 
     def send_patient #Which person should I email if it fails???
