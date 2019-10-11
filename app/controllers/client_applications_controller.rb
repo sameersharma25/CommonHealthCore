@@ -41,7 +41,7 @@ class ClientApplicationsController < ApplicationController
         logger.debug("Here we are")
         logger.debug("Expiration Date #{ca.client_agreement_expiration}")
         logger.debug("Today DAte #{Date.today}")
-        if ca.client_agreement_expiration = Date.today
+        if ca.client_agreement_expiration == Date.today
           ca.agreement_signed = false
           ca.agreement_counter_sign = "pending"
         else 
@@ -141,9 +141,6 @@ class ClientApplicationsController < ApplicationController
       logger.debug("IN the counter sign if statement**************************")
       @client_application.agreement_counter_sign = "Pending"
       @client_application.agreement_signed = false
-      @client_application.client_agreement_sign_date = Date.today
-      #Whoaaaa
-      @client_application.client_agreement_expiration = helper.check_expiration_date(@client_application)
  
       #@client_application.save
     end
