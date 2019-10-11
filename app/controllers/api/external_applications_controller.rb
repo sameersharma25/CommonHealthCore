@@ -7,7 +7,21 @@ module Api
 
     def render_script
       render html: '<div>html goes here</div>'.html_safe
-    end 
+    end
+
+
+    def reject_request
+      task_id = params[:task_id]
+      task = Task.find(task_id)
+      ledger_master = LedgerMaster.where(task_id: task_id).first
+      existing_status= ledger_master.ledger_statuses.where(referred_application_id: params[:external_application_id] ).first
+
+      existing_status.ledger_status = "Rejected"
+      existing_status.request_reject_reason = params[:request_reject_reason]
+      existing_status.save
+
+      render :json=> {status: :ok, message: "Request Rejected " }
+    end
 
     def send_patient #Which person should I email if it fails???
       task_id = params[:task_id]
@@ -62,7 +76,7 @@ module Api
                             #logger.debug("client_application #{client_application.inspect}")
                               #logger.debug("external_application #{external_application.inspect}")
                              if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
-                               send_task(result["p_id"], task,external_application_id,existing_status)
+                               send_task(result["p_id"], task,external_application_id,existing_status, patient)
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
@@ -72,7 +86,7 @@ module Api
                             SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                         end 
                 else 
-                    send_task(result["p_id"], task,external_application_id,existing_status)
+                    send_task(result["p_id"], task,external_application_id,existing_status,patient)
                 end 
                 ###
           else
@@ -112,7 +126,7 @@ module Api
                             #logger.debug("client_application #{client_application.inspect}")
                               #logger.debug("external_application #{external_application.inspect}")
                              if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
-                                send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+                                send_task(new_patient.id.to_s, task,external_application_id, existing_status, patient)
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
@@ -122,7 +136,7 @@ module Api
                             SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                         end 
                 else 
-                    send_task(new_patient.id.to_s, task,external_application_id, existing_status)
+                    send_task(new_patient.id.to_s, task,external_application_id, existing_status, patient)
                 end 
 
         else
@@ -133,23 +147,23 @@ module Api
 
                             logger.debug("client_application #{client_application.inspect}")
                             logger.debug("external_application #{external_application.inspect}")
-                        if client_application.agreement_type == external_application.agreement_type
+                        # if client_application.agreement_type == external_application.agreement_type
                             #logger.debug("client_application #{client_application.inspect}")
                               #logger.debug("external_application #{external_application.inspect}")
                              if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
-                                send_task(patient_check.id.to_s, task,external_application_id, existing_status) 
+                                send_task(patient_check.id.to_s, task,external_application_id, existing_status, patient)
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
                              end 
-                        else
+                        # else
                             #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                        end 
+                            # SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                        # end
                 else 
                     logger.debug("NIL NIL NIL NIL NIL NIL NIL")
  
-                    send_task(patient_check.id.to_s, task,external_application_id, existing_status) 
+                    send_task(patient_check.id.to_s, task,external_application_id, existing_status, patient)
                 end 
 
         end
@@ -160,7 +174,7 @@ module Api
     end
 
 
-    def send_task(p_id, task, ea_id, ledg_stat)
+    def send_task(p_id, task, ea_id, ledg_stat, old_patient)
       logger.debug("SENDING TASK TO EXTERNAL APPLICATION*************** #{p_id}, -----task is : #{task.inspect}")
 
       external_application = ClientApplication.find(ea_id)
@@ -222,9 +236,20 @@ module Api
           t.task_referred_from = ledg_stat.referred_by_id
           t.security_keys = helpers.security_keys_for_task(task, patient)
           if t.save
-            ledg_stat.ledger_status = "Accepted"
+            ledg_stat.ledger_status = "Transferred"
             ledg_stat.external_object_id = t.id.to_s
             ledg_stat.save
+            ledger_master = LedgerMaster.new
+            ledger_master.task_id = t.id.to_s
+            ledger_master.patient_id = p_id
+            if ledger_master.save
+              ledger_status = LedgerStatus.new
+              ledger_status.referred_application_id = ea_id
+              ledger_status.referred_by_id = old_patient.client_application_id.id.to_s
+              ledger_status.external_object_id = task.id
+              ledger_status.ledger_status = "Accepted"
+              ledger_status.save
+            end
           end
 
           render :json=> {status: :ok, message: "Patient and Task were transferred successfully " }
@@ -296,7 +321,9 @@ module Api
 
     def in_coming_referrals
       in_rfl_array = []
-      incoming_referrals = LedgerStatus.where(referred_application_id: params[:application_id])
+      user = User.find_by(email: params[:email])
+      client_application = user.client_application.id.to_s
+      incoming_referrals = LedgerStatus.where(referred_application_id: client_application)
       incoming_referrals.each do |in_rfl|
         referred_from = ClientApplication.find(in_rfl.referred_by_id).name
         task_id = in_rfl.ledger_master.task_id
@@ -306,12 +333,12 @@ module Api
         patient_name = patient.first_name + " "+ patient.last_name
         in_rfl_status = in_rfl.ledger_status
         ref = Task.find(task_id).referral
-        ref_name = ref.referral_name
+        ref_name = ref.referral_name + "- Copy"
         ref_source = ref.source
         ref_urgency = ref.urgency
         in_rfl_hash = {referred_from: referred_from,task_id:t_id, task_description: task_description, status: in_rfl_status,
                        external_application_id: in_rfl.referred_application_id,patient_name: patient_name,ref_name: ref_name,
-                       ref_source: ref_source,ref_urgency: ref_urgency }
+                       ref_source: referred_from,ref_urgency: ref_urgency }
         in_rfl_array.push(in_rfl_hash)
       end
       render :json=> {status: :ok, incoming_referrals: in_rfl_array  }
@@ -347,6 +374,40 @@ module Api
 
     def ledger_record_list
 
+
+    end
+
+    def ledger_details
+      task_id =  params[:task_id]
+      ledger_master = LedgerMaster.where(task_id: task_id).first
+      user = User.find(params[:email])
+      external_application_id = user.client_application_id.id.to_s
+      ledger_status= ledger_master.ledger_statuses.where(referred_application_id: external_application_id ).first
+      referred_by_id = ledger_status.referred_by_id
+      referred_by = ClientApplication.find(referred_by_id).name
+      internal_record_array = []
+      internal_records = ledger_status.ledger_records
+      internal_records.each do |ir|
+        changes = ir.changed_fields
+        created_at = ir.created_at
+        internal_record_hash = {changes: changes, created_at: created_at}
+        internal_record_array.push(internal_record_hash)
+      end
+
+      external_record_array = []
+      external_status = LedgerStatus.where(external_object_id: task_id ).first
+      if !external_status.nil?
+        external_records = external_status.ledger_records if !external_status.nil?
+
+        external_records.each do |er|
+          changes = er.changed_fields
+          created_at = er.created_at
+          external_record_hash = {changes: changes, created_at: created_at}
+          external_record_array.push(external_record_hash)
+        end
+      end
+
+      render :json => {status: :ok, ledger_details: {internal_record_array: internal_record_array, external_record_array: external_record_array } }
 
     end
 

@@ -65,7 +65,8 @@ class ScrapingRulesController < ApplicationController
     logger.debug("the parameters for adding rule are: #{params.inspect}")
 
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-    table_name = 'contact_management'
+    # table_name = 'contact_management'
+    table_name = ENV["CATALOG_TABLE_NAME"]
 
     parameters = {
         table_name: table_name,

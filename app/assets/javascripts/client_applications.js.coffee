@@ -168,7 +168,6 @@ jQuery ($) ->
     valid_til[0].checked = true
   )
 
-
   $(document).on("click", "#custom_agreement", ->
     theAgreement = $('#custom_agreement')
     theComment = $('#custom_agreement_comment')

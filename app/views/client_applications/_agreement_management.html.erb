@@ -12,7 +12,9 @@
     <% agreements.each do |agreement|%>
       <tr>
         <td> <%= agreement.file_name%></td>
+        <%if !agreement.agreement_doc.url.nil?%>         
         <td><%= link_to agreement.agreement_doc.url.split("/")[-1], agreement.agreement_doc.url, target: '_blank' %></td>
+        <%end%>
 
         <td> 
           <% if agreement.client_agreement_valid_til == true %>
@@ -20,8 +22,6 @@
           <% else %>
                <%= agreement.valid_for_integer%><%= agreement.valid_for_interval %>
           <% end %>
-          
-
         </td>
         
         <%if agreement.active == false%>

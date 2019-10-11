@@ -176,7 +176,9 @@ class ClientApplicationsController < ApplicationController
   def master_provider
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
 
-    table_name = 'master_provider'
+    # table_name = 'master_provider'
+    table_name = ENV["MASTER_TABLE_NAME"]
+
     params = {
         table_name: table_name,
         # projection_expression: "url",
@@ -226,7 +228,7 @@ class ClientApplicationsController < ApplicationController
 
     # details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
     #            programHash: @programHash, geoScope: @geoScope, programs: @programs }
-    details = get_catalog_details("contact_management")
+    details = get_catalog_details(ENV["CATALOG_TABLE_NAME"])
     # logger.debug("the detail are : #{details}")
     @organizationName = details[:organizationName]
     logger.debug("the orgName is : #{@organizationName}")
@@ -245,7 +247,7 @@ class ClientApplicationsController < ApplicationController
 
 
   def duplicate_entry_details
-    details = get_catalog_details("master_provider")
+    details = get_catalog_details(ENV["MASTER_TABLE_NAME"])
     # logger.debug("the detail are : #{details}")
     @organizationName = details[:organizationName]
     logger.debug("the orgName is : #{@organizationName}")
@@ -264,7 +266,7 @@ class ClientApplicationsController < ApplicationController
 
   def master_provider_details
 
-    details = get_catalog_details("master_provider")
+    details = get_catalog_details(ENV["MASTER_TABLE_NAME"])
     # logger.debug("the detail are : #{details}")
     @organizationName = details[:organizationName]
     logger.debug("the orgName is : #{@organizationName}")
@@ -575,7 +577,8 @@ class ClientApplicationsController < ApplicationController
     logger.debug("IN THE DUPLICATE METHOD*************")
     # catalog = params[:catalog]
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-    table_name = 'master_provider'
+    # table_name = 'master_provider'
+    table_name = ENV["MASTER_TABLE_NAME"]
     org_url = params[:org_url]
     params = {
         table_name: table_name,
@@ -637,7 +640,8 @@ class ClientApplicationsController < ApplicationController
     logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
     dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
     parameters = {
-        table_name: 'contact_management',
+        # table_name: 'contact_management',
+        table_name: ENV["CATALOG_TABLE_NAME"],
         key: {
             url: params["url"]
         },
@@ -686,7 +690,8 @@ class ClientApplicationsController < ApplicationController
   logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']} &&&& #{params['pocEmail']}")
   dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
   parameters = {
-      table_name: 'contact_management',
+      # table_name: 'contact_management',
+      table_name: ENV["CATALOG_TABLE_NAME"],
       key: {
           url: params["url"]
       },
@@ -714,7 +719,7 @@ class ClientApplicationsController < ApplicationController
 
 
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-    table_name = 'contact_management'
+    table_name = ENV["CATALOG_TABLE_NAME"]
     parameters = {
         table_name: table_name,
         key: {
@@ -736,7 +741,7 @@ class ClientApplicationsController < ApplicationController
 
     logger.debug("******************insert_in_master_provider #{result}")
 
-    table_name1 = 'master_provider'
+    table_name1 = ENV["MASTER_TABLE_NAME"]
 
     params1 = {
         table_name: table_name1,
@@ -760,7 +765,7 @@ class ClientApplicationsController < ApplicationController
     logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']}")
     dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
     parameters = {
-        table_name: 'contact_management',
+        table_name: ENV["CATALOG_TABLE_NAME"],
         key: {
             url: params["url"]
         },
@@ -788,7 +793,7 @@ class ClientApplicationsController < ApplicationController
     logger.debug("YOU STILL KNOW RAILS2 #{params['url']}")
     dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
     parameters = {
-        table_name: 'contact_management',
+        table_name: ENV["CATALOG_TABLE_NAME"],
         key: {
             url: params["url"]
         }
@@ -933,6 +938,10 @@ class ClientApplicationsController < ApplicationController
   def client_application_params
     # params.fetch(:client_application, {})
     params.require(:client_application).permit(:name, :application_url,:service_provider_url, :custom_agreement, :custom_agreement_comment, :agreement_expiration_date, :valid_for_integer, :valid_for_interval, :client_agreement_valid_til, :client_agreement_valid_for, :client_agreement_expiration, :client_agreement_sign_date, :accept_referrals, :client_speciality, :client_agreement, :agreement_type, :logo ,#users_attributes: [:name, :email, :_destroy],
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4f1ae5c1191b84034ec41a9f8f33d57ff6743d81
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end

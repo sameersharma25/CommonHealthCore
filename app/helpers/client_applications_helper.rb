@@ -2,7 +2,8 @@ module ClientApplicationsHelper
   def catalog_table_content
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
 
-    table_name = 'contact_management'
+    # table_name = 'contact_management'
+    table_name = ENV["CATALOG_TABLE_NAME"]
     params = {
         table_name: table_name,
         # projection_expression: "url",
@@ -15,7 +16,7 @@ module ClientApplicationsHelper
   
   def get_catalog(url)
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-    table_name = 'contact_management'
+    table_name = ENV["CATALOG_TABLE_NAME"]
 
     parameters = {
         table_name: table_name,
@@ -38,7 +39,6 @@ module ClientApplicationsHelper
         if active_agreement[0].client_agreement_valid_til == true
             #@client_application.client_agreement_expiration = active_agreement.agreement_expiration_date
             return active_agreement.agreement_expiration_date
-            
         elsif active_agreement[0].client_agreement_valid_for == true
             if active_agreement[0].valid_for_interval == 'months'
               interval_month = 1
