@@ -380,7 +380,9 @@ module Api
     def ledger_details
       task_id =  params[:task_id]
       ledger_master = LedgerMaster.where(task_id: task_id).first
-      ledger_status= ledger_master.ledger_statuses.where(referred_application_id: params[:external_application_id] ).first
+      user = User.find(params[:email])
+      external_application_id = user.client_application_id.id.to_s
+      ledger_status= ledger_master.ledger_statuses.where(referred_application_id: external_application_id ).first
       referred_by_id = ledger_status.referred_by_id
       referred_by = ClientApplication.find(referred_by_id).name
       internal_record_array = []
