@@ -36,10 +36,14 @@
             </table>
         <%end%> 
         
+        
         <div>
           <strong>Logo:</strong>
-          <p><%= image_tag @client_application.logo.thumb.url %></p>
+          <% if @client_application.logo.present? %>
+            <p><%= image_tag @client_application.logo.thumb.url %></p>
+          <% end %>
         </div>
+        
 
 
 

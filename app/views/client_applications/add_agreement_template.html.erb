@@ -1,15 +1,45 @@
 <%= form_for @agreement_template, url: create_agreement_template_path, method: :post, :html => {:multipart => true} do |f|%>
+
+
+<div class="col-md-10">
     <p>
       <%= f.label :file_name %> <br>
       <%= f.text_field :file_name%>
     </p>
+</div>
+
+<div class="col-md-10">
+    <div class="col-md-4"> 
+        <p>
+          <%= f.label :client_agreement_valid_til %>
+          <%= f.check_box :client_agreement_valid_til, id: :valid_til_box %>
+          <%= f.date_field :agreement_expiration_date%>
+        </p>
+    </div>
+
+    <div class="col-md-4">
+        <p>
+          <%= f.label :client_agreement_valid_for %>
+          <%= f.check_box :client_agreement_valid_for, id: :valid_for_box %>
+        </p>
+      <%= f.text_field :valid_for_integer, placeholder: :integer_only %>
+      <%= f.select :valid_for_interval, [ 'months', 'years'] %>
+    </div>
+
+</div>
+
+
+<div class="col-md-10">
     <p>
       <%= f.file_field :agreement_doc%>
     </p>
+</div>
+<div class="col-md-10">
     <p>
       <%= f.select :agreement_type, ['CE-A', 'CE-B', 'BA-1', 'BA-B']%>
     </p>
+</div>
 
     <p><%= f.submit%></p>
 
-<%end%>
+<%end%> 

@@ -153,7 +153,33 @@ jQuery ($) ->
       changed_value: changed_value,
       change_param: change_param
     return
+  )
 
+  $(document).on("change", "#valid_for_box", ->
+    valid_for = $('#valid_for_box')
+    valid_til = $('#valid_til_box')
+    valid_for[0].checked = true
+    valid_til[0].checked = false
+  )
+  $(document).on("change", "#valid_til_box", ->
+    valid_for = $('#valid_for_box')
+    valid_til = $('#valid_til_box')
+    valid_for[0].checked = false
+    valid_til[0].checked = true
+  )
+
+
+  $(document).on("click", "#custom_agreement", ->
+    theAgreement = $('#custom_agreement')
+    theComment = $('#custom_agreement_comment')
+    theCommentLabel = $('#custom_agreement_comment_label')
+    console.log("found", theAgreement[0].checked)
+    if theAgreement[0].checked == true
+      theComment[0].hidden = false
+      theCommentLabel[0].hidden = false 
+    if theAgreement[0].checked == false
+      theComment[0].hidden = true
+      theCommentLabel[0].hidden = true 
   )
 
   $(document).on("click", "#custom_agreement", ->

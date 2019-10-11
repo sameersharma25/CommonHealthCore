@@ -1,9 +1,10 @@
 <table class="table table-responsive table-bordered">
   <thead>
   <tr>
-    <th class="col-md-3">File Name</th>
+    <th class="col-md-2">File Name</th>
     <th class="col-md-3">File Link</th>
-    <th class="col-md-3"></th>
+    <th class="col-md-2">Expiration Date</th>
+    <th class="col-md-3"></th> 
 
   </tr>
   </thead>
@@ -11,9 +12,17 @@
     <% agreements.each do |agreement|%>
       <tr>
         <td> <%= agreement.file_name%></td>
-        <%if !agreement.agreement_doc.url.nil?%>
-          <td><%= link_to agreement.agreement_doc.url.split("/")[-1], agreement.agreement_doc.url, target: '_blank' %></td>
+        <%if !agreement.agreement_doc.url.nil?%>         
+        <td><%= link_to agreement.agreement_doc.url.split("/")[-1], agreement.agreement_doc.url, target: '_blank' %></td>
         <%end%>
+        <td> 
+          <% if agreement.client_agreement_valid_til == true %>
+              <%= agreement.agreement_expiration_date %>
+          <% else %>
+               <%= agreement.valid_for_integer%><%= agreement.valid_for_interval %>
+          <% end %>
+        </td>
+
         <%if agreement.active == false%>
           <td><%= link_to "Activate", "#", :id => "#{agreement.id}" ,:class => "agreement_activate_button" ,:remote => true%></td>
         <%else%>
@@ -24,4 +33,4 @@
   </tbody>
 </table>
 
-<br>
+<br> 

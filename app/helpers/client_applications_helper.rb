@@ -30,4 +30,31 @@ module ClientApplicationsHelper
 
     result = dynamodb.get_item(parameters)[:item]
   end
+
+
+  def check_agreement_expiration(ca)
+        @client_application = ca
+        active_agreement = AgreementTemplate.where(agreement_type: @client_application.agreement_type, active: true).entries
+
+        if active_agreement[0].client_agreement_valid_til == true
+            #@client_application.client_agreement_expiration = active_agreement.agreement_expiration_date
+            return active_agreement.agreement_expiration_date
+        elsif active_agreement[0].client_agreement_valid_for == true
+            if active_agreement[0].valid_for_interval == 'months'
+              interval_month = 1
+            elsif active_agreement[0].valid_for_interval == 'years'
+              interval_month = 12
+            else
+              logger.debug("User did not pick. Need validations") 
+            end 
+            number_of_months =  (active_agreement[0].valid_for_integer.to_i * interval_month)
+            expiration = Date.today + number_of_months.months
+            logger.debug("expiration #{expiration}")
+            #@client_application.client_agreement_expiration = expiration
+            return expiration
+        else
+          logger.debug("Didn't pick an expiration date.")
+        end 
+
+  end 
 end
