@@ -241,8 +241,15 @@ module Api
 
       task.security_keys = []
       task.security_keys = helpers.security_keys_for_task(task, patient)
-
+      changes = task.changes
       if task.save
+        ledger_master = LedgerMaster.where(task_id: task_id).first
+        ledger_status= ledger_master.ledger_statuses.where(referred_application_id: params[:external_application_id] ).first
+        new_record = LedgerRecord.new
+        new_record.changed_fields = changes
+        new_record.ledger_status_id = ledger_status.id.to_s
+        nes_record.save
+
         render :json=> {status: :ok, message: "Task Updated"}
       end
     end

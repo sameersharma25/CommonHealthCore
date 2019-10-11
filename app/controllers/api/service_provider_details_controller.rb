@@ -66,7 +66,7 @@ module Api
 
     def contact_management_details_for_plugin
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
 
       parameters = {
           table_name: table_name,
@@ -94,7 +94,7 @@ module Api
     def get_catalogue_site_by_id
 
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
 
       parameters = {
           table_name: table_name,
@@ -118,7 +118,7 @@ module Api
     def site_update
 
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
 
       parameters = {
           table_name: table_name,
@@ -172,7 +172,7 @@ module Api
 
     def site_program_list
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
 
       parameters = {
           table_name: table_name,
@@ -198,7 +198,7 @@ module Api
     def get_catalogue_program_by_id
 
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
 
       parameters = {
           table_name: table_name,
@@ -221,7 +221,7 @@ module Api
     def program_update
 
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
 
       parameters = {
           table_name: table_name,
@@ -279,11 +279,11 @@ module Api
       user = User.find_by(email: params[:email])
       client_application_id = user.client_application_id.to_s
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
       # domain_name = Addressable::URI.parse(params[:catalog_data]["url"]).host
       # item["url"] = "https://"+domain_name+"/"
-      url_split = params[:catalog_data]["url"].split("/")
-      item["url"] = url_split[0]+"//"+url_split[2]+"/"
+      #url_split = params[:catalog_data]["url"].split("/")
+      #item["url"] = url_split[0]+"//"+url_split[2]+"/"
       item["customer_id"] = client_application_id
       item["status"] = "New"
       created_at = DateTime.now.strftime("%F %T")
@@ -313,7 +313,7 @@ module Api
       organizationName = params[:organizationName].to_unsafe_h if params[:organizationName]
 
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
 
       if geoScope && organizationName
         parameters = {
@@ -369,7 +369,7 @@ module Api
     def mandatory_parameters_check_after_update(item, event)
       result = mandatory_parameters_check(item, event)
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = 'contact_management'
+      table_name = ENV["CATALOG_TABLE_NAME"]
       parameters = {
           table_name: table_name,
           key: {
@@ -392,7 +392,7 @@ module Api
 
       if event == "Updating"
         dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-        table_name = 'contact_management'
+        table_name = ENV["CATALOG_TABLE_NAME"]
 
         parameters = {
             table_name: table_name,
