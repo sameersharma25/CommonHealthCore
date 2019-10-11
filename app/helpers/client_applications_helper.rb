@@ -38,6 +38,7 @@ module ClientApplicationsHelper
         if active_agreement[0].client_agreement_valid_til == true
             #@client_application.client_agreement_expiration = active_agreement.agreement_expiration_date
             return active_agreement.agreement_expiration_date
+            
         elsif active_agreement[0].client_agreement_valid_for == true
             if active_agreement[0].valid_for_interval == 'months'
               interval_month = 1
