@@ -15,6 +15,7 @@
         <%if !agreement.agreement_doc.url.nil?%>         
         <td><%= link_to agreement.agreement_doc.url.split("/")[-1], agreement.agreement_doc.url, target: '_blank' %></td>
         <%end%>
+
         <td> 
           <% if agreement.client_agreement_valid_til == true %>
               <%= agreement.agreement_expiration_date %>
