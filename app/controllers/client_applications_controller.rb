@@ -939,9 +939,13 @@ class ClientApplicationsController < ApplicationController
     # params.fetch(:client_application, {})
     params.require(:client_application).permit(:name, :application_url,:service_provider_url, :custom_agreement, :custom_agreement_comment, :agreement_expiration_date, :valid_for_integer, :valid_for_interval, :client_agreement_valid_til, :client_agreement_valid_for, :client_agreement_expiration, :client_agreement_sign_date, :accept_referrals, :client_speciality, :client_agreement, :agreement_type, :logo ,#users_attributes: [:name, :email, :_destroy],
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 4f1ae5c1191b84034ec41a9f8f33d57ff6743d81
+=======
+
+>>>>>>> 063a58448a7b1ece2757f3cbb364bce1449c24ec
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
 end

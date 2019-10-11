@@ -15,7 +15,10 @@
         <%if !agreement.agreement_doc.url.nil?%>         
         <td><%= link_to agreement.agreement_doc.url.split("/")[-1], agreement.agreement_doc.url, target: '_blank' %></td>
         <%end%>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 063a58448a7b1ece2757f3cbb364bce1449c24ec
         <td> 
           <% if agreement.client_agreement_valid_til == true %>
               <%= agreement.agreement_expiration_date %>
@@ -23,7 +26,11 @@
                <%= agreement.valid_for_integer%><%= agreement.valid_for_interval %>
           <% end %>
         </td>
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 063a58448a7b1ece2757f3cbb364bce1449c24ec
         <%if agreement.active == false%>
           <td><%= link_to "Activate", "#", :id => "#{agreement.id}" ,:class => "agreement_activate_button" ,:remote => true%></td>
         <%else%>
