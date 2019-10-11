@@ -11,7 +11,9 @@
     <% agreements.each do |agreement|%>
       <tr>
         <td> <%= agreement.file_name%></td>
-        <td><%= link_to agreement.agreement_doc.url.split("/")[-1], agreement.agreement_doc.url, target: '_blank' %></td>
+        <%if !agreement.agreement_doc.url.nil?%>
+          <td><%= link_to agreement.agreement_doc.url.split("/")[-1], agreement.agreement_doc.url, target: '_blank' %></td>
+        <%end%>
         <%if agreement.active == false%>
           <td><%= link_to "Activate", "#", :id => "#{agreement.id}" ,:class => "agreement_activate_button" ,:remote => true%></td>
         <%else%>
