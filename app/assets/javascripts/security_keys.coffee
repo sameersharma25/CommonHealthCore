@@ -12,7 +12,7 @@
   		theDiv.each (x) ->
   			if theDiv[x].checked == true
   				keyValues.push(theDiv[x].id)
-  		$.post "/security_keys",
+  		$.post "/backend/security_keys",
 	      key_name: keyName,
 	      key_value: keyValues,
 	      key_type: 'pii'
@@ -28,7 +28,7 @@
   			if theDiv[x].checked == true
   				keyValues.push(theDiv[x].id)
   		console.log("my array",keyValues)
-  		$.post "/security_keys",
+  		$.post "/backend/security_keys",
 	      key_name: keyName,
 	      key_value: keyValues,
 	      key_type: 'phi'
@@ -43,7 +43,7 @@
   			if theDiv[x].checked == true
   				keyValues.push(theDiv[x].id)
   		console.log("my array",keyValues)
-  		$.post "/security_keys",
+  		$.post "/backend/security_keys",
 	      key_name: keyName,
 	      key_value: keyValues,
 	      key_type: 'sad'
@@ -55,7 +55,7 @@
    		row = $('#key_' + id)
    		keyName = row[0].cells[0].innerText
    		console.log("Look", keyName, 'length',keyName.length)
-   		$.post "/delete_keys",
+   		$.post "/backend/delete_keys",
    			key_name: keyName
    )
    #

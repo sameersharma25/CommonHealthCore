@@ -49,7 +49,7 @@ jQuery ($) ->
     console.log("the ids are: " + id)
     $("#user_name").val("")
     $("#user_email").val("")
-    $.post "/wizard_add_user",
+    $.post "/backend/wizard_add_user",
       name: name,
       email: email,
       role_ids: id

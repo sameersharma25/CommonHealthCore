@@ -7,7 +7,7 @@ jQuery ($) ->
     status = $("#status_status").val()
     console.log("the status is :", status)
     $("#status_status").val("")
-    $.post "/wizard_add_status",
+    $.post "/backend/wizard_add_status",
       status: status
     return
 

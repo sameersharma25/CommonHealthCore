@@ -14,7 +14,7 @@ jQuery ($) ->
     $("#notification_rule_subject").val("");
     $("#notification_rule_body").val("");
 
-    $.post "/wizard_add_notification",
+    $.post "/backend/wizard_add_notification",
       status: status,
       time: time,
       subject: subject,

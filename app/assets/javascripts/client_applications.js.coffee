@@ -6,7 +6,7 @@ jQuery ($) ->
   $(document).on("click", ".requested_application", ->
     id = $(this).attr("id")
     console.log("the id of the invite is ", id)
-    $.post "/send_application_invitation",
+    $.post "/backend/send_application_invitation",
       id: id
     return
   )
@@ -32,7 +32,7 @@ jQuery ($) ->
       console.log("the id is : ", id, 'the text is :', text)
 
     console.log("the array from js is :", api_array, "Client ID is : ", client_id  )
-    $.post "/after_signup_external/api_setup",
+    $.post "/backend/after_signup_external/api_setup",
       api_array: api_array,
       client_id: client_id
     return
@@ -47,7 +47,7 @@ jQuery ($) ->
     url_id = $('.myURL')[numVal].innerHTML.replace(/^\s+|\s+$/g, '')
     console.log("Looking for URL", url_id)
     console.log("the row id is: ", row_id, catalogName)
-    $.post "/send_for_approval",
+    $.post "/backend/send_for_approval",
       orgName: catalogName
       url: url_id
     return
@@ -62,7 +62,7 @@ jQuery ($) ->
     woof = $('#rule_' + row_id)
     woof.hide();
 
-    $.post "/delete_catalog",
+    $.post "/backend/delete_catalog",
       url: url_id
     return
 
@@ -78,7 +78,7 @@ jQuery ($) ->
     console.log("my POC Email", pocEmail)
     woof = $('#masterRule_' + row_id)
     woof.hide();
-    $.post "/approve_catalog",
+    $.post "/backend/approve_catalog",
       url: url_id
       pocEmail: pocEmail
     return
@@ -109,7 +109,7 @@ jQuery ($) ->
     woof = $('#masterRule_' + idVal)
     woof.hide();
     
-    $.post "/reject_catalog",
+    $.post "/backend/reject_catalog",
       url: url_id
       rejectReason: textValue[0].value
     return
@@ -118,7 +118,7 @@ jQuery ($) ->
   $(document).on("click",".agreement_activate_button", ->
     id = $(this).attr("id")
     console.log("the id of the activate button is", id)
-    $.post "/change_status_of_agreement_template",
+    $.post "/backend/change_status_of_agreement_template",
       id: id
     return
 
@@ -135,7 +135,7 @@ jQuery ($) ->
     text = $(".reason_for_agreement_reject_"+id).val()
     cus_id = $(".reason_for_agreement_reject_"+id).attr("id")
     console.log("the text is: ", text)
-    $.post "/reject_agreement_template",
+    $.post "/backend/reject_agreement_template",
       reason_for_reject: text,
       cus_id: cus_id
     return
@@ -148,7 +148,7 @@ jQuery ($) ->
     changed_value = $(this).val()
     change_param = $(this).attr("name")
     console.log("IN the change method***", $(this).attr("id"), "tewoiwororwrhworw", $(this).val(), $(this).attr("name"))
-    $.post "/update_sequence",
+    $.post "/backend/update_sequence",
       question: question,
       changed_value: changed_value,
       change_param: change_param
