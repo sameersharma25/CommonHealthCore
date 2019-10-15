@@ -18,7 +18,7 @@ jQuery ($) ->
 #        console.log($(this).val())
 #        cat_ids.push(element.value)
     console.log("the array of the cat ids is: ", ids_hash["row_ids"])
-    $.post "/validate_cat_entry",
+    $.post "/backend/validate_cat_entry",
       ids: ids_hash["cat_ids"],
       row_ids: ids_hash["row_ids"]
     return
@@ -28,7 +28,7 @@ jQuery ($) ->
   $(document).on("click", ".remove_rules", ->
     ids_hash = get_catalogue_ids()
     console.log("the id hash is : ", ids_hash["row_ids"])
-    $.post "/remove_cat_entry",
+    $.post "/backend/remove_cat_entry",
       ids: ids_hash["cat_ids"],
       row_ids: ids_hash["row_ids"]
     return

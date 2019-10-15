@@ -9,7 +9,7 @@ jQuery ($) ->
     cus_id = $("#client_application_id").val()
     ques_id = $("#question_id").val()
 #    console.log("the value of the radio button is :" + selValue + "Customer ID is : "+ cus_id+ "---------"+ ques_id)
-    $.post "next_question",
+    $.post "/backend/next_question",
       answer: selValue,
       cus_id: cus_id,
       ques_id: ques_id

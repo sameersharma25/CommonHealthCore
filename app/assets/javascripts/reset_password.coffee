@@ -6,7 +6,7 @@
   $(document).on("click", "#resetPassword", ->
     theUser = $('#fooFighter').val()
     console.log("said", theUser)
-    $.post "/reset_password_part_two",
+    $.post "/backend/reset_password_part_two",
       user: theUser 
     return
     )

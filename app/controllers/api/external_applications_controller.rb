@@ -245,7 +245,7 @@ module Api
             if ledger_master.save
               ledger_status = LedgerStatus.new
               ledger_status.referred_application_id = ea_id
-              ledger_status.referred_by_id = old_patient.client_application_id.id.to_s
+              ledger_status.referred_by_id = old_patient.client_application_id.to_s
               ledger_status.external_object_id = task.id
               ledger_status.ledger_status = "Accepted"
               ledger_status.save
