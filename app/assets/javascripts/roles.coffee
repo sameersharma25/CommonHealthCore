@@ -15,7 +15,7 @@ jQuery ($) ->
         abilities.push(element.value)
     console.log("ROLE NAME IS" + name+  "the ids are: " + abilities)
     $("#role_name").val("")
-    $.post "/wizard_add_new_role",
+    $.post "/backend/wizard_add_new_role",
       name: name,
       abilities: abilities
     return

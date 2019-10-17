@@ -14,6 +14,11 @@ class ClientApplication
   field :agreement_counter_sign, type: String
   field :agreement_type, type: String
   field :reason_for_agreement_reject, type: String
+
+
+  field :client_agreement_expiration, type: String
+  field :client_agreement_sign_date, type: String  
+ 
   field :logo, type: String 
   field :theme, type: String
   field :custom_agreement, type: Boolean, default: false 

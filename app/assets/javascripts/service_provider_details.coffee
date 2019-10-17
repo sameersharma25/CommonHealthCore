@@ -30,7 +30,7 @@ jQuery ($) ->
     $("#field_name").val('')
     $("#filter_field_values").val('')
     console.log(name + values + type )
-    $.post "/add_filter_fields",
+    $.post "/backend/add_filter_fields",
       name: name,
       values: values,
       type: type
@@ -39,7 +39,7 @@ jQuery ($) ->
   $(document).on("click", ".provider_filter", ->
     filter_value = $(this).val("id")[0].id
     console.log(filter_value)
-    $.get "/filter_page",
+    $.get "/backend/filter_page",
       filter: filter_value
     return
   )
