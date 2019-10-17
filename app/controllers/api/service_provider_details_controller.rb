@@ -131,11 +131,11 @@ module Api
           # filter_expression: "url = test1.com"
       }
 
-      result = dynamodb.get_item(parameters)[:item]["orgSites"]
+      result = dynamodb.get_item(parameters)[:item]["OrgSites"]
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
-      site_id = params[:selectSiteID]
+      site_id = params[:SelectSiteID]
 
-      result.delete_if {|h| h["selectSiteID"] == site_id }
+      result.delete_if {|h| h["SelectSiteID"] == site_id }
       new_hash = params[:newHash].first.to_unsafe_h
 
       logger.debug("the new hash IS : #{new_hash}")
@@ -152,7 +152,7 @@ module Api
               # url: params["org_url"]
               url: params["url"]
           },
-          update_expression: "set orgSites = :r ",
+          update_expression: "set OrgSites = :r ",
           expression_attribute_values: {
           ":r" => result
       },
@@ -186,9 +186,9 @@ module Api
       }
 
 
-      site_result = dynamodb.get_item(parameters)[:item]["orgSites"].collect{|item| [item["selectSiteID"],item["locationName"]]}
+      site_result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| [item["SelectSiteID"],item["LocationName"]]}
 
-      program_result = dynamodb.get_item(parameters)[:item]["programs"].collect{|item| [item["selectprogramID"],item["programName"]]}
+      program_result = dynamodb.get_item(parameters)[:item]["Programs"].collect{|item| [item["SelectprogramID"],item["ProgramName"]]}
 
       logger.debug("the Result of the get entry is : #{program_result}")
       render :json => {status: :ok, site: site_result, program: program_result }
@@ -209,7 +209,7 @@ module Api
           }
       }
 
-      result = dynamodb.get_item(parameters)[:item]["programs"].select{|item| item["selectprogramID"] == params["selectprogramID"]}
+      result = dynamodb.get_item(parameters)[:item]["Programs"].select{|item| item["SelectprogramID"] == params["SelectprogramID"]}
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
 
 
@@ -234,11 +234,11 @@ module Api
           # filter_expression: "url = test1.com"
       }
 
-      result = dynamodb.get_item(parameters)[:item]["programs"]
+      result = dynamodb.get_item(parameters)[:item]["Programs"]
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
-      program_id = params[:selectprogramID]
+      program_id = params[:SelectprogramID]
 
-      result.delete_if {|h| h["selectprogramID"] == program_id }
+      result.delete_if {|h| h["SelectprogramID"] == program_id }
       new_hash = params[:newHash].first.to_unsafe_h
 
       logger.debug("the new hash IS : #{new_hash}")
@@ -255,7 +255,7 @@ module Api
               # url: params["org_url"]
               url: params["url"]
           },
-          update_expression: "set programs = :r ",
+          update_expression: "set Programs = :r ",
           expression_attribute_values: {
               ":r" => result
           },
@@ -321,7 +321,7 @@ module Api
             key: {
                 url: params["url"]
             },
-            update_expression: "set geoScope = :g , organizationName = :o ",
+            update_expression: "set GeoScope = :g , OrganizationName = :o ",
             expression_attribute_values: {
                 ":g" => geoScope,
                 ":o" => organizationName
@@ -334,7 +334,7 @@ module Api
             key: {
                 url: params["url"]
             },
-            update_expression: "set geoScope = :g ",
+            update_expression: "set GeoScope = :g ",
             expression_attribute_values: {
                 ":g" => geoScope,
             },
@@ -346,7 +346,7 @@ module Api
             key: {
                 url: params["url"]
             },
-            update_expression: "set organizationName = :o ",
+            update_expression: "set OrganizationName = :o ",
             expression_attribute_values: {
                 ":o" => organizationName
             },
@@ -406,30 +406,30 @@ module Api
         item = dynamodb.get_item(parameters)[:item]
       end
 
-      scope = item["geoScope"]["geoScope"]
+      scope = item["GeoScope"]["Scope"]
       if scope == "Virtual"
-        home_page_url = item["organizationName"]["homepageURL"]
+        home_page_url = item["OrganizationName"]["homepageURL"]
         check_mandatory_field(home_page_url,item)
 
       elsif scope == "County"
-        county = item["geoScope"]["County"]
+        county = item["GeoScope"]["County"]
         check_mandatory_field(county,item)
 
       elsif scope == "Region"
-        region = item["geoScope"]["region"]
+        region = item["GeoScope"]["region"]
         # logger.debug("CHECKING THE REGION***************** #{region}")
         check_mandatory_field(region,item)
 
       elsif scope == "State"
-        state = item["geoScope"]["State"]
+        state = item["GeoScope"]["State"]
         check_mandatory_field(state,item)
 
       elsif scope == "National"
-        national = item["geoScope"]["country"]
+        national = item["GeoScope"]["country"]
         check_mandatory_field(national,item)
 
       elsif scope == "On Site"
-        sites = item["orgSites"]
+        sites = item["OrgSites"]
         address_text_array = []
         sites.each do |site|
           site_text = site["addrOne_Text"]
