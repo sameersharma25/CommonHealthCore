@@ -1,2 +1,2 @@
-CATALOG_TABLE_NAME: ''
-MASTER_TABLE_NAME: ''
+CATALOG_TABLE_NAME: 'contact_management'
+MASTER_TABLE_NAME: 'master_provider'
