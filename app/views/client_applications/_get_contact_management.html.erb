@@ -4,68 +4,619 @@
 </div>
 
 <div class="modal-body">
+<div class="container-fluid">
+<button id="collectButton">Update</button>
 
-  <h3> Organization Details</h3>
-  <strong>Organization Name : </strong> <%= @organizationName['organizationName_Text'][0]['text'] %> <br>
-  <strong>Organization Description : </strong> <%= @organizationName['OrgDescription'][0]['text'] if @organizationName['OrgDescription'] %><br>
-  
-  <h3>Geographic Scope</h3>
-    <% @geoScope.each do |k,v| %>
-       <strong><%= k %> :</strong><%= v %> <br>
-    <% end %>
+  <div class="row">
+    <div class="col-md-6" id ="OrgForm">
+      <h1>ORG DETAILS </h1>
+      <%= form_tag(url: "/get_new_catalog", method: 'post') do %> 
 
-  <h3>Organization Sites</h3>
-    <% @siteHash.each do |k,v| %>
-       <strong><%= k %> :</strong><%= v %> <br>
-    <% end %>
+              <%= label_tag :Scope %>
+              <%= text_field_tag :Scope, @orgDetails[:Scope], name: :Scope %><br>
+              <%= label_tag :HomePageURL %>
+              <%= text_field_tag :HomePageURL, @orgDetails[:HomePageURL], name: :HomePageURL %><br>
 
-    <h3>POC</h3>
-    <% @poc.each do |k,v| %>
-       <strong><%= k %> :</strong><%= v %> <br>
-    <% end %>
+              <div id="orgName" >
+                <h3><i>Org Name</i></h3>
+                <% @OrganizationName.each do |pd| %>
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                  <%= label_tag :Text %>
+                  <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                <% end %>
+            </div>
 
-  <h1>Program Details</h1>
-    <% @programHash.each do |k,v| %>
-       <strong><%= k %> :</strong><%= v %> <br>
-    <% end %>
+              <div id="orgDesc" >
+                <h3><i>Org Desc</i></h3>
+                <% @OrgDescription.each do |pd| %>
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                  <%= label_tag :Text %>
+                  <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                <% end %>
+            </div>
+      <% end %>
+    </div>
+    <div>
+      <div class="col-md-6" id="GeoScopeForm">
+          <h1>GEOSCOPE</h1>
+          <%= form_tag(url: "/get_new_catalog", method: 'post') do %> 
+              <%= label_tag :GeoScope %> 
+              <%= text_field_tag :GeoScope, @geoscope[:GeoScope] %>  <br>
+              <%= label_tag :Neighborhoods %> 
+              <%= text_field_tag :Neighborhoods, @geoscope[:Neighborhoods] %>  <br>
+              <%= label_tag :ServiceAreaName %> 
+              <%= text_field_tag :ServiceAreaName, @geoscope[:ServiceAreaName] %>  <br>
+              <%= label_tag :State %> 
+              <%= text_field_tag :State, @geoscope[:State] %>  <br>
+              <%= label_tag :Country %> 
+              <%= text_field_tag :Country, @geoscope[:Country] %>  <br>
+              <%= label_tag :Region %> 
+              <%= text_field_tag :Region, @geoscope[:Region] %> <br>
+              <%= label_tag :City %> 
+              <%= text_field_tag :City, @geoscope[:City] %>  <br>
+              <%= label_tag :County %> 
+              <%= text_field_tag :County, @geoscope[:County] %> <br> 
+
+          <% end %> 
+      </div>
+    </div>
+  </div>
+
+
+    <h1>PROGRAMS</h1>
+      <% @program.each do |x| %>
+        <div class=" ProgramForm row">
+            <div class="col-md-4">
+                    <%= label_tag :InactiveProgram %>
+                    <%= check_box_tag :InactiveProgram, x[:InactiveProgram], x[:InactiveProgram]%><br>
+                    <%= label_tag :QuickConnectWebPage %>
+                    <%= text_field_tag :QuickConnectWebPage, x[:QuickConnectWebPage] %><br>
+                    <%= label_tag :ContactWebPage %>
+                    <%= text_field_tag :ContactWebPage, x[:ContactWebPage] %><br>
+                    <%= label_tag :ProgramWebPage %>
+                    <%= text_field_tag :ProgramWebPage, x[:ProgramWebPage] %><br>
+                    <%= label_tag :ServiceTag %>
+                    <%= text_field_tag :ServiceTag, x[:ServiceTag] %><br>
+
+                    <%= label_tag :ProgramComment %>
+                    <%= text_field_tag :ProgramComment, x[:ProgramComment] %><br>
+
+                    <%= label_tag :SelectprogramID %>
+                    <%= text_field_tag :SelectprogramID, x[:SelectprogramID] %><br>
+
+                    <%= label_tag :PopulationTags %>
+                    <%= text_field_tag :PopulationTags, x[:PopulationTags] %><br>
+                    <%= label_tag :programSites %>
+                    <%= text_field_tag :programSites, x[:programSites] %><br>
+                    <h3><i>Pop Desc</i></h3>
+                    <% x[:PopulationDescription].each do |pd| %>
+                      <div class="programPopulationDescription" >
+                        <%= label_tag :Xpath %>
+                        <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                        <%= label_tag :Text %>
+                        <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                        <%= label_tag :Domain %>
+                        <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                      </div>
+                    <% end %>
+                    <h3><i>Prog Desc</i></h3>
+                    <% x[:ProgramDescription].each do |pd| %>
+                      <div class="programProgramDescription" >
+                        <%= label_tag :Xpath %>
+                        <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                        <%= label_tag :Text %>
+                        <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                        <%= label_tag :Domain %>
+                        <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                      </div>
+                    <% end %>
+                    <h3><i>Serv Desc</i></h3>
+                    <% x[:ServiceAreaDescription].each do |pd| %>
+                      <div class="programServiceAreaDescription" >
+                        <%= label_tag :Xpath %>
+                        <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                        <%= label_tag :Text %>
+                        <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                        <%= label_tag :Domain %>
+                        <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                      </div>
+                    <% end %>
+                    <h3><i>Prog Ref</i></h3>
+                    <% x[:ProgramReferences].each do |pd| %>
+                      <div class="programProgramReferences" >
+                        <%= label_tag :Xpath %>
+                        <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                        <%= label_tag :Text %>
+                        <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                        <%= label_tag :Domain %>
+                        <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                      </div>
+                    <% end %>      
+            </div>
+
+            <div class="col-md-4">
+              <h1>The Letter P</h1>
+                    <%= label_tag :P_Veteran %>
+                    <%= check_box_tag :P_Veteran, x[:P_Veteran] , x[:P_Veteran]%><br>
+                    <%= label_tag :P_Family %>
+                    <%= check_box_tag :P_Family, x[:P_Family], x[:P_Family]%><br>
+                    <%= label_tag :P_Citizenship %>
+                    <%= check_box_tag :P_Citizenship, x[:P_Citizenship], x[:P_Citizenship]%><br>
+                    <%= label_tag :P_Senior %>
+                    <%= check_box_tag :P_Senior, x[:P_Senior], x[:P_Senior] %><br>
+
+                    <%= label_tag :P_Any %>
+                    <%= check_box_tag :P_Any, x[:P_Any], x[:P_Any] %><br>
+
+                    <%= label_tag :P_Other %>
+                    <%= check_box_tag :P_Other, x[:P_Other], x[:P_Other] %><br>
+                    <%= label_tag :P_LGBTQ %>
+                    <%= check_box_tag :P_LGBTQ, x[:P_LGBTQ], x[:P_LGBTQ] %><br>
+                    <%= label_tag :P_LowIncome %>
+                    <%= check_box_tag :P_LowIncome, x[:P_LowIncome], x[:P_LowIncome] %><br>
+                    <%= label_tag :P_Disabled %>
+                    <%= check_box_tag :P_Disabled, x[:P_Disabled],x[:P_Disabled] %><br>
+                    <%= label_tag :P_Native %>
+                    <%= check_box_tag :P_Native, x[:P_Native], x[:P_Native] %><br>
+            </div>
+
+            <div class="col-md-4">
+              <h1>The Letter S</h1>
+                    <%= label_tag :S_Addiction %>
+                    <%= check_box_tag :S_Addiction, x[:S_Addiction], x[:S_Addiction] %><br>
+                    <%= label_tag :S_Identification %>
+                    <%= check_box_tag :S_Identification, x[:S_Identification], x[:S_Identification] %><br>
+                    <%= label_tag :S_Research %>
+                    <%= check_box_tag :S_Research, x[:S_Research], x[:S_Research] %><br>
+                    <%= label_tag :S_Legal %>
+                    <%= check_box_tag :S_Legal, x[:S_Legal], x[:S_Legal] %><br>
+                    <%= label_tag :S_Medical %>
+                    <%= check_box_tag :S_Medical, x[:S_Medical], x[:S_Medical] %><br>
+                    <%= label_tag :S_Food %>
+                    <%= check_box_tag :S_Food, x[:S_Food], x[:S_Food] %><br>
+                    <%= label_tag :S_GeneralSupport %>
+                    <%= check_box_tag :S_GeneralSupport, x[:S_GeneralSupport], x[:S_GeneralSupport] %><br>
+                    <%= label_tag :S_Education %>
+                    <%= check_box_tag :S_Education, x[:S_Education], x[:S_Education] %><br>
+                    <%= label_tag :S_Family %>
+                    <%= check_box_tag :S_Family, x[:S_Family], x[:S_Family] %><br>
+                    <%= label_tag :S_Employment %>
+                    <%= check_box_tag :S_Employment, x[:S_Employment] , x[:S_Employment]%><br>
+
+                    <%= label_tag :P_Senior %>
+                    <%= check_box_tag :P_Senior, x[:P_Senior], x[:P_Senior] %><br>
+                    <%= label_tag :S_Abuse %>
+                    <%= check_box_tag :S_Abuse, x[:S_Abuse], x[:S_Abuse] %><br>
+
+                    <%= label_tag :S_Resources %>
+                    <%= check_box_tag :S_Resources, x[:S_Resources], x[:S_Resources] %><br>
+
+                    <%= label_tag :S_Victim %>
+                    <%= check_box_tag :S_Victim, x[:S_Victim] , x[:S_Victim]%><br>
+
+                    <%= label_tag :S_Disabled %>
+                    <%= check_box_tag :S_Disabled, x[:S_Disabled] , x[:S_Disabled]%><br>
+
+                    <%= label_tag :S_Housing %>
+                    <%= check_box_tag :S_Housing, x[:S_Housing] , x[:S_Housing]%><br>
+
+                    <%= label_tag :S_Veterans %>
+                    <%= check_box_tag :S_Veterans, x[:S_Veterans] , x[:S_Veterans]%><br>
+                    <%= label_tag :S_BasicNeeds %>
+                    <%= check_box_tag :S_BasicNeeds, x[:S_BasicNeeds] , x[:S_BasicNeeds]%><br>
+                    <%= label_tag :S_Financial %>
+                    <%= check_box_tag :S_Financial, x[:S_Financial] , x[:S_Financial]%><br>
+                    <%= label_tag :S_Clothing %>
+                    <%= check_box_tag :S_Clothing, x[:S_Clothing], x[:S_Clothing] %><br>
+                    <%= label_tag :S_Respite %>
+                    <%= check_box_tag :S_Respite, x[:S_Respite] , x[:S_Respite]%><br>
+
+                    <%= label_tag :S_IndependentLiving %>
+                    <%= check_box_tag :S_IndependentLiving, x[:S_IndependentLiving], x[:S_IndependentLiving] %><br>
+
+                    <%= label_tag :S_CaseManagement %>
+                    <%= check_box_tag :S_CaseManagement, x[:S_CaseManagement] %><br>
+                    <%= label_tag :S_Senior %>
+                    <%= check_box_tag :S_Senior, x[:S_Senior] %><br>
+                    <%= label_tag :S_Emergency %>
+                    <%= check_box_tag :S_Emergency, x[:S_Emergency] %><br>
+                    <%= label_tag :S_DayCare %>
+                    <%= check_box_tag :S_DayCare, x[:S_DayCare] %><br>
+                    <%= label_tag :S_Transportation %>
+                    <%= check_box_tag :S_Transportation, x[:S_Transportation] %><br>
+                    <%= label_tag :S_Behavioral %>
+                    <%= check_box_tag :S_Behavioral, x[:S_Behavioral] %><br>
+                    <%= label_tag :S_Low_Income %>
+                    <%= check_box_tag :S_Low_Income, x[:S_Low_Income] %><br>
+            </div>
+
+        </div>
+      <% end %>
+<h1>SITES</h1>
+<% @site.each do |site| %>
+  <div class="SiteForm">
+    <div class="row">
+      <div class="col-md-4">
+                        <%= label_tag :LocationName %>
+                        <%= text_field_tag :LocationName, site[:LocationName] %><br>
+
+                        <h3><i>Address One</i></h3>
+                        <% site[:Addr1].each do |pd| %>
+                          <div class="siteAddr1">
+                          <%= label_tag :Xpath %>
+                          <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                          <%= label_tag :Text %>
+                          <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                          <%= label_tag :Domain %>
+                          <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                          </div>
+                        <% end %>
+                        <%= label_tag :Addr2 %>
+                        <%= text_field_tag :Addr2, site[:Addr2] %><br>
+
+                        <%= label_tag :AddrState %>
+                        <%= text_field_tag :AddrState, site[:AddrState] %><br>
+
+                        <%= label_tag :AddrCity %>
+                        <%= text_field_tag :AddrCity, site[:AddrCity] %><br>
+
+                        <%= label_tag :AddrZip %>
+                        <%= text_field_tag :AddrZip, site[:AddrZip] %><br>
+
+                        <h3><i>Site Ref</i></h3>
+                        <% site[:SiteReference].each do |pd| %>
+                          <div class="siteSiteReference">
+                          <%= label_tag :Xpath %>
+                          <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                          <%= label_tag :Text %>
+                          <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                          <%= label_tag :Domain %>
+                          <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                          </div>
+                        <% end %>
+      </div>
+
+      <div class="col-md-4">
+                        <%= label_tag :ServiceDeliverySite %>
+                        <%= check_box_tag :ServiceDeliverySite, site[:ServiceDeliverySite], site[:ServiceDeliverySite] %><br>
+                        <%= label_tag :AdminSite %>
+                        <%= check_box_tag :AdminSite, site[:AdminSite] , site[:AdminSite]%><br>
+                        <%= label_tag :ResourceDirectory %>
+                        <%= check_box_tag :ResourceDirectory, site[:ResourceDirectory], site[:ResourceDirectory] %><br>
+                        <%= label_tag :SelectSiteID %>
+                        <%= text_field_tag :SelectSiteID, site[:SelectSiteID] %><br>
+                        <%= label_tag :Webpage %>
+                        <%= text_field_tag :Webpage, site[:Webpage] %><br>
+      </div>
+
+      <div class="col-md-4">
+                <h3><i>POC</i></h3>
+                  <% site[:POCs].each do |pd| %>
+                      <div class="sitePOC">
+
+                        <%= label_tag :DefaultPOC %>
+                        <%= check_box_tag :DefaultPOC, pd[:poc][:DefaultPOC] , pd[:poc][:DefaultPOC]%><br>
+                          <%= label_tag :id %>
+                          <%= text_field_tag :id, pd[:id], name: :id %><br>
+                          <%= label_tag :OfficePhone %>
+                          <%= text_field_tag :OfficePhone, pd[:poc][:OfficePhone] %><br>
+                          <%= label_tag :Email %>
+                          <%= text_field_tag :Email, pd[:poc][:Email] %><br>
+                          <%= label_tag :Referrals %>
+                          <%= text_field_tag :Referrals, pd[:poc][:Referrals] %><br>
+                          <%= label_tag :ContactPage %>
+                          <%= text_field_tag :ContactPage, pd[:poc][:ContactPage] %><br>
+                          <%= label_tag :Title %>
+                          <%= text_field_tag :Title, pd[:poc][:Title] %><br>
+                          <%= label_tag :MobilePhone %>
+                          <%= text_field_tag :MobilePhone, pd[:poc][:MobilePhone] %><br>
+                          <%= label_tag :Name %>
+                          <%= text_field_tag :Name, pd[:poc][:Name] %><br>
+                      </div>
+                  <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<!-- End Container-->
+</div>
+
+
+
+<!-- -->
+
+
+<script type="text/javascript">
+document.getElementById("collectButton").addEventListener("click", function(event){
+
+ organizationDetails = {}
+ //OrgForm //Need to ignore certain values
+  var orgform = document.getElementById('OrgForm')  
+  var inputElements = orgform.querySelectorAll("input");
+  organizationName = {}
+
+        for(var i = 0; i < inputElements.length; i++){
+              var inputElement = inputElements[i];
+                    if (inputElement.value == ""){
+                      console.log("skip")
+                    } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain' || inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
+                        console.log("skip")
+                    }else{
+                      organizationName[inputElement.name] = inputElement.value; 
+                    } 
+
+              }
+  //orgName
+  var orgName = document.getElementById('orgName')
+  var orgNameElements = orgName.querySelectorAll("input");
+    nameObj = {}
+        for(var i = 0; i < orgNameElements.length; i++){
+              var inputElement = orgNameElements[i];
+                    if (inputElement.value == ""){
+                      console.log("skip")
+                    } else {
+                    nameObj[inputElement.name] = inputElement.value; 
+                    } 
+              console.log(inputElement.name, "=", inputElement.value)
+              
+              }
+              nameArray = []
+              nameArray.push(nameObj)
+              organizationName['OrganizationName'] = nameArray;
+  //orgDesc
+  var orgDesc = document.getElementById('orgDesc')
+  var orgDescElements = orgDesc.querySelectorAll("input");
+    descObj = {}
+        for(var i = 0; i < orgDescElements.length; i++){
+              var inputElement = orgDescElements[i];
+                    if (inputElement.value == ""){
+                      console.log("skip")
+                    } else {
+                    descObj[inputElement.name] = inputElement.value; 
+                    } 
+              console.log(inputElement.name, "=", inputElement.value)
+              
+              }
+              orgDescArray = []
+              orgDescArray.push(descObj)
+              organizationName['OrganizationDescription'] = orgDescArray;
+          ////
+         organizationDetails['OrganizationName'] = organizationName
+
+///////// 
+console.log("After Org", organizationDetails)
+
+
+
+// Geo
+  geoHash = {}
+  var geoform = document.getElementById('GeoScopeForm')  
+  var geoinputElements = geoform.querySelectorAll("input");
+
+        for(var i = 0; i < geoinputElements.length; i++){
+            var inputElement = geoinputElements[i];
+                  if (inputElement.value == ""){
+                    console.log("skip")
+                  } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
+                        console.log("skip")
+                  }else{
+                    geoHash[inputElement.name] = inputElement.value; 
+                  } 
+
+            }
+            organizationDetails["GeoScope"] = geoHash
+/// End Geo
+
+/// Site Form
+    var siteForm = document.getElementsByClassName("SiteForm")
+    
+    orgSiteArray = []
+    for(var k = 0; k < siteForm.length; k++){
+    siteHash = {}
+
+      var siteinputElements = siteForm[k].querySelectorAll("input");
+
+      for(var i = 0; i < siteinputElements.length; i++){
+        var inputElement = siteinputElements[i];
+              if (inputElement.value == ""){
+                console.log("skip")
+              }else if (inputElement.type == "checkbox" && inputElement.checked == true){
+                  siteHash[inputElement.name] = true
+              }else if (inputElement.type == "checkbox" && inputElement.checked != true){
+                 siteHash[inputElement.name] = false
+              } else if (inputElement.name == 'Text' || inputElement.name == 'Xpath' || inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8' || inputElement.name == 'id'){
+                    console.log("skip")
+              }else{
+              siteHash[inputElement.name] = inputElement.value; 
+              } 
+
+        }//inside loop #1
+
+      
+      pocSArray = []
+      var sitepoc = siteForm[k].getElementsByClassName("sitePOC")
+          for(var i = 0; i < sitepoc.length; i++){
+              singlePOC = {}
+              pocpoc = {}
+              var sitepocinput = sitepoc[i].querySelectorAll("input")
+
+                for(var i = 0; i < sitepocinput.length; i++){
+                  var inputElement = sitepocinput[i];
+                        if (inputElement.value == ""){
+                          console.log("skip")
+                        }else if (inputElement.type == "checkbox" && inputElement.checked == true){
+                            singlePOC[inputElement.name] = true
+                        }else if (inputElement.type == "checkbox" && inputElement.checked != true){
+                           singlePOC[inputElement.name] = false
+                        } else if( inputElement.name == "id"){
+                          pocpoc['id'] = inputElement.value
+                        }else
+                        {
+                        singlePOC[inputElement.name] = inputElement.value; 
+                        }
+                  }
+                  pocpoc['poc'] = singlePOC
+                  pocSArray.push(pocpoc)
+                  siteHash['POCs'] = pocSArray
+
+            } //
+
+     siterefArray = [];
+      var siteref = siteForm[k].getElementsByClassName("siteSiteReference")
+          for(var i = 0; i < siteref.length; i++){
+             siterefHash = {}
+
+              var siterefinput = siteref[i].querySelectorAll("input")
+
+                for(var i = 0; i < siterefinput.length; i++){
+                  var inputElement = siterefinput[i];
+                        if (inputElement.value == ""){
+                          console.log("skip")
+                        } else {
+                        siterefHash[inputElement.name] = inputElement.value; 
+                        } 
+
+                  }siterefArray.push(siterefHash)
+                  siteHash['SiteReference'] = siterefArray 
+
+            } 
+
+      
+      addr1array = []
+      var siteAddr1 = siteForm[k].getElementsByClassName("siteAddr1")
+          for(var i = 0; i < siteAddr1.length; i++){
+              addr1 = {}
+              var addInput = siteAddr1[i].querySelectorAll("input")
+                for(var i = 0; i < addInput.length; i++){
+                  var inputElement = addInput[i];
+                        if (inputElement.value == ""){
+                          console.log("skip")
+                        } else {
+                        addr1[inputElement.name] = inputElement.value; 
+                        } 
+
+                  }
+                  addr1array.push(addr1) 
+                  siteHash['Addr1'] = addr1array
+
+            } //
+
+            orgSiteArray.push(siteHash)
+}// End Site Loop
+organizationDetails["OrgSites"] = orgSiteArray
+
+//End Site Form
+
+//Program
+
+ var programform = document.getElementsByClassName('ProgramForm')  
+ programsArray = []
+
+ for(var i = 0; i < programform.length; i++){
+  programHash = {};
+
+  //basic elements
+    var progrraminputElements = programform[i].querySelectorAll("input");
+      for(var q = 0; q < progrraminputElements.length; q++){
+        var inputElement = progrraminputElements[q];
+              if (inputElement.value == ""){
+                console.log("skip")
+              }else if (inputElement.type == "checkbox" && inputElement.checked == true){
+                  programHash[inputElement.name] = true
+              }else if (inputElement.type == "checkbox" && inputElement.checked != true){
+                 programHash[inputElement.name] = false
+              } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
+                console.log("skip")
+              }else if (inputElement.name =='ProgramSites'){
+                  programSiteArray = []
+                  programSiteArray.push(inputElement.value)
+
+                  programHash['ProgramSites'] = programSiteArray
+              }else {
+                programHash[inputElement.name] = inputElement.value; 
+              }
+              
+
+        }
+
+    //PopDesc
+    
+    popDescArray = []
+    var programPopDecs = programform[i].getElementsByClassName("programPopulationDescription")
+    
+          for(var q = 0; q < programPopDecs.length; q++){
+            popDescHash = {}
+            var popDescinputElements = programPopDecs[q].querySelectorAll("input");
+
+                for(var k = 0; k < popDescinputElements.length; k++){
+                  var inputElement = popDescinputElements[k];
+                        if (inputElement.value == ""){
+                          console.log("skip")
+                        } else {
+                        popDescHash[inputElement.name] = inputElement.value; 
+                        } 
+
+                  }popDescArray.push(popDescHash) 
+                  programHash['PopulationDescription'] = popDescArray
+
+            } 
+    //Program Description
+    
+    progDescArray = []
+    var programProgDesc = programform[i].getElementsByClassName("programProgramDescription")
+          for(var q = 0; q < programProgDesc.length; q++){
+            progDescHash = {}
+              var progDescinputElements = programProgDesc[q].querySelectorAll("input")
+                for(var k = 0; k < progDescinputElements.length; k++){
+                  var inputElement = progDescinputElements[k];
+                        if (inputElement.value == ""){
+                          console.log("skip")
+                        } else {
+                        progDescHash[inputElement.name] = inputElement.value; 
+                        } 
+
+                  } progDescArray.push(progDescHash) 
+                  programHash['ProgramDescription'] = progDescArray
+            } 
+
+    // program Service area
    
-  <!--
-<h3>Program</h3>
-  <strong>Program Name : </strong> <%= @programs[0]['programName'] %><br>
-  <strong>Program Description : </strong> <%= @programs[0]['ProgramDescription'][0]['text'] if @programs[0]['ProgramDescription'] %><br>
-  <strong>Program References : </strong><%= @programs[0]['ProgramReferences'][0]['text'] if @programs[0]['ProgramReferences']  %><br>
-  <strong>Program Service Groups : </strong><%= @programs[0]['ServiceGroups'] %><br>
-  <strong>Service Tags : </strong><%= @programs[0]['serviceTag'] if @programs[0]['serviceTag'] %><br>
-  <strong>Service Description : </strong><%= @programs[0]['ServiceDescription'][0]['text'] if @programs[0]['ServiceDescription'] %><br>
-  <strong>Population Tags : </strong><%= @programs[0]['populationTags'] if @programs[0]['populationTags'] %><br>
-  <strong>Population Description : </strong><%= @programs[0]['PopulationDescription'][0]['text'] if @programs[0]['PopulationDescription'] %><br>
-  <strong>Population Groups : </strong><br> 
-  <strong> Location Name:</strong> <%= @orgSites[0]['locationName'] if @orgSites[0]['locationName']%><br>
-  <strong> Site Reference:</strong> <%= @orgSites[0]['SiteReference_TEXT'][0]['text'] if @orgSites[0]['SiteReference_TEXT']%><br>
-  <strong> Street Address:</strong> <%= @orgSites[0]['addrOne_Text'][0]['text'] if @orgSites[0]['addrOne_Text'] %><br>
-  <strong> City:</strong> <%= @orgSites[0]['Adrcity'] if @orgSites[0]['Adrcity'] %><br>
-  <strong> Adrstate:</strong> <%= @orgSites[0]['Adrstate'] if @orgSites[0]['Adrstate']%><br>
-  <strong> Zipcode:</strong> <%= @orgSites[0]['Adrzip'] if @orgSites[0]['Adrzip']%><br>
+    serviceAreaArray = [];
+    var programServiceArea = programform[i].getElementsByClassName("programServiceAreaDescription")
+          for(var q = 0; q < programServiceArea.length; q++){
+             serviceAreaHash = {};
+              var progServAinputElements = programServiceArea[q].querySelectorAll("input")
 
-  <strong>Service Tags : </strong><br>
-  <strong>Service Description : </strong><%= @programs[0]['ServiceDescription'][0]['text'] if @programs[0]['ServiceDescription'] %><br>
-  <strong>Population Groups : </strong><br>
-  <strong>Population Tags : </strong><br>
-  <strong>Population Description : </strong><%= @programs[0]['ProgramDescription'][0]['text'] if @programs[0]['ProgramDescription'] %><br>
+                for(var k = 0; k < progServAinputElements.length; k++){
+                  var inputElement = progServAinputElements[k];
+                        if (inputElement.value == ""){
+                          console.log("skip")
+                        } else {
+                        serviceAreaHash[inputElement.name] = inputElement.value; 
+                        } 
 
-  <strong> POC Office Phone:</strong> <%= @orgSites[0]['POCs'][0]['OfficePhone'] if @orgSites[0]['POCs']%><br>
-  <strong> POC Email:</strong> <%= @orgSites[0]['POCs'][0]['Email'] if @orgSites[0]['POCs'] %><br>
-  <strong> POC Referrals:</strong> <%= @orgSites[0]['POCs'][0]['Referrals'] if @orgSites[0]['POCs'] %><br>
-  <strong> POC ContactPage:</strong> <%= @orgSites[0]['POCs'][0]['ContactPage'] if @orgSites[0]['POCs'] %><br>
-  <strong> POC Title:</strong> <%= @orgSites[0]['POCs'][0]['Title'] if @orgSites[0]['POCs']%><br>
-  <strong> POC Name:</strong> <%= @orgSites[0]['POCs'][0]['Name'] if @orgSites[0]['POCs']%><br>
-  <strong> POC MobilePhone:</strong> <%= @orgSites[0]['POCs'][0]['MobilePhone'] if @orgSites[0]['POCs']%><br>
+                  } serviceAreaArray.push(serviceAreaHash)
+                  programHash['ServiceAreaDescription'] = serviceAreaArray
+            } 
+            programsArray.push(programHash)
+          
+ } //End of Program Loop 
+ organizationDetails["Programs"] = programsArray
 
--->
+     
+  }) // end of Click
+
+</script>
 
 
 
-
+ <!-- End Modal Div-->
 </div>
 
 

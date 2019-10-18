@@ -9,7 +9,7 @@
         <%end%>
         <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
         <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %>
-        <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["organizationName_Text"][0]['text'] if r["organizationName"] %></td>
+        <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["OrganizationName"][0]['text'] if r["organizationName"] %></td>
         <td id= <%= "Orgdescription_#{i}" %> ><%#= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]["OrgDescription"]  %></td>
 
         <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
