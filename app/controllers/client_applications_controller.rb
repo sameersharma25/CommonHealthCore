@@ -299,120 +299,72 @@ class ClientApplicationsController < ApplicationController
     @result = dynamodb.get_item(parameters)[:item]
 
     #logger.debug("the Result of the get entry is : #{@result}")
-    @result.each do |k,v|
-      logger.debug("Key::: #{k}: Value::: #{v}")
-      if k == "status"
-        #logger.debug("FOUND #{k}::: #{v}")
-      elsif k == "userName"
-        #logger.debug("FOUND #{k}::: #{v}")
-      elsif k == "geoScope"
-        #logger.debug("FOUND #{k}::: #{v}")
-        @geoScope = v
-      elsif k == "programs"
-        #logger.debug("FOUND #{k}::: #{v}")
-        @programs = v
-        @programHash = {}
-        i=0
-        while i < @programs.length do
-          @programs[i].each do |q,w|
-            logger.debug("KEY::: #{q}:VALUE:::#{w}")
-            case q
-              when 'ProgramDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @programHash[q] = textOnlyArray
-              when 'ProgramReferences'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @programHash[q] = textOnlyArray
-              when 'ServiceDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @programHash[q] = textOnlyArray
-              when 'PopulationDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @programHash[q] = textOnlyArray
-            end
-            if w.class != Array
-              @programHash[q] = w
-            end
+        @result.each do |k,v|
+            logger.debug("NOW THE KEY MATTERS #{k}")
+                case k.to_s
 
-          end
-          logger.debug("BREAK ####}")
-          i+=1
+                    when 'Programs'
+                      @program = v
+                      logger.debug("PROGRAM VALUE #{v}")
+
+                      v.each do |ary|
+                          ary.each do |key,value|
+                            if key.to_s == 'PopulationDescription'
+                              logger.debug("Value #{value}")
+                              @PopulationDescription = value
+
+                            elsif key.to_s == 'ProgramDescription'
+                              @ProgramDescription = value
+
+                            elsif key.to_s == 'ServiceAreaDescription'
+                              @ServiceAreaDescription = value
+
+                            elsif key.to_s == 'ProgramReferences'
+                              @ProgramReferences = value
+                            end 
+                          end
+                      end 
+ 
+
+                    when 'OrgSites'
+                      logger.debug("SITE SITE  #{v}")
+                      @site = v
+
+                      #v.each do |ary|
+                        v.each do |key,value|
+                          if key.to_s == 'Addr1'
+                            @Addr1 = v
+                          elsif key.to_s == 'SiteReference' 
+                            @SiteReference = v
+                          elsif key.to_s == 'poc'
+                            @poc = v
+                          end 
+                        end 
+                      #end 
+
+
+                    when 'OrganizationName'
+                      
+                      logger.debug("Org Name #{v}")
+                      @orgDetails = v 
+
+                      v.each do |key,value|
+                          logger.debug("breakdown:: #{key} value:: #{value}")
+                          if key.to_s == 'OrganizationName'
+                            @OrganizationName = value
+                            logger.debug("Value #{@OrganizationName}")
+                          elsif key.to_s == 'OrgDescription'
+                            @OrgDescription = value
+                            logger.debug("Value #{@OrgDescription}")
+                          end 
+                      end 
+
+                    when 'GeoScope'
+                      logger.debug("Geo #{v}")
+                      @geoscope = v
+                end 
+
         end
-      elsif k == "orgSites"
-        logger.debug("FOUND #{k}::: #{v}")
-        @orgSites = v
-        @siteHash = {}
-        @poc = {}
-        i=0
-        while i < @orgSites.length do
-          @orgSites[i].each do |q,w|
-            logger.debug("KEY::: #{q}:VALUE:::#{w}")
-            case q
-              when 'SiteReference_TEXT'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @siteHash[q] = textOnlyArray
-              when 'addrOne_Text'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @siteHash[q] = textOnlyArray
-              when 'ServiceDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @siteHash[q] = textOnlyArray
-              when 'ProgramDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @siteHash[q] = textOnlyArray
-              when 'POCs'
-                logger.debug("HERE #{w}")
-                w[0].each do |k,v|
-                  @poc[k]= v
-                end
-            end
-            if w.class != Array
-              @siteHash[q] = w
-            end
-
-          end
-          logger.debug("BREAK ####}")
-          i+=1
-        end
-
-
-      elsif k == "organizationName"
-        logger.debug("FOUND #{k}::: #{v}")
-        @organizationName = v
-      end
-    end
 
     details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
                programHash: @programHash, geoScope: @geoScope, programs: @programs }
