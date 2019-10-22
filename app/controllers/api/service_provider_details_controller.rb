@@ -105,7 +105,7 @@ module Api
           }
       }
 
-      result = dynamodb.get_item(parameters)[:item]["orgSites"].select{|item| item["selectSiteID"] == params["selectSiteID"]}
+      result = dynamodb.get_item(parameters)[:item]["OrgSites"].select{|item| item["SelectSiteID"] == params["SelectSiteID"]}
 
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
 
@@ -135,7 +135,11 @@ module Api
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
       site_id = params[:SelectSiteID]
 
+      if result.first.nil?
+        result.pop
+      end
       result.delete_if {|h| h["SelectSiteID"] == site_id }
+
       new_hash = params[:newHash].first.to_unsafe_h
 
       logger.debug("the new hash IS : #{new_hash}")
@@ -309,8 +313,8 @@ module Api
     end
 
     def update_catalog_entry
-      geoScope = params[:geoScope].to_unsafe_h if params[:geoScope]
-      organizationName = params[:organizationName].to_unsafe_h if params[:organizationName]
+      geoScope = params[:GeoScope].to_unsafe_h if params[:GeoScope]
+      organizationName = params[:OrganizationName].to_unsafe_h if params[:OrganizationName]
 
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
       table_name = ENV["CATALOG_TABLE_NAME"]
