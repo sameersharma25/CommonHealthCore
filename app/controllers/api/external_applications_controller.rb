@@ -248,6 +248,7 @@ module Api
               ledger_status.referred_by_id = old_patient.client_application_id.to_s
               ledger_status.external_object_id = task.id
               ledger_status.ledger_status = "Accepted"
+              ledger_status.ledger_master_id = ledger_master.id.to_s
               ledger_status.save
             end
           end
@@ -380,18 +381,28 @@ module Api
     def ledger_details
       task_id =  params[:task_id]
       ledger_master = LedgerMaster.where(task_id: task_id).first
-      user = User.find(params[:email])
-      external_application_id = user.client_application_id.id.to_s
-      ledger_status= ledger_master.ledger_statuses.where(referred_application_id: external_application_id ).first
+      user = User.find_by(email:params[:email])
+      external_application_id = user.client_application_id.to_s
+      # ledger_status= ledger_master.ledger_statuses.where(referred_application_id: external_application_id ).first
+      ledger_status= ledger_master.ledger_statuses.first
       referred_by_id = ledger_status.referred_by_id
       referred_by = ClientApplication.find(referred_by_id).name
       internal_record_array = []
       internal_records = ledger_status.ledger_records
       internal_records.each do |ir|
         changes = ir.changed_fields
+        first_hash = {}
+        second_hash = {}
+        changes_array = []
+        changes.keys.each do |k|
+          first_hash[k] = changes[k][0]
+          second_hash[k] = changes[k][1]
+        end
+        changes_array.push(first_hash)
+        changes_array.push(second_hash)
         created_at = ir.created_at
-        internal_record_hash = {changes: changes, created_at: created_at}
-        internal_record_array.push(internal_record_hash)
+        internal_record_hash = {changes: changes_array, created_at: created_at}
+        internal_record_array.push(external_record_hash)
       end
 
       external_record_array = []
@@ -401,8 +412,17 @@ module Api
 
         external_records.each do |er|
           changes = er.changed_fields
+          first_hash = {}
+          second_hash = {}
+          changes_array = []
+          changes.keys.each do |k|
+            first_hash[k] = changes[k][0]
+            second_hash[k] = changes[k][1]
+          end
+          changes_array.push(first_hash)
+          changes_array.push(second_hash)
           created_at = er.created_at
-          external_record_hash = {changes: changes, created_at: created_at}
+          external_record_hash = {changes: changes_array, created_at: created_at}
           external_record_array.push(external_record_hash)
         end
       end
