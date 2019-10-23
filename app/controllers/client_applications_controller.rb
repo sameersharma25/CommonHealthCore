@@ -247,6 +247,7 @@ logger.debug("OrgDesc::: #{@OrgDescription}")
 @siteHash = details[:siteHash]
 @poc = details[:poc]
 @site = details[:OrgSites]
+logger.debug("ORG SITES #{@site}")
 @geoscope = details[:geoscope]
 @program = details[:programs]
 @PopulationDescription = details[:popDesc]
@@ -269,11 +270,15 @@ logger.debug("OrgDesc::: #{@OrgDescription}")
     @organizationName = details[:organizationName]
     logger.debug("the orgName is : #{@organizationName}")
     @siteHash = details[:siteHash]
+    @Addr1 = details[:addr1] 
+    @SiteReference = details[:siteref] 
+
     @poc = details[:poc]
     @orgSites = details[:orgSites]
     @programHash = details[:programHash]
     @geoScope = details[:geoScope]
     @programs = details[:programs]
+    @site = details[:sites]
     
     respond_to do |format|
       format.html
@@ -391,7 +396,9 @@ logger.debug("OrgDesc::: #{@OrgDescription}")
     OrgDetails: @orgDetails,
     OrganizationName: @OrganizationName, 
     OrganizationDescription: @OrgDescription,
-    siteHash: @siteHash, 
+    site: @site,
+    addr1: @Addr1,
+    siteref: @SiteReference,
     poc: @poc, 
     OrgSites: @site,
     geoscope: @geoscope, 

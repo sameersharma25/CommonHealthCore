@@ -265,15 +265,15 @@
 
 
 <h1>SITES</h1>
+<% if @site != [nil] %>
 <% @site.each do |site| %>
   <div class="SiteForm">
     <div class="row">
       <div class="col-md-4">
-                        <%= label_tag :LocationName %>
-                        <%= text_field_tag :LocationName, site['LocationName'] %><br>
+                          <%= label_tag :LocationName %>
+                          <%= text_field_tag :LocationName, site['LocationName'] %><br>
 
 
-                        <% if site[:Addr1] != nil %>
                             <h3><i>Address One</i></h3>
                             <% site[:Addr1].each do |pd| %>
                                   <div class="siteAddr1">
@@ -284,7 +284,7 @@
                                     <%= label_tag :Domain %>
                                     <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
                                   </div>
-                            <% end %>
+
                         <% end %>
                         <%= label_tag :Addr2 %>
                         <%= text_field_tag :Addr2, site['Addr2'] %><br>
@@ -357,7 +357,7 @@
     </div>
   </div>
 <% end %>
-
+<% end %>
 <!-- End Container-->
 </div>
 
