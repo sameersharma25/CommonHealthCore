@@ -238,21 +238,23 @@ class ClientApplicationsController < ApplicationController
     #@geoScope = details[:geoScope]
     #@programs = details[:programs]
 
-@orgDetails = details[:OrgDetails]
-logger.debug("OrgDetails:::: #{@orgDetails}")
-@OrganizationName = details[:OrganizationName]
-logger.debug("OrgName::: #{@OrganizationName}")
-@OrgDescription = details[:OrganizationDescription]
-logger.debug("OrgDesc::: #{@OrgDescription}")
-@siteHash = details[:siteHash]
-@poc = details[:poc]
-@site = details[:OrgSites]
-@geoscope = details[:geoscope]
-@program = details[:programs]
-@PopulationDescription = details[:popDesc]
-@ProgramDescription = details[:progDesc]
-@ServiceAreaDescription = details[:servArea]
-@ProgramReferences = details[:progRef]
+    @orgDetails = details[:OrgDetails]
+    logger.debug("OrgDetails:::: #{@orgDetails}")
+    @OrganizationName = details[:OrganizationName]
+    logger.debug("OrgName::: #{@OrganizationName}")
+    @OrgDescription = details[:OrganizationDescription]
+    logger.debug("OrgDesc::: #{@OrgDescription}")
+    @siteHash = details[:siteHash]
+    @poc = details[:poc]
+    @site = details[:OrgSites]
+    logger.debug("ORG SITES #{@site}")
+    @geoscope = details[:geoscope]
+    @program = details[:programs]
+    logger.debug("PROGRAM #{@program}")
+    @PopulationDescription = details[:popDesc]
+    @ProgramDescription = details[:progDesc]
+    @ServiceAreaDescription = details[:servArea]
+    @ProgramReferences = details[:progRef]
 
 
 
@@ -269,11 +271,15 @@ logger.debug("OrgDesc::: #{@OrgDescription}")
     @organizationName = details[:organizationName]
     logger.debug("the orgName is : #{@organizationName}")
     @siteHash = details[:siteHash]
+    @Addr1 = details[:addr1] 
+    @SiteReference = details[:siteref] 
+
     @poc = details[:poc]
     @orgSites = details[:orgSites]
     @programHash = details[:programHash]
     @geoScope = details[:geoScope]
     @programs = details[:programs]
+    @site = details[:sites]
     
     respond_to do |format|
       format.html
@@ -391,6 +397,9 @@ logger.debug("OrgDesc::: #{@OrgDescription}")
     OrgDetails: @orgDetails,
     OrganizationName: @OrganizationName, 
     OrganizationDescription: @OrgDescription,
+    site: @site,
+    addr1: @Addr1,
+    siteref: @SiteReference,
     siteHash: @siteHash, 
     poc: @poc, 
     OrgSites: @site,

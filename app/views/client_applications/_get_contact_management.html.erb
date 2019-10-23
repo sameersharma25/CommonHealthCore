@@ -21,7 +21,6 @@
 
               <div id="orgName" >
 
-
                 <h3><i>Org Name</i></h3>
                 <% if @OrganizationName != nil %>
                     <% @OrganizationName.each do |pd| %>
@@ -168,97 +167,97 @@
             <div class="col-md-4">
               <h1>The Letter P</h1>
                     <%= label_tag :P_Veteran %>
-                    <%= check_box_tag :P_Veteran, x['P_Veteran'] , x['P_Veteran']%><br>
+                    <%= check_box_tag :P_Veteran, x['P_Veteran'] , x[:P_Veteran].to_s.downcase == "true"   %><br>
                     <%= label_tag :P_Family %>
-                    <%= check_box_tag :P_Family, x['P_Family'], x['P_Family']%><br>
+                    <%= check_box_tag :P_Family, x['P_Family'], x['P_Family'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_Citizenship %>
-                    <%= check_box_tag :P_Citizenship, x['P_Citizenship'], x['P_Citizenship']%><br>
+                    <%= check_box_tag :P_Citizenship, x['P_Citizenship'], x['P_Citizenship'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_Senior %>
-                    <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'] %><br>
+                    <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'].to_s.downcase == "true"  %><br>
 
                     <%= label_tag :P_Any %>
-                    <%= check_box_tag :P_Any, x['P_Any'], x['P_Any'] %><br>
+                    <%= check_box_tag :P_Any, x['P_Any'], x['P_Any'].to_s.downcase == "true" %><br>
 
                     <%= label_tag :P_Other %>
-                    <%= check_box_tag :P_Other, x['P_Other'], x['P_Other'] %><br>
+                    <%= check_box_tag :P_Other, x['P_Other'], x['P_Other'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_LGBTQ %>
-                    <%= check_box_tag :P_LGBTQ, x['P_LGBTQ'], x['P_LGBTQ'] %><br>
+                    <%= check_box_tag :P_LGBTQ, x['P_LGBTQ'], x['P_LGBTQ'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_LowIncome %>
-                    <%= check_box_tag :P_LowIncome, x['P_LowIncome'], x['P_LowIncome'] %><br>
+                    <%= check_box_tag :P_LowIncome, x['P_LowIncome'], x['P_LowIncome'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_Disabled %>
-                    <%= check_box_tag :P_Disabled, x['P_Disabled'],x['P_Disabled'] %><br>
+                    <%= check_box_tag :P_Disabled, x['P_Disabled'],x['P_Disabled'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_Native %>
-                    <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'] %><br>
+                    <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'].to_s.downcase == "true" %><br>
             </div>
 
             <div class="col-md-4">
               <h1>The Letter S</h1>
                     <%= label_tag :S_Addiction %>
-                    <%= check_box_tag :S_Addiction, x['S_Addiction'], x['S_Addiction'] %><br>
+                    <%= check_box_tag :S_Addiction, x['S_Addiction'], x['S_Addiction'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Identification %>
-                    <%= check_box_tag :S_Identification, x['S_Identification'], x['S_Identification'] %><br>
+                    <%= check_box_tag :S_Identification, x['S_Identification'], x['S_Identification'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Research %>
-                    <%= check_box_tag :S_Research, x['S_Research'], x['S_Research'] %><br>
+                    <%= check_box_tag :S_Research, x['S_Research'], x['S_Research'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Legal %>
-                    <%= check_box_tag :S_Legal, x['S_Legal'], x['S_Legal'] %><br>
+                    <%= check_box_tag :S_Legal, x['S_Legal'], x['S_Legal'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Medical %>
-                    <%= check_box_tag :S_Medical, x['S_Medical'], x['S_Medical'] %><br>
+                    <%= check_box_tag :S_Medical, x['S_Medical'], x['S_Medical'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Food %>
-                    <%= check_box_tag :S_Food, x['S_Food'], x['S_Food'] %><br>
+                    <%= check_box_tag :S_Food, x['S_Food'], x['S_Food'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_GeneralSupport %>
-                    <%= check_box_tag :S_GeneralSupport, x['S_GeneralSupport'], x['S_GeneralSupport'] %><br>
+                    <%= check_box_tag :S_GeneralSupport, x['S_GeneralSupport'], x['S_GeneralSupport'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Education %>
-                    <%= check_box_tag :S_Education, x['S_Education'], x['S_Education'] %><br>
+                    <%= check_box_tag :S_Education, x['S_Education'], x['S_Education'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Family %>
-                    <%= check_box_tag :S_Family, x['S_Family'], x['S_Family'] %><br>
+                    <%= check_box_tag :S_Family, x['S_Family'], x['S_Family'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Employment %>
-                    <%= check_box_tag :S_Employment, x['S_Employment'] , x['S_Employment']%><br>
+                    <%= check_box_tag :S_Employment, x['S_Employment'] , x['S_Employment'].to_s.downcase == "true" %><br>
 
                     <%= label_tag :P_Senior %>
-                    <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'] %><br>
+                    <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Abuse %>
-                    <%= check_box_tag :S_Abuse, x['S_Abuse'], x['S_Abuse'] %><br>
+                    <%= check_box_tag :S_Abuse, x['S_Abuse'], x['S_Abuse'].to_s.downcase == "true"  %><br>
 
                     <%= label_tag :S_Resources %>
-                    <%= check_box_tag :S_Resources, x['S_Resources'], x['S_Resources'] %><br>
+                    <%= check_box_tag :S_Resources, x['S_Resources'], x['S_Resources'].to_s.downcase == "true"  %><br>
 
                     <%= label_tag :S_Victim %>
-                    <%= check_box_tag :S_Victim, x['S_Victim'] , x['S_Victim']%><br>
+                    <%= check_box_tag :S_Victim, x['S_Victim'] , x['S_Victim'].to_s.downcase == "true" %><br>
 
                     <%= label_tag :S_Disabled %>
-                    <%= check_box_tag :S_Disabled, x['S_Disabled'] , x['S_Disabled']%><br>
+                    <%= check_box_tag :S_Disabled, x['S_Disabled'] , x['S_Disabled'].to_s.downcase == "true" %><br>
 
                     <%= label_tag :S_Housing %>
-                    <%= check_box_tag :S_Housing, x['S_Housing'] , x['S_Housing']%><br>
+                    <%= check_box_tag :S_Housing, x['S_Housing'] , x['S_Housing'].to_s.downcase == "true" %><br>
 
                     <%= label_tag :S_Veterans %>
-                    <%= check_box_tag :S_Veterans, x['S_Veterans'] , x['S_Veterans']%><br>
+                    <%= check_box_tag :S_Veterans, x['S_Veterans'] , x['S_Veterans'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_BasicNeeds %>
-                    <%= check_box_tag :S_BasicNeeds, x['S_BasicNeeds'] , x['S_BasicNeeds']%><br>
+                    <%= check_box_tag :S_BasicNeeds, x['S_BasicNeeds'] , x['S_BasicNeeds'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Financial %>
-                    <%= check_box_tag :S_Financial, x['S_Financial'] , x['S_Financial']%><br>
+                    <%= check_box_tag :S_Financial, x['S_Financial'] , x['S_Financial'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Clothing %>
-                    <%= check_box_tag :S_Clothing, x['S_Clothing'], x['S_Clothing'] %><br>
+                    <%= check_box_tag :S_Clothing, x['S_Clothing'], x['S_Clothing'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Respite %>
-                    <%= check_box_tag :S_Respite, x['S_Respite'] , x['S_Respite']%><br>
+                    <%= check_box_tag :S_Respite, x['S_Respite'] , x['S_Respite'].to_s.downcase == "true" %><br>
 
                     <%= label_tag :S_IndependentLiving %>
-                    <%= check_box_tag :S_IndependentLiving, x['S_IndependentLiving'], x['S_IndependentLiving'] %><br>
+                    <%= check_box_tag :S_IndependentLiving, x['S_IndependentLiving'], x['S_IndependentLiving'].to_s.downcase == "true" %><br>
 
                     <%= label_tag :S_CaseManagement %>
-                    <%= check_box_tag :S_CaseManagement, x['S_CaseManagement'], x['S_CaseManagement'] %><br>
+                    <%= check_box_tag :S_CaseManagement, x['S_CaseManagement'], x['S_CaseManagement'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Senior %>
-                    <%= check_box_tag :S_Senior, x['S_Senior'], x['S_Senior'] %><br>
+                    <%= check_box_tag :S_Senior, x['S_Senior'], x['S_Senior'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Emergency %>
-                    <%= check_box_tag :S_Emergency, x['S_Emergency'], x['S_Emergency'] %><br>
+                    <%= check_box_tag :S_Emergency, x['S_Emergency'], x['S_Emergency'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_DayCare %>
-                    <%= check_box_tag :S_DayCare, x['S_DayCare'], x['S_DayCare'] %><br>
+                    <%= check_box_tag :S_DayCare, x['S_DayCare'], x['S_DayCare'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Transportation %>
-                    <%= check_box_tag :S_Transportation, x['S_Transportation'], x['S_Transportation'] %><br>
+                    <%= check_box_tag :S_Transportation, x['S_Transportation'], x['S_Transportation'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Behavioral %>
-                    <%= check_box_tag :S_Behavioral, x['S_Behavioral'], x['S_Behavioral'] %><br>
+                    <%= check_box_tag :S_Behavioral, x['S_Behavioral'], x['S_Behavioral'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Low_Income %>
-                    <%= check_box_tag :S_Low_Income, x['S_Low_Income'], x['S_Low_Income'] %><br>
+                    <%= check_box_tag :S_Low_Income, x['S_Low_Income'], x['S_Low_Income'].to_s.downcase == "true" %><br>
             </div>
 
         </div>
@@ -267,15 +266,16 @@
 
 
 <h1>SITES</h1>
+
+<% if @site != [nil] %>
 <% @site.each do |site| %>
   <div class="SiteForm">
     <div class="row">
       <div class="col-md-4">
-                        <%= label_tag :LocationName %>
-                        <%= text_field_tag :LocationName, site['LocationName'] %><br>
 
+                          <%= label_tag :LocationName %>
+                          <%= text_field_tag :LocationName, site['LocationName'] %><br>
 
-                        <% if site[:Addr1] != nil %>
                             <h3><i>Address One</i></h3>
                             <% site[:Addr1].each do |pd| %>
                                   <div class="siteAddr1">
@@ -286,7 +286,7 @@
                                     <%= label_tag :Domain %>
                                     <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
                                   </div>
-                            <% end %>
+
                         <% end %>
                         <%= label_tag :Addr2 %>
                         <%= text_field_tag :Addr2, site['Addr2'] %><br>
@@ -317,11 +317,11 @@
 
       <div class="col-md-4">
                         <%= label_tag :ServiceDeliverySite %>
-                        <%= check_box_tag :ServiceDeliverySite, site['ServiceDeliverySite'], site['ServiceDeliverySite'] %><br>
+                        <%= check_box_tag :ServiceDeliverySite, site['ServiceDeliverySite'], site['ServiceDeliverySite'].to_s.downcase == "true" %><br>
                         <%= label_tag :AdminSite %>
-                        <%= check_box_tag :AdminSite, site['AdminSite'] , site['AdminSite']%><br>
+                        <%= check_box_tag :AdminSite, site['AdminSite'] , site['AdminSite'].to_s.downcase == "true" %><br>
                         <%= label_tag :ResourceDirectory %>
-                        <%= check_box_tag :ResourceDirectory, site['ResourceDirectory'], site['ResourceDirectory'] %><br>
+                        <%= check_box_tag :ResourceDirectory, site['ResourceDirectory'], site['ResourceDirectory'].to_s.downcase == "true" %><br>
                         <%= label_tag :SelectSiteID %>
                         <%= text_field_tag :SelectSiteID, site['SelectSiteID'] %><br>
                         <%= label_tag :Webpage %>
@@ -335,7 +335,7 @@
                   <% site['POCs'].each do |pd| %>
                       <div class="sitePOC">
                           <%= label_tag :DefaultPOC %>
-                          <%= check_box_tag :DefaultPOC, pd['poc']['DefaultPOC'] , pd['poc']['DefaultPOC']%><br>
+                          <%= check_box_tag :DefaultPOC, pd['poc']['DefaultPOC'] , pd['poc']['DefaultPOC'.to_s.downcase == "true" ]%><br>
                           <%= label_tag :id %>
                           <%= text_field_tag :id, pd['id'], name: :id %><br>
                           <%= label_tag :OfficePhone %>
@@ -358,6 +358,7 @@
       </div>
     </div>
   </div>
+<% end %>
 <% end %>
 
 <!-- End Container-->

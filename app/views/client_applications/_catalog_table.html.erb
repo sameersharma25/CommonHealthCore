@@ -1,6 +1,6 @@
 <% i  = 1 %>
 <% result.each do |r|%>
-    <%if r["status"] == "New" || r["status"] == "Rejected"%>
+
         <% i += 1 %>
         <% if r["missing_mandatory_fields"] == "1" %>
             <tr class="currentRow missing_fields" id= <%="rule_#{i}"%>  >
@@ -42,5 +42,5 @@
             </script>
         <% end %>
 
-    <%end%>
+
 <%end%>
