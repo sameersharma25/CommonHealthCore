@@ -6,27 +6,29 @@
 <div class="modal-body">
 <!--Modal Body -->
 <div class="container-fluid">
-<button id="collectButton">Update</button>
+<button id="collectButton">Update</button> 
 
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>ORG DETAILS </h1>
-      <%= form_tag(url: "/get_new_catalog", method: 'post') do %> 
 
-              <%= label_tag :Scope %>
-              <%= text_field_tag :Scope, @orgDetails[:Scope], name: :Scope %><br>
+
+
+              <%= label_tag :Type %>
+              <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
               <%= label_tag :HomePageURL %>
-              <%= text_field_tag :HomePageURL, @orgDetails[:HomePageURL], name: :HomePageURL %><br>
+              <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL %><br>
 
               <div id="orgName" >
                 <h3><i>Org Name</i></h3>
+
                 <% @OrganizationName.each do |pd| %>
                   <%= label_tag :Xpath %>
-                  <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
                   <%= label_tag :Text %>
-                  <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
                   <%= label_tag :Domain %>
-                  <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
                 <% end %>
             </div>
 
@@ -34,40 +36,42 @@
                 <h3><i>Org Desc</i></h3>
                 <% @OrgDescription.each do |pd| %>
                   <%= label_tag :Xpath %>
-                  <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
                   <%= label_tag :Text %>
-                  <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
                   <%= label_tag :Domain %>
-                  <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
                 <% end %>
             </div>
-      <% end %>
+
     </div>
     <div>
       <div class="col-md-6" id="GeoScopeForm">
           <h1>GEOSCOPE</h1>
-          <%= form_tag(url: "/get_new_catalog", method: 'post') do %> 
-              <%= label_tag :GeoScope %> 
-              <%= text_field_tag :GeoScope, @geoscope[:GeoScope] %>  <br>
-              <%= label_tag :Neighborhoods %> 
-              <%= text_field_tag :Neighborhoods, @geoscope[:Neighborhoods] %>  <br>
-              <%= label_tag :ServiceAreaName %> 
-              <%= text_field_tag :ServiceAreaName, @geoscope[:ServiceAreaName] %>  <br>
-              <%= label_tag :State %> 
-              <%= text_field_tag :State, @geoscope[:State] %>  <br>
-              <%= label_tag :Country %> 
-              <%= text_field_tag :Country, @geoscope[:Country] %>  <br>
-              <%= label_tag :Region %> 
-              <%= text_field_tag :Region, @geoscope[:Region] %> <br>
-              <%= label_tag :City %> 
-              <%= text_field_tag :City, @geoscope[:City] %>  <br>
-              <%= label_tag :County %> 
-              <%= text_field_tag :County, @geoscope[:County] %> <br> 
 
-          <% end %> 
+              <%= label_tag :GeoScope %> 
+              <%= text_field_tag :GeoScope, @geoscope['GeoScope'] %>  <br>
+              <%= label_tag :Neighborhoods %> 
+              <%= text_field_tag :Neighborhoods, @geoscope['Neighborhoods'] %>  <br>
+              <%= label_tag :ServiceAreaName %> 
+              <%= text_field_tag :ServiceAreaName, @geoscope['ServiceAreaName'] %>  <br>
+              <%= label_tag :State %> 
+              <%= text_field_tag :State, @geoscope['State'] %>  <br>
+              <%= label_tag :Country %> 
+              <%= text_field_tag :Country, @geoscope['Country'] %>  <br>
+              <%= label_tag :Region %> 
+              <%= text_field_tag :Region, @geoscope['Region'] %> <br>
+              <%= label_tag :City %> 
+              <%= text_field_tag :City, @geoscope['City'] %>  <br>
+              <%= label_tag :County %> 
+              <%= text_field_tag :County, @geoscope['County'] %> <br> 
+
+
       </div>
     </div>
   </div>
+
+
 
 
     <h1>PROGRAMS</h1>
@@ -75,256 +79,281 @@
         <div class=" ProgramForm row">
             <div class="col-md-4">
                     <%= label_tag :InactiveProgram %>
-                    <%= check_box_tag :InactiveProgram, x[:InactiveProgram], x[:InactiveProgram]%><br>
+                    <%= check_box_tag :InactiveProgram, x['InactiveProgram'], x['InactiveProgram']%><br>
                     <%= label_tag :QuickConnectWebPage %>
-                    <%= text_field_tag :QuickConnectWebPage, x[:QuickConnectWebPage] %><br>
+                    <%= text_field_tag :QuickConnectWebPage, x['QuickConnectWebPage'] %><br>
                     <%= label_tag :ContactWebPage %>
-                    <%= text_field_tag :ContactWebPage, x[:ContactWebPage] %><br>
+                    <%= text_field_tag :ContactWebPage, x['ContactWebPage'] %><br>
                     <%= label_tag :ProgramWebPage %>
-                    <%= text_field_tag :ProgramWebPage, x[:ProgramWebPage] %><br>
-                    <%= label_tag :ServiceTag %>
-                    <%= text_field_tag :ServiceTag, x[:ServiceTag] %><br>
+                    <%= text_field_tag :ProgramWebPage, x['ProgramWebPage'] %><br>
+                    <%= label_tag :ServiceTags %>
+                    <%= text_field_tag :ServiceTags, x['ServiceTags'] %><br>
 
                     <%= label_tag :ProgramComment %>
-                    <%= text_field_tag :ProgramComment, x[:ProgramComment] %><br>
+                    <%= text_field_tag :ProgramComment, x['ProgramComment'] %><br>
 
                     <%= label_tag :SelectprogramID %>
-                    <%= text_field_tag :SelectprogramID, x[:SelectprogramID] %><br>
+                    <%= text_field_tag :SelectprogramID, x['SelectprogramID'] %><br>
 
                     <%= label_tag :PopulationTags %>
-                    <%= text_field_tag :PopulationTags, x[:PopulationTags] %><br>
+                    <%= text_field_tag :PopulationTags, x['PopulationTags'] %><br>
                     <%= label_tag :programSites %>
-                    <%= text_field_tag :programSites, x[:programSites] %><br>
-                    <h3><i>Pop Desc</i></h3>
-                    <% x[:PopulationDescription].each do |pd| %>
-                      <div class="programPopulationDescription" >
-                        <%= label_tag :Xpath %>
-                        <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
-                        <%= label_tag :Text %>
-                        <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
-                        <%= label_tag :Domain %>
-                        <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
-                      </div>
+                    <%= text_field_tag :programSites, x['programSites'] %><br>
+
+                    <% if x[:PopulationDescription] != nil %>
+                      <h3><i>Pop Desc</i></h3>
+                      <% x[:PopulationDescription].each do |pd| %>
+                        <div class="programPopulationDescription" >
+                          <%= label_tag :Xpath %>
+                          <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
+                          <%= label_tag :Text %>
+                          <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                          <%= label_tag :Domain %>
+                          <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
+                        </div>
+                      <% end %>
                     <% end %>
+
+
+                    <% if x[:ProgramDescription] != nil %>
                     <h3><i>Prog Desc</i></h3>
                     <% x[:ProgramDescription].each do |pd| %>
                       <div class="programProgramDescription" >
                         <%= label_tag :Xpath %>
-                        <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                        <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
                         <%= label_tag :Text %>
-                        <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                        <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
                         <%= label_tag :Domain %>
-                        <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                        <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
                       </div>
                     <% end %>
+                    <% end %>
+
+
+                    <% if x[:ServiceAreaDescription] != nil %>
                     <h3><i>Serv Desc</i></h3>
                     <% x[:ServiceAreaDescription].each do |pd| %>
                       <div class="programServiceAreaDescription" >
                         <%= label_tag :Xpath %>
-                        <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                        <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
                         <%= label_tag :Text %>
-                        <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                        <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
                         <%= label_tag :Domain %>
-                        <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                        <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
                       </div>
                     <% end %>
+                    <% end %>
+
+                    <% if x[:ProgramReferences] != nil %>
                     <h3><i>Prog Ref</i></h3>
                     <% x[:ProgramReferences].each do |pd| %>
                       <div class="programProgramReferences" >
                         <%= label_tag :Xpath %>
-                        <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
+                        <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
                         <%= label_tag :Text %>
-                        <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
+                        <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
                         <%= label_tag :Domain %>
-                        <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
+                        <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
                       </div>
-                    <% end %>      
+                    <% end %>  
+                    <% end %>    
             </div>
 
             <div class="col-md-4">
               <h1>The Letter P</h1>
                     <%= label_tag :P_Veteran %>
-                    <%= check_box_tag :P_Veteran, x[:P_Veteran] , x[:P_Veteran]%><br>
+                    <%= check_box_tag :P_Veteran, x['P_Veteran'] , x['P_Veteran']%><br>
                     <%= label_tag :P_Family %>
-                    <%= check_box_tag :P_Family, x[:P_Family], x[:P_Family]%><br>
+                    <%= check_box_tag :P_Family, x['P_Family'], x['P_Family']%><br>
                     <%= label_tag :P_Citizenship %>
-                    <%= check_box_tag :P_Citizenship, x[:P_Citizenship], x[:P_Citizenship]%><br>
+                    <%= check_box_tag :P_Citizenship, x['P_Citizenship'], x['P_Citizenship']%><br>
                     <%= label_tag :P_Senior %>
-                    <%= check_box_tag :P_Senior, x[:P_Senior], x[:P_Senior] %><br>
+                    <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'] %><br>
 
                     <%= label_tag :P_Any %>
-                    <%= check_box_tag :P_Any, x[:P_Any], x[:P_Any] %><br>
+                    <%= check_box_tag :P_Any, x['P_Any'], x['P_Any'] %><br>
 
                     <%= label_tag :P_Other %>
-                    <%= check_box_tag :P_Other, x[:P_Other], x[:P_Other] %><br>
+                    <%= check_box_tag :P_Other, x['P_Other'], x['P_Other'] %><br>
                     <%= label_tag :P_LGBTQ %>
-                    <%= check_box_tag :P_LGBTQ, x[:P_LGBTQ], x[:P_LGBTQ] %><br>
+                    <%= check_box_tag :P_LGBTQ, x['P_LGBTQ'], x['P_LGBTQ'] %><br>
                     <%= label_tag :P_LowIncome %>
-                    <%= check_box_tag :P_LowIncome, x[:P_LowIncome], x[:P_LowIncome] %><br>
+                    <%= check_box_tag :P_LowIncome, x['P_LowIncome'], x['P_LowIncome'] %><br>
                     <%= label_tag :P_Disabled %>
-                    <%= check_box_tag :P_Disabled, x[:P_Disabled],x[:P_Disabled] %><br>
+                    <%= check_box_tag :P_Disabled, x['P_Disabled'],x['P_Disabled'] %><br>
                     <%= label_tag :P_Native %>
-                    <%= check_box_tag :P_Native, x[:P_Native], x[:P_Native] %><br>
+                    <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'] %><br>
             </div>
 
             <div class="col-md-4">
               <h1>The Letter S</h1>
                     <%= label_tag :S_Addiction %>
-                    <%= check_box_tag :S_Addiction, x[:S_Addiction], x[:S_Addiction] %><br>
+                    <%= check_box_tag :S_Addiction, x['S_Addiction'], x['S_Addiction'] %><br>
                     <%= label_tag :S_Identification %>
-                    <%= check_box_tag :S_Identification, x[:S_Identification], x[:S_Identification] %><br>
+                    <%= check_box_tag :S_Identification, x['S_Identification'], x['S_Identification'] %><br>
                     <%= label_tag :S_Research %>
-                    <%= check_box_tag :S_Research, x[:S_Research], x[:S_Research] %><br>
+                    <%= check_box_tag :S_Research, x['S_Research'], x['S_Research'] %><br>
                     <%= label_tag :S_Legal %>
-                    <%= check_box_tag :S_Legal, x[:S_Legal], x[:S_Legal] %><br>
+                    <%= check_box_tag :S_Legal, x['S_Legal'], x['S_Legal'] %><br>
                     <%= label_tag :S_Medical %>
-                    <%= check_box_tag :S_Medical, x[:S_Medical], x[:S_Medical] %><br>
+                    <%= check_box_tag :S_Medical, x['S_Medical'], x['S_Medical'] %><br>
                     <%= label_tag :S_Food %>
-                    <%= check_box_tag :S_Food, x[:S_Food], x[:S_Food] %><br>
+                    <%= check_box_tag :S_Food, x['S_Food'], x['S_Food'] %><br>
                     <%= label_tag :S_GeneralSupport %>
-                    <%= check_box_tag :S_GeneralSupport, x[:S_GeneralSupport], x[:S_GeneralSupport] %><br>
+                    <%= check_box_tag :S_GeneralSupport, x['S_GeneralSupport'], x['S_GeneralSupport'] %><br>
                     <%= label_tag :S_Education %>
-                    <%= check_box_tag :S_Education, x[:S_Education], x[:S_Education] %><br>
+                    <%= check_box_tag :S_Education, x['S_Education'], x['S_Education'] %><br>
                     <%= label_tag :S_Family %>
-                    <%= check_box_tag :S_Family, x[:S_Family], x[:S_Family] %><br>
+                    <%= check_box_tag :S_Family, x['S_Family'], x['S_Family'] %><br>
                     <%= label_tag :S_Employment %>
-                    <%= check_box_tag :S_Employment, x[:S_Employment] , x[:S_Employment]%><br>
+                    <%= check_box_tag :S_Employment, x['S_Employment'] , x['S_Employment']%><br>
 
                     <%= label_tag :P_Senior %>
-                    <%= check_box_tag :P_Senior, x[:P_Senior], x[:P_Senior] %><br>
+                    <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'] %><br>
                     <%= label_tag :S_Abuse %>
-                    <%= check_box_tag :S_Abuse, x[:S_Abuse], x[:S_Abuse] %><br>
+                    <%= check_box_tag :S_Abuse, x['S_Abuse'], x['S_Abuse'] %><br>
 
                     <%= label_tag :S_Resources %>
-                    <%= check_box_tag :S_Resources, x[:S_Resources], x[:S_Resources] %><br>
+                    <%= check_box_tag :S_Resources, x['S_Resources'], x['S_Resources'] %><br>
 
                     <%= label_tag :S_Victim %>
-                    <%= check_box_tag :S_Victim, x[:S_Victim] , x[:S_Victim]%><br>
+                    <%= check_box_tag :S_Victim, x['S_Victim'] , x['S_Victim']%><br>
 
                     <%= label_tag :S_Disabled %>
-                    <%= check_box_tag :S_Disabled, x[:S_Disabled] , x[:S_Disabled]%><br>
+                    <%= check_box_tag :S_Disabled, x['S_Disabled'] , x['S_Disabled']%><br>
 
                     <%= label_tag :S_Housing %>
-                    <%= check_box_tag :S_Housing, x[:S_Housing] , x[:S_Housing]%><br>
+                    <%= check_box_tag :S_Housing, x['S_Housing'] , x['S_Housing']%><br>
 
                     <%= label_tag :S_Veterans %>
-                    <%= check_box_tag :S_Veterans, x[:S_Veterans] , x[:S_Veterans]%><br>
+                    <%= check_box_tag :S_Veterans, x['S_Veterans'] , x['S_Veterans']%><br>
                     <%= label_tag :S_BasicNeeds %>
-                    <%= check_box_tag :S_BasicNeeds, x[:S_BasicNeeds] , x[:S_BasicNeeds]%><br>
+                    <%= check_box_tag :S_BasicNeeds, x['S_BasicNeeds'] , x['S_BasicNeeds']%><br>
                     <%= label_tag :S_Financial %>
-                    <%= check_box_tag :S_Financial, x[:S_Financial] , x[:S_Financial]%><br>
+                    <%= check_box_tag :S_Financial, x['S_Financial'] , x['S_Financial']%><br>
                     <%= label_tag :S_Clothing %>
-                    <%= check_box_tag :S_Clothing, x[:S_Clothing], x[:S_Clothing] %><br>
+                    <%= check_box_tag :S_Clothing, x['S_Clothing'], x['S_Clothing'] %><br>
                     <%= label_tag :S_Respite %>
-                    <%= check_box_tag :S_Respite, x[:S_Respite] , x[:S_Respite]%><br>
+                    <%= check_box_tag :S_Respite, x['S_Respite'] , x['S_Respite']%><br>
 
                     <%= label_tag :S_IndependentLiving %>
-                    <%= check_box_tag :S_IndependentLiving, x[:S_IndependentLiving], x[:S_IndependentLiving] %><br>
+                    <%= check_box_tag :S_IndependentLiving, x['S_IndependentLiving'], x['S_IndependentLiving'] %><br>
 
                     <%= label_tag :S_CaseManagement %>
-                    <%= check_box_tag :S_CaseManagement, x[:S_CaseManagement] %><br>
+                    <%= check_box_tag :S_CaseManagement, x['S_CaseManagement'], x['S_CaseManagement'] %><br>
                     <%= label_tag :S_Senior %>
-                    <%= check_box_tag :S_Senior, x[:S_Senior] %><br>
+                    <%= check_box_tag :S_Senior, x['S_Senior'], x['S_Senior'] %><br>
                     <%= label_tag :S_Emergency %>
-                    <%= check_box_tag :S_Emergency, x[:S_Emergency] %><br>
+                    <%= check_box_tag :S_Emergency, x['S_Emergency'], x['S_Emergency'] %><br>
                     <%= label_tag :S_DayCare %>
-                    <%= check_box_tag :S_DayCare, x[:S_DayCare] %><br>
+                    <%= check_box_tag :S_DayCare, x['S_DayCare'], x['S_DayCare'] %><br>
                     <%= label_tag :S_Transportation %>
-                    <%= check_box_tag :S_Transportation, x[:S_Transportation] %><br>
+                    <%= check_box_tag :S_Transportation, x['S_Transportation'], x['S_Transportation'] %><br>
                     <%= label_tag :S_Behavioral %>
-                    <%= check_box_tag :S_Behavioral, x[:S_Behavioral] %><br>
+                    <%= check_box_tag :S_Behavioral, x['S_Behavioral'], x['S_Behavioral'] %><br>
                     <%= label_tag :S_Low_Income %>
-                    <%= check_box_tag :S_Low_Income, x[:S_Low_Income] %><br>
+                    <%= check_box_tag :S_Low_Income, x['S_Low_Income'], x['S_Low_Income'] %><br>
             </div>
 
         </div>
       <% end %>
+
+
+
 <h1>SITES</h1>
 <% @site.each do |site| %>
   <div class="SiteForm">
     <div class="row">
       <div class="col-md-4">
                         <%= label_tag :LocationName %>
-                        <%= text_field_tag :LocationName, site[:LocationName] %><br>
+                        <%= text_field_tag :LocationName, site['LocationName'] %><br>
 
-                        <h3><i>Address One</i></h3>
-                        <% site[:Addr1].each do |pd| %>
-                          <div class="siteAddr1">
-                          <%= label_tag :Xpath %>
-                          <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
-                          <%= label_tag :Text %>
-                          <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
-                          <%= label_tag :Domain %>
-                          <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
-                          </div>
+
+                        <% if site[:Addr1] != nil %>
+                            <h3><i>Address One</i></h3>
+                            <% site[:Addr1].each do |pd| %>
+                                  <div class="siteAddr1">
+                                    <%= label_tag :Xpath %>
+                                    <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
+                                    <%= label_tag :Text %>
+                                    <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                                    <%= label_tag :Domain %>
+                                    <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
+                                  </div>
+                            <% end %>
                         <% end %>
                         <%= label_tag :Addr2 %>
-                        <%= text_field_tag :Addr2, site[:Addr2] %><br>
+                        <%= text_field_tag :Addr2, site['Addr2'] %><br>
 
                         <%= label_tag :AddrState %>
-                        <%= text_field_tag :AddrState, site[:AddrState] %><br>
+                        <%= text_field_tag :AddrState, site['AddrState'] %><br>
 
                         <%= label_tag :AddrCity %>
-                        <%= text_field_tag :AddrCity, site[:AddrCity] %><br>
+                        <%= text_field_tag :AddrCity, site['AddrCity'] %><br>
 
                         <%= label_tag :AddrZip %>
-                        <%= text_field_tag :AddrZip, site[:AddrZip] %><br>
+                        <%= text_field_tag :AddrZip, site['AddrZip'] %><br>
 
-                        <h3><i>Site Ref</i></h3>
-                        <% site[:SiteReference].each do |pd| %>
-                          <div class="siteSiteReference">
-                          <%= label_tag :Xpath %>
-                          <%= text_field_tag :Xpath, pd[:Xpath], name: :Xpath %><br>
-                          <%= label_tag :Text %>
-                          <%= text_field_tag :Text, pd[:Text], name: :Text%><br>
-                          <%= label_tag :Domain %>
-                          <%= text_field_tag :Domain, pd[:Domain], name: :Domain %><br>
-                          </div>
+                        <% if site[:SiteReference] != nil %>
+                          <h3><i>Site Ref</i></h3>
+                            <% site[:SiteReference].each do |pd| %>
+                              <div class="siteSiteReference">
+                                  <%= label_tag :Xpath %>
+                                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
+                                  <%= label_tag :Text %>
+                                  <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                                  <%= label_tag :Domain %>
+                                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
+                              </div>
+                            <% end %>
                         <% end %>
       </div>
 
       <div class="col-md-4">
                         <%= label_tag :ServiceDeliverySite %>
-                        <%= check_box_tag :ServiceDeliverySite, site[:ServiceDeliverySite], site[:ServiceDeliverySite] %><br>
+                        <%= check_box_tag :ServiceDeliverySite, site['ServiceDeliverySite'], site['ServiceDeliverySite'] %><br>
                         <%= label_tag :AdminSite %>
-                        <%= check_box_tag :AdminSite, site[:AdminSite] , site[:AdminSite]%><br>
+                        <%= check_box_tag :AdminSite, site['AdminSite'] , site['AdminSite']%><br>
                         <%= label_tag :ResourceDirectory %>
-                        <%= check_box_tag :ResourceDirectory, site[:ResourceDirectory], site[:ResourceDirectory] %><br>
+                        <%= check_box_tag :ResourceDirectory, site['ResourceDirectory'], site['ResourceDirectory'] %><br>
                         <%= label_tag :SelectSiteID %>
-                        <%= text_field_tag :SelectSiteID, site[:SelectSiteID] %><br>
+                        <%= text_field_tag :SelectSiteID, site['SelectSiteID'] %><br>
                         <%= label_tag :Webpage %>
-                        <%= text_field_tag :Webpage, site[:Webpage] %><br>
+                        <%= text_field_tag :Webpage, site['Webpage'] %><br>
       </div>
 
       <div class="col-md-4">
-                <h3><i>POC</i></h3>
-                  <% site[:POCs].each do |pd| %>
-                      <div class="sitePOC">
 
-                        <%= label_tag :DefaultPOC %>
-                        <%= check_box_tag :DefaultPOC, pd[:poc][:DefaultPOC] , pd[:poc][:DefaultPOC]%><br>
+              <h3><i>POC</i></h3>
+                <% if site['POCs'] != nil %>
+                  <% site['POCs'].each do |pd| %>
+                      <div class="sitePOC">
+                          <%= label_tag :DefaultPOC %>
+                          <%= check_box_tag :DefaultPOC, pd['poc']['DefaultPOC'] , pd['poc']['DefaultPOC']%><br>
                           <%= label_tag :id %>
-                          <%= text_field_tag :id, pd[:id], name: :id %><br>
+                          <%= text_field_tag :id, pd['id'], name: :id %><br>
                           <%= label_tag :OfficePhone %>
-                          <%= text_field_tag :OfficePhone, pd[:poc][:OfficePhone] %><br>
+                          <%= text_field_tag :OfficePhone, pd['poc']['OfficePhone'] %><br>
                           <%= label_tag :Email %>
-                          <%= text_field_tag :Email, pd[:poc][:Email] %><br>
+                          <%= text_field_tag :Email, pd['poc']['Email'] %><br>
                           <%= label_tag :Referrals %>
-                          <%= text_field_tag :Referrals, pd[:poc][:Referrals] %><br>
+                          <%= text_field_tag :Referrals, pd['poc']['Referrals'] %><br>
                           <%= label_tag :ContactPage %>
-                          <%= text_field_tag :ContactPage, pd[:poc][:ContactPage] %><br>
+                          <%= text_field_tag :ContactPage, pd['poc']['ContactPage'] %><br>
                           <%= label_tag :Title %>
-                          <%= text_field_tag :Title, pd[:poc][:Title] %><br>
+                          <%= text_field_tag :Title, pd['poc']['Title'] %><br>
                           <%= label_tag :MobilePhone %>
-                          <%= text_field_tag :MobilePhone, pd[:poc][:MobilePhone] %><br>
+                          <%= text_field_tag :MobilePhone, pd['poc']['MobilePhone'] %><br>
                           <%= label_tag :Name %>
-                          <%= text_field_tag :Name, pd[:poc][:Name] %><br>
+                          <%= text_field_tag :Name, pd['poc']['Name'] %><br>
                       </div>
                   <% end %>
+              <% end %>
       </div>
     </div>
   </div>
 <% end %>
+
 <!-- End Container-->
 </div>
 
@@ -609,9 +638,39 @@ organizationDetails["OrgSites"] = orgSiteArray
           
  } //End of Program Loop 
  organizationDetails["Programs"] = programsArray
-
+  submitChange(organizationDetails)
      
   }) // end of Click
+
+  function submitChange(data){
+          myjsonObject = data
+          myjsonObject['url'] = "qwer"
+          var crud = JSON.stringify(myjsonObject)
+          //  
+         sendCataData(crud);
+
+         function sendCataData(crud) {
+          var XHR = new XMLHttpRequest();
+          XHR.addEventListener("load", function(event) {
+          });
+          //error
+          XHR.addEventListener("error", function(event) {
+          alert('Oops! Something went wrong.');
+          });
+          XHR.open("POST", "https://dev7.resourcestack.com/api/get_catalogue_entry");
+          XHR.setRequestHeader('Content-Type', 'application/json');
+          XHR.send(crud);
+              XHR.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    response = this.responseText
+                    console.log(this.response)
+                } else {
+                  console.log(XHR.responseText)
+                }
+              };
+          }
+
+  }
 
 </script>
 

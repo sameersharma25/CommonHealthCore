@@ -229,15 +229,32 @@ class ClientApplicationsController < ApplicationController
     # details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
     #            programHash: @programHash, geoScope: @geoScope, programs: @programs }
     details = get_catalog_details(ENV["CATALOG_TABLE_NAME"])
-    # logger.debug("the detail are : #{details}")
-    @organizationName = details[:organizationName]
-    logger.debug("the orgName is : #{@organizationName}")
-    @siteHash = details[:siteHash]
-    @poc = details[:poc]
-    @orgSites = details[:orgSites]
-    @programHash = details[:programHash]
-    @geoScope = details[:geoScope]
-    @programs = details[:programs]
+    #@organizationName = details[:organizationName]
+    #logger.debug("the orgName is : #{@organizationName}")
+    #@siteHash = details[:siteHash]
+    #@poc = details[:poc]
+    #@orgSites = details[:orgSites]
+    #@programHash = details[:programHash]
+    #@geoScope = details[:geoScope]
+    #@programs = details[:programs]
+
+@orgDetails = details[:OrgDetails]
+logger.debug("OrgDetails:::: #{@orgDetails}")
+@OrganizationName = details[:OrganizationName]
+logger.debug("OrgName::: #{@OrganizationName}")
+@OrgDescription = details[:OrganizationDescription]
+logger.debug("OrgDesc::: #{@OrgDescription}")
+@siteHash = details[:siteHash]
+@poc = details[:poc]
+@site = details[:OrgSites]
+@geoscope = details[:geoscope]
+@program = details[:programs]
+@PopulationDescription = details[:popDesc]
+@ProgramDescription = details[:progDesc]
+@ServiceAreaDescription = details[:servArea]
+@ProgramReferences = details[:progRef]
+
+
 
     respond_to do |format|
       format.html
@@ -275,6 +292,7 @@ class ClientApplicationsController < ApplicationController
     @orgSites = details[:orgSites]
     @programHash = details[:programHash]
     @geoScope = details[:geoScope]
+    logger.debug("What is Geo #{@geoScope}")
     @programs = details[:programs]
     respond_to do |format|
       format.html
@@ -299,18 +317,19 @@ class ClientApplicationsController < ApplicationController
     @result = dynamodb.get_item(parameters)[:item]
 
     #logger.debug("the Result of the get entry is : #{@result}")
+    logger.debug("MASON RIGHT HERE ")
         @result.each do |k,v|
             logger.debug("NOW THE KEY MATTERS #{k}")
                 case k.to_s
 
                     when 'Programs'
                       @program = v
-                      logger.debug("PROGRAM VALUE #{v}")
+                      #logger.debug("PROGRAM VALUE #{v}")
 
                       v.each do |ary|
                           ary.each do |key,value|
                             if key.to_s == 'PopulationDescription'
-                              logger.debug("Value #{value}")
+                        #      logger.debug("Value #{value}")
                               @PopulationDescription = value
 
                             elsif key.to_s == 'ProgramDescription'
@@ -327,7 +346,7 @@ class ClientApplicationsController < ApplicationController
  
 
                     when 'OrgSites'
-                      logger.debug("SITE SITE  #{v}")
+                      #logger.debug("SITE SITE  #{v}")
                       @site = v
 
                       #v.each do |ary|
@@ -366,9 +385,21 @@ class ClientApplicationsController < ApplicationController
 
         end
 
-    details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
-               programHash: @programHash, geoScope: @geoScope, programs: @programs }
-
+    #details = {OrganizationName: @orgDetails, siteHash: @siteHash, poc: @poc, OrgSites: @sites,
+     #          programHash: @programHash, geoscope: @geoscope, programs: @programs }
+    details = {
+    OrgDetails: @orgDetails,
+    OrganizationName: @OrganizationName, 
+    OrganizationDescription: @OrgDescription,
+    siteHash: @siteHash, 
+    poc: @poc, 
+    OrgSites: @site,
+    geoscope: @geoscope, 
+    programs: @program,
+    popDesc: @PopulationDescription,
+    progDesc: @ProgramDescription,
+    servArea: @ServiceAreaDescription,
+    progRef: @ProgramReferences }
   end
 
 

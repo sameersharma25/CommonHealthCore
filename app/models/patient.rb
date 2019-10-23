@@ -31,6 +31,9 @@ class Patient
   field :emergency_contact_phone, type: String
   field :emergency_contact_email, type: String
   field :emergency_contact_relationship, type: String 
+  
+  field :population_group, type: Array, default: []
+  field :service_group, type: Array, default: []
 
 
   belongs_to :client_application
