@@ -238,22 +238,23 @@ class ClientApplicationsController < ApplicationController
     #@geoScope = details[:geoScope]
     #@programs = details[:programs]
 
-@orgDetails = details[:OrgDetails]
-logger.debug("OrgDetails:::: #{@orgDetails}")
-@OrganizationName = details[:OrganizationName]
-logger.debug("OrgName::: #{@OrganizationName}")
-@OrgDescription = details[:OrganizationDescription]
-logger.debug("OrgDesc::: #{@OrgDescription}")
-@siteHash = details[:siteHash]
-@poc = details[:poc]
-@site = details[:OrgSites]
-logger.debug("ORG SITES #{@site}")
-@geoscope = details[:geoscope]
-@program = details[:programs]
-@PopulationDescription = details[:popDesc]
-@ProgramDescription = details[:progDesc]
-@ServiceAreaDescription = details[:servArea]
-@ProgramReferences = details[:progRef]
+    @orgDetails = details[:OrgDetails]
+    logger.debug("OrgDetails:::: #{@orgDetails}")
+    @OrganizationName = details[:OrganizationName]
+    logger.debug("OrgName::: #{@OrganizationName}")
+    @OrgDescription = details[:OrganizationDescription]
+    logger.debug("OrgDesc::: #{@OrgDescription}")
+    @siteHash = details[:siteHash]
+    @poc = details[:poc]
+    @site = details[:OrgSites]
+    logger.debug("ORG SITES #{@site}")
+    @geoscope = details[:geoscope]
+    @program = details[:programs]
+    logger.debug("PROGRAM #{@program}")
+    @PopulationDescription = details[:popDesc]
+    @ProgramDescription = details[:progDesc]
+    @ServiceAreaDescription = details[:servArea]
+    @ProgramReferences = details[:progRef]
 
 
 
@@ -399,6 +400,7 @@ logger.debug("ORG SITES #{@site}")
     site: @site,
     addr1: @Addr1,
     siteref: @SiteReference,
+    siteHash: @siteHash, 
     poc: @poc, 
     OrgSites: @site,
     geoscope: @geoscope, 
