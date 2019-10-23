@@ -20,27 +20,31 @@
               <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL %><br>
 
               <div id="orgName" >
-                <h3><i>Org Name</i></h3>
 
-                <% @OrganizationName.each do |pd| %>
-                  <%= label_tag :Xpath %>
-                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
-                  <%= label_tag :Text %>
-                  <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
-                  <%= label_tag :Domain %>
-                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
+                <h3><i>Org Name</i></h3>
+                <% if @OrganizationName != nil %>
+                    <% @OrganizationName.each do |pd| %>
+                      <%= label_tag :Xpath %>
+                      <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
+                      <%= label_tag :Text %>
+                      <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                      <%= label_tag :Domain %>
+                      <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
+                    <% end %>
                 <% end %>
             </div>
 
               <div id="orgDesc" >
                 <h3><i>Org Desc</i></h3>
-                <% @OrgDescription.each do |pd| %>
-                  <%= label_tag :Xpath %>
-                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
-                  <%= label_tag :Text %>
-                  <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
-                  <%= label_tag :Domain %>
-                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
+                <% if @OrgDescription != nil %>
+                    <% @OrgDescription.each do |pd| %>
+                      <%= label_tag :Xpath %>
+                      <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
+                      <%= label_tag :Text %>
+                      <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                      <%= label_tag :Domain %>
+                      <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
+                    <% end %>
                 <% end %>
             </div>
 
