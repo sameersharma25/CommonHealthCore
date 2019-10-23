@@ -20,6 +20,7 @@
               <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL %><br>
 
               <div id="orgName" >
+
                 <h3><i>Org Name</i></h3>
                 <% if @OrganizationName != nil %>
                     <% @OrganizationName.each do |pd| %>
@@ -35,6 +36,7 @@
 
               <div id="orgDesc" >
                 <h3><i>Org Desc</i></h3>
+
                 <% if @OrgDescription != nil %>
                     <% @OrgDescription.each do |pd| %>
                       <%= label_tag :Xpath %>
