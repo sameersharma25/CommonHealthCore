@@ -16,6 +16,11 @@ module Api
       referral.due_date = params[:due_date]
       referral.patient_id = patient
       referral.client_application_id = client_id
+      #
+      referral.client_consent = params[:client_consent]
+      referral.third_party_user_id = params[:third_party_user_id]
+      referral.consent_timestamp = params[:consent_timestamp]
+      #
       referral.save
       if params[:task].blank?
         if referral.save
@@ -85,6 +90,7 @@ module Api
         due_date = r.due_date
         source = r.source
         task_count = r.tasks.count
+        client_consent = r.client_consent
 
         status = r.status
         follow_up_date = r.follow_up_date
@@ -111,6 +117,7 @@ module Api
       source = r.source
       task_count = r.tasks.count
       status = r.status
+      client_consent = r.client_consent
       follow_up_date = r.follow_up_date
       agreement_notification_flag = r.agreement_notification_flag
       referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
@@ -131,6 +138,11 @@ module Api
       referral.status = params[:status] if params[:status]
       referral.follow_up_date = params[:follow_up_date] if params[:follow_up_date]
       referral.agreement_notification_flag = params[:agreement_notification_flag] if params[:agreement_notification_flag]
+      
+      referral.client_consent = params[:client_consent]
+      referral.third_party_user_id = params[:third_party_user_id]
+      referral.consent_timestamp = params[:consent_timestamp]
+      
       if referral.save
         render :json=> {status: :ok, message: "Referral Updated"}
       end

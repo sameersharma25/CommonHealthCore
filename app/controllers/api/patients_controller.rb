@@ -29,6 +29,14 @@ module Api
 
       patient.security_keys = helpers.security_keys_for_patients(patient)
 
+      patient.primary_care_physician = params[:primary_care_physician] if params[:primary_care_physician]
+      patient.emergency_contact_fName = params[:emergency_contact_fName] if params[:emergency_contact_fName]
+      patient.emergency_contact_lName = params[:emergency_contact_lName] if params[:emergency_contact_lName]
+      patient.emergency_contact_phone = params[:emergency_contact_phone] if params[:emergency_contact_phone]
+      patient.emergency_contact_email = params[:emergency_contact_email] if params[:emergency_contact_email]
+      patient.emergency_contact_relationship = params[:emergency_contact_relationship] if params[:emergency_contact_relationship]
+
+
       patient.save
 
       patient_name = patient.first_name+" "+ patient.last_name
@@ -89,6 +97,16 @@ module Api
       patient.gender = params[:gender] if params[:gender]
       patient.patient_status = "New"
       patient.security_keys = helpers.security_keys_for_patients(patient)
+
+      patient.primary_care_physician = params[:primary_care_physician] if params[:primary_care_physician]
+      patient.emergency_contact_fName = params[:emergency_contact_fName] if params[:emergency_contact_fName]
+      patient.emergency_contact_lName = params[:emergency_contact_lName] if params[:emergency_contact_lName]
+      patient.emergency_contact_phone = params[:emergency_contact_phone] if params[:emergency_contact_phone]
+      patient.emergency_contact_email = params[:emergency_contact_email] if params[:emergency_contact_email]
+      patient.emergency_contact_relationship = params[:emergency_contact_relationship] if params[:emergency_contact_relationship]
+      patient.population_group = params[:population_group] if params[:population_group]
+      patient.service_group = params[:service_group] if params[:service_group]
+
       if patient.save
         render :json=> {status: :ok, message: "Patient Created Successfully"}
       end
