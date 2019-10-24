@@ -228,7 +228,7 @@ class ClientApplicationsController < ApplicationController
 
     # details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
     #            programHash: @programHash, geoScope: @geoScope, programs: @programs }
-    details = get_catalog_details(ENV["CATALOG_TABLE_NAME"])
+    details = get_catalog_details(ENV["CATALOG_TABLE_NAME"]) 
     #@organizationName = details[:organizationName]
     #logger.debug("the orgName is : #{@organizationName}")
     #@siteHash = details[:siteHash]
@@ -237,7 +237,8 @@ class ClientApplicationsController < ApplicationController
     #@programHash = details[:programHash]
     #@geoScope = details[:geoScope]
     #@programs = details[:programs]
-
+    @url = details[:url],
+    logger.debug("WHAT IS THE URL  #{@url}")
     @orgDetails = details[:OrgDetails]
     logger.debug("OrgDetails:::: #{@orgDetails}")
     @OrganizationName = details[:OrganizationName]
@@ -325,9 +326,11 @@ class ClientApplicationsController < ApplicationController
     #logger.debug("the Result of the get entry is : #{@result}")
     logger.debug("MASON RIGHT HERE ")
         @result.each do |k,v|
-            logger.debug("NOW THE KEY MATTERS #{k}")
+            logger.debug("NOW THE KEY MATTERS #{k} ::: V:: #{v}")
                 case k.to_s
-
+                    when 'url'
+                      @url = v
+                      logger.debug("GETTING THE URL #{@url}")
                     when 'Programs'
                       @program = v
                       #logger.debug("PROGRAM VALUE #{v}")
@@ -394,6 +397,7 @@ class ClientApplicationsController < ApplicationController
     #details = {OrganizationName: @orgDetails, siteHash: @siteHash, poc: @poc, OrgSites: @sites,
      #          programHash: @programHash, geoscope: @geoscope, programs: @programs }
     details = {
+    url: @url,
     OrgDetails: @orgDetails,
     OrganizationName: @OrganizationName, 
     OrganizationDescription: @OrgDescription,
