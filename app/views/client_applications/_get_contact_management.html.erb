@@ -10,7 +10,7 @@
 
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
-      <h1>ORG DETAILS </h1>
+      <h1>Organization Details  </h1>
 
 
 
@@ -21,7 +21,7 @@
 
               <div id="orgName" >
 
-                <h3><i>Org Name</i></h3>
+                <h3><i>Organization Name</i></h3>
                 <% if @OrganizationName != nil %>
                     <% @OrganizationName.each do |pd| %>
                       <%= label_tag :Xpath %>
@@ -35,7 +35,7 @@
             </div>
 
               <div id="orgDesc" >
-                <h3><i>Org Desc</i></h3>
+                <h3><i>Organization Description</i></h3>
 
                 <% if @OrgDescription != nil %>
                     <% @OrgDescription.each do |pd| %>
@@ -52,7 +52,7 @@
     </div>
     <div>
       <div class="col-md-6" id="GeoScopeForm">
-          <h1>GEOSCOPE</h1>
+          <h1>Geoscope</h1>
 
               <%= label_tag :GeoScope %> 
               <%= text_field_tag :GeoScope, @geoscope['GeoScope'] %>  <br>
@@ -79,7 +79,7 @@
 
 
 
-    <h1>PROGRAMS</h1>
+    <h1>Programs</h1>
       <% @program.each do |x| %>
         <div class=" ProgramForm row">
             <div class="col-md-4">
@@ -106,7 +106,7 @@
                     <%= text_field_tag :programSites, x['programSites'] %><br>
 
                     <% if x[:PopulationDescription] != nil %>
-                      <h3><i>Pop Desc</i></h3>
+                      <h3><i>Population Description</i></h3>
                       <% x[:PopulationDescription].each do |pd| %>
                         <div class="programPopulationDescription" >
                           <%= label_tag :Xpath %>
@@ -121,7 +121,7 @@
 
 
                     <% if x[:ProgramDescription] != nil %>
-                    <h3><i>Prog Desc</i></h3>
+                    <h3><i>Program Description</i></h3>
                     <% x[:ProgramDescription].each do |pd| %>
                       <div class="programProgramDescription" >
                         <%= label_tag :Xpath %>
@@ -136,7 +136,7 @@
 
 
                     <% if x[:ServiceAreaDescription] != nil %>
-                    <h3><i>Serv Desc</i></h3>
+                    <h3><i>Service Area Description</i></h3>
                     <% x[:ServiceAreaDescription].each do |pd| %>
                       <div class="programServiceAreaDescription" >
                         <%= label_tag :Xpath %>
@@ -150,7 +150,7 @@
                     <% end %>
 
                     <% if x[:ProgramReferences] != nil %>
-                    <h3><i>Prog Ref</i></h3>
+                    <h3><i>Program References</i></h3>
                     <% x[:ProgramReferences].each do |pd| %>
                       <div class="programProgramReferences" >
                         <%= label_tag :Xpath %>
@@ -165,7 +165,7 @@
             </div>
 
             <div class="col-md-4">
-              <h1>The Letter P</h1>
+              <h1>Population Tags</h1>
                     <%= label_tag :P_Veteran %>
                     <%= check_box_tag :P_Veteran, x['P_Veteran'] , x[:P_Veteran].to_s.downcase == "true"   %><br>
                     <%= label_tag :P_Family %>
@@ -191,7 +191,7 @@
             </div>
 
             <div class="col-md-4">
-              <h1>The Letter S</h1>
+              <h1>Service Tags</h1>
                     <%= label_tag :S_Addiction %>
                     <%= check_box_tag :S_Addiction, x['S_Addiction'], x['S_Addiction'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Identification %>
@@ -265,7 +265,7 @@
 
 
 
-<h1>SITES</h1>
+<h1>Sites</h1>
 
 <% if @site != [nil] %>
 <% @site.each do |site| %>
@@ -277,7 +277,7 @@
                           <%= text_field_tag :LocationName, site['LocationName'] %><br>
 
                             <h3><i>Address One</i></h3>
-                            <% site[:Addr1].each do |pd| %>
+                            <% site['Addr1'].each do |pd| %>
                                   <div class="siteAddr1">
                                     <%= label_tag :Xpath %>
                                     <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
@@ -301,7 +301,7 @@
                         <%= text_field_tag :AddrZip, site['AddrZip'] %><br>
 
                         <% if site[:SiteReference] != nil %>
-                          <h3><i>Site Ref</i></h3>
+                          <h3><i>Site Reference</i></h3>
                             <% site[:SiteReference].each do |pd| %>
                               <div class="siteSiteReference">
                                   <%= label_tag :Xpath %>
