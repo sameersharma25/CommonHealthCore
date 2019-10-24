@@ -213,6 +213,7 @@ Rails.application.routes.draw do
 
     post "/create_catalog", to: "service_provider_details#create_catalog_entry"
     post "/update_catalog", to: "service_provider_details#update_catalog_entry"
+    post "/update_entire_catalog", to: "service_provider_details#update_entire_catalog"
 
     post "/site_update", to: "service_provider_details#site_update"
     post "/site_program_list",to: "service_provider_details#site_program_list"
