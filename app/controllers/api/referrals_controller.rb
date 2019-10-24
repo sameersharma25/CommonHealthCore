@@ -171,6 +171,24 @@ module Api
 
     end
 
+    def referral_assessments
+      referral = Referral.find(params[:referral_id])
+      needs = referral.needs
+      needs_array = []
+
+      needs.each do |n|
+        need_id = n.id.to_s
+        need_title = n.need_title
+        need_description = n.need_description
+        need_urgency = n.need_urgency
+        need_status = n.need_status
+        need_details = {need_id: need_id, need_title: need_title , need_description: need_description, need_urgency: need_urgency,
+                        need_status: need_status }
+        needs_array.push(need_details)
+      end
+      render :json => {status: :ok, needs_array: needs_array }
+    end
+
     def create_task
       referral = Referral.find(params[:referral_id])
       patient_id = referral.patient.id.to_s

@@ -12,4 +12,5 @@ class Need
   has_many :obstacles
   # belongs_to :interview
   belongs_to :patient
+  belongs_to :referral
 end

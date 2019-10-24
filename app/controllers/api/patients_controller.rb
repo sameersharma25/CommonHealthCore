@@ -108,7 +108,7 @@ module Api
       patient.service_group = params[:service_group] if params[:service_group]
 
       if patient.save
-        render :json=> {status: :ok, message: "Patient Created Successfully"}
+        render :json=> {status: :ok, message: "Patient Created Successfully", patient_id: patient.id.to_s}
       end
     end
 
