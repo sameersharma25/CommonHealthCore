@@ -7,6 +7,7 @@
 <!--Modal Body -->
 <div class="container-fluid">
 <button id="collectButton">Update</button> 
+          <h6 id ="theurl"> <%= @url.first %> </h6>
 
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
@@ -650,8 +651,9 @@ organizationDetails["OrgSites"] = orgSiteArray
   }) // end of Click
 
   function submitChange(data){
+
           myjsonObject = data
-          myjsonObject['url'] = "qwer"
+          myjsonObject['url'] = document.getElementById('theurl').innerText
           var crud = JSON.stringify(myjsonObject)
           //  
          sendCataData(crud);
@@ -664,7 +666,9 @@ organizationDetails["OrgSites"] = orgSiteArray
           XHR.addEventListener("error", function(event) {
           alert('Oops! Something went wrong.');
           });
-          XHR.open("POST", "https://dev7.resourcestack.com/api/get_catalogue_entry");
+          XHR.open("POST", "https://dev7.resourcestack.com/api/create_catalog");
+          //XHR.open("POST", "http://localhost:3000/api/update_entire_catalog");
+
           XHR.setRequestHeader('Content-Type', 'application/json');
           XHR.send(crud);
               XHR.onreadystatechange = function() {
