@@ -193,6 +193,7 @@ Rails.application.routes.draw do
     post "tsk_dashboard", to: "referrals#dashboard_tasks"
     post "ledg_rec_create", to: "referrals#create_ledger_record"
     post "ext_app_ledger", to: "referrals#ext_app_ledger"
+    post "rfl_assessments", to; "referrals#referral_assessments"
 
 
     post "msg_send", to: "communications#send_message"

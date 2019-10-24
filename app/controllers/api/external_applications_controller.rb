@@ -402,7 +402,7 @@ module Api
         changes_array.push(second_hash)
         created_at = ir.created_at
         internal_record_hash = {changes: changes_array, created_at: created_at}
-        internal_record_array.push(external_record_hash)
+        internal_record_array.push(internal_record_hash)
       end
 
       external_record_array = []
