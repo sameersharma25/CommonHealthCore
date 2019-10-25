@@ -55,8 +55,8 @@
       <div class="col-md-6" id="GeoScopeForm">
           <h1>Geoscope</h1>
 
-              <%= label_tag :GeoScope %> 
-              <%= text_field_tag :GeoScope, @geoscope['GeoScope'] %>  <br>
+              <%= label_tag :Scope %> 
+              <%= text_field_tag :Scope, @geoscope['Scope'] %>  <br>
               <%= label_tag :Neighborhoods %> 
               <%= text_field_tag :Neighborhoods, @geoscope['Neighborhoods'] %>  <br>
               <%= label_tag :ServiceAreaName %> 
@@ -278,6 +278,7 @@
                           <%= text_field_tag :LocationName, site['LocationName'] %><br>
 
                             <h3><i>Address One</i></h3>
+                            <% if site['Addr1'] != nil %>
                             <% site['Addr1'].each do |pd| %>
                                   <div class="siteAddr1">
                                     <%= label_tag :Xpath %>
@@ -287,6 +288,7 @@
                                     <%= label_tag :Domain %>
                                     <%= text_field_tag :Domain, pd['Domain'], name: :Domain %><br>
                                   </div>
+                            <% end %>
 
                         <% end %>
                         <%= label_tag :Addr2 %>
