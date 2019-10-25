@@ -648,15 +648,16 @@ organizationDetails["OrgSites"] = orgSiteArray
           
  } //End of Program Loop 
  organizationDetails["Programs"] = programsArray
+ organizationDetails["url"] = document.getElementById('theurl').innerText
+
   submitChange(organizationDetails)
      
   }) // end of Click
 
   function submitChange(data){
-
-          myjsonObject = data
-          myjsonObject['url'] = document.getElementById('theurl').innerText
-          var crud = JSON.stringify(myjsonObject)
+        catalog = {}
+        catalog['catalog_data'] = data
+        var crud = JSON.stringify(catalog);
           //  
          sendCataData(crud);
 
