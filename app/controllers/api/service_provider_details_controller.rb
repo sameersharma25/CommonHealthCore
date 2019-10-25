@@ -563,35 +563,7 @@ module Api
 
 
     ###
-    def update_entire_catalog
-      item = params[:OrganizationName].to_unsafe_h
-      #user = User.find_by(email: params[:email])
-      #client_application_id = user.client_application_id.to_s
-      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = ENV["CATALOG_TABLE_NAME"]
 
-      #item["customer_id"] = client_application_id
-      item["status"] = "New"
-      created_at = DateTime.now.strftime("%F %T")
-      item["created_at"] = created_at
-      item["catalog_id"] = SecureRandom.hex(13)
-      item["rejectReason"] = "N/A"
-
-      #item1 = mandatory_parameters_check(item, "Creating")
-      #logger.debug(")))))))))))))))))))))))))))))))))))))))))))the item is : #{item1}")
-
-      params = {
-          table_name: table_name,
-          item: item
-      }
-
-      begin
-        dynamodb.put_item(params)
-        render :json => { status: :ok, message: "Entry created successfully"  }
-      rescue  Aws::DynamoDB::Errors::ServiceError => error
-        render :json => {message: error  }
-      end
-    end
     ###
 
 
