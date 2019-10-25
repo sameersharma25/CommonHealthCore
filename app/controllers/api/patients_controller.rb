@@ -158,6 +158,77 @@ module Api
       render :json => {status: :ok, response: response}
     end
 
+    def patient_details
+      patient = Patient.find(params[:patient_id])
+      dob = patient.date_of_birth
+      age = dob.blank? ? "" :((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+      # if patient.patient_zipcode?
+      #   patient_coords = Geocoder.search(patient.patient_zipcode)
+      #   logger.debug("******the coordinates are : #{patient_coords.inspect}")
+      #   patient_lat = patient_coords.first.coordinates[0]
+      #   patient_lng = patient_coords.first.coordinates[1]
+      # else
+      #   patient_coords = Geocoder.search("99203")
+      #   # logger.debug("******the coordinates are : #{patient_coords.inspect}")
+      #   patient_lat = patient_coords.first.coordinates[0]
+      #   patient_lng = patient_coords.first.coordinates[1]
+      # end
+      patients_details = {first_name: patient.first_name, last_name: patient.last_name,
+                          ph_number: patient.patient_phone, date_of_birth: patient.date_of_birth,
+                          patient_email: patient.patient_email, patient_zipcode: patient.patient_zipcode,
+                          healthcare_coverage: patient.healthcare_coverage, patient_coverage_id: patient.patient_coverage_id,
+                          mode_of_contact: patient.mode_of_contact, ethnicity: patient.ethnicity, gender: patient.gender,
+                          patient_address: patient.patient_address, age: age, primary_care_physician: patient.primary_care_physician,
+                          emergency_contact_fName: patient.emergency_contact_fName, emergency_contact_lName: patient.emergency_contact_lName,
+                          emergency_contact_phone: patient.emergency_contact_phone, emergency_contact_email: patient.emergency_contact_email,
+                          emergency_contact_relationship: patient.emergency_contact_relationship, population_group: patient.population_group,
+                          service_group: patient.service_group, client_consent: patient.client_consent}
+
+      render :json => {status: :ok, patients_details: patients_details }
+    end
+
+
+
+    def patients_list
+      user = User.find_by(email: params[:email])
+      c = user.client_application_id
+      if params[:search] and !params[:search].blank?
+        # patients = Patient.where("last_name LIKE ?", "%#{params[:search]}%")
+        # patients = Patient.where(client_application_id: c,:last_name => Regexp.new(params[:search], true),:first_name_name => Regexp.new(params[:search], true) ).order(first_name: :asc)
+        patients = Patient.where(client_application_id: c).or({:last_name => Regexp.new(params[:search], true)},{:first_name => Regexp.new(params[:search], true)}).order(first_name: :asc)
+        # patients = Patient.where(client_application_id: c).or({:first_name => Regexp.new(params[:search], true)},{:last_name => Regexp.new(params[:search], true)}).order(first_name: :asc)
+      else
+        patients = Patient.where(client_application_id: c).order(last_name: :asc)
+      end
+
+      patients_details = Array.new
+      # active_notification = false
+      active_notification_array = []
+      patients.each do |p|
+        patient_id = p.id.to_s
+        first_name = p.first_name
+        last_name = p.last_name
+        ph_number = p.patient_phone
+        p_status = p.patient_status
+        p_email = p.patient_email
+        dob = p.date_of_birth
+        p_age = dob.blank? ? "" : ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+        active_notification = false
+        p.appointments.each do |a|
+          a.notifications.each do |n|
+            if n.active == true
+              active_notification = true
+            end
+          end
+        end
+        active_notification_array.push(active_notification)
+        patient_detail = {patient_id: patient_id, first_name: first_name, last_name: last_name,
+                          ph_number: ph_number,email: p_email,p_age: p_age, active_notification: active_notification, p_status: p_status }
+        patients_details.push(patient_detail)
+      end
+      active_notification_array_count = active_notification_array.count(true)
+      render :json => {status: :ok, patients_details: patients_details , active_notifications_count: active_notification_array_count}
+    end
 
   end
 end

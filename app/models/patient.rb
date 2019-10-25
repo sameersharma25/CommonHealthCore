@@ -34,6 +34,7 @@ class Patient
   
   field :population_group, type: Array, default: []
   field :service_group, type: Array, default: []
+  field :client_consent, type: Boolean
 
 
   belongs_to :client_application

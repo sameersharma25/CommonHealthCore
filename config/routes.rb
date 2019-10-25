@@ -149,7 +149,7 @@ Rails.application.routes.draw do
     post 'give_appointment_details_for_notification', to: "users#give_appointment_details_for_notification"
     post 'create_user', to: "users#create_user"
     post 'patients_list', to: "users#patients_list"
-    post 'patient_details', to: "users#patient_details"
+
     post 'patient_appointments', to: "users#patient_appointments"
 
     post 'get_faq', to: "users#get_faq"
@@ -170,6 +170,8 @@ Rails.application.routes.draw do
     post "note_create", to: "patients#create_note"
     post "notes_list", to: "patients#patient_notes_list"
     post "med_patient", to: "patients#med_patient"
+    post 'patient_details', to: "patients#patient_details"
+    post 'patients_list', to: "patients#patients_list"
 
     post 'update_notifications', to: "users#update_notifications"
     resource :sessions, only: [:create, :destroy, :verify]
@@ -193,7 +195,7 @@ Rails.application.routes.draw do
     post "tsk_dashboard", to: "referrals#dashboard_tasks"
     post "ledg_rec_create", to: "referrals#create_ledger_record"
     post "ext_app_ledger", to: "referrals#ext_app_ledger"
-    post "rfl_assessments", to; "referrals#referral_assessments"
+    post "rfl_assessments", to: "referrals#referral_assessments"
 
 
     post "msg_send", to: "communications#send_message"
