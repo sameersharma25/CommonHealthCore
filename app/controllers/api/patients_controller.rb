@@ -35,7 +35,9 @@ module Api
       patient.emergency_contact_phone = params[:emergency_contact_phone] if params[:emergency_contact_phone]
       patient.emergency_contact_email = params[:emergency_contact_email] if params[:emergency_contact_email]
       patient.emergency_contact_relationship = params[:emergency_contact_relationship] if params[:emergency_contact_relationship]
-
+      patient.population_group = params[:population_group] if params[:population_group]
+      patient.service_group = params[:service_group] if params[:service_group]
+      patient.client_consent = params[:client_consent] if params[:client_consent]
 
       patient.save
 
@@ -106,6 +108,7 @@ module Api
       patient.emergency_contact_relationship = params[:emergency_contact_relationship] if params[:emergency_contact_relationship]
       patient.population_group = params[:population_group] if params[:population_group]
       patient.service_group = params[:service_group] if params[:service_group]
+      patient.client_consent = params[:client_consent] if params[:client_consent]
 
       if patient.save
         render :json=> {status: :ok, message: "Patient Created Successfully", patient_id: patient.id.to_s}
