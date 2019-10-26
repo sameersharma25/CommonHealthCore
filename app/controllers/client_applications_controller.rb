@@ -324,7 +324,7 @@ class ClientApplicationsController < ApplicationController
     @result = dynamodb.get_item(parameters)[:item]
 
     #logger.debug("the Result of the get entry is : #{@result}")
-    logger.debug("MASON RIGHT HERE ")
+    logger.debug("MASON RIGHT HERE #{@result}")
         @result.each do |k,v|
             logger.debug("NOW THE KEY MATTERS #{k} ::: V:: #{v}")
                 case k.to_s
