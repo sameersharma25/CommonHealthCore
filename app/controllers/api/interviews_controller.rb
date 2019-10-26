@@ -24,6 +24,7 @@ module Api
         referral.source = "Call"
         referral.client_application_id = client_application.id.to_s
         referral.patient_id = patient.id.to_s
+        referral.referral_type = "Interview"
         if referral.save
           task = Task.new
           task.task_type = "Interview"
@@ -32,7 +33,7 @@ module Api
           task.save
         end
 
-        render :json => {status: :ok , interview_id: patient.id.to_s }
+        render :json => {status: :ok , interview_id: patient.id.to_s, referral_id: referral.id.to_s }
       end
 
 
@@ -72,6 +73,7 @@ module Api
       new_need.need_title = params[:need_title]
       new_need.patient_id = params[:interview_id]
       new_need.need_description = params[:need_description] if params[:need_description]
+      new_need.referral_id = params[:referral_id]
       new_need.save
 
       render :json => {status: :ok, need_id: new_need.id.to_s}

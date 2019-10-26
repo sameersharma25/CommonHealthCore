@@ -16,6 +16,11 @@ module Api
       referral.due_date = params[:due_date]
       referral.patient_id = patient
       referral.client_application_id = client_id
+      #
+      referral.client_consent = params[:client_consent]
+      referral.third_party_user_id = params[:third_party_user_id]
+      referral.consent_timestamp = params[:consent_timestamp]
+      #
       referral.save
       if params[:task].blank?
         if referral.save
@@ -85,6 +90,7 @@ module Api
         due_date = r.due_date
         source = r.source
         task_count = r.tasks.count
+        client_consent = r.client_consent
 
         status = r.status
         follow_up_date = r.follow_up_date
@@ -111,6 +117,7 @@ module Api
       source = r.source
       task_count = r.tasks.count
       status = r.status
+      client_consent = r.client_consent
       follow_up_date = r.follow_up_date
       agreement_notification_flag = r.agreement_notification_flag
       referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
@@ -131,6 +138,11 @@ module Api
       referral.status = params[:status] if params[:status]
       referral.follow_up_date = params[:follow_up_date] if params[:follow_up_date]
       referral.agreement_notification_flag = params[:agreement_notification_flag] if params[:agreement_notification_flag]
+      
+      referral.client_consent = params[:client_consent]
+      referral.third_party_user_id = params[:third_party_user_id]
+      referral.consent_timestamp = params[:consent_timestamp]
+      
       if referral.save
         render :json=> {status: :ok, message: "Referral Updated"}
       end
@@ -157,6 +169,24 @@ module Api
       end
       render :json => {status: :ok, task_list: task_list }
 
+    end
+
+    def referral_assessments
+      referral = Referral.find(params[:referral_id])
+      needs = referral.needs
+      needs_array = []
+
+      needs.each do |n|
+        need_id = n.id.to_s
+        need_title = n.need_title
+        need_description = n.need_description
+        need_urgency = n.need_urgency
+        need_status = n.need_status
+        need_details = {need_id: need_id, need_title: need_title , need_description: need_description, need_urgency: need_urgency,
+                        need_status: need_status }
+        needs_array.push(need_details)
+      end
+      render :json => {status: :ok, needs_array: needs_array }
     end
 
     def create_task

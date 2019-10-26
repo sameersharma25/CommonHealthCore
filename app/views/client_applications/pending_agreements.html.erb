@@ -30,7 +30,7 @@
         <td> <%= a.custom_agreement %></td>
         <td> <%= a.custom_agreement_comment %></td>
 
-        <td><%#= link_to a.client_agreement.url.split('/')[-1], a.client_agreement.url, target: '_blank'%> </td>
+        <td><%= link_to a.client_agreement.url.split('/')[-1], a.client_agreement.url, target: '_blank'%> </td>
         <td><%= link_to "Upload Document", counter_sign_popup_path(id: a.id.to_s),  {:remote => true ,method: :post,'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %></td>
         <!--<td><%#= file_field_tag :client_agreement%></td>-->
         <td>

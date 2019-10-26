@@ -382,11 +382,11 @@ module Api
       task_id =  params[:task_id]
       ledger_master = LedgerMaster.where(task_id: task_id).first
       user = User.find_by(email:params[:email])
-      external_application_id = user.client_application_id.to_s
+      #external_application_id = user.client_application_id.to_s
       # ledger_status= ledger_master.ledger_statuses.where(referred_application_id: external_application_id ).first
       ledger_status= ledger_master.ledger_statuses.first
       referred_by_id = ledger_status.referred_by_id
-      referred_by = ClientApplication.find(referred_by_id).name
+      #referred_by = ClientApplication.find(referred_by_id).name
       internal_record_array = []
       internal_records = ledger_status.ledger_records
       internal_records.each do |ir|
@@ -402,7 +402,7 @@ module Api
         changes_array.push(second_hash)
         created_at = ir.created_at
         internal_record_hash = {changes: changes_array, created_at: created_at}
-        internal_record_array.push(external_record_hash)
+        internal_record_array.push(internal_record_hash)
       end
 
       external_record_array = []

@@ -228,16 +228,36 @@ class ClientApplicationsController < ApplicationController
 
     # details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
     #            programHash: @programHash, geoScope: @geoScope, programs: @programs }
-    details = get_catalog_details(ENV["CATALOG_TABLE_NAME"])
-    # logger.debug("the detail are : #{details}")
-    @organizationName = details[:organizationName]
-    logger.debug("the orgName is : #{@organizationName}")
+    details = get_catalog_details(ENV["CATALOG_TABLE_NAME"]) 
+    #@organizationName = details[:organizationName]
+    #logger.debug("the orgName is : #{@organizationName}")
+    #@siteHash = details[:siteHash]
+    #@poc = details[:poc]
+    #@orgSites = details[:orgSites]
+    #@programHash = details[:programHash]
+    #@geoScope = details[:geoScope]
+    #@programs = details[:programs]
+    @url = details[:url],
+    logger.debug("WHAT IS THE URL  #{@url}")
+    @orgDetails = details[:OrgDetails]
+    logger.debug("OrgDetails:::: #{@orgDetails}")
+    @OrganizationName = details[:OrganizationName]
+    logger.debug("OrgName::: #{@OrganizationName}")
+    @OrgDescription = details[:OrganizationDescription]
+    logger.debug("OrgDesc::: #{@OrgDescription}")
     @siteHash = details[:siteHash]
     @poc = details[:poc]
-    @orgSites = details[:orgSites]
-    @programHash = details[:programHash]
-    @geoScope = details[:geoScope]
-    @programs = details[:programs]
+    @site = details[:OrgSites]
+    logger.debug("ORG SITES #{@site}")
+    @geoscope = details[:geoscope]
+    @program = details[:programs]
+    logger.debug("PROGRAM #{@program}")
+    @PopulationDescription = details[:popDesc]
+    @ProgramDescription = details[:progDesc]
+    @ServiceAreaDescription = details[:servArea]
+    @ProgramReferences = details[:progRef]
+
+
 
     respond_to do |format|
       format.html
@@ -252,11 +272,15 @@ class ClientApplicationsController < ApplicationController
     @organizationName = details[:organizationName]
     logger.debug("the orgName is : #{@organizationName}")
     @siteHash = details[:siteHash]
+    @Addr1 = details[:addr1] 
+    @SiteReference = details[:siteref] 
+
     @poc = details[:poc]
     @orgSites = details[:orgSites]
     @programHash = details[:programHash]
     @geoScope = details[:geoScope]
     @programs = details[:programs]
+    @site = details[:sites]
     
     respond_to do |format|
       format.html
@@ -275,6 +299,7 @@ class ClientApplicationsController < ApplicationController
     @orgSites = details[:orgSites]
     @programHash = details[:programHash]
     @geoScope = details[:geoScope]
+    logger.debug("What is Geo #{@geoScope}")
     @programs = details[:programs]
     respond_to do |format|
       format.html
@@ -299,124 +324,95 @@ class ClientApplicationsController < ApplicationController
     @result = dynamodb.get_item(parameters)[:item]
 
     #logger.debug("the Result of the get entry is : #{@result}")
-    @result.each do |k,v|
-      logger.debug("Key::: #{k}: Value::: #{v}")
-      if k == "status"
-        #logger.debug("FOUND #{k}::: #{v}")
-      elsif k == "userName"
-        #logger.debug("FOUND #{k}::: #{v}")
-      elsif k == "geoScope"
-        #logger.debug("FOUND #{k}::: #{v}")
-        @geoScope = v
-      elsif k == "programs"
-        #logger.debug("FOUND #{k}::: #{v}")
-        @programs = v
-        @programHash = {}
-        i=0
-        while i < @programs.length do
-          @programs[i].each do |q,w|
-            logger.debug("KEY::: #{q}:VALUE:::#{w}")
-            case q
-              when 'ProgramDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @programHash[q] = textOnlyArray
-              when 'ProgramReferences'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @programHash[q] = textOnlyArray
-              when 'ServiceDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @programHash[q] = textOnlyArray
-              when 'PopulationDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @programHash[q] = textOnlyArray
-            end
-            if w.class != Array
-              @programHash[q] = w
-            end
+    logger.debug("MASON RIGHT HERE #{@result}")
+        @result.each do |k,v|
+            logger.debug("NOW THE KEY MATTERS #{k} ::: V:: #{v}")
+                case k.to_s
+                    when 'url'
+                      @url = v
+                      logger.debug("GETTING THE URL #{@url}")
+                    when 'Programs'
+                      @program = v
+                      #logger.debug("PROGRAM VALUE #{v}")
 
-          end
-          logger.debug("BREAK ####}")
-          i+=1
-        end
-      elsif k == "orgSites"
-        logger.debug("FOUND #{k}::: #{v}")
-        @orgSites = v
-        @siteHash = {}
-        @poc = {}
-        i=0
-        while i < @orgSites.length do
-          @orgSites[i].each do |q,w|
-            logger.debug("KEY::: #{q}:VALUE:::#{w}")
-            case q
-              when 'SiteReference_TEXT'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @siteHash[q] = textOnlyArray
-              when 'addrOne_Text'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @siteHash[q] = textOnlyArray
-              when 'ServiceDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @siteHash[q] = textOnlyArray
-              when 'ProgramDescription'
-                textOnlyArray = []
-                w.each do |x|
-                  textvalue = x['text']
-                  textOnlyArray.push(textvalue)
-                end
-                @siteHash[q] = textOnlyArray
-              when 'POCs'
-                logger.debug("HERE #{w}")
-                w[0].each do |k,v|
-                  @poc[k]= v
-                end
-            end
-            if w.class != Array
-              @siteHash[q] = w
-            end
+                      v.each do |ary|
+                          ary.each do |key,value|
+                            if key.to_s == 'PopulationDescription'
+                        #      logger.debug("Value #{value}")
+                              @PopulationDescription = value
 
-          end
-          logger.debug("BREAK ####}")
-          i+=1
+                            elsif key.to_s == 'ProgramDescription'
+                              @ProgramDescription = value
+
+                            elsif key.to_s == 'ServiceAreaDescription'
+                              @ServiceAreaDescription = value
+
+                            elsif key.to_s == 'ProgramReferences'
+                              @ProgramReferences = value
+                            end 
+                          end
+                      end 
+ 
+
+                    when 'OrgSites'
+                      #logger.debug("SITE SITE  #{v}")
+                      @site = v
+
+                      #v.each do |ary|
+                        v.each do |key,value|
+                          if key.to_s == 'Addr1'
+                            @Addr1 = v
+                          elsif key.to_s == 'SiteReference' 
+                            @SiteReference = v
+                          elsif key.to_s == 'poc'
+                            @poc = v
+                          end 
+                        end 
+                      #end 
+
+
+                    when 'OrganizationName'
+                      
+                      logger.debug("Org Name #{v}")
+                      @orgDetails = v 
+
+                      v.each do |key,value|
+                          logger.debug("breakdown:: #{key} value:: #{value}")
+                          if key.to_s == 'OrganizationName'
+                            @OrganizationName = value
+                            logger.debug("Value #{@OrganizationName}")
+                          elsif key.to_s == 'OrgDescription'
+                            @OrgDescription = value
+                            logger.debug("Value #{@OrgDescription}")
+                          end 
+                      end 
+
+                    when 'GeoScope'
+                      logger.debug("Geo #{v}")
+                      @geoscope = v
+                end 
+
         end
 
-
-      elsif k == "organizationName"
-        logger.debug("FOUND #{k}::: #{v}")
-        @organizationName = v
-      end
-    end
-
-    details = {organizationName: @organizationName, siteHash: @siteHash, poc: @poc, orgSites: @orgSites,
-               programHash: @programHash, geoScope: @geoScope, programs: @programs }
-
+    #details = {OrganizationName: @orgDetails, siteHash: @siteHash, poc: @poc, OrgSites: @sites,
+     #          programHash: @programHash, geoscope: @geoscope, programs: @programs }
+    details = {
+    url: @url,
+    OrgDetails: @orgDetails,
+    OrganizationName: @OrganizationName, 
+    OrganizationDescription: @OrgDescription,
+    site: @site,
+    addr1: @Addr1,
+    siteref: @SiteReference,
+    siteHash: @siteHash, 
+    poc: @poc, 
+    OrgSites: @site,
+    geoscope: @geoscope, 
+    programs: @program,
+    popDesc: @PopulationDescription,
+    progDesc: @ProgramDescription,
+    servArea: @ServiceAreaDescription,
+    progRef: @ProgramReferences }
   end
 
 

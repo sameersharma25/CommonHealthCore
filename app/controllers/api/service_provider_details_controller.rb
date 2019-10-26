@@ -3,7 +3,7 @@ module Api
     include UsersHelper
     before_action :authenticate_user_from_token, except: [:create_catalog_entry,:update_catalog_entry,:scrappy_doo_response, :authenticate_user_email, :site_update,
                                                           :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
-                                                          :site_program_list,:program_update,:contact_management_details_for_plugin]
+                                                          :site_program_list,:program_update,:contact_management_details_for_plugin, :update_entire_catalog]
     load_and_authorize_resource class: :api, except: [:create_catalog_entry,:update_catalog_entry,:scrappy_doo_response, :authenticate_user_email,:site_update,
                                                       :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
                                                       :site_program_list,:program_update,:contact_management_details_for_plugin]
@@ -277,7 +277,7 @@ module Api
 
     end
 
-    def create_catalog_entry
+    def create_catalog_entry 
 
       item = params[:catalog_data].to_unsafe_h
       user = User.find_by(email: params[:email])
@@ -395,7 +395,7 @@ module Api
     def mandatory_parameters_check(item, event)
 
       if event == "Updating"
-        dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+        dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2") 
         table_name = ENV["CATALOG_TABLE_NAME"]
 
         parameters = {
@@ -560,6 +560,44 @@ module Api
       render :json=> {status: :ok, :provider_data=> JSON.parse(response.body) }
 
     end
+
+
+    ###
+    def update_entire_catalog
+
+      item = params[:catalog_data].to_unsafe_h
+      #user = User.find_by(email: params[:email])
+      #client_application_id = user.client_application_id.to_s
+      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+      table_name = ENV["CATALOG_TABLE_NAME"]
+      # domain_name = Addressable::URI.parse(params[:catalog_data]["url"]).host
+      # item["url"] = "https://"+domain_name+"/"
+      #url_split = params[:catalog_data]["url"].split("/")
+      #item["url"] = url_split[0]+"//"+url_split[2]+"/"
+      #item["customer_id"] = client_application_id
+      item["status"] = "New"
+      created_at = DateTime.now.strftime("%F %T")
+      item["created_at"] = created_at
+      item["catalog_id"] = SecureRandom.hex(13)
+      item["rejectReason"] = "N/A"
+
+      item1=  mandatory_parameters_check(item, "Creating")
+      logger.debug(")))))))))))))))))))))))))))))))))))))))))))the item is : #{item1}")
+
+      params = {
+          table_name: table_name,
+          item: item1
+      }
+
+      begin
+        dynamodb.put_item(params)
+        render :json => { status: :ok, message: "Entry created successfully"  }
+      rescue  Aws::DynamoDB::Errors::ServiceError => error
+        render :json => {message: error  }
+      end
+
+    end
+    ###
 
 
 

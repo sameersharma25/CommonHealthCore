@@ -24,6 +24,18 @@ class Patient
   field :security_keys, type: Array, default: []
   field :through_call, type: Boolean
   field :caller_additional_fields, type: Hash
+  #
+  field :primary_care_physician, type: String
+  field :emergency_contact_fName, type: String
+  field :emergency_contact_lName, type: String
+  field :emergency_contact_phone, type: String
+  field :emergency_contact_email, type: String
+  field :emergency_contact_relationship, type: String 
+  
+  field :population_group, type: Array, default: []
+  field :service_group, type: Array, default: []
+  field :client_consent, type: Boolean
+
 
   belongs_to :client_application
   has_many :appointments
