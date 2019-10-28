@@ -128,9 +128,9 @@
                     <% end %>
 
 
-                    <% if x[:ProgramDescription] != nil %>
+                    <% if x['ProgramDescription'] != nil %>
                     <h3><i>Program Description</i></h3>
-                    <% x[:ProgramDescription].each do |pd| %>
+                    <% x['ProgramDescription'].each do |pd| %>
                       <div class="programProgramDescription" >
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
@@ -143,9 +143,9 @@
                     <% end %>
 
 
-                    <% if x[:ServiceAreaDescription] != nil %>
+                    <% if x['ServiceAreaDescription'] != nil %>
                     <h3><i>Service Area Description</i></h3>
-                    <% x[:ServiceAreaDescription].each do |pd| %>
+                    <% x['ServiceAreaDescription'].each do |pd| %>
                       <div class="programServiceAreaDescription" >
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
@@ -157,9 +157,9 @@
                     <% end %>
                     <% end %>
 
-                    <% if x[:ProgramReferences] != nil %>
+                    <% if x['ProgramReferences'] != nil %>
                     <h3><i>Program References</i></h3>
-                    <% x[:ProgramReferences].each do |pd| %>
+                    <% x['ProgramReferences'].each do |pd| %>
                       <div class="programProgramReferences" >
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath %><br>
@@ -175,7 +175,7 @@
             <div class="col-md-4">
               <h1>Population Tags</h1>
                     <%= label_tag :P_Veteran %>
-                    <%= check_box_tag :P_Veteran, x['P_Veteran'] , x[:P_Veteran].to_s.downcase == "true"   %><br>
+                    <%= check_box_tag :P_Veteran, x['P_Veteran'] , x['P_Veteran'].to_s.downcase == "true"   %><br>
                     <%= label_tag :P_Family %>
                     <%= check_box_tag :P_Family, x['P_Family'], x['P_Family'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_Citizenship %>
@@ -267,8 +267,7 @@
                     <%= check_box_tag :S_Transportation, x['S_Transportation'], x['S_Transportation'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Behavioral %>
                     <%= check_box_tag :S_Behavioral, x['S_Behavioral'], x['S_Behavioral'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_Low_Income %>
-                    <%= check_box_tag :S_Low_Income, x['S_Low_Income'], x['S_LowIncome'].to_s.downcase == "true" %><br>
+
             </div>
 
         </div>
@@ -679,8 +678,8 @@ organizationDetails["OrgSites"] = orgSiteArray
           XHR.addEventListener("error", function(event) {
           alert('Oops! Something went wrong.');
           });
-          XHR.open("POST", "https://dev7.resourcestack.com/api/update_entire_catalog");
-          //XHR.open("POST", "http://localhost:3000/api/update_entire_catalog");
+          //XHR.open("POST", "https://dev7.resourcestack.com/api/update_entire_catalog");
+          XHR.open("POST", "https://dev11.resourcestack.com/backend/api/update_entire_catalog");
 
           XHR.setRequestHeader('Content-Type', 'application/json');
           XHR.send(crud);
