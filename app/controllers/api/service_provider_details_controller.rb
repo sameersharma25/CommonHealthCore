@@ -412,7 +412,7 @@ module Api
 
       scope = item["GeoScope"]["Scope"]
       if scope == "Virtual"
-        home_page_url = item["OrganizationName"]["homepageURL"]
+        home_page_url = item["OrganizationName"]["HomepageURL"]
         check_mandatory_field(home_page_url,item)
 
       elsif scope == "County"
@@ -420,7 +420,7 @@ module Api
         check_mandatory_field(county,item)
 
       elsif scope == "Region"
-        region = item["GeoScope"]["region"]
+        region = item["GeoScope"]["Region"]
         # logger.debug("CHECKING THE REGION***************** #{region}")
         check_mandatory_field(region,item)
 
@@ -429,7 +429,7 @@ module Api
         check_mandatory_field(state,item)
 
       elsif scope == "National"
-        national = item["GeoScope"]["country"]
+        national = item["GeoScope"]["Country"]
         check_mandatory_field(national,item)
 
       elsif scope == "On Site"
