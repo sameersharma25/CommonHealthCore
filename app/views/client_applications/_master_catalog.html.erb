@@ -14,7 +14,7 @@
           <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
           <td><%= link_to "Check Duplicates", check_duplicates_path(org_url: x["url"] ),{ method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}%></td>
 
-           <%= hidden_field_tag x["OrgSites"][0]['POCs'][0]['Email'] , e , :id => "hiddenEmail_#{e}" %>
+           <%#= hidden_field_tag x["OrgSites"][0]['POCs'][0]['Email'] , e , :id => "hiddenEmail_#{e}" %>
         </tr>
     <% end %>
 <% end %> 
