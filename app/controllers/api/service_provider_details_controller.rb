@@ -575,9 +575,9 @@ module Api
       #url_split = params[:catalog_data]["url"].split("/")
       #item["url"] = url_split[0]+"//"+url_split[2]+"/"
       #item["customer_id"] = client_application_id
-      item["status"] = "New"
-      created_at = DateTime.now.strftime("%F %T")
-      item["created_at"] = created_at
+      #item["status"] = "New"
+      #created_at = DateTime.now.strftime("%F %T")
+      #item["created_at"] = created_at
       item["catalog_id"] = SecureRandom.hex(13)
       item["rejectReason"] = "N/A"
 

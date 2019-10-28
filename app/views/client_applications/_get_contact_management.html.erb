@@ -103,8 +103,8 @@
 
                     <%= label_tag :PopulationTags %>
                     <%= text_field_tag :PopulationTags, x['PopulationTags'] %><br>
-                    <%= label_tag :programSites %>
-                    <%= text_field_tag :programSites, x['programSites'] %><br>
+                    <%= label_tag :ProgramSites %>
+                    <%= text_field_tag :ProgramSites, x['ProgramSites'] %><br>
 
                     <% if x[:PopulationDescription] != nil %>
                       <h3><i>Population Description</i></h3>
@@ -189,6 +189,11 @@
                     <%= check_box_tag :P_Disabled, x['P_Disabled'],x['P_Disabled'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_Native %>
                     <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'].to_s.downcase == "true" %><br>
+
+                    <%= label_tag :P_Dental %>
+                    <%= check_box_tag :P_Dental, x['P_Dental'], x['P_Dental'].to_s.downcase == "true" %><br>
+                    <%= label_tag :P_Vision %>
+                    <%= check_box_tag :P_Vision, x['P_Vision'], x['P_Vision'].to_s.downcase == "true" %><br>
             </div>
 
             <div class="col-md-4">
@@ -214,8 +219,6 @@
                     <%= label_tag :S_Employment %>
                     <%= check_box_tag :S_Employment, x['S_Employment'] , x['S_Employment'].to_s.downcase == "true" %><br>
 
-                    <%= label_tag :P_Senior %>
-                    <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Abuse %>
                     <%= check_box_tag :S_Abuse, x['S_Abuse'], x['S_Abuse'].to_s.downcase == "true"  %><br>
 
@@ -425,7 +428,7 @@ document.getElementById("collectButton").addEventListener("click", function(even
               }
               orgDescArray = []
               orgDescArray.push(descObj)
-              organizationName['OrganizationDescription'] = orgDescArray;
+              organizationName['OrgDescription'] = orgDescArray;
           ////
          organizationDetails['OrganizationName'] = organizationName
 
