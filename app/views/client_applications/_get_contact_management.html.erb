@@ -7,6 +7,7 @@
 <!--Modal Body -->
 <div class="container-fluid">
 <button id="collectButton">Update</button> 
+  <h3 id="portalStatus"></h3>
           <h6 id ="theurl"> <%= @url.first %> </h6>
 
   <div class="row">
@@ -86,6 +87,12 @@
             <div class="col-md-4">
                     <%= label_tag :InactiveProgram %>
                     <%= check_box_tag :InactiveProgram, x['InactiveProgram'], x['InactiveProgram']%><br>
+
+                    <%= label_tag :ProgramName %>
+                    <%= text_field_tag :ProgramName, x['ProgramName'] %><br>
+
+
+
                     <%= label_tag :QuickConnectWebPage %>
                     <%= text_field_tag :QuickConnectWebPage, x['QuickConnectWebPage'] %><br>
                     <%= label_tag :ContactWebPage %>
@@ -261,7 +268,7 @@
                     <%= label_tag :S_Behavioral %>
                     <%= check_box_tag :S_Behavioral, x['S_Behavioral'], x['S_Behavioral'].to_s.downcase == "true" %><br>
                     <%= label_tag :S_Low_Income %>
-                    <%= check_box_tag :S_Low_Income, x['S_Low_Income'], x['S_Low_Income'].to_s.downcase == "true" %><br>
+                    <%= check_box_tag :S_Low_Income, x['S_Low_Income'], x['S_LowIncome'].to_s.downcase == "true" %><br>
             </div>
 
         </div>
@@ -681,8 +688,10 @@ organizationDetails["OrgSites"] = orgSiteArray
                 if (this.readyState == 4 && this.status == 200) {
                     response = this.responseText
                     console.log(this.response)
+                    document.getElementById('portalStatus').innerText = "Catalog Updated"
                 } else {
                   console.log(XHR.responseText)
+                  document.getElementById('portalStatus').innerText = "Something Went Wrong..."
                 }
               };
           }
