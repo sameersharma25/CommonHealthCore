@@ -9,7 +9,7 @@
         <%end%>
         <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
         <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %>
-        <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["organizationName"]["organizationName_Text"][0]['text'] if r["organizationName"] %></td>
+        <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> ><%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %></td>
         <td id= <%= "Orgdescription_#{i}" %> ><%#= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]["OrgDescription"]  %></td>
 
         <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
@@ -24,7 +24,7 @@
         <td><%= r["status"] %></td>
         <!--<td><%#= r["created_at"] %></td>-->
         <!--<td><%#= r["primeScope"] %></td>-->
-        <% if r["missing_mandatory_fields"] == "1" %>
+        <% if r["missing_mandatory_fields"] == "1" || r["missing_mandatory_fields"].nil? %>
             <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :disabled => true, :remote => true , type: "button"%> </td>
         <%elsif r["missing_mandatory_fields"] == "0" %>
             <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true,type: "button", method: :get %> </td>
