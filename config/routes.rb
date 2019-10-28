@@ -148,7 +148,6 @@ Rails.application.routes.draw do
     post 'appointments_referred_to_me', to: "users#appointments_referred_to_me"
     post 'give_appointment_details_for_notification', to: "users#give_appointment_details_for_notification"
     post 'create_user', to: "users#create_user"
-    post 'patients_list', to: "users#patients_list"
 
     post 'patient_appointments', to: "users#patient_appointments"
 
