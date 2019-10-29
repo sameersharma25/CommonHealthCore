@@ -3,7 +3,7 @@ class ClientApplicationsController < ApplicationController
   include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:new, :create, :contact_management]
-
+ skip_before_action :verify_authenticity_token, only: [:send_for_approval]
   # GET /client_applications
   # GET /client_applications.json
   def index  
