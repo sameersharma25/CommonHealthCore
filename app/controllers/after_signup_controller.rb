@@ -53,6 +53,8 @@ class AfterSignupController < ApplicationController
     when :users
       @user = User.new
     when :agreement_template
+      @customer_id = current_user.client_application_id.to_s
+      @first_question = Question.where(pq: nil).first
       @questions = Question.all
       @question_response = QuestionResponse.new
       @customer_id = current_user.client_application_id.to_s
@@ -120,6 +122,8 @@ class AfterSignupController < ApplicationController
           logger.debug("***********before 6------------")
           league_segment.push("6")
         end
+        # @customer_id = current_user.client_application_id.to_s
+        # @first_question = Question.where(pq: nil).first
 
         @question_response  = QuestionResponse.new
         @question_response .client_application_id = params["client_application_id"]
