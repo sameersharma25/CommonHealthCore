@@ -190,12 +190,15 @@ module Api
 
     def interview_details
       # interview = Interview.find(params[:interview_id])
+
       interview = Patient.find(params[:interview_id])
       # need = interview.needs.first
       # obstacle = need.obstacles.first if (need && need.obstacles)
+      referral = Referral.find(params[:referral_id])
 
       details_array = []
-      needs = interview.needs
+      # needs = interview.needs
+      needs = referral.needs
 
       #{need_array: [{need_id: 1, need_title: "title", obstacles_array: [{obstacle_id: o1, obs_title: "OT", solution_array: []] }]}
 
@@ -249,11 +252,12 @@ module Api
 
 
 
-      interview_hash = {caller_first_name: interview.first_name, caller_last_name: interview.last_name,
-                        caller_dob: interview.date_of_birth, caller_address: interview.patient_address,
-                        caller_zipcode: interview.patient_zipcode, caller_state: interview.patient_state,
-                        caller_additional_fields: interview.caller_additional_fields}
+      # interview_hash = {caller_first_name: interview.first_name, caller_last_name: interview.last_name,
+      #                   caller_dob: interview.date_of_birth, caller_address: interview.patient_address,
+      #                   caller_zipcode: interview.patient_zipcode, caller_state: interview.patient_state,
+      #                   caller_additional_fields: interview.caller_additional_fields}
 
+      interview_hash = { }
       # need_hash = {need_title: need.need_title, need_description: need.need_description, need_note: need.need_notes,
       #              need_urgency: need.need_urgency, need_status: need.need_status} if need
 
