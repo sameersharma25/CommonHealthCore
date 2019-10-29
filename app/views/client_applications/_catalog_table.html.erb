@@ -9,8 +9,8 @@
             <tr class="currentRow" id= <%="rule_#{i}" %>  >
         <%end%>
 
-        <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
-        <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %>
+
+        <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %> </td>
 
 
         <td class = "nameOrg" id=<%= "nameOfOrg_"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %> </td>
@@ -23,10 +23,10 @@
 
         <%= hidden_field_tag r["url"] ,i, :id => "url_#{i}" %>
 
-        <td><%= r["status"] %></td> 
+        <td><%= r["status"] %></td>
 
+        <% if r["missing_mandatory_fields"] == "1" || r["missing_mandatory_fields"].nil? %>
 
-        <% if r["missing_mandatory_fields"] == "1" %>
             <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :disabled => true, :remote => true , type: "button"%> </td>
         <%elsif r["missing_mandatory_fields"] == "0" %>
             <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true,type: "button", method: :get %> </td>

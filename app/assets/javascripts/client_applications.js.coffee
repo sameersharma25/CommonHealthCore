@@ -43,10 +43,11 @@ jQuery ($) ->
     row_id = $(this).attr("id")
     console.log("in the add rule function", row_id)
     numVal = parseInt(row_id) - 2
-    catalogName = $('.nameOrg')[numVal].innerHTML
-    url_id = $('.myURL')[numVal].innerHTML.replace(/^\s+|\s+$/g, '')
-    console.log("Looking for URL", url_id)
+    catalogName = $('#nameOfOrg_'+ row_id).text()
     console.log("the row id is: ", row_id, catalogName)
+    url_id = $('#url_'+row_id).text().replace(/^\s+|\s+$/g, '')
+    console.log("Looking for URL", url_id)
+
     $.post "/backend/send_for_approval",
       orgName: catalogName
       url: url_id
