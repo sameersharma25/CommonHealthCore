@@ -13,7 +13,7 @@
         <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %> </td>
 
 
-        <td class = "nameOrg" id=<%= "nameOfOrg_"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %> </td>
+        <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %> </td>
 
 
         <td id= <%= "Orgdescription_#{i}" %> >
@@ -25,12 +25,15 @@
 
         <td><%= r["status"] %></td>
 
-        <% if r["missing_mandatory_fields"] == "1" || r["missing_mandatory_fields"].nil? %>
+        <!--<% if r["missing_mandatory_fields"] == "1" || r["missing_mandatory_fields"].nil? %>
 
             <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :disabled => true, :remote => true , type: "button"%> </td>
         <%elsif r["missing_mandatory_fields"] == "0" %>
-            <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true,type: "button", method: :get %> </td>
-        <%end%>
+            <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true, type: "button", method: :get %> </td> 
+        <%end%> -->
+
+
+        <td><%= button_tag "Send", id: "send_#{i}", class: "woooooo", type: 'button' %>  </td>
 
         <td><%= link_to "Delete", '#', class: "delete_rule", id: "#{i}", :remote => true %></td>
 
@@ -46,3 +49,74 @@
 
 
 <%end%> 
+
+
+<script type="text/javascript">
+    //get elemeny by id
+    //
+
+    var sendButton = document.getElementsByClassName('woooooo')
+
+    for (var i =0; i < sendButton.length; i++) {
+        sendButton[i].addEventListener('click', function(e){
+            parseID =  e.srcElement.id
+            console.log("Where am 2", e.srcElement)
+            myID = parseID.split("_")
+            console.log("What is my url",myID)
+            url = 'url_' + myID[1]
+            orgName = 'nameOfOrg_' + myID[1]
+            console.log("My url is", document.getElementById(url).innerText)
+            selectedURL = document.getElementById(url).innerText
+            console.log("My OrgName is", document.getElementById(orgName).innerText)
+            selectedOrg = document.getElementById(orgName).innerText
+            sendforApproval(selectedOrg, selectedURL)
+
+        })
+    }
+   
+
+  function sendforApproval(orgName, url){ 
+        console.log("what data is coming over", orgName, "&", url)
+        myData = {}
+        myData['orgName'] = orgName;
+        myData['url'] = url;
+        var crud = JSON.stringify(myData);
+          //  
+         sendData(crud);
+
+         function sendData(crud) {
+          var XHR = new XMLHttpRequest();
+          XHR.addEventListener("load", function(event) {
+          });
+          //error
+          XHR.addEventListener("error", function(event) {
+          alert('Oops! Something went wrong.');
+          });
+
+          //XHR.open("POST", "http://localhost:3000/send_for_approval");
+          //XHR.open("POST", "https://dev1.resourcestack.com/backend/send_for_approval");
+          XHR.open("POST", "https://dev7.resourcestack.com/send_for_approval");
+
+
+          XHR.setRequestHeader('Content-Type', 'application/json');
+          XHR.send(crud);
+              XHR.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    response = this.responseText
+                    console.log(this.response)
+                    console.log("this worked")
+                } else {
+                  console.log(XHR.responseText)
+                  console.log("this did not work")
+
+                }
+              };
+          }
+
+  }
+
+
+
+
+
+</script>
