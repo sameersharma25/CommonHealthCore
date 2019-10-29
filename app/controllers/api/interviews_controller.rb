@@ -304,8 +304,8 @@ module Api
       # {need_array: [{need_id: 1, need_title: "title", obstacles_array: [{}] }]}
       # o_h = {obstacle_id: o1, obs_title: "OT"}
 
-      # referrals.each do |r|
-        needs.each do |need|
+      referrals.each do |r|
+        r.needs.each do |need|
           need_id = need.id.to_s
           need_title =  need.need_title,
               need_description = need.need_description,
@@ -350,7 +350,7 @@ module Api
 
           details_array.push(need_hash)
         end
-      # end
+      end
 
 
       interview_hash = {caller_first_name: interview.first_name, caller_last_name: interview.last_name,
