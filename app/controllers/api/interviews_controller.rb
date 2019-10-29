@@ -71,7 +71,7 @@ module Api
     def new_need
       new_need = Need.new
       new_need.need_title = params[:need_title]
-      # new_need.patient_id = params[:interview_id]
+      new_need.patient_id = params[:interview_id]
       new_need.need_description = params[:need_description] if params[:need_description]
       new_need.referral_id = params[:referral_id]
       new_need.save
@@ -141,17 +141,31 @@ module Api
 
     def interview_list
       client_application_id = User.find_by(email: params[:email]).client_application_id
-      client_interviews = Patient.where(client_application_id: client_application_id, through_call: true )
+      referrals = Referral.where(client_application_id: client_application_id, referral_type: "Interview" )
       interview_list_array = []
-      client_interviews.each do |ci|
-        patient_id = ci.id.to_s
-        caller_first_name = ci.first_name
-        int_created_at = ci.created_at
-        need_title = ci.needs.first.need_title if ci.needs.first
-        obstacle_title = ci.needs.first.obstacles.first.obstacle_title if (ci.needs.first && ci.needs.first.obstacles.first)
-        interview_hash = {interview_id: patient_id ,created_at: int_created_at, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
+      referrals.each do |ref|
+        patient_id = ref.patient.id.to_s
+        patient = Patient.find(patient_id)
+        caller_first_name = patient.first_name
+        int_created_at = p.created_at
+        need_title = ref.needs.first.need_title if ref.needs.first
+        obstacle_title = ref.needs.first.obstacles.first.obstacle_title if (ref.needs.first && ref.needs.first.obstacles.first)
+        interview_hash = {interview_id: patient_id ,referral_id: ref.id.to_s,created_at: int_created_at, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
         interview_list_array.push(interview_hash)
       end
+
+
+      # client_interviews = Patient.where(client_application_id: client_application_id, through_call: true )
+      #
+      # client_interviews.each do |ci|
+      #   patient_id = ci.id.to_s
+      #   caller_first_name = ci.first_name
+      #   int_created_at = ci.created_at
+      #   need_title = ci.needs.first.need_title if ci.needs.first
+      #   obstacle_title = ci.needs.first.obstacles.first.obstacle_title if (ci.needs.first && ci.needs.first.obstacles.first)
+      #   interview_hash = {interview_id: patient_id ,created_at: int_created_at, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
+      #   interview_list_array.push(interview_hash)
+      # end
       interview_list = interview_list_array#.order(caller_first_name: :asc)
       render :json => {status: :ok, interview_list: interview_list}
     end
@@ -278,7 +292,7 @@ module Api
       # obstacle = need.obstacles.first if (need && need.obstacles)
       # referral = Referral.find(params[:referral_id])
 
-      referrals = Referral.where(referral_type: "Interview")
+      referrals = interview.referrals.where(referral_type: "Interview")
       details_array = []
 
       needs = interview.needs
