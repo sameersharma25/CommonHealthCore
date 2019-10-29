@@ -12,9 +12,7 @@
 
         <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %> </td>
 
-
         <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %> </td>
-
 
         <td id= <%= "Orgdescription_#{i}" %> >
              <%= r["OrganizationName"]["OrgDescription"][0]['Text'] if r["OrganizationName"]["OrgDescription"] %> 
@@ -24,6 +22,7 @@
         <%= hidden_field_tag r["url"] ,i, :id => "url_#{i}" %>
 
         <td><%= r["status"] %></td>
+
 
         <!--<% if r["missing_mandatory_fields"] == "1" || r["missing_mandatory_fields"].nil? %>
 
@@ -46,7 +45,6 @@
                 document.getElementById(myID).style.color = "red";
             </script>
         <% end %>
-
 
 <%end%> 
 
