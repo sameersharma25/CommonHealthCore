@@ -380,8 +380,9 @@ module Api
       referrals.each do |r|
         task_type_collection_array = Array.new
         r.tasks.each do |t|
-          date = t.task_deadline.strftime('%m/%d/%Y')
+          date = t.task_deadline.strftime('%m/%d/%Y') if t.task_deadline
         end
+        date = r.tasks.last.task_deadline.strftime('%m/%d/%Y') if (r.tasks.last && !r.tasks.last.task_deadline.nil?)
         ref_id = r.id.to_s
         ref_patient = r.patient.last_name + r.patient.first_name
         new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}

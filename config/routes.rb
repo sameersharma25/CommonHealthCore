@@ -241,6 +241,7 @@ Rails.application.routes.draw do
     post "/int_update", to: "interviews#update_interview"
     post "/int_list", to: "interviews#interview_list"
     post "/int_details", to: "interviews#interview_details"
+    post "/int_details_test", to: "interviews#interview_details_test"
 
     post "/need_create", to: "interviews#new_need"
     post "/need_update", to: "interviews#update_need"
