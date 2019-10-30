@@ -130,7 +130,7 @@ module Api
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                             end 
+                             end
                         # else
                         #     #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
                         #     SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
