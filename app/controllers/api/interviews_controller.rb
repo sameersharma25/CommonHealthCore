@@ -72,9 +72,14 @@ module Api
     end
 
     def new_need
+      ref = Referral.find(params[:referral_id])
+      ref.referral_type = "Interview"
+      ref.save
+      patient_id = ref.patient.id.to_s
       new_need = Need.new
       new_need.need_title = params[:need_title]
-      new_need.patient_id = params[:interview_id]
+      # new_need.patient_id = params[:interview_id]
+      new_need.patient_id = patient_id
       new_need.need_description = params[:need_description] if params[:need_description]
       new_need.referral_id = params[:referral_id]
       new_need.save
@@ -298,7 +303,7 @@ module Api
       referrals = interview.referrals.where(referral_type: "Interview")
       details_array = []
 
-      needs = interview.needs
+      #needs = interview.needs
 
       # needs = referral.needs
 

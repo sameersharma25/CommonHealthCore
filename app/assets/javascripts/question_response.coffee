@@ -17,6 +17,13 @@ jQuery ($) ->
 
   )
 
+  $(document).on("click", ".skip_survey", ->
+    cus_id = $("#client_application_id").val()
+    $.post "/backend/skip_survey",
+      cus_id: cus_id
+    return
+  )
+
   $(document).on("click", "#custom_agreement", ->
     theAgreement = $('#custom_agreement')
     theComment = $('#custom_agreement_comment')
