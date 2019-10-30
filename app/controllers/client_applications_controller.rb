@@ -3,7 +3,7 @@ class ClientApplicationsController < ApplicationController
   include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:new, :create, :contact_management]
-
+ skip_before_action :verify_authenticity_token, only: [:send_for_approval]
   # GET /client_applications
   # GET /client_applications.json
   def index  
@@ -211,6 +211,8 @@ class ClientApplicationsController < ApplicationController
     # @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
     @result = helpers.catalog_table_content
+
+
     @pending_results = @result.select{|p| p["status"] == "Pending"}
 
     logger.debug("the RESULT OF THE SCAN IS : ************************ #{@pending_results}")
@@ -539,7 +541,7 @@ class ClientApplicationsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html
+      format.html 
       format.js
     end
 

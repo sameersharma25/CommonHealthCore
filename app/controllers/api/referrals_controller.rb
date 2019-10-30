@@ -325,60 +325,71 @@ module Api
       active_referral_time_array = Array.new
       pending_referral_time_array = Array.new
       new_referral_time_array = Array.new
-
+      #
+      # referrals.each do |r|
+      #   task_type_collection_array = Array.new
+      #   r.tasks.each do |t|
+      #     if t.task_deadline == Date.today
+      #       ref_id = r.id.to_s
+      #       ref_patient = r.patient.last_name + r.patient.first_name
+      #       date = t.task_deadline.strftime('%m/%d/%Y')
+      #       # active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+      #       # active_referral_array.push(active_referral_hash)
+      #       # break
+      #       task_type_collection_array.push("active")
+      #       active_referral_time_array.push(date)
+      #     elsif !t.task_deadline.nil? && t.task_deadline != Date.today
+      #       ref_id = r.id.to_s
+      #       ref_patient = r.patient.last_name + r.patient.first_name
+      #       date = t.task_deadline.strftime('%m/%d/%Y')
+      #       # pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+      #       # pending_referral_array.push(pending_referral_hash)
+      #       task_type_collection_array.push("pending")
+      #       pending_referral_time_array.push(date)
+      #     elsif t.task_deadline.nil?
+      #       ref_id = r.id.to_s
+      #       ref_patient = r.patient.last_name + r.patient.first_name
+      #       date = ""
+      #       # new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
+      #       # new_referral_array.push(new_referral_hash)
+      #       task_type_collection_array.push("new")
+      #     end
+      #   end
+      #
+      #   if task_type_collection_array.include? ("active")
+      #     ref_id = r.id.to_s
+      #     ref_patient = r.patient.last_name + r.patient.first_name
+      #     date = active_referral_time_array.sort.last
+      #     active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency }
+      #     active_referral_array.push(active_referral_hash)
+      #   elsif task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active")
+      #     ref_id = r.id.to_s
+      #     ref_patient = r.patient.last_name + r.patient.first_name
+      #     date = pending_referral_time_array.sort.last
+      #     pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}
+      #     pending_referral_array.push(pending_referral_hash)
+      #   elsif !task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active") && task_type_collection_array.include?("new")
+      #     ref_id = r.id.to_s
+      #     ref_patient = r.patient.last_name + r.patient.first_name
+      #     date = ""
+      #     new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}
+      #     new_referral_array.push(new_referral_hash)
+      #   end
+      #
+      # end
       referrals.each do |r|
         task_type_collection_array = Array.new
         r.tasks.each do |t|
-          if t.task_deadline == Date.today
-            ref_id = r.id.to_s
-            ref_patient = r.patient.last_name + r.patient.first_name
-            date = t.task_deadline.strftime('%m/%d/%Y')
-            # active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
-            # active_referral_array.push(active_referral_hash)
-            # break
-            task_type_collection_array.push("active")
-            active_referral_time_array.push(date)
-          elsif !t.task_deadline.nil? && t.task_deadline != Date.today
-            ref_id = r.id.to_s
-            ref_patient = r.patient.last_name + r.patient.first_name
-            date = t.task_deadline.strftime('%m/%d/%Y')
-            # pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
-            # pending_referral_array.push(pending_referral_hash)
-            task_type_collection_array.push("pending")
-            pending_referral_time_array.push(date)
-          elsif t.task_deadline.nil?
-            ref_id = r.id.to_s
-            ref_patient = r.patient.last_name + r.patient.first_name
-            date = ""
-            # new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date }
-            # new_referral_array.push(new_referral_hash)
-            task_type_collection_array.push("new")
-          end
+          date = t.task_deadline.strftime('%m/%d/%Y') if t.task_deadline
         end
-
-        if task_type_collection_array.include? ("active")
-          ref_id = r.id.to_s
-          ref_patient = r.patient.last_name + r.patient.first_name
-          date = active_referral_time_array.sort.last
-          active_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency }
-          active_referral_array.push(active_referral_hash)
-        elsif task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active")
-          ref_id = r.id.to_s
-          ref_patient = r.patient.last_name + r.patient.first_name
-          date = pending_referral_time_array.sort.last
-          pending_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}
-          pending_referral_array.push(pending_referral_hash)
-        elsif !task_type_collection_array.include?("pending") && !task_type_collection_array.include?("active") && task_type_collection_array.include?("new")
-          ref_id = r.id.to_s
-          ref_patient = r.patient.last_name + r.patient.first_name
-          date = ""
-          new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}
-          new_referral_array.push(new_referral_hash)
-        end
-
+        date = r.tasks.last.task_deadline.strftime('%m/%d/%Y') if (r.tasks.last && !r.tasks.last.task_deadline.nil?)
+        ref_id = r.id.to_s
+        ref_patient = r.patient.last_name + r.patient.first_name
+        new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}
+        new_referral_array.push(new_referral_hash)
       end
-      render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }
-
+      # render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }
+      render :json => {status: :ok, new_referral_array: new_referral_array }
     end
 
     def patient_document
