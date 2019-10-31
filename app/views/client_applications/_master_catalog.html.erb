@@ -3,10 +3,15 @@
     <%if x["status"] == "New" || x["status"] == "Pending" %>
         <% e += 1 %>
         <tr id= <%="masterRule_#{e}" %>>
-          <td class = "masterURL"><%= x["url"] %></td>
+          <td class = "masterURL" id= <%= "url_#{x}" %> > <%= x["url"] %></td>
           <td class = "nameOrg" ><%= x["organizationName"]["organizationName_Text"][0]['text'] if x["organizationName"] %></td>
           <td> <%= x['status'] %> </td>
-          <td><%= link_to "Approve", '#', class: "approve_rule", id: "#{e}", :remote => true %> </td>
+
+
+           <td><%= link_to "Approve", '#',  class: "sendIT", id: "#{e}", :remote => true %> </td> 
+          <!-- <td><%= link_to "Approve", '#', class: "approve_rule", id: "#{e}", :remote => true %> </td> -->
+
+
           <td id="rejectRow_"><%= link_to "Reject", '#', class: "reject_rule", id: "#{e}", :remote => true %></td>
 
           <td > <input type="reason" name="reason" style="display:none;" id = <%= "rejectText_#{e}" %> class= <%= "displayReason_#{e}" %>> <button  type="button" style="display:none;" id ="submitReason" class= <%= "displayReason_#{e}" %>> submit</button> </td>
@@ -14,7 +19,86 @@
           <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
           <td><%= link_to "Check Duplicates", check_duplicates_path(org_url: x["url"] ),{ method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}%></td>
 
-           <%#= hidden_field_tag x["OrgSites"][0]['POCs'][0]['Email'] , e , :id => "hiddenEmail_#{e}" %>
+        <% if x['OrgSites'][0]['POCs'].present? %>
+             <%= hidden_field_tag x['OrgSites'][0]['POCs'][0]['poc']['Email'] , e , :id => "hiddenEmail_#{e}" %>
+        <% else %>
+             <%= hidden_field_tag "noemail@poc.com" , e , :id => "hiddenEmail_#{e}" %>
+        <% end %>
+
+
+
         </tr>
+
     <% end %>
-<% end %> 
+<% end %>  
+
+<script type="text/javascript">
+    var sendButton = document.getElementsByClassName('sendIT')
+
+    for (var i =0; i < sendButton.length; i++) {
+        sendButton[i].addEventListener('click', function(e){
+          console.log("this is where i am", e)
+            parseID =  e.srcElement.id
+
+            cRow = 'masterRule_' + parseID
+            url = 'url_' + parseID
+            email = 'hiddenEmail_' + parseID
+
+            urlText = document.getElementById(url).innerText
+            catalogEmail = document.getElementById(email).name
+            console.log(" url ::", catalogEmail)
+            approvalFx( urlText, cRow, catalogEmail)
+        })
+    }
+
+
+
+
+  function approvalFx(urlText, cRow, catalogEmail){ 
+
+        console.log("url::", urlText, "Row::", cRow)
+        var currentRow  =  document.getElementById(cRow)
+        console.log("Row", currentRow)
+        document.getElementById(cRow).style.display = "none";
+        myData = {}
+        myData['url'] = url;
+        myData['pocEmail'] = catalogEmail;
+        var crud = JSON.stringify(myData);
+          //  
+         sendData(crud);
+
+         function sendData(crud) {
+          var XHR = new XMLHttpRequest();
+          XHR.addEventListener("load", function(event) {
+          });
+          //error
+          XHR.addEventListener("error", function(event) {
+          alert('Oops! Something went wrong.');
+          });
+          //FOR LOCAL
+          XHR.open("POST", "http://localhost:3000/approve_catalog");
+          //FOR DEV11
+          //XHR.open("POST", "https://dev11.resourcestack.com/backend/approve_catalog");
+          //FOR DEMO
+          //XHR.open("POST", "https://demo.commonhealthcore.org/backend/approve_catalog");
+
+          XHR.setRequestHeader('Content-Type', 'application/json');
+          XHR.send(crud);
+              XHR.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    response = this.responseText
+                    console.log(this.response)
+                    console.log("this worked")
+                    
+                } else {
+                  console.log(XHR.responseText)
+                  console.log("this did not work")
+
+                }
+              };
+          }
+
+  }
+  
+
+</script>

@@ -7,7 +7,7 @@
             <tr class="currentRow missing_fields" id= <%="rule_#{i}"%>  >
         <%else %> 
             <tr class="currentRow" id= <%="rule_#{i}" %>  >
-        <%end%> 
+        <%end%>  
 
 
 
@@ -17,7 +17,7 @@
         <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %> </td>
 
         <td id= <%= "Orgdescription_#{i}" %> >
-             <%= r["OrganizationName"]["OrgDescription"][0]['Text'] if r["OrganizationName"]["OrgDescription"] %> 
+
         </td>
 
 
@@ -34,7 +34,7 @@
         <%end%> -->
 
 
-        <td><%= button_tag "Send For Approval", id: "send_#{i}", class: "woooooo", type: 'button' %>  </td>
+        <td><%= button_tag "Send For Approval", id: "send_#{i}", class: "sendIT", type: 'button' %>  </td>
 
         <td><%= link_to "Delete", '#', class: "delete_rule", id: "#{i}", :remote => true %></td>
 
@@ -52,10 +52,8 @@
 
 
 <script type="text/javascript">
-    //get elemeny by id
-    //
 
-    var sendButton = document.getElementsByClassName('woooooo')
+    var sendButton = document.getElementsByClassName('sendIT')
 
     for (var i =0; i < sendButton.length; i++) {
         sendButton[i].addEventListener('click', function(e){
@@ -65,16 +63,11 @@
             orgName = 'nameOfOrg_' + myID[1]
             selectedURL = document.getElementById(url).innerText
             selectedOrg = document.getElementById(orgName).innerText
-
             cRow = 'rule_' + myID[1]
             console.log("here", cRow)
             console.log("Looking ",  document.getElementById(cRow))
-
             document.getElementById(cRow).style.display = "none";
-            //sendforApproval(selectedOrg, selectedURL, cRow)
-
-
-
+            sendforApproval(selectedOrg, selectedURL, cRow)
         })
     }
    
@@ -101,7 +94,7 @@
           //FOR DEV11
           //XHR.open("POST", "https://dev11.resourcestack.com/backend/send_for_approval");
           //FOR DEMO
-          //XHR.open("POST", "https://demo.commonhealthcore.org/backend/send_for_approval");
+          XHR.open("POST", "https://demo.commonhealthcore.org/backend/send_for_approval");
 
           XHR.setRequestHeader('Content-Type', 'application/json');
           XHR.send(crud);
@@ -118,11 +111,5 @@
                 }
               };
           }
-
   }
-
-
-
-
-
 </script>
