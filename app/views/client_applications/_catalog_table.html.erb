@@ -18,6 +18,18 @@
 
         <td id= <%= "Orgdescription_#{i}" %> >
 
+           <% if r["OrganizationName"].present? %>
+                <%if r["OrganizationName"]["OrgDescription"].present? %>
+                      <%= r["OrganizationName"]["OrgDescription"][0]['Text'] %> 
+                <% else %>
+                      <%= "n/a" %>
+                <% end %>
+
+          <% else %>
+              <%= 'n/a '%>
+          <% end %> 
+
+             
         </td>
 
 
@@ -52,6 +64,8 @@
 
 
 <script type="text/javascript">
+    //get elemeny by id
+    //
 
     var sendButton = document.getElementsByClassName('sendIT')
 
@@ -63,11 +77,16 @@
             orgName = 'nameOfOrg_' + myID[1]
             selectedURL = document.getElementById(url).innerText
             selectedOrg = document.getElementById(orgName).innerText
+
             cRow = 'rule_' + myID[1]
             console.log("here", cRow)
             console.log("Looking ",  document.getElementById(cRow))
+
             document.getElementById(cRow).style.display = "none";
             sendforApproval(selectedOrg, selectedURL, cRow)
+
+
+
         })
     }
    
@@ -111,5 +130,11 @@
                 }
               };
           }
+
   }
+
+
+
+
+
 </script>
