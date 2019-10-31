@@ -135,7 +135,7 @@ Rails.application.routes.draw do
   post "/save_question_response", to: "question_response#save_question_response"
   get "/question_form", to: "question_response#question_form"
   post "/next_question", to: "question_response#next_question"
-
+  post "/skip_survey", to: "question_response#skip_survey"
 
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]

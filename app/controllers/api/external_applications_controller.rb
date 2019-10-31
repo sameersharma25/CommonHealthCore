@@ -122,7 +122,7 @@ module Api
 
                 if new_patient.security_keys.length > 0 || task.security_keys.length > 0 
                     #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
-                        #if client_application.agreement_type == external_application.agreement_type
+                        # if client_application.agreement_type == external_application.agreement_type
                             #logger.debug("client_application #{client_application.inspect}")
                               #logger.debug("external_application #{external_application.inspect}")
                              if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
@@ -130,11 +130,11 @@ module Api
                              else 
                               #Do Not Send: Email: Sorry, the agreement types do not match
                               SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                             end 
-                        #else
-                        #    #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                        #    SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                        #end 
+                             end
+                        # else
+                        #     #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                        #     SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                        # end
                 else 
                     send_task(new_patient.id.to_s, task,external_application_id, existing_status, patient)
                 end 

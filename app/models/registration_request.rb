@@ -9,5 +9,14 @@ class RegistrationRequest
   field :external_application, type: Boolean, default: false
 
   validates_presence_of :application_name, :application_url, :user_email
+  validate :email_already_taken
+
+  def email_already_taken
+    all_email = User.all.pluck(:email)
+    Rails.logger.debug("IN THE RR MODEL")
+    if all_email.include?(user_email)
+      errors.add(:user_email, "is already taken, please choose a different email.")
+    end
+  end
 
 end
