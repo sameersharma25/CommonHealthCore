@@ -6,7 +6,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if !@user.nil?
       if @user.persisted?
         flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Google"
-        sign_in_and_redirect @user, :event => :authentication
+        #sign_in_and_redirect @user, :event => :authentication
+
+      
+        response.headers["Content-Type"] = "application/pdf"
+        response.headers["user-token"] = @user.authentication_token
+        redirect_to 'https://dev11.resourcestack.com/dashboard/' 
+        
       else
         session["devise.google_data"] = request.env["omniauth.auth"].except("extra")
         redirect_to users_sign_in_path
@@ -17,3 +23,5 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 end
+
+

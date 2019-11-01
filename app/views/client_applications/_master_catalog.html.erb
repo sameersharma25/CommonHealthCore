@@ -3,9 +3,10 @@
     <%if x["status"] == "New" || x["status"] == "Pending" %>
         <% e += 1 %>
         <tr id= <%="masterRule_#{e}" %>>
-          <td class = "masterURL" id= <%= "url_#{x}" %> > <%= x["url"] %></td>
+          <td class = "masterURL" id= <%= "MasterUrl_#{e}" %> > <%= x["url"] %></td>
+
           <td class = "nameOrg" ><%= x["organizationName"]["organizationName_Text"][0]['text'] if x["organizationName"] %></td>
-          <td> <%= x['status'] %> </td>
+          <td> <%= x['status'] %> </td> 
 
 
            <td><%= link_to "Approve", '#',  class: "sendIT", id: "#{e}", :remote => true %> </td> 
@@ -39,20 +40,23 @@
         sendButton[i].addEventListener('click', function(e){
           console.log("this is where i am", e)
             parseID =  e.srcElement.id
+            console.log("ID::", e.srcElement.id)
 
             cRow = 'masterRule_' + parseID
-            url = 'url_' + parseID
+            console.log("cRow::", cRow)
+
+            approveUrl = 'MasterUrl_' + parseID
+            console.log("ID url_::", approveUrl)
+
             email = 'hiddenEmail_' + parseID
 
-            urlText = document.getElementById(url).innerText
+            urlText = document.getElementById(approveUrl).innerText
             catalogEmail = document.getElementById(email).name
-            console.log(" url ::", catalogEmail)
-            approvalFx( urlText, cRow, catalogEmail)
+            console.log(" url ::", urlText)
+            console.log(" email ::", catalogEmail)
+            //approvalFx( urlText, cRow, catalogEmail)
         })
     }
-
-
-
 
   function approvalFx(urlText, cRow, catalogEmail){ 
 
@@ -61,7 +65,7 @@
         console.log("Row", currentRow)
         document.getElementById(cRow).style.display = "none";
         myData = {}
-        myData['url'] = url;
+        myData['url'] = urlText;
         myData['pocEmail'] = catalogEmail;
         var crud = JSON.stringify(myData);
           //  
@@ -76,7 +80,7 @@
           alert('Oops! Something went wrong.');
           });
           //FOR LOCAL
-          XHR.open("POST", "http://localhost:3000/approve_catalog");
+          //XHR.open("POST", "http://localhost:3000/approve_catalog");
           //FOR DEV11
           //XHR.open("POST", "https://dev11.resourcestack.com/backend/approve_catalog");
           //FOR DEMO

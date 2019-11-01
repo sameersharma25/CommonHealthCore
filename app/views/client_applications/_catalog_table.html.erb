@@ -9,9 +9,6 @@
             <tr class="currentRow" id= <%="rule_#{i}" %>  >
         <%end%>  
 
-
-
-
         <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %> </td>
 
         <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %> </td>
@@ -84,9 +81,6 @@
 
             document.getElementById(cRow).style.display = "none";
             sendforApproval(selectedOrg, selectedURL, cRow)
-
-
-
         })
     }
    
@@ -109,11 +103,11 @@
           alert('Oops! Something went wrong.');
           });
           //FOR LOCAL
-          //XHR.open("POST", "http://localhost:3000/send_for_approval");
+          XHR.open("POST", "http://localhost:3000/send_for_approval");
           //FOR DEV11
           //XHR.open("POST", "https://dev11.resourcestack.com/backend/send_for_approval");
           //FOR DEMO
-          XHR.open("POST", "https://demo.commonhealthcore.org/backend/send_for_approval");
+          //XHR.open("POST", "https://demo.commonhealthcore.org/backend/send_for_approval");
 
           XHR.setRequestHeader('Content-Type', 'application/json');
           XHR.send(crud);
