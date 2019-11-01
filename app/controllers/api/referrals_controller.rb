@@ -167,7 +167,57 @@ module Api
                         additional_fields: additional_fields}
         task_list.push(task_details)
       end
-      render :json => {status: :ok, task_list: task_list }
+      
+      referral = Referral.find(params[:referral_id])
+      details_array = []
+      needs = referral.needs
+      needs.each do |need|
+        need_id = need.id.to_s
+        need_title =  need.need_title,
+            need_description = need.need_description,
+            need_note = need.need_notes,
+            need_urgency = need.need_urgency,
+            need_status = need.need_status
+
+        logger.debug("******************the need Title is : #{need.inspect}")
+        need_hash = {need_id: need_id, need_title: need_title.first, need_description: need_description,
+                     need_note: need_note, need_urgency: need_urgency, need_status: need_status,
+                     obstacles_array: []}
+        logger.debug("******************the need HASH is : #{need_hash}")
+
+        need_obstacles = need.obstacles
+        need_obstacles.each do |obstacle|
+          obstacle_id = obstacle.id.to_s
+          obstacle_title = obstacle.obstacle_title,
+              obstacle_description = obstacle.obstacle_description,
+              obstacle_notes = obstacle.obstacle_notes,
+              obstacle_urgency = obstacle.obstacle_urgency,
+              obstacle_status = obstacle.obstacle_status
+
+          obstacle_hash = { obstacle_id: obstacle_id,obstacle_title: obstacle_title.first,
+                            obstacle_description: obstacle_description,
+                            obstacle_notes: obstacle_notes, obstacle_urgency: obstacle_urgency,
+                            obstacle_status: obstacle_status, solutions_array: []}
+
+
+          obstacle_solutions = obstacle.solutions
+          obstacle_solutions.each do |solution|
+            solution_id = solution.id.to_s
+            solution_title = solution.solution_title
+            solution_description = solution.solution_description
+            solution_provider = solution.solution_provider
+
+            solution_hash = {solution_id: solution_id, solution_title: solution_title,
+                             solution_description: solution_description, solution_provider: solution_provider }
+            obstacle_hash[:solutions_array].push(solution_hash) if solution_hash
+          end
+          need_hash[:obstacles_array].push(obstacle_hash)
+        end
+
+        details_array.push(need_hash)
+      end
+
+      render :json => {status: :ok, task_list: task_list, int_list: details_array }
 
     end
 

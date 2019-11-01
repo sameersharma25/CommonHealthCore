@@ -128,6 +128,16 @@ class QuestionResponseController < ApplicationController
     @client_application = ClientApplication.find(@customer_id)
   end
 
+  def skip_survey
+    customer = ClientApplication.find(params[:cus_id])
+    customer_response = customer.question_responses
+    customer_response.each do |cr|
+      cr.destroy
+    end
+
+    redirect_to root_path
+  end
+
 
   def display_template(customer_id)
     logger.debug("going into the DISPLAY TEMPLATE*****************")
