@@ -3,7 +3,7 @@ class ClientApplicationsController < ApplicationController
   include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:new, :create, :contact_management]
- skip_before_action :verify_authenticity_token, only: [:send_for_approval]
+ skip_before_action :verify_authenticity_token, only: [:send_for_approval, :approve_catalog]
   # GET /client_applications
   # GET /client_applications.json
   def index  
@@ -685,7 +685,7 @@ class ClientApplicationsController < ApplicationController
 
   def approve_catalog
 
-  logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']} &&&& #{params['pocEmail']}")
+  #logger.debug("Collecting info #{params['orgName']} &&&URL #{params['url']} &&&& #{params['pocEmail']}")
   dynamodb1 = Aws::DynamoDB::Client.new(region: "us-west-2")
   parameters = {
       # table_name: 'contact_management',
@@ -707,6 +707,7 @@ class ClientApplicationsController < ApplicationController
       begin
         dynamodb1.update_item(parameters)
         insert_in_master_provider(params["url"], params['pocEmail'])
+
         render :json => {status: :ok, message: "Catalog Updated" }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
         render :json => {message: error  }
@@ -730,7 +731,7 @@ class ClientApplicationsController < ApplicationController
 
     result = dynamodb.get_item(parameters)[:item]
     
-    if pocEMAIL != ''
+    if pocEMAIL != 'noemail@poc.com' || pocEMAIL != ''
       result['poc_emailed'] = true
       PocMailer.poc_welcome(pocEMAIL).deliver
     else 

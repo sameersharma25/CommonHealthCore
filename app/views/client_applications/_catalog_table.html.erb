@@ -5,17 +5,28 @@
 
         <% if r["missing_mandatory_fields"] == "1" %>
             <tr class="currentRow missing_fields" id= <%="rule_#{i}"%>  >
-        <%elsif r["missing_mandatory_fields"] == "0" %>
+        <%else %> 
             <tr class="currentRow" id= <%="rule_#{i}" %>  >
-        <%end%>
-
+        <%end%>  
 
         <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %> </td>
 
         <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %> </td>
 
         <td id= <%= "Orgdescription_#{i}" %> >
-             <%= r["OrganizationName"]["OrgDescription"][0]['Text'] if r["OrganizationName"]["OrgDescription"] %> 
+
+           <% if r["OrganizationName"].present? %>
+                <%if r["OrganizationName"]["OrgDescription"].present? %>
+                      <%= r["OrganizationName"]["OrgDescription"][0]['Text'] %> 
+                <% else %>
+                      <%= "n/a" %>
+                <% end %>
+
+          <% else %>
+              <%= 'n/a '%>
+          <% end %> 
+
+             
         </td>
 
 
@@ -32,7 +43,7 @@
         <%end%> -->
 
 
-        <td><%= button_tag "Send", id: "send_#{i}", class: "woooooo", type: 'button' %>  </td>
+        <td><%= button_tag "Send For Approval", id: "send_#{i}", class: "sendIT", type: 'button' %>  </td>
 
         <td><%= link_to "Delete", '#', class: "delete_rule", id: "#{i}", :remote => true %></td>
 
@@ -53,27 +64,28 @@
     //get elemeny by id
     //
 
-    var sendButton = document.getElementsByClassName('woooooo')
+    var sendButton = document.getElementsByClassName('sendIT')
 
     for (var i =0; i < sendButton.length; i++) {
         sendButton[i].addEventListener('click', function(e){
             parseID =  e.srcElement.id
-            console.log("Where am 2", e.srcElement)
             myID = parseID.split("_")
-            console.log("What is my url",myID)
             url = 'url_' + myID[1]
             orgName = 'nameOfOrg_' + myID[1]
-            console.log("My url is", document.getElementById(url).innerText)
             selectedURL = document.getElementById(url).innerText
-            console.log("My OrgName is", document.getElementById(orgName).innerText)
             selectedOrg = document.getElementById(orgName).innerText
-            sendforApproval(selectedOrg, selectedURL)
 
+            cRow = 'rule_' + myID[1]
+            console.log("here", cRow)
+            console.log("Looking ",  document.getElementById(cRow))
+
+            document.getElementById(cRow).style.display = "none";
+            sendforApproval(selectedOrg, selectedURL, cRow)
         })
     }
    
 
-  function sendforApproval(orgName, url){ 
+  function sendforApproval(orgName, url, cRow){ 
         console.log("what data is coming over", orgName, "&", url)
         myData = {}
         myData['orgName'] = orgName;
@@ -90,10 +102,12 @@
           XHR.addEventListener("error", function(event) {
           alert('Oops! Something went wrong.');
           });
-
-          //XHR.open("POST", "http://localhost:3000/send_for_approval");
-          XHR.open("POST", "https://dev11.resourcestack.com/backend/send_for_approval");
-          //XHR.open("POST", "https://dev7.resourcestack.com/send_for_approval");
+          //FOR LOCAL
+          XHR.open("POST", "http://localhost:3000/send_for_approval");
+          //FOR DEV11
+          //XHR.open("POST", "https://dev11.resourcestack.com/backend/send_for_approval");
+          //FOR DEMO
+          //XHR.open("POST", "https://demo.commonhealthcore.org/backend/send_for_approval");
 
 
           XHR.setRequestHeader('Content-Type', 'application/json');
@@ -103,6 +117,7 @@
                     response = this.responseText
                     console.log(this.response)
                     console.log("this worked")
+                    
                 } else {
                   console.log(XHR.responseText)
                   console.log("this did not work")
