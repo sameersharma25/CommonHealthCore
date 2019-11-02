@@ -332,6 +332,8 @@ module Api
         t_id = Task.find(task_id).id.to_s
         patient = Task.find(task_id).referral.patient
         patient_name = patient.first_name + " "+ patient.last_name
+        p_first_name = patient.first_name
+        p_last_name = patient.last_name
         in_rfl_status = in_rfl.ledger_status
         ref = Task.find(task_id).referral
         ref_name = ref.referral_name + "- Copy"
@@ -339,7 +341,7 @@ module Api
         ref_urgency = ref.urgency
         in_rfl_hash = {referred_from: referred_from,task_id:t_id, task_description: task_description, status: in_rfl_status,
                        external_application_id: in_rfl.referred_application_id,patient_name: patient_name,ref_name: ref_name,
-                       ref_source: referred_from,ref_urgency: ref_urgency }
+                       ref_source: referred_from,ref_urgency: ref_urgency, p_last_name: p_last_name, p_first_name: p_first_name  }
         in_rfl_array.push(in_rfl_hash)
       end
       render :json=> {status: :ok, incoming_referrals: in_rfl_array  }

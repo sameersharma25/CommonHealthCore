@@ -103,7 +103,7 @@
           alert('Oops! Something went wrong.');
           });
           //FOR LOCAL
-          XHR.open("POST", "http://localhost:3000/send_for_approval");
+          XHR.open("POST", "<% ENV['APPLICATION_URL'] %>/send_for_approval");
           //FOR DEV11
           //XHR.open("POST", "https://dev11.resourcestack.com/backend/send_for_approval");
           //FOR DEMO

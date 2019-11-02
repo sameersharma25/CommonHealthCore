@@ -20,7 +20,7 @@
           <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
           <td><%= link_to "Check Duplicates", check_duplicates_path(org_url: x["url"] ),{ method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}%></td>
 
-        <% if x['OrgSites'][0]['POCs'].present? %>
+        <% if (!x['OrgSites'][0].nil? && x['OrgSites'][0]['POCs'].present?) %>
              <%= hidden_field_tag x['OrgSites'][0]['POCs'][0]['poc']['Email'] , e , :id => "hiddenEmail_#{e}" %>
         <% else %>
              <%= hidden_field_tag "noemail@poc.com" , e , :id => "hiddenEmail_#{e}" %>
@@ -82,7 +82,7 @@
           //FOR LOCAL
           //XHR.open("POST", "http://localhost:3000/approve_catalog");
           //FOR DEV11
-          //XHR.open("POST", "https://dev11.resourcestack.com/backend/approve_catalog");
+          XHR.open("POST", "<% ENV['APPLICATION_URL'] %>/backend/approve_catalog");
           //FOR DEMO
           //XHR.open("POST", "https://demo.commonhealthcore.org/backend/approve_catalog");
 

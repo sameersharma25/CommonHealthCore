@@ -167,7 +167,7 @@ module Api
                         additional_fields: additional_fields}
         task_list.push(task_details)
       end
-      
+
       referral = Referral.find(params[:referral_id])
       details_array = []
       needs = referral.needs
@@ -435,7 +435,10 @@ module Api
         date = r.tasks.last.task_deadline.strftime('%m/%d/%Y') if (r.tasks.last && !r.tasks.last.task_deadline.nil?)
         ref_id = r.id.to_s
         ref_patient = r.patient.last_name + r.patient.first_name
-        new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description, ref_urgency: r.urgency}
+        p_last_name = r.patient.last_name
+        p_first_name = r.patient.first_name
+        new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description,
+                             ref_urgency: r.urgency, p_last_name: p_last_name, p_first_name: p_first_name}
         new_referral_array.push(new_referral_hash)
       end
       # render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }
