@@ -43,7 +43,7 @@
         <%end%> -->
 
 
-        <td><%= button_tag "Send For Approval", id: "send_#{i}", class: "sendIT", type: 'button' %>  </td>
+        <td><%= button_tag "Send For Approval", id: "send_#{i}", class: "sendForApproval", type: 'button' %>  </td>
 
         <td><%= link_to "Delete", '#', class: "delete_rule", id: "#{i}", :remote => true %></td>
 
@@ -64,7 +64,7 @@
     //get elemeny by id
     //
 
-    var sendButton = document.getElementsByClassName('sendIT')
+    var sendButton = document.getElementsByClassName('sendForApproval')
 
     for (var i =0; i < sendButton.length; i++) {
         sendButton[i].addEventListener('click', function(e){
@@ -105,7 +105,7 @@
           //FOR LOCAL
           XHR.open("POST", "http://localhost:3000/send_for_approval");
           //FOR DEV11
-          //XHR.open("POST", "https://dev11.resourcestack.com/backend/send_for_approval");
+          //XHR.open("POST", "https://dev11.resourcestack.com/backend/send_for_approval"); {}
           //FOR DEMO
           //XHR.open("POST", "https://demo.commonhealthcore.org/backend/send_for_approval");
 
