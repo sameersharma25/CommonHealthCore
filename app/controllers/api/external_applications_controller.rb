@@ -331,7 +331,7 @@ module Api
         task_description = Task.find(task_id).task_description
         t_id = Task.find(task_id).id.to_s
         patient = Task.find(task_id).referral.patient
-        patient_name = patient.first_name + " "+ patient.last_name
+        patient_name = patient.last_name + " "+  patient.first_name
         p_first_name = patient.first_name
         p_last_name = patient.last_name
         in_rfl_status = in_rfl.ledger_status

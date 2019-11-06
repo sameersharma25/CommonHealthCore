@@ -240,9 +240,16 @@ module Api
     end
 
     def create_task
-      referral = Referral.find(params[:referral_id])
-      patient_id = referral.patient.id.to_s
       task = Task.new
+      if params[:solution_id]
+        referral = Solution.find(params[:solution_id]).obstacle.need.referral
+        task.solution_id = params[:solution_id]
+      else
+        referral = Referral.find(params[:referral_id])
+      end
+
+      patient_id = referral.patient.id.to_s
+
       task.referral_id = referral
       task.task_type = params[:task_type] if params[:task_type]
       task.task_status = params[:task_status] if params[:task_status]
@@ -267,7 +274,7 @@ module Api
         #   led_stat.ledger_status = "Accepted"
         #   led_stat.save
         # end
-        render :json=> {status: :ok, message: "Task Created"}
+        render :json=> {status: :ok, message: "Task Created", task_id: task.id.to_s}
       end
 
     end
@@ -437,8 +444,9 @@ module Api
         ref_patient = r.patient.last_name + r.patient.first_name
         p_last_name = r.patient.last_name
         p_first_name = r.patient.first_name
+        client_consent = r.patient.client_consent
         new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description,
-                             ref_urgency: r.urgency, p_last_name: p_last_name, p_first_name: p_first_name}
+                             ref_urgency: r.urgency, p_last_name: p_last_name, p_first_name: p_first_name, client_consent: client_consent}
         new_referral_array.push(new_referral_hash)
       end
       # render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }

@@ -154,7 +154,7 @@ module Api
       referrals.each do |ref|
         patient_id = ref.patient.id.to_s
         patient = Patient.find(patient_id)
-        caller_first_name = patient.first_name
+        caller_first_name = patient.last_name + " "+ patient.first_name
         int_created_at = patient.created_at
         need_title = ref.needs.first.need_title if ref.needs.first
         obstacle_title = ref.needs.first.obstacles.first.obstacle_title if (ref.needs.first && ref.needs.first.obstacles.first)
@@ -261,9 +261,13 @@ module Api
             solution_title = solution.solution_title
             solution_description = solution.solution_description
             solution_provider = solution.solution_provider
+            logger.debug("the NEED IS : #{need}******the OBSTACLE IS : #{obstacle}******** THE SOLUTION IS : #{solution}")
+            task_id = ''
+            task_id = Task.where(solution_id: solution_id ).first.id.to_s if !Task.where(solution_id: solution_id ).first.nil?
 
             solution_hash = {solution_id: solution_id, solution_title: solution_title,
-                             solution_description: solution_description, solution_provider: solution_provider }
+                             solution_description: solution_description, solution_provider: solution_provider,
+                             task_id: task_id}
             obstacle_hash[:solutions_array].push(solution_hash) if solution_hash
           end
           need_hash[:obstacles_array].push(obstacle_hash)
@@ -348,9 +352,11 @@ module Api
               solution_title = solution.solution_title
               solution_description = solution.solution_description
               solution_provider = solution.solution_provider
+              task_id = Task.find_by(solution_id: solution_id ).id.to_s
 
               solution_hash = {solution_id: solution_id, solution_title: solution_title,
-                               solution_description: solution_description, solution_provider: solution_provider }
+                               solution_description: solution_description, solution_provider: solution_provider,
+                               task_id: task_id}
               obstacle_hash[:solutions_array].push(solution_hash) if solution_hash
             end
             need_hash[:obstacles_array].push(obstacle_hash)
