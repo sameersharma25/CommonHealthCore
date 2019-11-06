@@ -24,7 +24,8 @@ config.secret_key = '7080f60d0d9c25104dd7e5c6092901a2ac8bd116eb9f64a897ccf2aa207
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'donotreply@resourcestack.com'
+  config.mailer_sender = 'technicalsupport@resourcestack.com'
+  #'donotreply@resourcestack.com'
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'

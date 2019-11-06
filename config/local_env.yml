@@ -1,2 +1,3 @@
-CATALOG_TABLE_NAME: 'contact_management'
-MASTER_TABLE_NAME: 'master_provider'
+CATALOG_TABLE_NAME: 'demo_catalog'
+MASTER_TABLE_NAME: 'demo_master_catalog'
+APPLICATION_URL: 'https://demo.commonhealthcore.org/backend/'

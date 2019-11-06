@@ -225,7 +225,7 @@ module Api
           end
         end
         active_notification_array.push(active_notification)
-        patient_detail = {patient_id: patient_id, first_name: first_name, last_name: last_name,
+        patient_detail = {patient_id: patient_id, p_first_name: first_name, p_last_name: last_name,
                           ph_number: ph_number,email: p_email,p_age: p_age, active_notification: active_notification, p_status: p_status }
         patients_details.push(patient_detail)
       end
