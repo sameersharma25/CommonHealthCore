@@ -11,13 +11,27 @@ require 'json'
       if @user.persisted?
         flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Google"
         #sign_in_and_redirect @user, :event => :authentication
-        #response.headers["user_token"] = @user.authentication_token
-        #redirect_to 'https://dev11.resourcestack.com/backend/api/sessions' 
 
-        ##Pass the email, authentication_token via JSON to 'https://dev11.resourcestack.com/backend/api/sessions' 
-
+#we could just make a post method to dev11 which would accept a user email and user.authtoken.
+#security issue 
 
 
+
+#each site will have a unique post to dev7. (recreating oauth). This will redirect them to dev7 and trigger google oAuth
+
+
+  #dev11POST dev11.commonhealthcore.com {userEmail: '', originURL: 'dev11.resourcestack.com', securityCode: 'randomHexGeneratedByDev7'}
+  #if user is a user of Dev7 && originURL exists && securityCode matches 
+  #google Oauth will complete it's course. The originURL will be used to trigger a redirect from OmniAuthController 
+    #respond back to dev11 with #redirect_to dev7 oAuth
+
+#Dev11 authPage will make a login request
+
+#if the login request is valid, dev7 authenticates the login process
+
+
+
+=begin
            uri = URI("https://dev11.resourcestack.com/backend/api/sessions")
 
            header = {'Content-Type' => 'application/json'}
@@ -38,7 +52,7 @@ require 'json'
            response = http.request(request)
            puts "response #{response.body}"
            puts JSON.parse(response.body)
-
+=end
         
       else
         session["devise.google_data"] = request.env["omniauth.auth"].except("extra")
