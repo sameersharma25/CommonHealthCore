@@ -1,2 +1,3 @@
-CATALOG_TABLE_NAME: ''
-MASTER_TABLE_NAME: ''
+CATALOG_TABLE_NAME: 'test_provider'
+MASTER_TABLE_NAME: 'master_provider'
+APPLICATION_URL: 'http://localhost:3000'
