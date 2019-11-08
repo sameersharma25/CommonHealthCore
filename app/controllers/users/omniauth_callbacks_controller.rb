@@ -14,7 +14,7 @@ require 'json'
         response.headers["Content-Type"] = "application/json"
         response.headers["email"] = @user.email
         #response.headers["user-token"] = @user.tempToken
-        userURL = user.ClientApplication.application_url + '/chcAuthPage' 
+        userURL = user.client_application.application_url + '/chcAuthPage' 
         redirect_to userURL 
 
 =begin
