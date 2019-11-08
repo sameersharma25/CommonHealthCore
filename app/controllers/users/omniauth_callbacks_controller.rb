@@ -13,25 +13,9 @@ require 'json'
         #sign_in_and_redirect @user, :event => :authentication
         response.headers["Content-Type"] = "application/json"
         response.headers["email"] = @user.email
-        response.headers["user-token"] = @user.authentication_token
-
-        logger.debug("Who is my user #{@user}") 
-        logger.debug("Who is my user #{@user.email}")
-
-        redirect_to 'https://dev11.resourcestack.com/chcAuthPage' 
-        header = {'Content-Type' => 'application/json'}
-        user = { 
-              email: @user.email,
-              authentication_token: @user.authentication_token,
-              google_oauth: true           
-        }
-
-
-
-
-
-
-
+        #response.headers["user-token"] = @user.tempToken
+        userURL = user.ClientApplication.application_url + '/chcAuthPage' 
+        redirect_to userURL 
 
 =begin
            uri = URI("https://dev11.resourcestack.com/backend/api/sessions")

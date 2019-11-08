@@ -442,12 +442,12 @@ module Api
 
     def chcAuthentication
         user = User.find_by(email: params[:userEmail])
-        secCode = chcAuthentication.find_by(associatedURL: params[:originURL])
-        if secCode === params[:accessToken]
+        #secCode = chcAuthentication.find_by(associatedURL: params[:originURL])
+        #if secCode === params[:accessToken]
           render :json => { message: :ok, :redirect_url => "https://dev7.resourcestack.com/users/auth/google_oauth2"}
-        else 
-          render :json => {message: :unauthorized, :redirect_url => "originURL"}
-        end 
+        #else 
+          #render :json => {message: :unauthorized, :redirect_url => "originURL"}
+        #end 
     end 
 
     ##oAuth Stuff

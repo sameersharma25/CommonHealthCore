@@ -74,9 +74,8 @@ class User
   field :roles, type: Array, default: []
 
   ##chcAuth
-  field :associatedURL , type: String
   field :tempToken , type: String
-
+ 
   
 
   belongs_to :client_application, inverse_of: :users
