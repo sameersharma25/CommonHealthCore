@@ -11,23 +11,25 @@ require 'json'
       if @user.persisted?
         flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Google"
         #sign_in_and_redirect @user, :event => :authentication
+        response.headers["Content-Type"] = "application/json"
+        response.headers["email"] = @user.email
+        response.headers["user-token"] = @user.authentication_token
 
-#we could just make a post method to dev11 which would accept a user email and user.authtoken.
-#security issue 
+        logger.debug("Who is my user #{@user}") 
+        logger.debug("Who is my user #{@user.email}")
+
+        redirect_to 'https://dev11.resourcestack.com/chcAuthPage' 
+        header = {'Content-Type' => 'application/json'}
+        user = { 
+              email: @user.email,
+              authentication_token: @user.authentication_token,
+              google_oauth: true           
+        }
 
 
 
-#each site will have a unique post to dev7. (recreating oauth). This will redirect them to dev7 and trigger google oAuth
 
 
-  #dev11POST dev11.commonhealthcore.com {userEmail: '', originURL: 'dev11.resourcestack.com', securityCode: 'randomHexGeneratedByDev7'}
-  #if user is a user of Dev7 && originURL exists && securityCode matches 
-  #google Oauth will complete it's course. The originURL will be used to trigger a redirect from OmniAuthController 
-    #respond back to dev11 with #redirect_to dev7 oAuth
-
-#Dev11 authPage will make a login request
-
-#if the login request is valid, dev7 authenticates the login process
 
 
 
