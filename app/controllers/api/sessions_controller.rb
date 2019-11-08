@@ -46,9 +46,13 @@ module Api
             render :json => {status: :unauthorized ,message: "The email or password was incorrect. Please try again"}
           end 
       else 
+          #catch the request from Wordpress HERE
+
           # if host == client_url
             if user&.valid_password?(params[:password])
               render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
+            elsif params[:googleOauthLogin] == true # &&
+                render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
             else
               render :json => {status: :unauthorized ,message: "The email or password was incorrect. Please try again"}
             end

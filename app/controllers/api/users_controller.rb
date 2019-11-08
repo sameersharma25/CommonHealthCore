@@ -402,6 +402,8 @@ module Api
       render :json => { status: :ok, admin: admin_details}
     end 
 
+
+
     def user_profile
       user = User.find_by(email: params['email'])
       @user_profile = {}
@@ -435,6 +437,20 @@ module Api
         user.save
         render :json => {status: :ok, message: "User Details have been updated" }
     end 
+
+    ##secondary Oauth Below
+
+    def chcAuthentication
+        user = User.find_by(email: params[:userEmail])
+        #secCode = chcAuthentication.find_by(associatedURL: params[:originURL])
+        #if secCode === params[:accessToken]
+          render :json => { message: :ok, :redirect_url => "https://dev7.resourcestack.com/users/auth/google_oauth2"}
+        #else 
+          #render :json => {message: :unauthorized, :redirect_url => "originURL"}
+        #end 
+    end 
+
+    ##oAuth Stuff
 
   end
 end

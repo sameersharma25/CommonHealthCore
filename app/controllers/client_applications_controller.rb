@@ -32,7 +32,7 @@ class ClientApplicationsController < ApplicationController
         redirect_to after_signup_path(:role)
       end
 
-    end
+    end 
 
     ## To Be. Background Job check_expiration_date
     all_ca = ClientApplication.all
