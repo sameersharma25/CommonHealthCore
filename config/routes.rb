@@ -164,7 +164,9 @@ Rails.application.routes.draw do
     post 'user_profile', to: 'users#user_profile'
     post 'edit_profile', to: 'users#edit_profile'
     
+
     post 'chcAuthentication', to: 'users#chcAuthentication' 
+
 
 
     post 'update_patient', to: "patients#update_patient"
