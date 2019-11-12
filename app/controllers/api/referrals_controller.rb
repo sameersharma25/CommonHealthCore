@@ -445,8 +445,11 @@ module Api
         p_last_name = r.patient.last_name
         p_first_name = r.patient.first_name
         client_consent = r.patient.client_consent
+        follow_up_date = r.follow_up_date
+        status = r.status
         new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description,
-                             ref_urgency: r.urgency, p_last_name: p_last_name, p_first_name: p_first_name, client_consent: client_consent}
+                             ref_urgency: r.urgency, p_last_name: p_last_name, p_first_name: p_first_name, client_consent: client_consent,
+                             follow_up_date: follow_up_date, status: status }
         new_referral_array.push(new_referral_hash)
       end
       # render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }

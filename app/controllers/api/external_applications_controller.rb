@@ -93,7 +93,7 @@ module Api
             logger.debug('the PATIENT ID WAS nil***************')
           end
       else
-        patient_check = Patient.where(client_application_id: external_application_id, first_name: patient.first_name).first
+        patient_check = Patient.where(client_application_id: external_application_id, first_name: patient.first_name, last_name: patient.last_name).first
         logger.debug("Creating patient for internal application******************* #{patient_check}")
         if patient_check.nil?
           logger.debug("Creating new Patient*********************")

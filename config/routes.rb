@@ -163,6 +163,7 @@ Rails.application.routes.draw do
     get 'admin_details', to: 'users#admin_details'
     post 'user_profile', to: 'users#user_profile'
     post 'edit_profile', to: 'users#edit_profile'
+    post 'app_version', to: "users#app_version"
     
 
     post 'chcAuthentication', to: 'users#chcAuthentication' 

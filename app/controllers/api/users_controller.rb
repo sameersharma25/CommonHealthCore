@@ -439,7 +439,12 @@ module Api
         user.otp_required_for_login = params[:otp_required_for_login] if params[:otp_required_for_login]
         user.save
         render :json => {status: :ok, message: "User Details have been updated" }
-    end 
+    end
+
+    def app_version
+      version =  ENV["APPLICATION_VERSION"]
+      render :json => {status: :ok, version: version }
+    end
 
     ##secondary Oauth Below
 
