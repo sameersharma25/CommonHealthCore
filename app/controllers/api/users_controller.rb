@@ -1,9 +1,12 @@
 module Api
   class UsersController < ActionController::Base
     include UsersHelper
+    require 'securerandom'
     before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
     # before_action :authenticate_user!
     load_and_authorize_resource class: :api, except: [:give_appointment_details_for_notification]
+
+    skip_before_action :verify_authenticity_token, only: [:chcAuthentication]
 
     def get_all_users
       logger.debug("the user email you sent is : #{params[:email]}")
@@ -393,7 +396,7 @@ module Api
       @logo = user.client_application.logo.url
 
       render :json => { status: :ok, logo: @logo}
-      # render json: @logo, type: :jpeg, content_type: 'image/jpeg'
+      # render json: @logo, type: :jpeg, content_type: 'image/jpeg' 
 
     end 
 
@@ -442,6 +445,8 @@ module Api
 
     def chcAuthentication
         user = User.find_by(email: params[:userEmail])
+        user.tempToken = SecureRandom.hex
+        user.save 
         #secCode = chcAuthentication.find_by(associatedURL: params[:originURL])
         #if secCode === params[:accessToken]
           render :json => { message: :ok, :redirect_url => "https://dev7.resourcestack.com/users/auth/google_oauth2"}

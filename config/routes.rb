@@ -99,6 +99,8 @@ Rails.application.routes.draw do
   get "about_us_page", to: "static_pages#about"
   get "faq_page", to: "static_pages#faq"
   get "admin_contact", to: "static_pages#admin_contact"
+  get "redirect_page", to: "static_pages#redirect_page"
+  get "no_url", to: "static_pages#no_url"
 
   get "/reset_password", to: "reset_password#reset_password"
   post "/reset_password_part_two", to: "reset_password#reset_password_part_two" 
@@ -162,7 +164,7 @@ Rails.application.routes.draw do
     post 'user_profile', to: 'users#user_profile'
     post 'edit_profile', to: 'users#edit_profile'
     
-    post 'chcAuthentication', to: 'users#chcAuthentication'
+    post 'chcAuthentication', to: 'users#chcAuthentication' 
 
 
     post 'update_patient', to: "patients#update_patient"

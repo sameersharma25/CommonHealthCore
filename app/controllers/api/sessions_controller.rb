@@ -51,7 +51,9 @@ module Api
           # if host == client_url
             if user&.valid_password?(params[:password])
               render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
-            elsif params[:googleOauthLogin] == true # &&
+            elsif params[:googleOauthLogin] == 'true' && params[:tempToken] == user.tempToken
+                user.tempToken = ''
+                user.save
                 render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
             else
               render :json => {status: :unauthorized ,message: "The email or password was incorrect. Please try again"}

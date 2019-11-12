@@ -11,42 +11,32 @@ require 'json'
       if @user.persisted?
         flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Google"
         #sign_in_and_redirect @user, :event => :authentication
-        response.headers["Content-Type"] = "application/json"
-        response.headers["email"] = @user.email
-        #response.headers["user-token"] = @user.tempToken
-        userURL = user.client_application.application_url + '/chcAuthPage' 
-        redirect_to userURL 
+        @userURL = @user.client_application.application_url + '/chcAuthPage'
+        # redirect_to 'https://dev11.resourcestack.com/chcAuthPage'
+        # redirect_to @userURL
+        # redirect_to @user.client_application.application_url + '/chcAuthPage'  
+        if @user.client_application.application_url == 'dev7.resourcestack.com'
+          redirect_to "https://dev11.resourcestack.com/chcAuthPage?email=#{@user.email}&tempToken=#{@user.tempToken}"
+        elsif  @user.client_application.application_url == 'dev11.resourcestack.com'
+          redirect_to "https://dev11.resourcestack.com/chcAuthPage?email=#{@user.email}&tempToken=#{@user.tempToken}"
+        elsif @user.client_application.application_url == 'demo.commonhealthcore.org'
+          redirect_to "https://demo.commonhealthcore.org/chcAuthPage?email=#{@user.email}&tempToken=#{@user.tempToken}"
+        else
+         #need to add additonal site 
+         redirect_to no_url_path
+        end
 
-=begin
-           uri = URI("https://dev11.resourcestack.com/backend/api/sessions")
-
-           header = {'Content-Type' => 'application/json'}
-            user = { 
-                email: @user.email,
-                authentication_token: @user.authentication_token,
-                google_oauth: true,
-            }
-
-           # Create the HTTP objects
-           http = Net::HTTP.new(uri.host, uri.port)
-           puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
-           http.use_ssl = true
-           request = Net::HTTP::Post.new(uri.path, header)
-           request.body = user.to_json
-
-           # Send the request
-           response = http.request(request)
-           puts "response #{response.body}"
-           puts JSON.parse(response.body)
-=end
         
       else
         session["devise.google_data"] = request.env["omniauth.auth"].except("extra")
-        redirect_to users_sign_in_path
+        #redirect_to users_sign_in_path
+        redirect_to redirect_page_path
+        #redirect this to a page 
       end
     else
       session["devise.google_data"] = request.env["omniauth.auth"].except("extra")
-      redirect_to users_sign_in_path
+      #redirect_to users_sign_in_path
+      redirect_to redirect_page_path
     end
   end
 end
