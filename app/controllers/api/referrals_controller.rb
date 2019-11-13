@@ -453,7 +453,7 @@ module Api
         new_referral_array.push(new_referral_hash)
       end
       # render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }
-      render :json => {status: :ok, new_referral_array: new_referral_array }
+      render :json => {status: :ok, new_referral_array: new_referral_array.sort_by{|h| h[:submission_date]}.reverse }
     end
 
     def patient_document

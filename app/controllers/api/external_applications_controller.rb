@@ -345,7 +345,7 @@ module Api
                        submission_date: in_rfl.created_at.strftime('%m/%d/%Y') }
         in_rfl_array.push(in_rfl_hash)
       end
-      render :json=> {status: :ok, incoming_referrals: in_rfl_array  }
+      render :json=> {status: :ok, incoming_referrals: in_rfl_array.sort_by{|h| h[:submission_date]}.reverse  }
     end
 
     def out_going_referrals
