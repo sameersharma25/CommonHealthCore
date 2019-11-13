@@ -2,11 +2,11 @@ module Api
   class UsersController < ActionController::Base
     include UsersHelper
     require 'securerandom'
-    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
+    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password, :chcAuthentication]
     # before_action :authenticate_user!
     load_and_authorize_resource class: :api, except: [:give_appointment_details_for_notification]
 
-    skip_before_action :verify_authenticity_token, only: [:chcAuthentication]
+    #skip_before_action :verify_authenticity_token, only: [:chcAuthentication]
 
     def get_all_users
       logger.debug("the user email you sent is : #{params[:email]}")
