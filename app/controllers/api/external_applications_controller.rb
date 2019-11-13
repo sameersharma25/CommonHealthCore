@@ -342,7 +342,7 @@ module Api
         in_rfl_hash = {referred_from: referred_from,task_id:t_id, task_description: task_description, status: in_rfl_status,
                        external_application_id: in_rfl.referred_application_id,patient_name: patient_name,ref_name: ref_name,
                        ref_source: referred_from,ref_urgency: ref_urgency, p_last_name: p_last_name, p_first_name: p_first_name,
-                       submission_date: in_rfl.created_at }
+                       submission_date: in_rfl.created_at.strftime('%m/%d/%Y') }
         in_rfl_array.push(in_rfl_hash)
       end
       render :json=> {status: :ok, incoming_referrals: in_rfl_array  }
