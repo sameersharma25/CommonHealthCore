@@ -4,7 +4,7 @@ module Api
     require 'securerandom'
     before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password, :chcAuthentication]
     # before_action :authenticate_user!
-    load_and_authorize_resource class: :api, except: [:give_appointment_details_for_notification]
+    load_and_authorize_resource class: :api, except: [:give_appointment_details_for_notification, :chcAuthentication]
 
     #skip_before_action :verify_authenticity_token, only: [:chcAuthentication]
 

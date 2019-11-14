@@ -56,7 +56,7 @@
   </thead>
   <tbody>
   <% i = 1%>
-  <%@applications.each do |a|%>
+  <%@all_agreements.each do |a|%>
       <tr>
         <td><%= a.name%></td>
         <%if !a.client_agreement.url.nil?%>
