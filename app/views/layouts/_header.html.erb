@@ -35,25 +35,13 @@
     navbar.style.display = 'none';
     togglebtn.style.display = 'block'
   };   
-
   togglebtn.addEventListener('click', function(){
-      /////////
-     // if (localStorage["navbarStatus"] == "true" ){  //SHOW IT
-      //  console.log("IN if true", localStorage["navbarStatus"])
-      //  navbar.style.display = 'none';
-      //  localStorage["navbarStatus"] = false;
-        
-      //} else {
           console.log("IN else", localStorage["navbarStatus"])
           localStorage["navbarStatus"] = true;
           navbar.style.display = 'block';
           togglebtn.style.display = 'none'
-
-      //}
-  })
-
+  });
   togglebtnCLOSE.addEventListener('click', function(){
-      /////////
         console.log("IN if true", localStorage["navbarStatus"])
         navbar.style.display = 'none';
         localStorage["navbarStatus"] = false;
