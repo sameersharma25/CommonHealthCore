@@ -16,7 +16,28 @@ require 'json'
         # redirect_to @userURL
         # redirect_to @user.client_application.application_url + '/chcAuthPage'  
         if @user.client_application.application_url == 'dev7.resourcestack.com'
-          redirect_to "https://dev11.resourcestack.com/chcAuthPage?email=#{@user.email}&tempToken=#{@user.tempToken}"
+          
+          ###
+          uri = URI("https://dev11.resourcestack.com/chcAuthPage")
+          header = {'Content-Type' => 'text/json'}
+          parameters = {
+             email: @user.email,
+             tempToken: @user.tempToken
+
+          }
+          # Create the HTTP objects
+          http = Net::HTTP.new(uri.host, uri.port)
+          http.use_ssl = true
+          request = Net::HTTP::Post.new(uri.path, header)
+          request.body = parameters.to_json
+          # Send the request
+          response = http.request(request)
+          ###
+
+          redirect_to "https://dev11.resourcestack.com/chcAuthPage"  
+
+          ### ?email=#{@user.email}&tempToken=#{@user.tempToken}"
+
         elsif  @user.client_application.application_url == 'dev11.resourcestack.com'
           redirect_to "https://dev11.resourcestack.com/chcAuthPage?email=#{@user.email}&tempToken=#{@user.tempToken}"
         elsif @user.client_application.application_url == 'demo.commonhealthcore.org'
