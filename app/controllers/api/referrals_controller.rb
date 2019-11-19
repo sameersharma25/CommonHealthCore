@@ -1,6 +1,7 @@
 module Api
   class ReferralsController < ActionController::Base
     include UsersHelper
+    include ClientApplicationsHelper
     before_action :authenticate_user_from_token, except: [:ext_app_ledger]
     load_and_authorize_resource class: :api, except: [:ext_app_ledger]
 
@@ -120,9 +121,12 @@ module Api
       client_consent = r.client_consent
       follow_up_date = r.follow_up_date
       agreement_notification_flag = r.agreement_notification_flag
+      patient_id = r.patient.id.to_s
+
       referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
                           urgency: urgency, due_date: due_date,source: source, task_count: task_count,  status: status, 
-                            follow_up_date: follow_up_date, agreement_notification_flag: agreement_notification_flag}
+                          follow_up_date: follow_up_date, agreement_notification_flag: agreement_notification_flag,
+                          patient_id: patient_id}
       render :json => {status: :ok, referral_details: referral_details }
     end
 
@@ -447,7 +451,10 @@ module Api
         client_consent = r.patient.client_consent
         follow_up_date = r.follow_up_date
         status = r.status
-        new_referral_hash = {ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description,
+        patient_id = r.patient.id.to_s
+        submission_date = r.tasks.last.nil? ? "" :  r.tasks.last.created_at.strftime('%m/%d/%Y')
+
+        new_referral_hash = {patient_id: patient_id,ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description,
                              ref_urgency: r.urgency, p_last_name: p_last_name, p_first_name: p_first_name, client_consent: client_consent,
                              follow_up_date: follow_up_date, status: status, submission_date: r.tasks.last.created_at.strftime('%m/%d/%Y') }
         new_referral_array.push(new_referral_hash)
@@ -509,6 +516,24 @@ module Api
           logger.debug("NOTIFICATION FOR REFERAL WILL BE SENT**********")
         end
       end
+    end
+
+    def invite_org
+      ca = ClientApplication.new
+      ca.name = params[:name]
+      ca.application_url = params[:application_url]
+      ca.
+      if ca.save
+        admin_role = Role.create(client_application_id: @client_application.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
+        if params[:client_application][:user][:email]
+          user_invite = helper.send_invite_to_user(params[:client_application][:user][:email],@client_application,
+                                            params[:client_application][:user][:name], admin_role.id.to_s )
+        end
+      else
+        render :json => {status: :bad_request ,message: "Organization was not saved."}
+      end
+
+
 
     end
 

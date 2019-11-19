@@ -398,12 +398,14 @@ module Api
         second_hash = {}
         changes_array = []
         changes.keys.each do |k|
-          first_hash[k] = changes[k][0]
-          second_hash[k] = changes[k][1]
+          if changes[k][1] != ""
+            first_hash[k] = changes[k][0]
+            second_hash[k] = changes[k][1]
+          end
         end
         changes_array.push(first_hash)
         changes_array.push(second_hash)
-        created_at = ir.created_at
+        created_at = ir.created_at.strftime("%D %T")
         internal_record_hash = {changes: changes_array, created_at: created_at}
         internal_record_array.push(internal_record_hash)
       end
@@ -419,12 +421,14 @@ module Api
           second_hash = {}
           changes_array = []
           changes.keys.each do |k|
-            first_hash[k] = changes[k][0]
-            second_hash[k] = changes[k][1]
+            if changes[k][1] != ""
+              first_hash[k] = changes[k][0]
+              second_hash[k] = changes[k][1]
+            end
           end
           changes_array.push(first_hash)
           changes_array.push(second_hash)
-          created_at = er.created_at
+          created_at = er.created_at.strftime("%D %T")
           external_record_hash = {changes: changes_array, created_at: created_at}
           external_record_array.push(external_record_hash)
         end
