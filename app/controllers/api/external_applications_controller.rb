@@ -171,7 +171,7 @@ module Api
       end
 
 
-    end
+    end 
 
 
     def send_task(p_id, task, ea_id, ledg_stat, old_patient)
@@ -182,6 +182,18 @@ module Api
       if external_application.external_application == true
         external_api = ExternalApiSetup.where(client_application_id: ea_id, api_for: "remove_patient").first
 
+        ### Story 401 Mailer/Notfication 
+        ##if currentTask.ca_id == currentUser
+
+        currentApplication = ClientApplication.find_by(id: old_patient.client_application_id)
+        if task.task_referred_from  != currentApplication.to_s && task.task_referred_from != nil
+          #mailer{ ReferralPartner, AssignedProvider, Description, Patient}
+          AlertParentAppMailer.taskReassigned(currentApplication.name, external_application.name, task.task_description, old_patient).deliver
+        else
+          logger.debug("Initial Transfer or current task is the same as current user ")
+        end 
+
+        ###
         task_hash = Hash.new
         task_hash["patient_id"] = p_id
         external_api.mapped_parameters.each do|mp|
