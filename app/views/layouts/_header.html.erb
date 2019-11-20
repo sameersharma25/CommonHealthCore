@@ -1,6 +1,5 @@
 
 
-
 <% if current_user.present? %>
   <%= button_to "Home", root_path, {method: :get, type: 'button', class: 'btn btn-primary navbar-right'}  %>
 <% end %>
@@ -43,7 +42,6 @@
   };   
 
   togglebtn.addEventListener('click', function(){
-
           console.log("IN else", localStorage["navbarStatus"])
           localStorage["navbarStatus"] = true;
           navbar.style.display = 'block';
