@@ -75,7 +75,7 @@ Rails.application.routes.draw do
   post "/parameters_mapping", to: "client_applications#parameters_mapping"
 
   get "/download_plugin", to: "client_applications#download_plugin"
-  post "/catalogMangViewer", to: "client_applications#catalogMangViewer"
+  get "/catalogMangViewer", to: "client_applications#catalogMangViewer"
   post "/get_contact_management", to: "client_applications#get_contact_management"
   post "/master_provider_details", to: "client_applications#master_provider_details"
 
