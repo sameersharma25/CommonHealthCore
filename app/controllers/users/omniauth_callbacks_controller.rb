@@ -36,7 +36,6 @@ require 'json'
           #response = http.request(request)
           ###
 
-        
       else
         session["devise.google_data"] = request.env["omniauth.auth"].except("extra")
         #redirect_to users_sign_in_path
