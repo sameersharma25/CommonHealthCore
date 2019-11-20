@@ -12,6 +12,11 @@ class ClientApplicationsController < ApplicationController
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
     @referred_applications = LedgerStatus.where(referred_application_id: @client_application.id.to_s)
+    # @referred_applications.each do |ra|
+    #   ledger_master = ra.ledger_master
+    #   logger.debug("the ledger master is : #{ra.inspect}")
+    #   task = Task.find(ledger_master.task_id)
+    # end
     @about = AboutU.where(client_application_id: @client_application.id.to_s).entries
     @faqs = Faq.where(client_application_id: @client_application.id.to_s).entries
     # @referred_applications = LedgerStatus.all
@@ -43,7 +48,7 @@ class ClientApplicationsController < ApplicationController
         logger.debug("Today DAte #{Date.today}")
         if ca.client_agreement_expiration == Date.today
           ca.agreement_signed = false
-          ca.agreement_counter_sign = "pending"
+          ca.agreement_counter_sign = "Pending"
         else 
         end 
 
@@ -142,7 +147,7 @@ class ClientApplicationsController < ApplicationController
       @client_application.agreement_counter_sign = "Pending"
       @client_application.agreement_signed = false
  
-      #@client_application.save
+      @client_application.save
     end
     @client_application.update(client_application_params)
     redirect_to root_path
@@ -915,8 +920,7 @@ class ClientApplicationsController < ApplicationController
     customer.client_agreement = params[:client_application][:client_agreement]
     customer.agreement_counter_sign = "Done"
     customer.agreement_signed = true
-    customer.client_agreement_sign_date = Date.today 
-    customer.client_agreement_expiration = helper.check_expiration_date(customer)
+    customer.client_agreement_sign_date = Date.today
     customer.save
 
     redirect_to pending_agreements_path
