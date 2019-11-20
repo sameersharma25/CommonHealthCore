@@ -4,7 +4,7 @@ require 'json'
 
 module Api
   class ExternalApplicationsController < ActionController::Base
-
+    include ClientApplicationsHelper
     def render_script
       render html: '<div>html goes here</div>'.html_safe
     end
@@ -291,33 +291,36 @@ module Api
 
     def send_referral
       task_id = params[:task_id]
-      referred_by_id = Task.find(params[:task_id]).referral.client_application.id.to_s
-      ledger_master = LedgerMaster.where(task_id: task_id).first
-      ledger_master_id = ledger_master.id.to_s
-      referred_applicaiton = ClientApplication.find(params[:referred_application_id])
-      client_user = referred_applicaiton.users.first
-      client_user_email = client_user.email
-
-      exixting_status= ledger_master.ledger_statuses.where(referred_application_id: params[:referred_application_id] )
-      logger.debug("the existing status value is : #{exixting_status.entries}")
-
-      if !exixting_status.empty?
-        logger.debug("the IF BLOCK OF EXISTING***************")
-      else
-        logger.debug("the ELSE BLOCK OF EXISTING***************")
-
-        logger.debug("the user is #{client_user}, ******** USER EMAIL IS : #{client_user_email}")
-        led_stat = LedgerStatus.new
-        led_stat.referred_application_id = params[:referred_application_id]
-        led_stat.ledger_master_id = ledger_master_id
-        led_stat.ledger_status = "Pending"
-        led_stat.referred_by_id = referred_by_id
-        if led_stat.save
-          logger.debug("NOTIFICATION FOR REFERAL WILL BE SENT**********")
-          RegistrationRequestMailer.referral_request(client_user_email,task_id, params[:referred_application_id] ).deliver
-          render :json=> {status: :ok, message: "Referral Request was sent" }
-        end
-      end
+      helpers.send_referral_common(task_id,params[:referred_application_id])
+      #
+      # referred_by_id = Task.find(params[:task_id]).referral.client_application.id.to_s
+      # ledger_master = LedgerMaster.where(task_id: task_id).first
+      # ledger_master_id = ledger_master.id.to_s
+      # referred_applicaiton = ClientApplication.find(params[:referred_application_id])
+      # client_user = referred_applicaiton.users.first
+      # client_user_email = client_user.email
+      #
+      # exixting_status= ledger_master.ledger_statuses.where(referred_application_id: params[:referred_application_id] )
+      # logger.debug("the existing status value is : #{exixting_status.entries}")
+      #
+      #
+      # if !exixting_status.empty?
+      #   logger.debug("the IF BLOCK OF EXISTING***************")
+      # else
+      #   logger.debug("the ELSE BLOCK OF EXISTING***************")
+      #
+      #   logger.debug("the user is #{client_user}, ******** USER EMAIL IS : #{client_user_email}")
+      #   led_stat = LedgerStatus.new
+      #   led_stat.referred_application_id = params[:referred_application_id]
+      #   led_stat.ledger_master_id = ledger_master_id
+      #   led_stat.ledger_status = "Pending"
+      #   led_stat.referred_by_id = referred_by_id
+      #   if led_stat.save
+      #     logger.debug("NOTIFICATION FOR REFERAL WILL BE SENT**********")
+      #     RegistrationRequestMailer.referral_request(client_user_email,task_id, params[:referred_application_id] ).deliver
+      #     render :json=> {status: :ok, message: "Referral Request was sent" }
+      #   end
+      # end
 
     end
 
