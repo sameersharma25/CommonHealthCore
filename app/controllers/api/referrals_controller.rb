@@ -456,7 +456,7 @@ module Api
 
         new_referral_hash = {patient_id: patient_id,ref_id: ref_id, ref_patient: ref_patient,date: date, ref_source: r.source, ref_description: r.referral_description,
                              ref_urgency: r.urgency, p_last_name: p_last_name, p_first_name: p_first_name, client_consent: client_consent,
-                             follow_up_date: follow_up_date, status: status, submission_date: r.tasks.last.created_at.strftime('%m/%d/%Y') }
+                             follow_up_date: follow_up_date, status: status, submission_date: submission_date }
         new_referral_array.push(new_referral_hash)
       end
       # render :json => {status: :ok, new_referral_array: new_referral_array, active_referral_array: active_referral_array, pending_referral_array: pending_referral_array }
@@ -522,19 +522,21 @@ module Api
       ca = ClientApplication.new
       ca.name = params[:name]
       ca.application_url = params[:application_url]
-      ca.
+      ca.external_application = params[:external_application]
+      ca.master_application_status = false
       if ca.save
-        admin_role = Role.create(client_application_id: @client_application.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
-        if params[:client_application][:user][:email]
-          user_invite = helper.send_invite_to_user(params[:client_application][:user][:email],@client_application,
-                                            params[:client_application][:user][:name], admin_role.id.to_s )
+        admin_role = Role.create(client_application_id: ca.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
+        if params[:user_email]
+          user_invite = helpers.send_invite_to_user(params[:user_email],ca,
+                                            params[:name], admin_role.id.to_s )
+          # if user_invite == true
+          #
+          # end
+          render :json => {status: :bad_request ,message: "Organization Invited."}
         end
       else
-        render :json => {status: :bad_request ,message: "Organization was not saved."}
+        render :json => {status: :bad_request ,message: "Organization not invited."}
       end
-
-
-
     end
 
   end

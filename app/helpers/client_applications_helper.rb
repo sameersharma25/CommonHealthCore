@@ -59,8 +59,10 @@ module ClientApplicationsHelper
   end
 
   def send_invite_to_user(email, client_application,name,role)
-    logger.debug("********* In the send user invite method")
+    logger.debug("********* In the send user invite method from the Client Application helper*********")
     @user = User.invite!(email: email, name: name,roles: [role])
-    @user.update(client_application_id: client_application , application_representative: true, admin: true)
+    if @user.update(client_application_id: client_application , application_representative: true, admin: true)
+      return true
+    end
   end
 end
