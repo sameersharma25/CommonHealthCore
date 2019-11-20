@@ -1,4 +1,5 @@
 
+
 <% if current_user.present? %>
   <%= button_to "Home", root_path, {method: :get, type: 'button', class: 'btn btn-primary navbar-right'}  %>
 <% end %>
@@ -25,12 +26,6 @@
   <button type="button" class="btn btn-warning" id="toggleNav">Navigation</button>
 </nav>
 
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 9af0f3eda6c1737790f65c2111bf4faff552b97a
 <script type="text/javascript">
   var togglebtn = document.getElementById('toggleNav')  
   var togglebtnCLOSE = document.getElementById('toggleClose') 
@@ -45,21 +40,13 @@
     navbar.style.display = 'none';
     togglebtn.style.display = 'block'
   };   
-<<<<<<< HEAD
-  togglebtn.addEventListener('click', function(){
-=======
 
   togglebtn.addEventListener('click', function(){
-
->>>>>>> 9af0f3eda6c1737790f65c2111bf4faff552b97a
           console.log("IN else", localStorage["navbarStatus"])
           localStorage["navbarStatus"] = true;
           navbar.style.display = 'block';
           togglebtn.style.display = 'none'
-<<<<<<< HEAD
-=======
 
->>>>>>> 9af0f3eda6c1737790f65c2111bf4faff552b97a
   });
   togglebtnCLOSE.addEventListener('click', function(){
         console.log("IN if true", localStorage["navbarStatus"])
@@ -70,10 +57,6 @@
 
   })
 </script>
-<<<<<<< HEAD
-
-=======
->>>>>>> 9af0f3eda6c1737790f65c2111bf4faff552b97a
 -->
 
 
