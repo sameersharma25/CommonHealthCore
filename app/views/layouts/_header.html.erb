@@ -1,4 +1,11 @@
 
+
+
+<% if current_user.present? %>
+  <%= button_to "Home", root_path, {method: :get, type: 'button', class: 'btn btn-primary navbar-right'}  %>
+<% end %>
+
+<!--
 <nav class="navbar navbar-default" id="CHCnavbar" style="background-color: #27aacc; display: none;">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -20,7 +27,6 @@
   <button type="button" class="btn btn-warning" id="toggleNav">Navigation</button>
 </nav>
 
-
 <script type="text/javascript">
   var togglebtn = document.getElementById('toggleNav')  
   var togglebtnCLOSE = document.getElementById('toggleClose') 
@@ -37,23 +43,14 @@
   };   
 
   togglebtn.addEventListener('click', function(){
-      /////////
-     // if (localStorage["navbarStatus"] == "true" ){  //SHOW IT
-      //  console.log("IN if true", localStorage["navbarStatus"])
-      //  navbar.style.display = 'none';
-      //  localStorage["navbarStatus"] = false;
-        
-      //} else {
+
           console.log("IN else", localStorage["navbarStatus"])
           localStorage["navbarStatus"] = true;
           navbar.style.display = 'block';
           togglebtn.style.display = 'none'
 
-      //}
-  })
-
+  });
   togglebtnCLOSE.addEventListener('click', function(){
-      /////////
         console.log("IN if true", localStorage["navbarStatus"])
         navbar.style.display = 'none';
         localStorage["navbarStatus"] = false;
@@ -62,6 +59,7 @@
 
   })
 </script>
+-->
 
 
 

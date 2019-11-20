@@ -217,7 +217,7 @@ class ClientApplicationsController < ApplicationController
 
     @result = helpers.catalog_table_content
 
-
+ 
     @pending_results = @result.select{|p| p["status"] == "Pending"}
 
     logger.debug("the RESULT OF THE SCAN IS : ************************ #{@pending_results}")
@@ -230,6 +230,31 @@ class ClientApplicationsController < ApplicationController
 
 
   end
+
+  def catalogMangViewer
+    details = get_catalog_details(ENV["CATALOG_TABLE_NAME"]) 
+    @url = details[:url]
+    logger.debug("WHAT IS THE URL  #{@url}")
+    @orgDetails = details[:OrgDetails]
+    logger.debug("OrgDetails:::: #{@orgDetails}")
+    @OrganizationName = details[:OrganizationName]
+    logger.debug("OrgName::: #{@OrganizationName}")
+    @OrgDescription = details[:OrganizationDescription]
+    logger.debug("OrgDesc::: #{@OrgDescription}")
+    @siteHash = details[:siteHash]
+    @poc = details[:poc]
+    @site = details[:OrgSites]
+    logger.debug("ORG SITES #{@site}")
+    @geoscope = details[:geoscope]
+    @program = details[:programs]
+    logger.debug("PROGRAM #{@program}")
+    @PopulationDescription = details[:popDesc]
+    @ProgramDescription = details[:progDesc]
+    @ServiceAreaDescription = details[:servArea]
+    @ProgramReferences = details[:progRef]
+
+
+  end 
 
   def get_contact_management #modal
 
@@ -244,7 +269,7 @@ class ClientApplicationsController < ApplicationController
     #@programHash = details[:programHash]
     #@geoScope = details[:geoScope]
     #@programs = details[:programs]
-    @url = details[:url],
+    @url = details[:url]
     logger.debug("WHAT IS THE URL  #{@url}")
     @orgDetails = details[:OrgDetails]
     logger.debug("OrgDetails:::: #{@orgDetails}")
