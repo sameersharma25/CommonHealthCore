@@ -529,10 +529,10 @@ module Api
         if params[:user_email]
           user_invite = helpers.send_invite_to_user(params[:user_email],ca,
                                             params[:name], admin_role.id.to_s )
-          # if user_invite == true
-          #
-          # end
-          render :json => {status: :bad_request ,message: "Organization Invited."}
+          if user_invite == true
+            helpers.send_referral_common(params[:task_id],ca.id.to_s)
+          end
+          render :json => {status: :ok ,message: "Organization Invited."}
         end
       else
         render :json => {status: :bad_request ,message: "Organization not invited."}

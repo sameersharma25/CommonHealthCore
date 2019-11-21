@@ -3,9 +3,13 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .user-display > tbody > tr:nth-child(2n+1) > td {
-  background-color: #99dfe9;
+  background-color: #43b02a;
 }
 
 .missing_fields{
   color: orange;
+}
+
+a:link {
+  color: black;
 }
