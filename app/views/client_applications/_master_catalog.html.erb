@@ -17,7 +17,8 @@
 
           <td > <input type="reason" name="reason" style="display:none;" id = <%= "rejectText_#{e}" %> class= <%= "displayReason_#{e}" %>> <button  type="button" style="display:none;" id ="submitReason" class= <%= "displayReason_#{e}" %>> submit</button> </td>
 
-          <td><%= link_to "See More", get_contact_management_path(org_url: x["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>
+
+            <td><%= link_to "See More", catalogMangViewer_path(org_url: x["url"] ), {target: :_blank} %> </td>
           <td><%= link_to "Check Duplicates", check_duplicates_path(org_url: x["url"] ),{ method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}%></td>
 
 
