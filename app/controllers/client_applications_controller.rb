@@ -36,16 +36,16 @@ class ClientApplicationsController < ApplicationController
         logger.debug("REDIRECTING TO THE NEW STEPS****************")
         redirect_to after_signup_path(:role)
       end
-
+    elsif user.sign_in_count.to_s == "1"
+      #mailer Story 405
+      adminUser = User.where(admin: true, client_application_id: @client_application.id).first
+      NotificationMailer.alertPendingContactJoined(user, adminUser).deliver
+      ##
     end 
-
     ## To Be. Background Job check_expiration_date
     all_ca = ClientApplication.all
 
       all_ca.each do |ca|
-        logger.debug("Here we are")
-        logger.debug("Expiration Date #{ca.client_agreement_expiration}")
-        logger.debug("Today DAte #{Date.today}")
         if ca.client_agreement_expiration == Date.today
           ca.agreement_signed = false
           ca.agreement_counter_sign = "Pending"
