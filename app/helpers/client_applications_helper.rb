@@ -56,5 +56,44 @@ module ClientApplicationsHelper
           logger.debug("Didn't pick an expiration date.")
         end 
 
-  end 
+  end
+
+  def send_invite_to_user(email, client_application,name,role)
+    logger.debug("********* In the send user invite method from the Client Application helper*********")
+    @user = User.invite!(email: email, name: name,roles: [role])
+    if @user.update(client_application_id: client_application , application_representative: true, admin: true)
+      return true
+    end
+  end
+
+  def send_referral_common(task_id,referred_application_id)
+
+    referred_by_id = Task.find(task_id).referral.client_application.id.to_s
+    ledger_master = LedgerMaster.where(task_id: task_id).first
+    ledger_master_id = ledger_master.id.to_s
+    referred_applicaiton = ClientApplication.find(referred_application_id)
+    client_user = referred_applicaiton.users.first
+    client_user_email = client_user.email
+
+    exixting_status= ledger_master.ledger_statuses.where(referred_application_id: referred_application_id )
+    logger.debug("send_referral_common--------the existing status value is : #{exixting_status.entries}")
+    if !exixting_status.empty?
+      logger.debug("send_referral_common--------the IF BLOCK OF EXISTING***************")
+    else
+      logger.debug("send_referral_common--------the ELSE BLOCK OF EXISTING***************")
+
+      logger.debug("send_referral_common--------the user is #{client_user}, ******** USER EMAIL IS : #{client_user_email}")
+      led_stat = LedgerStatus.new
+      led_stat.referred_application_id = referred_application_id
+      led_stat.ledger_master_id = ledger_master_id
+      led_stat.ledger_status = "Pending"
+      led_stat.referred_by_id = referred_by_id
+      if led_stat.save
+        logger.debug("send_referral_common--------NOTIFICATION FOR REFERAL WILL BE SENT**********")
+        RegistrationRequestMailer.referral_request(client_user_email,task_id, referred_application_id ).deliver
+        render :json=> {status: :ok, message: "Referral Request was sent" }
+      end
+    end
+  end
+
 end

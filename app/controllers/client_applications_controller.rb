@@ -12,6 +12,11 @@ class ClientApplicationsController < ApplicationController
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
     @referred_applications = LedgerStatus.where(referred_application_id: @client_application.id.to_s)
+    # @referred_applications.each do |ra|
+    #   ledger_master = ra.ledger_master
+    #   logger.debug("the ledger master is : #{ra.inspect}")
+    #   task = Task.find(ledger_master.task_id)
+    # end
     @about = AboutU.where(client_application_id: @client_application.id.to_s).entries
     @faqs = Faq.where(client_application_id: @client_application.id.to_s).entries
     # @referred_applications = LedgerStatus.all
@@ -32,7 +37,7 @@ class ClientApplicationsController < ApplicationController
         redirect_to after_signup_path(:role)
       end
 
-    end
+    end 
 
     ## To Be. Background Job check_expiration_date
     all_ca = ClientApplication.all
@@ -43,7 +48,7 @@ class ClientApplicationsController < ApplicationController
         logger.debug("Today DAte #{Date.today}")
         if ca.client_agreement_expiration == Date.today
           ca.agreement_signed = false
-          ca.agreement_counter_sign = "pending"
+          ca.agreement_counter_sign = "Pending"
         else 
         end 
 
@@ -142,7 +147,7 @@ class ClientApplicationsController < ApplicationController
       @client_application.agreement_counter_sign = "Pending"
       @client_application.agreement_signed = false
  
-      #@client_application.save
+      @client_application.save
     end
     @client_application.update(client_application_params)
     redirect_to root_path
@@ -212,7 +217,7 @@ class ClientApplicationsController < ApplicationController
 
     @result = helpers.catalog_table_content
 
-
+ 
     @pending_results = @result.select{|p| p["status"] == "Pending"}
 
     logger.debug("the RESULT OF THE SCAN IS : ************************ #{@pending_results}")
@@ -225,6 +230,31 @@ class ClientApplicationsController < ApplicationController
 
 
   end
+
+  def catalogMangViewer
+    details = get_catalog_details(ENV["CATALOG_TABLE_NAME"]) 
+    @url = details[:url]
+    logger.debug("WHAT IS THE URL  #{@url}")
+    @orgDetails = details[:OrgDetails]
+    logger.debug("OrgDetails:::: #{@orgDetails}")
+    @OrganizationName = details[:OrganizationName]
+    logger.debug("OrgName::: #{@OrganizationName}")
+    @OrgDescription = details[:OrganizationDescription]
+    logger.debug("OrgDesc::: #{@OrgDescription}")
+    @siteHash = details[:siteHash]
+    @poc = details[:poc]
+    @site = details[:OrgSites]
+    logger.debug("ORG SITES #{@site}")
+    @geoscope = details[:geoscope]
+    @program = details[:programs]
+    logger.debug("PROGRAM #{@program}")
+    @PopulationDescription = details[:popDesc]
+    @ProgramDescription = details[:progDesc]
+    @ServiceAreaDescription = details[:servArea]
+    @ProgramReferences = details[:progRef]
+
+
+  end 
 
   def get_contact_management #modal
 
@@ -239,7 +269,7 @@ class ClientApplicationsController < ApplicationController
     #@programHash = details[:programHash]
     #@geoScope = details[:geoScope]
     #@programs = details[:programs]
-    @url = details[:url],
+    @url = details[:url]
     logger.debug("WHAT IS THE URL  #{@url}")
     @orgDetails = details[:OrgDetails]
     logger.debug("OrgDetails:::: #{@orgDetails}")
@@ -890,8 +920,7 @@ class ClientApplicationsController < ApplicationController
     customer.client_agreement = params[:client_application][:client_agreement]
     customer.agreement_counter_sign = "Done"
     customer.agreement_signed = true
-    customer.client_agreement_sign_date = Date.today 
-    customer.client_agreement_expiration = helper.check_expiration_date(customer)
+    customer.client_agreement_sign_date = Date.today
     customer.save
 
     redirect_to pending_agreements_path

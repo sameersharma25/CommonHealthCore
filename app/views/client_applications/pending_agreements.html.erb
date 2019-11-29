@@ -1,6 +1,8 @@
 <!--Most Recent Date With Pending First -->
 <table class="table table-responsive table-bordered user-display">
+
   <thead>
+    <h3>Pending Agreement List </h3>
   <tr>
     <th>Agreement Type</th>
     <th>Agreement Status</th>
@@ -52,11 +54,12 @@
   <tr>
     <th >Name</th>
     <th >URL</th>
+    <th>Agreement Done</th>
   </tr>
   </thead>
   <tbody>
   <% i = 1%>
-  <%@applications.each do |a|%>
+  <%@all_agreements.each do |a|%>
       <tr>
         <td><%= a.name%></td>
         <%if !a.client_agreement.url.nil?%>
@@ -65,6 +68,11 @@
             <td> </td>
         <%end%>
 
+        <td><%= a.agreement_counter_sign %></td> 
+
+
+
+        
       </tr>
       <%i+=1%>
   <%end%>

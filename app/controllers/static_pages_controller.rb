@@ -17,7 +17,12 @@ class StaticPagesController < ApplicationController
 		#@admin_user = User.where(:admin => true, :client_application_id => master_app.id).entries
 
 		@admin_user = ClientApplication.where(master_application_status: true).first.users.first
+	end 
 
+	def redirect_page
+		#google oAuth redirect page when email is not present 
+	end 
 
+	def no_url
 	end 
 end

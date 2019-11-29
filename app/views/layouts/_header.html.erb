@@ -1,5 +1,11 @@
 
-<nav class="navbar navbar-default" style="background-color: #27aacc;">
+
+<% if current_user.present? %>
+  <%= button_to "Home", root_path, {method: :get, type: 'button', class: 'btn btn-primary navbar-right'}  %>
+<% end %>
+
+<!--
+<nav class="navbar navbar-default" id="CHCnavbar" style="background-color: #27aacc; display: none;">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href= "/users/sign_in" >CommonHealthCore</a>
@@ -9,12 +15,49 @@
       <li class="top_bar_elements"><%= link_to 'Logout', destroy_user_session_path, :id => 'logoutID', :method => :delete if current_user.present?%></li>
       <li class="top_bar_elements"><%= link_to "Sign up Request", new_registration_request_path if !current_user.present?%></li>
 
+
     </ul>
+    <button class="navbar-right" id="toggleClose" type="button">X</button>
   </div>
 </nav>
 
 
 <nav>
-        <button class="btn btn-primary" > <%= link_to 'Home', root_path if current_user.present? %> </button>
-      
+  <button type="button" class="btn btn-warning" id="toggleNav">Navigation</button>
 </nav>
+
+<script type="text/javascript">
+  var togglebtn = document.getElementById('toggleNav')  
+  var togglebtnCLOSE = document.getElementById('toggleClose') 
+
+  var navbar = document.getElementById('CHCnavbar')
+  console.log("Initial Status", localStorage["navbarStatus"])
+
+  if (localStorage["navbarStatus"] == "true" ){  
+    navbar.style.display = 'block';
+    togglebtn.style.display = 'none'
+  }else{  
+    navbar.style.display = 'none';
+    togglebtn.style.display = 'block'
+  };   
+
+  togglebtn.addEventListener('click', function(){
+          console.log("IN else", localStorage["navbarStatus"])
+          localStorage["navbarStatus"] = true;
+          navbar.style.display = 'block';
+          togglebtn.style.display = 'none'
+
+  });
+  togglebtnCLOSE.addEventListener('click', function(){
+        console.log("IN if true", localStorage["navbarStatus"])
+        navbar.style.display = 'none';
+        localStorage["navbarStatus"] = false;
+        togglebtn.style.display = 'block'
+        
+
+  })
+</script>
+-->
+
+
+

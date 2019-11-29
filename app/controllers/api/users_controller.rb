@@ -1,9 +1,12 @@
 module Api
   class UsersController < ActionController::Base
     include UsersHelper
-    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password]
+    require 'securerandom'
+    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password, :chcAuthentication]
     # before_action :authenticate_user!
-    load_and_authorize_resource class: :api, except: [:give_appointment_details_for_notification]
+    load_and_authorize_resource class: :api, except: [:give_appointment_details_for_notification, :chcAuthentication]
+
+    #skip_before_action :verify_authenticity_token, only: [:chcAuthentication]
 
     def get_all_users
       logger.debug("the user email you sent is : #{params[:email]}")
@@ -393,7 +396,7 @@ module Api
       @logo = user.client_application.logo.url
 
       render :json => { status: :ok, logo: @logo}
-      # render json: @logo, type: :jpeg, content_type: 'image/jpeg'
+      # render json: @logo, type: :jpeg, content_type: 'image/jpeg' 
 
     end 
 
@@ -401,6 +404,8 @@ module Api
       admin_details = ClientApplication.where(master_application_status: true).first.users.first
       render :json => { status: :ok, admin: admin_details}
     end 
+
+
 
     def user_profile
       user = User.find_by(email: params['email'])
@@ -434,7 +439,28 @@ module Api
         user.otp_required_for_login = params[:otp_required_for_login] if params[:otp_required_for_login]
         user.save
         render :json => {status: :ok, message: "User Details have been updated" }
+    end
+
+    def app_version
+      version =  ENV["APPLICATION_VERSION"]
+      render :json => {status: :ok, version: version }
+    end
+
+    ##secondary Oauth Below
+
+    def chcAuthentication
+        user = User.find_by(email: params[:userEmail])
+        user.tempToken = SecureRandom.hex
+        user.save 
+        #secCode = chcAuthentication.find_by(associatedURL: params[:originURL])
+        #if secCode === params[:accessToken]
+          render :json => { message: :ok, :redirect_url => "https://dev7.resourcestack.com/users/auth/google_oauth2"}
+        #else 
+          #render :json => {message: :unauthorized, :redirect_url => "originURL"}
+        #end 
     end 
+
+    ##oAuth Stuff
 
   end
 end

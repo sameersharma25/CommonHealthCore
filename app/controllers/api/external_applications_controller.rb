@@ -4,7 +4,7 @@ require 'json'
 
 module Api
   class ExternalApplicationsController < ActionController::Base
-
+    include ClientApplicationsHelper
     def render_script
       render html: '<div>html goes here</div>'.html_safe
     end
@@ -93,7 +93,7 @@ module Api
             logger.debug('the PATIENT ID WAS nil***************')
           end
       else
-        patient_check = Patient.where(client_application_id: external_application_id, first_name: patient.first_name).first
+        patient_check = Patient.where(client_application_id: external_application_id, first_name: patient.first_name, last_name: patient.last_name).first
         logger.debug("Creating patient for internal application******************* #{patient_check}")
         if patient_check.nil?
           logger.debug("Creating new Patient*********************")
@@ -171,7 +171,7 @@ module Api
       end
 
 
-    end
+    end 
 
 
     def send_task(p_id, task, ea_id, ledg_stat, old_patient)
@@ -182,6 +182,18 @@ module Api
       if external_application.external_application == true
         external_api = ExternalApiSetup.where(client_application_id: ea_id, api_for: "remove_patient").first
 
+        ### Story 401 Mailer/Notfication 
+        ##if currentTask.ca_id == currentUser
+
+        currentApplication = ClientApplication.find_by(id: old_patient.client_application_id)
+        if task.task_referred_from  != currentApplication.to_s && task.task_referred_from != nil
+          #mailer{ ReferralPartner, AssignedProvider, Description, Patient}
+          AlertParentAppMailer.taskReassigned(currentApplication.name, external_application.name, task.task_description, old_patient).deliver
+        else
+          logger.debug("Initial Transfer or current task is the same as current user ")
+        end 
+
+        ###
         task_hash = Hash.new
         task_hash["patient_id"] = p_id
         external_api.mapped_parameters.each do|mp|
@@ -279,33 +291,36 @@ module Api
 
     def send_referral
       task_id = params[:task_id]
-      referred_by_id = Task.find(params[:task_id]).referral.client_application.id.to_s
-      ledger_master = LedgerMaster.where(task_id: task_id).first
-      ledger_master_id = ledger_master.id.to_s
-      referred_applicaiton = ClientApplication.find(params[:referred_application_id])
-      client_user = referred_applicaiton.users.first
-      client_user_email = client_user.email
-
-      exixting_status= ledger_master.ledger_statuses.where(referred_application_id: params[:referred_application_id] )
-      logger.debug("the existing status value is : #{exixting_status.entries}")
-
-      if !exixting_status.empty?
-        logger.debug("the IF BLOCK OF EXISTING***************")
-      else
-        logger.debug("the ELSE BLOCK OF EXISTING***************")
-
-        logger.debug("the user is #{client_user}, ******** USER EMAIL IS : #{client_user_email}")
-        led_stat = LedgerStatus.new
-        led_stat.referred_application_id = params[:referred_application_id]
-        led_stat.ledger_master_id = ledger_master_id
-        led_stat.ledger_status = "Pending"
-        led_stat.referred_by_id = referred_by_id
-        if led_stat.save
-          logger.debug("NOTIFICATION FOR REFERAL WILL BE SENT**********")
-          RegistrationRequestMailer.referral_request(client_user_email,task_id, params[:referred_application_id] ).deliver
-          render :json=> {status: :ok, message: "Referral Request was sent" }
-        end
-      end
+      helpers.send_referral_common(task_id,params[:referred_application_id])
+      #
+      # referred_by_id = Task.find(params[:task_id]).referral.client_application.id.to_s
+      # ledger_master = LedgerMaster.where(task_id: task_id).first
+      # ledger_master_id = ledger_master.id.to_s
+      # referred_applicaiton = ClientApplication.find(params[:referred_application_id])
+      # client_user = referred_applicaiton.users.first
+      # client_user_email = client_user.email
+      #
+      # exixting_status= ledger_master.ledger_statuses.where(referred_application_id: params[:referred_application_id] )
+      # logger.debug("the existing status value is : #{exixting_status.entries}")
+      #
+      #
+      # if !exixting_status.empty?
+      #   logger.debug("the IF BLOCK OF EXISTING***************")
+      # else
+      #   logger.debug("the ELSE BLOCK OF EXISTING***************")
+      #
+      #   logger.debug("the user is #{client_user}, ******** USER EMAIL IS : #{client_user_email}")
+      #   led_stat = LedgerStatus.new
+      #   led_stat.referred_application_id = params[:referred_application_id]
+      #   led_stat.ledger_master_id = ledger_master_id
+      #   led_stat.ledger_status = "Pending"
+      #   led_stat.referred_by_id = referred_by_id
+      #   if led_stat.save
+      #     logger.debug("NOTIFICATION FOR REFERAL WILL BE SENT**********")
+      #     RegistrationRequestMailer.referral_request(client_user_email,task_id, params[:referred_application_id] ).deliver
+      #     render :json=> {status: :ok, message: "Referral Request was sent" }
+      #   end
+      # end
 
     end
 
@@ -341,10 +356,11 @@ module Api
         ref_urgency = ref.urgency
         in_rfl_hash = {referred_from: referred_from,task_id:t_id, task_description: task_description, status: in_rfl_status,
                        external_application_id: in_rfl.referred_application_id,patient_name: patient_name,ref_name: ref_name,
-                       ref_source: referred_from,ref_urgency: ref_urgency, p_last_name: p_last_name, p_first_name: p_first_name  }
+                       ref_source: referred_from,ref_urgency: ref_urgency, p_last_name: p_last_name, p_first_name: p_first_name,
+                       submission_date: in_rfl.created_at.strftime('%m/%d/%Y') }
         in_rfl_array.push(in_rfl_hash)
       end
-      render :json=> {status: :ok, incoming_referrals: in_rfl_array  }
+      render :json=> {status: :ok, incoming_referrals: in_rfl_array.sort_by{|h| h[:submission_date]}.reverse  }
     end
 
     def out_going_referrals
@@ -397,12 +413,14 @@ module Api
         second_hash = {}
         changes_array = []
         changes.keys.each do |k|
-          first_hash[k] = changes[k][0]
-          second_hash[k] = changes[k][1]
+          if changes[k][1] != ""
+            first_hash[k] = changes[k][0]
+            second_hash[k] = changes[k][1]
+          end
         end
         changes_array.push(first_hash)
         changes_array.push(second_hash)
-        created_at = ir.created_at
+        created_at = ir.created_at.strftime("%D %T")
         internal_record_hash = {changes: changes_array, created_at: created_at}
         internal_record_array.push(internal_record_hash)
       end
@@ -418,12 +436,14 @@ module Api
           second_hash = {}
           changes_array = []
           changes.keys.each do |k|
-            first_hash[k] = changes[k][0]
-            second_hash[k] = changes[k][1]
+            if changes[k][1] != ""
+              first_hash[k] = changes[k][0]
+              second_hash[k] = changes[k][1]
+            end
           end
           changes_array.push(first_hash)
           changes_array.push(second_hash)
-          created_at = er.created_at
+          created_at = er.created_at.strftime("%D %T")
           external_record_hash = {changes: changes_array, created_at: created_at}
           external_record_array.push(external_record_hash)
         end

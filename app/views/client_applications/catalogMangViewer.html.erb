@@ -1,10 +1,3 @@
-<div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal">x</button>
-  <h4 class="modal-title" id="myModalLabel">Details</h4>
-</div>
-
-<div class="modal-body">
-<!--Modal Body -->
 <div class="container-fluid">
 <button id="collectButton">Update</button> 
   <h3 id="portalStatus"></h3>
@@ -13,9 +6,7 @@
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
-
-
-
+ 
               <%= label_tag :Type %>
               <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
               <%= label_tag :HomePageURL %>
@@ -28,8 +19,10 @@
                     <% @OrganizationName.each do |pd| %>
                       <%= label_tag :Xpath %>
                       <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
-                      <%= label_tag :Text %>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+
+                      <%= label_tag :Text %><br>
+                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+
                       <%= label_tag :Domain %>
                       <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
                     <% end %>
@@ -43,8 +36,11 @@
                     <% @OrgDescription.each do |pd| %>
                       <%= label_tag :Xpath %>
                       <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
-                      <%= label_tag :Text %>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                      
+                      <%= label_tag :Text %><br>
+                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+
+
                       <%= label_tag :Domain %>
                       <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
                     <% end %>
@@ -119,8 +115,8 @@
                         <div class="programPopulationDescription" >
                           <%= label_tag :Xpath %>
                           <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true  %><br>
-                          <%= label_tag :Text %>
-                          <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                      <%= label_tag :Text %><br>
+                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                           <%= label_tag :Domain %>
                           <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true  %><br>
                         </div>
@@ -134,8 +130,8 @@
                       <div class="programProgramDescription" >
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true  %><br>
-                        <%= label_tag :Text %>
-                        <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                      <%= label_tag :Text %><br>
+                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                         <%= label_tag :Domain %>
                         <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true  %><br>
                       </div>
@@ -149,8 +145,8 @@
                       <div class="programServiceAreaDescription" >
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                        <%= label_tag :Text %>
-                        <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                      <%= label_tag :Text %><br>
+                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                         <%= label_tag :Domain %>
                         <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
                       </div>
@@ -163,8 +159,8 @@
                       <div class="programProgramReferences" >
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                        <%= label_tag :Text %>
-                        <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                      <%= label_tag :Text %><br>
+                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                         <%= label_tag :Domain %>
                         <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
                       </div>
@@ -318,8 +314,8 @@
                               <div class="siteSiteReference">
                                   <%= label_tag :Xpath %>
                                   <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                                  <%= label_tag :Text %>
-                                  <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                                  <%= label_tag :Text %><br>
+                                  <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                                   <%= label_tag :Domain %>
                                   <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
                               </div>
@@ -375,8 +371,6 @@
 
 <!-- End Container-->
 </div>
-
-
 
 <!-- -->
 
@@ -701,8 +695,6 @@ organizationDetails["OrgSites"] = orgSiteArray
 
 
 
-<!--Modal Body -->
-</div>
 
 
 

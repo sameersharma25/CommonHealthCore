@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   post "/parameters_mapping", to: "client_applications#parameters_mapping"
 
   get "/download_plugin", to: "client_applications#download_plugin"
+  get "/catalogMangViewer", to: "client_applications#catalogMangViewer"
   post "/get_contact_management", to: "client_applications#get_contact_management"
   post "/master_provider_details", to: "client_applications#master_provider_details"
 
@@ -99,6 +100,8 @@ Rails.application.routes.draw do
   get "about_us_page", to: "static_pages#about"
   get "faq_page", to: "static_pages#faq"
   get "admin_contact", to: "static_pages#admin_contact"
+  get "redirect_page", to: "static_pages#redirect_page"
+  get "no_url", to: "static_pages#no_url"
 
   get "/reset_password", to: "reset_password#reset_password"
   post "/reset_password_part_two", to: "reset_password#reset_password_part_two" 
@@ -161,6 +164,11 @@ Rails.application.routes.draw do
     get 'admin_details', to: 'users#admin_details'
     post 'user_profile', to: 'users#user_profile'
     post 'edit_profile', to: 'users#edit_profile'
+    post 'app_version', to: "users#app_version"
+    
+
+    post 'chcAuthentication', to: 'users#chcAuthentication' 
+
 
 
     post 'update_patient', to: "patients#update_patient"
@@ -195,6 +203,7 @@ Rails.application.routes.draw do
     post "ledg_rec_create", to: "referrals#create_ledger_record"
     post "ext_app_ledger", to: "referrals#ext_app_ledger"
     post "rfl_assessments", to: "referrals#referral_assessments"
+    post "org_invite", to: "referrals#invite_org"
 
 
     post "msg_send", to: "communications#send_message"
