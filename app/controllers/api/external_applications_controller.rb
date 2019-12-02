@@ -291,7 +291,7 @@ module Api
 
     def send_referral
       task_id = params[:task_id]
-      helpers.send_referral_common(task_id,params[:referred_application_id])
+      return_status=  helpers.send_referral_common(task_id,params[:referred_application_id])
       #
       # referred_by_id = Task.find(params[:task_id]).referral.client_application.id.to_s
       # ledger_master = LedgerMaster.where(task_id: task_id).first
@@ -321,6 +321,7 @@ module Api
       #     render :json=> {status: :ok, message: "Referral Request was sent" }
       #   end
       # end
+      render :json=> {status: return_status[1], message: return_status[0] }
 
     end
 

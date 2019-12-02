@@ -61,6 +61,7 @@ module ClientApplicationsHelper
   def send_invite_to_user(email, client_application,name,role)
     logger.debug("********* In the send user invite method from the Client Application helper*********")
     @user = User.invite!(email: email, name: name,roles: [role])
+    logger.debug("********* In the send user invite method from the Client Application helper after invite #{@user.inspect}*********")
     if @user.update(client_application_id: client_application , application_representative: true, admin: true)
       return true
     end
@@ -79,6 +80,8 @@ module ClientApplicationsHelper
     logger.debug("send_referral_common--------the existing status value is : #{exixting_status.entries}")
     if !exixting_status.empty?
       logger.debug("send_referral_common--------the IF BLOCK OF EXISTING***************")
+      req_status = "ok"
+      message = "Referral Request already exists"
     else
       logger.debug("send_referral_common--------the ELSE BLOCK OF EXISTING***************")
 
@@ -91,9 +94,13 @@ module ClientApplicationsHelper
       if led_stat.save
         logger.debug("send_referral_common--------NOTIFICATION FOR REFERAL WILL BE SENT**********")
         RegistrationRequestMailer.referral_request(client_user_email,task_id, referred_application_id ).deliver
-        render :json=> {status: :ok, message: "Referral Request was sent" }
+        # render :json=> {status: :ok, message: "Referral Request was sent" }
+        req_status = "ok"
+        message = "Referral Request sent"
       end
     end
+    return message, req_status
   end
+
 
 end
