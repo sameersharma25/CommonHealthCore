@@ -34,7 +34,7 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { :host => 'localhost' }
+  config.action_mailer.default_url_options = { :host => 'dev7.resourcestack.com' }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -52,7 +52,8 @@ Rails.application.configure do
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
-  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  #config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  config.file_watcher = ActiveSupport::FileUpdateChecker
     ###adding for production
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
@@ -62,7 +63,7 @@ Rails.application.configure do
     port:            '587',
     authentication:  :login,
     user_name:       'technicalsupport@resourcestack.com',
-    password:        'Resource123', 
+    password:        'ZAQ!2wsxZAQ!2wsx', 
     domain:          'commonhealthcore.com',
     enable_starttls_auto: true
   }
