@@ -1,8 +1,13 @@
 <div class="container-fluid">
 <button id="collectButton">Update</button> 
   <h3 id="portalStatus"></h3>
-          <h6 id ="theurl"> <%= @url.first %> </h6>
+          <h6 id ="theurl"> <%= @url %> </h6><br>
 
+<!-- for PDF Implementation 
+          <% @pdfLinkSet.each do |x| %>
+            <%= x %>
+          <% end %>
+-->
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
