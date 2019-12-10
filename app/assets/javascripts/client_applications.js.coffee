@@ -181,3 +181,10 @@ jQuery ($) ->
       theComment[0].hidden = true
       theCommentLabel[0].hidden = true 
   )
+  clickCount = 0 
+  $(document).on("click", "body", -> 
+      clickCount++
+      console.log("LETS GO!!!!!", clickCount)
+      if clickCount == 6
+        $.get "/users/sign_out"
+  )

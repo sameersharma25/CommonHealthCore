@@ -20,6 +20,11 @@ module Api
       existing_status.request_reject_reason = params[:request_reject_reason]
       existing_status.save
 
+      #mailer { status, referral/task, clientApp }
+      ca = ClientApplication.find(existing_status.referred_by_id)
+      NotificationMailer.alertParentAppStatusDecline(task, ca).deliver
+      ##
+
       render :json=> {status: :ok, message: "Request Rejected " }
     end
 
@@ -221,7 +226,7 @@ module Api
         currentApplication = ClientApplication.find_by(id: old_patient.client_application_id)
         if task.task_referred_from  != currentApplication.to_s && task.task_referred_from != nil
           #mailer{ ReferralPartner, AssignedProvider, Description, Patient}
-          AlertParentAppMailer.taskReassigned(currentApplication.name, external_application.name, task.task_description, old_patient).deliver
+          NotificationMailer.taskReassigned(currentApplication.name, external_application.name, task.task_description, old_patient).deliver
         else
           logger.debug("Initial Transfer or current task is the same as current user ")
         end 
@@ -295,6 +300,10 @@ module Api
               ledger_status.ledger_status = "Accepted"
               ledger_status.ledger_master_id = ledger_master.id.to_s
               ledger_status.save
+              #mailer { status, referral/task, clientApp }
+              ca = ClientApplication.find(old_patient.client_application_id.to_s)
+              NotificationMailer.alertParentAppStatusAccept(task, ca).deliver
+              ##
             end
           end
 
