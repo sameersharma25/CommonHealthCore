@@ -246,14 +246,12 @@ class ClientApplicationsController < ApplicationController
     @site = details[:OrgSites]
     #logger.debug("ORG SITES #{@site}")
     @geoscope = details[:geoscope]
-    @program = details[:programs]
+    @program = details[:programs] 
     logger.debug("PROGRAM #{@program}")
     @PopulationDescription = details[:popDesc]
     @ProgramDescription = details[:progDesc]
     @ServiceAreaDescription = details[:servArea]
     @ProgramReferences = details[:progRef]
-
-
 
 #this is for the PDF implementation 
 =begin   
@@ -290,11 +288,14 @@ class ClientApplicationsController < ApplicationController
           end 
       end 
 
-    pdfSET.each do |thisPDF|
+
+    #pdfSET.each do |thisPDF|
       #For Testing
-      #pdfRequest = {}
-      #pdfRequest[:dynamoURL] = 'kuducoffeeandcraftbeer.com'
-      #pdfRequest[:secondaryURL] = 'https://kaladi.com/locations'
+      @pdfLinkSet = []
+      pdfRequest = {}
+      pdfRequest[:dynamoURL] = 'nwaccessfund.org'
+      pdfRequest[:secondaryURL] = 'http://www.nwaccessfund.org/'
+
       #First Perform a GET of the URL, if status = none, CREATE
       uri = URI("http://localhost:3030/scrapePDF")
       header = {'Content-Type' => 'application/json'}
@@ -302,6 +303,7 @@ class ClientApplicationsController < ApplicationController
       puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
       # http.use_ssl = true
       request = Net::HTTP::Get.new(uri.path, header)
+
       request.body = thisPDF.to_json
       # Send the request
       response = http.request(request)
@@ -315,6 +317,7 @@ class ClientApplicationsController < ApplicationController
         puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
         # http.use_ssl = true
         request = Net::HTTP::Post.new(uri.path, header)
+
         request.body = thisPDF.to_json
         # Send the request
         response = http.request(request)
@@ -330,8 +333,10 @@ class ClientApplicationsController < ApplicationController
           end 
       end 
 
+
     end #end set
 =end
+
 
   end 
 
