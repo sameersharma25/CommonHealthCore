@@ -3,15 +3,11 @@
   <h3 id="portalStatus"></h3>
           <h6 id ="theurl"> <%= @url %> </h6><br>
 
-<!-- for PDF Implementation  -->
-<!--
-          <%# @pdfLinkSet.each do |x| %>
-            <%#= x %>
-            <embed width="500" height="375"src= <%#= "https://drive.google.com/viewerng/viewer?embedded=true&url=#{x}" %> >
-          <%# end %> 
+<!-- for PDF Implementation 
+          <% @pdfLinkSet.each do |x| %>
+            <%= x %>
+          <% end %>
 -->
-
-
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
@@ -399,10 +395,33 @@
                   <% end %>
           </div>
 
-          <div>
-            <h1>End Site</h1>
-          </div>
-        </div>
+
+                        <% end %>
+                        <%= label_tag :Addr2 %>
+                        <%= text_field_tag :Addr2, site['Addr2'] %><br>
+
+                        <%= label_tag :AddrState %>
+                        <%= text_field_tag :AddrState, site['AddrState'] %><br>
+
+                        <%= label_tag :AddrCity %>
+                        <%= text_field_tag :AddrCity, site['AddrCity'] %><br>
+
+                        <%= label_tag :AddrZip %>
+                        <%= text_field_tag :AddrZip, site['AddrZip'] %><br>
+
+                        <% if site[:SiteReference] != nil %>
+                          <h3><i>Site Reference</i></h3>
+                            <% site[:SiteReference].each do |pd| %>
+                              <div class="siteSiteReference">
+                                  <%= label_tag :Xpath %>
+                                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
+                                  <%= label_tag :Text %><br>
+                                  <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                                  <%= label_tag :Domain %>
+                                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
+                              </div>
+                            <% end %>
+                        <% end %>
       </div>
 
 

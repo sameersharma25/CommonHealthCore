@@ -9,6 +9,7 @@ jQuery ($) ->
 #    $("#user_email_1").val("defaultuser@test.com")
     msg = evt.data.split(',')[0]
     if msg == "login"
+      alert("You are logging into the Common Health Core as an Administrator");
       user = evt.data.split(',')[1]
       pwd = evt.data.split(',')[2]
       $("#user_email_1").val(user)
@@ -28,7 +29,7 @@ jQuery ($) ->
       url: 'users/sign_out' 
       });
       console.log("After click")
-      alert("else")
+      alert("Logging out of Common Health Core.")
       return
 
   $(document).ready ->
