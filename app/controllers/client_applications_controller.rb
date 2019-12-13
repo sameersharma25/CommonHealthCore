@@ -259,8 +259,8 @@ class ClientApplicationsController < ApplicationController
     pdfSET = []
     @pdfLinkSet = []
       @program.each do |k,v|
-            if k['PopulationDescription'].present?
-                  k['PopulationDescription'].each do |x|
+            if k['ProgramDescription'].present?
+                  k['ProgramDescription'].each do |x|
                     logger.debug("program we got #{x['Domain']}")
                         #if x['Domain'] != 'n/a'
                             #push each to array
@@ -289,22 +289,26 @@ class ClientApplicationsController < ApplicationController
           end 
       end 
 
-    #pdfSET.each do |thisPDF|
+#=end
+
+  pdfSET.each do |thisPDF|
       #For Testing
       @pdfLinkSet = []
-      pdfRequest = {}
-      pdfRequest[:dynamoURL] = 'nwaccessfund.org'
-      pdfRequest[:secondaryURL] = 'http://www.nwaccessfund.org/'
+      #pdfRequest = {}
+      #pdfRequest[:dynamoURL] = 'drinkblackeye.com'
+      #pdfRequest[:secondaryURL] = 'https://www.drinkblackeye.com/menu-1'
       #First Perform a GET of the URL, if status = none, CREATE
+
       uri = URI("http://localhost:3030/scrapePDF")
       header = {'Content-Type' => 'application/json'}
       http = Net::HTTP.new(uri.host, uri.port)
       puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
       # http.use_ssl = true
       request = Net::HTTP::Get.new(uri.path, header)
-      #request.body = thisPDF.to_json
 
-      request.body =  pdfRequest.to_json
+      request.body = thisPDF.to_json
+      #request.body =  pdfRequest.to_json
+
       # Send the request
       response = http.request(request)
       puts "response1 #{response.body}"
@@ -317,26 +321,33 @@ class ClientApplicationsController < ApplicationController
         puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
         # http.use_ssl = true
         request = Net::HTTP::Post.new(uri.path, header)
-        #request.body = thisPDF.to_json
-        request.body =  pdfRequest.to_json
+
+        request.body = thisPDF.to_json
+        #request.body =  pdfRequest.to_json
+
         # Send the request
         response = http.request(request)
         puts "response #{response.body}"
         puts JSON.parse(response.body)
         myPDF = JSON.parse(response.body)
-        puts myPDF['pdf_s3_link']
+
+        puts "PARSED #{myPDF}"
+
+        myPDF['pdf'].each do |x|
+           @pdfLinkSet.push(x)
+        end 
+
       else
         logger.debug("In The Else")
           myResponse['pdf'].each do |x|
-            puts x['pdf_s3_link']
-            @pdfLinkSet.push(x['pdf_s3_link'])
+            puts "here #{x}"
+            @pdfLinkSet.push(x)
           end 
       end 
 
-   # end #end set
-=end 
+ end #end set loop
 
-
+=end
   end 
 
   def get_contact_management #modal
