@@ -1,13 +1,29 @@
-<div class="container-fluid">
-<button id="collectButton">Update</button> 
-  <h3 id="portalStatus"></h3>
-          <h6 id ="theurl"> <%= @url %> </h6><br>
+<div class="container-fluid" style="display: none;">
+    <div class ="row" id="pdfSection">
 
-<!-- for PDF Implementation 
-          <% @pdfLinkSet.each do |x| %>
-            <%= x %>
-          <% end %>
--->
+        <ul>
+            <% @pdfLinkSet.each do |x| %>
+
+                <li style="display: inline-block;">
+                    <%= x['url'] %><br>
+                    <button class="pdfID" type="button">refresh</button>
+                    <p style="display: none;"><%= x['_id'] %></p><br>
+
+                    <button type="button" class="pdfToggle">toggle</button><br>
+
+                    <embed class="pdfSelector"  width="250" height="188" src= <%= "https://drive.google.com/viewerng/viewer?embedded=true&url=#{x['pdf_s3_link']}" %> >
+                </li>
+            <% end %> 
+        </ul>      
+    </div>
+</div>
+
+
+<div class="container-fluid" id="createMargin">
+   <h3 class="pull-right" id ="theurl"> <%= @url %> </h3><br>
+    <button id="collectButton">Update</button> 
+     <h3 id="portalStatus"></h3>
+         
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
@@ -19,11 +35,6 @@
 
               <%= label_tag :HomePageURL %>
               <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL, readonly: true %><br>
-
-
-
-
-
 
               <div id="orgName" >
 
@@ -42,9 +53,8 @@
                 <% end %>
             </div>
 
-              <div id="orgDesc" >
+            <div id="orgDesc" >
                 <h3><i>Organization Description</i></h3>
-
                 <% if @OrgDescription != nil %>
                     <% @OrgDescription.each do |pd| %>
                       <%= label_tag :Xpath %>
@@ -59,8 +69,8 @@
                     <% end %>
                 <% end %>
             </div>
-
     </div>
+
     <div>
       <div class="col-md-6" id="GeoScopeForm">
           <h1>Geoscope</h1>
@@ -81,8 +91,6 @@
               <%= text_field_tag :City, @geoscope['City'] %>  <br>
               <%= label_tag :County %> 
               <%= text_field_tag :County, @geoscope['County'] %> <br> 
-
-
       </div>
     </div>
   </div>
@@ -92,15 +100,15 @@
 
     <h1>Programs</h1>
       <% @program.each do |x| %>
-      <% if x['InactiveProgram'] == true %>
-          <p>Inactive Program</p>
-          <button type="button" class="toggleProgram">Toggle Program</button>
-          <div class=" ProgramForm row" style="display: none;">
+            <% if x['InactiveProgram'] == true %>
+                <p>Inactive Program</p>
+                <button type="button" class="toggleProgram">Toggle Program</button>
+                <div class=" ProgramForm row" style="display: none;">
+            <% else %>
+              <!-- <div class=" ProgramForm row"> -->
+                <div class=" ProgramForm row">
+            <% end %>
 
-      <% else %>
-        <!-- <div class=" ProgramForm row"> -->
-          <div class=" ProgramForm row">
-      <% end %>
             <div class="col-md-4">
                     <%= label_tag :InactiveProgram %>
                     <%= check_box_tag :InactiveProgram, x['InactiveProgram'], x['InactiveProgram']%><br>
@@ -285,156 +293,123 @@
 
             </div>
 
-        </div>
+        </div><br>
+      <% end %> <br>
+
+
+
+
+
+    <h1>Sites</h1>
+    <% if @site != [nil] %>
+      <% @site.each do |site| %>
+
+          <% if site['InactiveSite'] == true %>
+              <p>Inactive Site </p>
+              <button type="button" class="toggleProgram">Toggle Site</button>
+              <div class="SiteForm" style="display: none;">
+          <% else %>
+              <div class="SiteForm">
+          <% end %>
+                <div class="row">
+                    <div class="col-md-4">
+                                  <%= label_tag :InactiveSite %>
+                                  <%= check_box_tag :InactiveSite, site['InactiveSite'], site['InactiveSite']%><br>
+
+                                  <%= label_tag :LocationName %>
+                                  <%= text_field_tag :LocationName, site['LocationName'] %><br>
+
+                                    <h3><i>Address One</i></h3>
+                                      <% if site['Addr1'] != nil %>
+                                          <% site['Addr1'].each do |pd| %>
+                                                <div class="siteAddr1">
+                                                  <%= label_tag :Xpath %>
+                                                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
+                                                  <%= label_tag :Text %>
+                                                  <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
+                                                  <%= label_tag :Domain %>
+                                                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
+                                                </div>
+                                          <% end %>
+
+                                      <% end %>
+                                  <%= label_tag :Addr2 %>
+                                  <%= text_field_tag :Addr2, site['Addr2'] %><br>
+
+                                  <%= label_tag :AddrState %>
+                                  <%= text_field_tag :AddrState, site['AddrState'] %><br>
+
+                                  <%= label_tag :AddrCity %>
+                                  <%= text_field_tag :AddrCity, site['AddrCity'] %><br>
+
+                                  <%= label_tag :AddrZip %>
+                                  <%= text_field_tag :AddrZip, site['AddrZip'] %><br>
+
+                                      <% if site[:SiteReference] != nil %>
+                                        <h3><i>Site Reference</i></h3>
+                                          <% site[:SiteReference].each do |pd| %>
+                                            <div class="siteSiteReference">
+                                                <%= label_tag :Xpath %>
+                                                <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
+                                                <%= label_tag :Text %><br>
+                                                <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                                                <%= label_tag :Domain %>
+                                                <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
+                                            </div>
+                                          <% end %>
+                                      <% end %>
+                    </div>
+
+                    <div class="col-md-4">
+                                      <%= label_tag :ServiceDeliverySite %>
+                                      <%= check_box_tag :ServiceDeliverySite, site['ServiceDeliverySite'], site['ServiceDeliverySite'].to_s.downcase == "true" %><br>
+                                      <%= label_tag :AdminSite %>
+                                      <%= check_box_tag :AdminSite, site['AdminSite'] , site['AdminSite'].to_s.downcase == "true" %><br>
+                                      <%= label_tag :ResourceDirectory %>
+                                      <%= check_box_tag :ResourceDirectory, site['ResourceDirectory'], site['ResourceDirectory'].to_s.downcase == "true" %><br>
+                                      <%= label_tag :SelectSiteID %>
+                                      <%= text_field_tag :SelectSiteID, site['SelectSiteID'], readonly: true  %><br>
+                                      <%= label_tag :Webpage %>
+                                      <%= text_field_tag :Webpage, site['Webpage'] %><br>
+                    </div>
+
+                    <div class="col-md-4">
+
+                            <h3><i>POC</i></h3>
+                              <% if site['POCs'] != nil %>
+                                <% site['POCs'].each do |pd| %>
+                                    <div class="sitePOC">
+                                        <%= label_tag :DefaultPOC %>
+                                        <%= check_box_tag :DefaultPOC, pd['poc']['DefaultPOC'] , pd['poc']['DefaultPOC'.to_s.downcase == "true" ]%><br>
+                                        <%= label_tag :id %>
+                                        <%= text_field_tag :id, pd['id'], name: :id, readonly: true   %><br>
+                                        <%= label_tag :OfficePhone %>
+                                        <%= text_field_tag :OfficePhone, pd['poc']['OfficePhone'] %><br>
+                                        <%= label_tag :Email %>
+                                        <%= text_field_tag :Email, pd['poc']['Email'] %><br>
+                                        <%= label_tag :Referrals %>
+                                        <%= text_field_tag :Referrals, pd['poc']['Referrals'] %><br>
+                                        <%= label_tag :ContactPage %>
+                                        <%= text_field_tag :ContactPage, pd['poc']['ContactPage'] %><br>
+                                        <%= label_tag :Title %>
+                                        <%= text_field_tag :Title, pd['poc']['Title'] %><br>
+                                        <%= label_tag :MobilePhone %>
+                                        <%= text_field_tag :MobilePhone, pd['poc']['MobilePhone'] %><br>
+                                        <%= label_tag :Name %>
+                                        <%= text_field_tag :Name, pd['poc']['Name'] %><br>
+                                    </div>
+                                <% end %>
+                            <% end %>
+                    </div>
+                </div><!-- end row -->
+              </div><!-- end site form -->  
       <% end %>
-
-
-
-
-<h1>Sites</h1>
-
-<% if @site != [nil] %>
-<% @site.each do |site| %>
-
-  <% if site['InactiveSite'] == true %>
-      <p>Inactive Site </p>
-      <button type="button" class="toggleProgram">Toggle Site</button>
-      <div class="SiteForm" style="display: none;">
-  <% else %>
-    <div class="SiteForm">
-  <% end %>
-      
-        <div class="row">
-          <div class="col-md-4">
-                        <%= label_tag :InactiveSite %>
-                        <%= check_box_tag :InactiveSite, site['InactiveSite'], site['InactiveSite']%><br>
-
-                              <%= label_tag :LocationName %>
-                              <%= text_field_tag :LocationName, site['LocationName'] %><br>
-
-                                <h3><i>Address One</i></h3>
-                                <% if site['Addr1'] != nil %>
-                                <% site['Addr1'].each do |pd| %>
-                                      <div class="siteAddr1">
-                                        <%= label_tag :Xpath %>
-                                        <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                                        <%= label_tag :Text %>
-                                        <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
-                                        <%= label_tag :Domain %>
-                                        <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
-                                      </div>
-                                <% end %>
-
-                            <% end %>
-                            <%= label_tag :Addr2 %>
-                            <%= text_field_tag :Addr2, site['Addr2'] %><br>
-
-                            <%= label_tag :AddrState %>
-                            <%= text_field_tag :AddrState, site['AddrState'] %><br>
-
-                            <%= label_tag :AddrCity %>
-                            <%= text_field_tag :AddrCity, site['AddrCity'] %><br>
-
-                            <%= label_tag :AddrZip %>
-                            <%= text_field_tag :AddrZip, site['AddrZip'] %><br>
-
-                            <% if site[:SiteReference] != nil %>
-                              <h3><i>Site Reference</i></h3>
-                                <% site[:SiteReference].each do |pd| %>
-                                  <div class="siteSiteReference">
-                                      <%= label_tag :Xpath %>
-                                      <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                                      <%= label_tag :Text %><br>
-                                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
-                                      <%= label_tag :Domain %>
-                                      <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
-                                  </div>
-                                <% end %>
-                            <% end %>
-          </div>
-
-          <div class="col-md-4">
-                            <%= label_tag :ServiceDeliverySite %>
-                            <%= check_box_tag :ServiceDeliverySite, site['ServiceDeliverySite'], site['ServiceDeliverySite'].to_s.downcase == "true" %><br>
-                            <%= label_tag :AdminSite %>
-                            <%= check_box_tag :AdminSite, site['AdminSite'] , site['AdminSite'].to_s.downcase == "true" %><br>
-                            <%= label_tag :ResourceDirectory %>
-                            <%= check_box_tag :ResourceDirectory, site['ResourceDirectory'], site['ResourceDirectory'].to_s.downcase == "true" %><br>
-                            <%= label_tag :SelectSiteID %>
-                            <%= text_field_tag :SelectSiteID, site['SelectSiteID'], readonly: true  %><br>
-                            <%= label_tag :Webpage %>
-                            <%= text_field_tag :Webpage, site['Webpage'] %><br>
-          </div>
-
-          <div class="col-md-4">
-
-                  <h3><i>POC</i></h3>
-                    <% if site['POCs'] != nil %>
-                      <% site['POCs'].each do |pd| %>
-                          <div class="sitePOC">
-                              <%= label_tag :DefaultPOC %>
-                              <%= check_box_tag :DefaultPOC, pd['poc']['DefaultPOC'] , pd['poc']['DefaultPOC'.to_s.downcase == "true" ]%><br>
-                              <%= label_tag :id %>
-                              <%= text_field_tag :id, pd['id'], name: :id, readonly: true   %><br>
-                              <%= label_tag :OfficePhone %>
-                              <%= text_field_tag :OfficePhone, pd['poc']['OfficePhone'] %><br>
-                              <%= label_tag :Email %>
-                              <%= text_field_tag :Email, pd['poc']['Email'] %><br>
-                              <%= label_tag :Referrals %>
-                              <%= text_field_tag :Referrals, pd['poc']['Referrals'] %><br>
-                              <%= label_tag :ContactPage %>
-                              <%= text_field_tag :ContactPage, pd['poc']['ContactPage'] %><br>
-                              <%= label_tag :Title %>
-                              <%= text_field_tag :Title, pd['poc']['Title'] %><br>
-                              <%= label_tag :MobilePhone %>
-                              <%= text_field_tag :MobilePhone, pd['poc']['MobilePhone'] %><br>
-                              <%= label_tag :Name %>
-                              <%= text_field_tag :Name, pd['poc']['Name'] %><br>
-                          </div>
-                      <% end %>
-                  <% end %>
-          </div>
-
-
-                        <% end %>
-                        <%= label_tag :Addr2 %>
-                        <%= text_field_tag :Addr2, site['Addr2'] %><br>
-
-                        <%= label_tag :AddrState %>
-                        <%= text_field_tag :AddrState, site['AddrState'] %><br>
-
-                        <%= label_tag :AddrCity %>
-                        <%= text_field_tag :AddrCity, site['AddrCity'] %><br>
-
-                        <%= label_tag :AddrZip %>
-                        <%= text_field_tag :AddrZip, site['AddrZip'] %><br>
-
-                        <% if site[:SiteReference] != nil %>
-                          <h3><i>Site Reference</i></h3>
-                            <% site[:SiteReference].each do |pd| %>
-                              <div class="siteSiteReference">
-                                  <%= label_tag :Xpath %>
-                                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                                  <%= label_tag :Text %><br>
-                                  <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
-                                  <%= label_tag :Domain %>
-                                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
-                              </div>
-                            <% end %>
-                        <% end %>
-      </div>
-
-
-<!-- -->
-<% end %>
-  <!-- --->
-<% end %>
-
+    <% end %>
 
 <!-- End Container-->
 </div>
 
-<!-- -->
+
 
 
 <script type="text/javascript">
@@ -761,6 +736,65 @@ organizationDetails["OrgSites"] = orgSiteArray
                 } else {
                   console.log(XHR.responseText)
                   document.getElementById('portalStatus').innerText = "Something Went Wrong..."
+                }
+              };
+          }
+
+  }
+  //
+      var togglePdf  = document.getElementsByClassName('pdfToggle')
+        for (var i =0; i < togglePdf.length; i++){
+           togglePdf[i].addEventListener('click', function(e){
+              if (e.srcElement.nextElementSibling.nextElementSibling.height < 200){
+                  e.srcElement.nextElementSibling.nextElementSibling.height = "1000";
+                  e.srcElement.nextElementSibling.nextElementSibling.width = "750";
+                  document.getElementById('pdfSection').style.height = "400px";
+              } else {
+                  e.srcElement.nextElementSibling.nextElementSibling.height = "188";
+                  e.srcElement.nextElementSibling.nextElementSibling.width = "250"
+                  document.getElementById('pdfSection').style.height = '250px'
+            }
+           })
+        }
+        ///////////
+      var resetPDF  = document.getElementsByClassName('pdfID')
+        for (var i =0; i < resetPDF.length; i++){
+           resetPDF[i].addEventListener('click', function(e){
+              console.log(" DELETE THIS ID", e.srcElement.nextElementSibling.innerText)
+              deletePDF(e.srcElement.nextElementSibling.innerText)
+
+           })
+        }
+
+  ////
+  function deletePDF(data){
+        catalog = {}
+        catalog['_id'] = data
+        console.log("WHAT ID DELETE", catalog)
+        var crud = JSON.stringify(catalog);
+          //  
+         sendCataData(crud);
+
+         function sendCataData(crud) {
+          var XHR = new XMLHttpRequest();
+          XHR.addEventListener("load", function(event) {
+          });
+          //error
+          XHR.addEventListener("error", function(event) {
+          alert('Oops! Something went wrong.');
+          });
+
+          XHR.open("DELETE", "http://localhost:3030/scrapePDF");
+
+          XHR.setRequestHeader('Content-Type', 'application/json');
+          XHR.send(crud);
+              XHR.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    response = this.responseText
+                    console.log(this.response)
+
+                } else {
+                  console.log(XHR.responseText)
                 }
               };
           }
