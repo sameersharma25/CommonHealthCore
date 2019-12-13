@@ -244,13 +244,19 @@ module Api
     end
 
     def create_task
-      task = Task.new
-      # if params[:solution_id]
-      #   referral = Solution.find(params[:solution_id]).obstacle.need.referral
-      #   task.solution_id = params[:solution_id]
-      # else
+      #task = Task.new
+      if !params[:solution_id].blank?
+        referral = Solution.find(params[:solution_id]).obstacle.need.referral
+        sol_task = Task.where(solution_id: params[:solution_id])
+        if sol_task.blank?
+          task = Task.new
+        else
+          task = sol_task.first
+        end
+        task.solution_id = params[:solution_id]
+      else
         referral = Referral.find(params[:referral_id])
-      # end
+      end
 
       patient_id = referral.patient.id.to_s
 

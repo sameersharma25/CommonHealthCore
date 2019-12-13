@@ -64,10 +64,10 @@ module Api
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuYV\"\r\n\r\n#{patient.mode_of_contact}\r\n
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n#{patient.patient_phone}\r\n
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n#{patient.patient_email}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QUJpC\"\r\n\r\n#{patient coverage type}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QUJpC\"\r\n\r\n#{patient.healthcare_coverage}\r\n
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuLl\"\r\n\r\n#{patient.patient_coverage_id}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000cwlRB\"\r\n\r\n#{patient.healthcare_coverage}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000enVX0\"\r\n\r\n#{patient.notes.first.note_text}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000cwlRB\"\r\n\r\n#{patient.task.provider}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000enVX0\"\r\n\r\n#{patient.notes.first.note_text if patient.notes.first}\r\n
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW--"
 
         response = http.request(request)
