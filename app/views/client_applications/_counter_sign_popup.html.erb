@@ -3,7 +3,7 @@
   <h4 class="modal-title" id="myModalLabel">Counter Sign For <%= @customer.name%></h4>
 </div>
 <div class="modal-body">
-  <%= form_for @customer, url: upload_countersign_doc_path, method: :post,:html => { :multipart => true } do |f| %>
+  <%= form_for @customer, url: "upload_countersign_doc", method: :post,:html => { :multipart => true } do |f| %>
 
       <div class="field">
         <%= f.file_field :client_agreement%>

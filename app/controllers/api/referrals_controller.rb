@@ -244,9 +244,15 @@ module Api
     end
 
     def create_task
-      task = Task.new
-      if params[:solution_id]
+      #task = Task.new
+      if !params[:solution_id].blank?
         referral = Solution.find(params[:solution_id]).obstacle.need.referral
+        sol_task = Task.where(solution_id: params[:solution_id])
+        if sol_task.blank?
+          task = Task.new
+        else
+          task = sol_task.first
+        end
         task.solution_id = params[:solution_id]
       else
         referral = Referral.find(params[:referral_id])
@@ -527,16 +533,23 @@ module Api
       if ca.save
         admin_role = Role.create(client_application_id: ca.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
         if params[:user_email]
+          logger.debug("*********invit_org Before the send invire to user ")
           user_invite = helpers.send_invite_to_user(params[:user_email],ca,
                                             params[:name], admin_role.id.to_s )
           if user_invite == true
-            helpers.send_referral_common(params[:task_id],ca.id.to_s)
+             helpers.send_referral_common(params[:task_id],ca.id.to_s)
           end
-          render :json => {status: :ok ,message: "Organization Invited."}
+          # render :json => {status: :ok ,message: "Organization Invited."}
+          req_status = "ok"
+          req_message = "Thank you your invitation to the CHC network was successfully submitted."
         end
       else
-        render :json => {status: :bad_request ,message: "Organization not invited."}
+        # render :json => {status: :bad_request ,message: "Organization not invited."}
+        req_status = "bad_request"
+        req_message = "Organization not invited."
       end
+
+      render :json => {status: req_status ,message: req_message }
     end
 
   end
