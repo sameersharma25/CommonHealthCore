@@ -36,16 +36,16 @@ class ClientApplicationsController < ApplicationController
         logger.debug("REDIRECTING TO THE NEW STEPS****************")
         redirect_to after_signup_path(:role)
       end
-
+    elsif user.sign_in_count.to_s == "1"
+      #mailer Story 405
+      adminUser = User.where(admin: true, client_application_id: @client_application.id).first
+      NotificationMailer.alertPendingContactJoined(user, adminUser).deliver
+      ##
     end 
-
     ## To Be. Background Job check_expiration_date
     all_ca = ClientApplication.all
 
       all_ca.each do |ca|
-        logger.debug("Here we are")
-        logger.debug("Expiration Date #{ca.client_agreement_expiration}")
-        logger.debug("Today DAte #{Date.today}")
         if ca.client_agreement_expiration == Date.today
           ca.agreement_signed = false
           ca.agreement_counter_sign = "Pending"
@@ -53,7 +53,6 @@ class ClientApplicationsController < ApplicationController
         end 
 
       end 
-    ##
   end
 
   # GET /client_applications/1
@@ -233,27 +232,207 @@ class ClientApplicationsController < ApplicationController
 
   def catalogMangViewer
     details = get_catalog_details(ENV["CATALOG_TABLE_NAME"]) 
+    logger.debug("looking at the details, #{details}")
     @url = details[:url]
-    logger.debug("WHAT IS THE URL  #{@url}")
+    #logger.debug("WHAT IS THE URL  #{@url}")
     @orgDetails = details[:OrgDetails]
-    logger.debug("OrgDetails:::: #{@orgDetails}")
+    #logger.debug("OrgDetails:::: #{@orgDetails}")
     @OrganizationName = details[:OrganizationName]
-    logger.debug("OrgName::: #{@OrganizationName}")
+    #logger.debug("OrgName::: #{@OrganizationName}")
     @OrgDescription = details[:OrganizationDescription]
-    logger.debug("OrgDesc::: #{@OrgDescription}")
+    #logger.debug("OrgDesc::: #{@OrgDescription}")
     @siteHash = details[:siteHash]
     @poc = details[:poc]
     @site = details[:OrgSites]
-    logger.debug("ORG SITES #{@site}")
+    #logger.debug("ORG SITES #{@site}")
     @geoscope = details[:geoscope]
-    @program = details[:programs]
+    @program = details[:programs] 
     logger.debug("PROGRAM #{@program}")
     @PopulationDescription = details[:popDesc]
     @ProgramDescription = details[:progDesc]
     @ServiceAreaDescription = details[:servArea]
     @ProgramReferences = details[:progRef]
 
+#this is for the PDF implementation 
+@pdfLinkSet = [] 
+=begin   
+    pdfSET = []
+    @pdfLinkSet = []
+      @program.each do |k,v|
+            if k['PopulationDescription'].present?
+                  k['PopulationDescription'].each do |x|
+                    logger.debug("program we got #{x['Domain']}")
+                        #if x['Domain'] != 'n/a'
+                            #push each to array
+                            pdfRequest = {}
+                            pdfRequest[:dynamoURL] = @url
+                            pdfRequest[:secondaryURL] = x['Domain']
+                            logger.debug("what is #{pdfRequest}")
+                            pdfSET.push(pdfRequest)
+                        #end 
+                  end 
+            end 
+      end 
 
+      @site.each do |k,v|
+          if k['SiteReference'].present?
+              k['SiteReference'].each do |x|
+                logger.debug("site we got #{x['Domain']}")
+                        if x['Domain'] != 'n/a'
+                            pdfRequest = {}
+                            pdfRequest[:dynamoURL] = @url
+                            pdfRequest[:secondaryURL] = x['Domain']
+                            logger.debug("what is #{pdfRequest}")
+                            pdfSET.push(pdfRequest)
+                        end 
+              end 
+          end 
+      end 
+
+
+    #pdfSET.each do |thisPDF|
+      #For Testing
+      @pdfLinkSet = []
+      pdfRequest = {}
+      pdfRequest[:dynamoURL] = 'nwaccessfund.org'
+      pdfRequest[:secondaryURL] = 'http://www.nwaccessfund.org/'
+
+      #First Perform a GET of the URL, if status = none, CREATE
+      uri = URI("http://localhost:3030/scrapePDF")
+      header = {'Content-Type' => 'application/json'}
+      http = Net::HTTP.new(uri.host, uri.port)
+      puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+      # http.use_ssl = true
+      request = Net::HTTP::Get.new(uri.path, header)
+
+      request.body = thisPDF.to_json
+      # Send the request
+      response = http.request(request)
+      puts "response1 #{response.body}"
+      myResponse = JSON.parse(response.body)
+
+      if myResponse['status'] == 'none'
+        uri = URI("http://localhost:3030/scrapePDF")
+        header = {'Content-Type' => 'application/json'}
+        http = Net::HTTP.new(uri.host, uri.port)
+        puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+        # http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.path, header)
+
+        request.body = thisPDF.to_json
+        # Send the request
+        response = http.request(request)
+        puts "response #{response.body}"
+        puts JSON.parse(response.body)
+        myPDF = JSON.parse(response.body)
+        puts myPDF['pdf_s3_link']
+      else
+        logger.debug("In The Else")
+          myResponse['pdf'].each do |x|
+            puts x['pdf_s3_link']
+            @pdfLinkSet.push(x['pdf_s3_link'])
+          end 
+      end 
+
+
+    end #end set
+=end
+
+
+#this is for the PDF implementation 
+=begin   
+    pdfSET = []
+    @pdfLinkSet = []
+      @program.each do |k,v|
+            if k['ProgramDescription'].present?
+                  k['ProgramDescription'].each do |x|
+                    logger.debug("program we got #{x['Domain']}")
+                        #if x['Domain'] != 'n/a'
+                            #push each to array
+                            pdfRequest = {}
+                            pdfRequest[:dynamoURL] = @url
+                            pdfRequest[:secondaryURL] = x['Domain']
+                            logger.debug("what is #{pdfRequest}")
+                            pdfSET.push(pdfRequest)
+                        #end 
+                  end 
+            end 
+      end 
+
+      @site.each do |k,v|
+          if k['SiteReference'].present?
+              k['SiteReference'].each do |x|
+                logger.debug("site we got #{x['Domain']}")
+                        if x['Domain'] != 'n/a'
+                            pdfRequest = {}
+                            pdfRequest[:dynamoURL] = @url
+                            pdfRequest[:secondaryURL] = x['Domain']
+                            logger.debug("what is #{pdfRequest}")
+                            pdfSET.push(pdfRequest)
+                        end 
+              end 
+          end 
+      end 
+
+#=end
+
+  pdfSET.each do |thisPDF|
+      #For Testing
+      @pdfLinkSet = []
+      #pdfRequest = {}
+      #pdfRequest[:dynamoURL] = 'drinkblackeye.com'
+      #pdfRequest[:secondaryURL] = 'https://www.drinkblackeye.com/menu-1'
+      #First Perform a GET of the URL, if status = none, CREATE
+
+      uri = URI("http://localhost:3030/scrapePDF")
+      header = {'Content-Type' => 'application/json'}
+      http = Net::HTTP.new(uri.host, uri.port)
+      puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+      # http.use_ssl = true
+      request = Net::HTTP::Get.new(uri.path, header)
+
+      request.body = thisPDF.to_json
+      #request.body =  pdfRequest.to_json
+
+      # Send the request
+      response = http.request(request)
+      puts "response1 #{response.body}"
+      myResponse = JSON.parse(response.body)
+
+      if myResponse['status'] == 'none'
+        uri = URI("http://localhost:3030/scrapePDF")
+        header = {'Content-Type' => 'application/json'}
+        http = Net::HTTP.new(uri.host, uri.port)
+        puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+        # http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.path, header)
+
+        request.body = thisPDF.to_json
+        #request.body =  pdfRequest.to_json
+
+        # Send the request
+        response = http.request(request)
+        puts "response #{response.body}"
+        puts JSON.parse(response.body)
+        myPDF = JSON.parse(response.body)
+
+        puts "PARSED #{myPDF}"
+
+        myPDF['pdf'].each do |x|
+           @pdfLinkSet.push(x)
+        end 
+
+      else
+        logger.debug("In The Else")
+          myResponse['pdf'].each do |x|
+            puts "here #{x}"
+            @pdfLinkSet.push(x)
+          end 
+      end 
+
+ end #end set loop
+
+=end
   end 
 
   def get_contact_management #modal
@@ -356,9 +535,9 @@ class ClientApplicationsController < ApplicationController
     @result = dynamodb.get_item(parameters)[:item]
 
     #logger.debug("the Result of the get entry is : #{@result}")
-    logger.debug("MASON RIGHT HERE #{@result}")
+    #logger.debug("MASON RIGHT HERE #{@result}")
         @result.each do |k,v|
-            logger.debug("NOW THE KEY MATTERS #{k} ::: V:: #{v}")
+            #logger.debug("NOW THE KEY MATTERS #{k} ::: V:: #{v}")
                 case k.to_s
                     when 'url'
                       @url = v
@@ -375,6 +554,7 @@ class ClientApplicationsController < ApplicationController
 
                             elsif key.to_s == 'ProgramDescription'
                               @ProgramDescription = value
+                              logger.debug("my mind is too busy:: #{@ProgramDescription}")
 
                             elsif key.to_s == 'ServiceAreaDescription'
                               @ServiceAreaDescription = value
@@ -415,16 +595,16 @@ class ClientApplicationsController < ApplicationController
                             logger.debug("Value #{@OrganizationName}")
                           elsif key.to_s == 'OrgDescription'
                             @OrgDescription = value
-                            logger.debug("Value #{@OrgDescription}")
+                            #logger.debug("Value #{@OrgDescription}")
                           end 
                       end 
 
                     when 'GeoScope'
-                      logger.debug("Geo #{v}")
+                      #logger.debug("Geo #{v}")
                       @geoscope = v
                 end 
 
-        end
+        end 
 
     #details = {OrganizationName: @orgDetails, siteHash: @siteHash, poc: @poc, OrgSites: @sites,
      #          programHash: @programHash, geoscope: @geoscope, programs: @programs }

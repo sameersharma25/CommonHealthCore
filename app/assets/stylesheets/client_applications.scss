@@ -13,3 +13,25 @@
 a:link {
   color: black;
 }
+
+#pdfSection{
+	height: 250px;
+	width: 70%;
+	position: fixed;
+	background-color: #d3d3d3;
+	z-index: 1;
+	max-height: 400px;
+	overflow-y: scroll;
+}
+
+#createMargin{
+	margin-top: 400px;
+}
+
+.SiteForm{
+	border: 5px solid black;
+}
+
+.ProgramForm{
+	border: 5px solid black;
+}

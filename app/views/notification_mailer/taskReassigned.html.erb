@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+
+<p>
+Dear <%= @referralPartner %>,<br> 
+We're sorry to inform you that we are unable to provide the level of service needed by your referral request for 
+<%= @patient> and forwarded the request to <%= @assignedProvider %>.<br>
+<b>Request Description:</b><br>
+<%= descrription %><br>
+We are looking forward to assist you in other cases soon.
+Regards,
+<%= notificationSignature %>
+</p>
+
+  </body>
+</html>

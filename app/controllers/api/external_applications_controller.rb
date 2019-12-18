@@ -20,6 +20,11 @@ module Api
       existing_status.request_reject_reason = params[:request_reject_reason]
       existing_status.save
 
+      #mailer { status, referral/task, clientApp }
+      ca = ClientApplication.find(existing_status.referred_by_id)
+      NotificationMailer.alertParentAppStatusDecline(task, ca).deliver
+      ##
+
       render :json=> {status: :ok, message: "Request Rejected " }
     end
 
@@ -34,6 +39,40 @@ module Api
       external_application_id = params[:external_application_id]
       external_application = ClientApplication.find(external_application_id)
       client_application = ClientApplication.find(patient.client_application_id)
+
+
+      if external_application.name == "Dentistlink"
+
+        url = URI("https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8")
+
+        http = Net::HTTP.new(url.host, url.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+        request = Net::HTTP::Post.new(url)
+        request["content-type"] = 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
+        request["cache-control"] = 'no-cache'
+        request["postman-token"] = '5127317f-ae78-f5f0-5a15-2e1814eb0e2c'
+        request.body = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"recordType\"\r\n\r\n01241000000vbjk\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000bdkqr\"\r\n\r\nCHC-Test\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"oid\"\r\n\r\n00D41000001itfQ\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"retURL\"\r\n\r\nhttp://demo.dentislink.org\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"first_name\"\r\n\r\n#{patient.first_name}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"last_name\"\r\n\r\n#{patient.last_name}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"zip\"\r\n\r\n#{patient.patient_zipcode}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuKi\"\r\n\r\n#{patient.date_of_birth}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuYV\"\r\n\r\n#{patient.mode_of_contact}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n#{patient.patient_phone}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n#{patient.patient_email}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QUJpC\"\r\n\r\n#{patient.healthcare_coverage}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuLl\"\r\n\r\n#{patient.patient_coverage_id}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000cwlRB\"\r\n\r\n#{patient.task.provider}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000enVX0\"\r\n\r\n#{patient.notes.first.note_text if patient.notes.first}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW--"
+
+        response = http.request(request)
+        puts response.read_body
+      end
 
 
       if external_application.external_application == true
@@ -170,7 +209,6 @@ module Api
 
       end
 
-
     end 
 
 
@@ -188,7 +226,7 @@ module Api
         currentApplication = ClientApplication.find_by(id: old_patient.client_application_id)
         if task.task_referred_from  != currentApplication.to_s && task.task_referred_from != nil
           #mailer{ ReferralPartner, AssignedProvider, Description, Patient}
-          AlertParentAppMailer.taskReassigned(currentApplication.name, external_application.name, task.task_description, old_patient).deliver
+          NotificationMailer.taskReassigned(currentApplication.name, external_application.name, task.task_description, old_patient).deliver
         else
           logger.debug("Initial Transfer or current task is the same as current user ")
         end 
@@ -262,6 +300,10 @@ module Api
               ledger_status.ledger_status = "Accepted"
               ledger_status.ledger_master_id = ledger_master.id.to_s
               ledger_status.save
+              #mailer { status, referral/task, clientApp }
+              ca = ClientApplication.find(old_patient.client_application_id.to_s)
+              NotificationMailer.alertParentAppStatusAccept(task, ca).deliver
+              ##
             end
           end
 
@@ -291,7 +333,7 @@ module Api
 
     def send_referral
       task_id = params[:task_id]
-      helpers.send_referral_common(task_id,params[:referred_application_id])
+      return_status=  helpers.send_referral_common(task_id,params[:referred_application_id])
       #
       # referred_by_id = Task.find(params[:task_id]).referral.client_application.id.to_s
       # ledger_master = LedgerMaster.where(task_id: task_id).first
@@ -321,6 +363,7 @@ module Api
       #     render :json=> {status: :ok, message: "Referral Request was sent" }
       #   end
       # end
+      render :json=> {status: return_status[1], message: return_status[0] }
 
     end
 

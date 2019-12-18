@@ -16,7 +16,7 @@
           <% i += 1 %>
           <% if r["missing_mandatory_fields"] == "1" %>
               <tr class="currentRow missing_fields" id= <%="rule_#{i}"%>  >
-          <%elsif r["missing_mandatory_fields"] == "0" %>
+          <%else  r["missing_mandatory_fields"] == "0" %>
               <tr class="currentRow" id= <%="rule_#{i}" %>  >
           <%end%>
           <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->

@@ -1,9 +1,7 @@
 <p id="notice"><%= notice %></p>
 
-
-
 <% if @client_application.users.count == 0 %>
-    <div style="color: red"><%= link_to "You donn't have any users. Please click here to create users", new_user_path%></div>
+    <div style="color: red"><%= link_to "You don't have any users. Please click here to create users", new_user_path%></div>
 <%end%>
 
 <% if @client_application.external_application == false || @client_application.external_application.nil? %>
@@ -243,3 +241,6 @@
 <%#= link_to "Create Patient", api_create_patient_path(email: "defaultuser@test.com"), method: :post %><br>
 <%#= link_to "Create task", api_tsk_create_path(email: "defaultuser@test.com"), method: :post %><br>
 <%#= link_to "Patients List", api_patients_list_path(email: current_user.email), method: :post %><br>
+
+
+
