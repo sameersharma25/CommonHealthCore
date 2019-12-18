@@ -178,6 +178,7 @@ class ClientApplicationsController < ApplicationController
   end
 
   def master_provider
+    results = []
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
 
     # table_name = 'master_provider'
@@ -189,7 +190,21 @@ class ClientApplicationsController < ApplicationController
         # filter_expression: "url = test1.com"
     }
 
-    @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
+    # result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
+    result = dynamodb.scan(params) #.sort_by!{|k| k["created_at"]}.reverse!
+
+    loop do
+
+      # logger.debug("*************************the count of the iteration is : #{result.items.count}, and the result is : #{result}")
+      results << result.items
+
+      break unless (lek = result.last_evaluated_key)
+
+      result = dynamodb.scan params.merge(exclusive_start_key: lek)
+
+    end
+
+    @result = results.flatten
 
     # @pending_results = @result.select{|p| p["status"] == "Pending"}
 
@@ -215,6 +230,8 @@ class ClientApplicationsController < ApplicationController
     # @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
     @result = helpers.catalog_table_content
+
+    logger.debug("***********************the the count in the result is : #{@result.count}")
 
  
     @pending_results = @result.select{|p| p["status"] == "Pending"}
