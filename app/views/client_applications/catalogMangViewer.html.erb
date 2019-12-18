@@ -45,7 +45,8 @@
                       <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
 
                       <%= label_tag :Text %><br>
-                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+
 
                       <%= label_tag :Domain %>
                       <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
@@ -61,7 +62,7 @@
                       <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
                       
                       <%= label_tag :Text %><br>
-                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50' %><br>
 
 
                       <%= label_tag :Domain %>
@@ -134,7 +135,7 @@
                     <%= label_tag :PopulationTags %>
                     <%= text_field_tag :PopulationTags, x['PopulationTags'] %><br>
                     <%= label_tag :ProgramSites %>
-                    <%= text_field_tag :ProgramSites, x['ProgramSites']  %><br>
+                    <%= text_field_tag :ProgramSites, x['ProgramSites'], name: :ProgramSites %><br>
 
                     <% if x[:PopulationDescription] != nil %>
                       <h3><i>Population Description</i></h3>
@@ -143,7 +144,7 @@
                           <%= label_tag :Xpath %>
                           <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true  %><br>
                       <%= label_tag :Text %><br>
-                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                           <%= label_tag :Domain %>
                           <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true  %><br>
                         </div>
@@ -158,7 +159,7 @@
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true  %><br>
                       <%= label_tag :Text %><br>
-                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                         <%= label_tag :Domain %>
                         <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true  %><br>
                       </div>
@@ -173,7 +174,7 @@
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
                       <%= label_tag :Text %><br>
-                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                         <%= label_tag :Domain %>
                         <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
                       </div>
@@ -187,7 +188,7 @@
                         <%= label_tag :Xpath %>
                         <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
                       <%= label_tag :Text %><br>
-                      <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                         <%= label_tag :Domain %>
                         <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
                       </div>
@@ -352,7 +353,7 @@
                                                 <%= label_tag :Xpath %>
                                                 <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
                                                 <%= label_tag :Text %><br>
-                                                <%= text_area_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                                                <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
                                                 <%= label_tag :Domain %>
                                                 <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
                                             </div>
@@ -433,7 +434,7 @@ document.getElementById("collectButton").addEventListener("click", function(even
  //OrgForm //Need to ignore certain values
   var orgform = document.getElementById('OrgForm')  
   var inputElements = orgform.querySelectorAll("input");
-  organizationName = {}
+  var organizationName = {}
 
         for(var i = 0; i < inputElements.length; i++){
               var inputElement = inputElements[i];
@@ -462,7 +463,7 @@ document.getElementById("collectButton").addEventListener("click", function(even
               }
               nameArray = []
               nameArray.push(nameObj)
-              organizationName['OrganizationName'] = nameArray;
+              organizationName['OrganizationName'] = nameArray; 
   //orgDesc
   var orgDesc = document.getElementById('orgDesc')
   var orgDescElements = orgDesc.querySelectorAll("input");
