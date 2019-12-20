@@ -65,9 +65,17 @@ module Api
       if user.save
          render :json=> {status: :ok, message: "Theme Set"}
        end 
-    end 
+    end
 
-
+    api :POST, "/create_appointment", "Create Appointment"
+    param :email, String, :desc => "User Email", :required => true
+    param :first_name, String, :desc => "Patient first name", :required => true
+    param :last_name, String, :desc => "Patient last name", :required => true
+    param :patient_phone, String, :desc => "Patient phone"
+    param :reason_for_visit, String, :desc => "Reason for visit"
+    param :patient_coverage, String
+    param :dob, String
+    param :healthcare_coverage, String
     def create_appointment
       user = User.find_by(email: params[:email])
       client_application = user.client_application
