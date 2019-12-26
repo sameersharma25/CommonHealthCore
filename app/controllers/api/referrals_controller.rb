@@ -255,6 +255,7 @@ module Api
         end
         task.solution_id = params[:solution_id]
       else
+        task = Task.new
         referral = Referral.find(params[:referral_id])
       end
 
