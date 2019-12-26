@@ -508,23 +508,21 @@ module Api
 
     end
 
-    api :POST, "/accept_patient", "Accept Patient"
-    param :email, String, :desc => "User Email", :required => true
-    param :ledger_status_id, String, :desc => "need to"
-    returns :code => 200, :desc => "Details of the Patient" do
-      property :first_name, Integer, :desc => ""
-      property :last_name, Integer, :desc => ""
-      property :dob, Integer, :desc => ""
-      property :phone, Integer, :desc => ""
-      property :reason_for_visit, Integer, :desc => ""
-
-    end
+    # api :POST, "/accept_patient", "Accept Patient"
+    # param :ledger_status_id, String, :desc => "need to"
+    # returns :code => 200, :desc => "Details of the Patient" do
+    #   property :first_name, Integer, :desc => ""
+    #   property :last_name, Integer, :desc => ""
+    #   property :dob, Integer, :desc => ""
+    #   property :phone, Integer, :desc => ""
+    #   property :reason_for_visit, Integer, :desc => ""
+    #
+    # end
     def send_patient_to_DL
       status_led = LedgerStatus.find(params[:ledger_status_id])
     end
 
     api :POST, "/rfl_send_ext", "Api for an external application to send referral to CHC"
-    param :email, String, :desc => "User Email", :required => true
     param :patient_name, String, :desc => "Patient full name (last_name + first_name)", :required => true
     param :request_title, String, :desc => "Reason for visit to be displayed on the table.", :required => true
     param :urgency, String, :desc => "Urgency of the request if being used in external application", :required => true
@@ -536,7 +534,6 @@ module Api
 
 
     api :POST, "/read_ledg_ext", "Api for an external application to read the ledger"
-    param :email, String, :desc => "User Email", :required => true
     param :external_object_id,String, :desc => "Id of the external object that was transferred"
     returns :code => 200, :desc => "Details of the ledger record" do
       property :record_array, :array_of => Hash do
@@ -549,8 +546,7 @@ module Api
     end
 
     api :POST, "/write_ledg_ext", "Api for an external application to write to the ledger"
-    param :email, String, :desc => "User Email", :required => true
-    param :external_object_id,String, :desc => "Id of the external object that was transferred"
+    param :external_object_id,String, :desc => "Id of the external object that was transferred. (task_id)"
     param :change, Hash, :desc => "Hash of all the changes happening on the object eg: {'object' => ['new_value', 'old_value']}"
     returns :code => 200, :desc => "Ledger successfully updated"
     def write_ledger_by_external
