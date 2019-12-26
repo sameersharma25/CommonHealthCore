@@ -47,7 +47,7 @@ gem 'wicked'
 
 gem 'rack-cors', :require => 'rack/cors'
 
-gem 'simple_token_authentication'
+#gem 'simple_token_authentication'
 # gem 'aws-sdk'
 gem 'aws-sdk', '~> 3.0', '>= 3.0.1'
 gem 'whenever', require: false
@@ -68,7 +68,7 @@ gem 'zip-codes'
 gem 'carrierwave'#, :git => "git://github.com/jnicklas/carrierwave.git"
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem 'mongoid-paperclip', require: 'mongoid_paperclip'
-gem 'mini_magick', :git => 'git://github.com/probablycorey/mini_magick.git'
+gem 'mini_magick' #, :git => 'git://github.com/probablycorey/mini_magick.git'
 gem "fog-aws"
 gem "recaptcha", '3.4.0', require: "recaptcha/rails"
 gem 'ckeditor', github: 'galetahub/ckeditor'
@@ -76,7 +76,7 @@ gem 'devise-two-factor'
 gem 'rqrcode', '~> 0.10.1'
 gem 'omniauth-google-oauth2'
 # gem 'fog'
-
+gem 'apipie-rails'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
