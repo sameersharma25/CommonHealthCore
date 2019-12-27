@@ -58,8 +58,11 @@ jQuery ($) ->
   $(document).on("click", ".delete_rule", ->    
     row_id = $(this).attr("id")
     console.log("in the delete rule function", row_id)
-    numVal = parseInt(row_id) - 2
-    url_id = $('.myURL')[numVal].innerHTML.replace(/^\s+|\s+$/g, '')
+    numVal = parseInt(row_id) - 2 
+    console.log("What", $('#url_' +row_id)[0].innerText)
+    #url_id = $('.myURL')[numVal].innerHTML.replace(/^\s+|\s+$/g, '')
+    url_id = $('#url_' +row_id)[0].innerText.replace(/^\s+|\s+$/g, '')
+
     woof = $('#rule_' + row_id)
     woof.hide();
 
@@ -181,10 +184,10 @@ jQuery ($) ->
       theComment[0].hidden = true
       theCommentLabel[0].hidden = true 
   )
-  clickCount = 0 
-  $(document).on("click", "body", -> 
+  clickCount = 0  
+  $(document).on("click", ".logoutclickcount", -> 
       clickCount++
       console.log("LETS GO!!!!!", clickCount)
-      if clickCount == 6
+      if clickCount == 10
         $.get "/users/sign_out"
   )
