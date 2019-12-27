@@ -440,28 +440,21 @@ class ClientApplicationsController < ApplicationController
 
     @result = dynamodb.get_item(parameters)[:item]
 
-######Update Selenium scrape test
-uri = URI("http://localhost:3030/validateCatalog")
-        header = {'Content-Type' => 'application/json'}
-        http = Net::HTTP.new(uri.host, uri.port)
-        puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
-        # http.use_ssl = true
-        request = Net::HTTP::Post.new(uri.path, header)
-
-        request.body = @result.to_json
-        # Send the request
-        response = http.request(request)
-        puts "response #{response.body}"
-
-######
-
-
-
-
-
-
+      #######Update Selenium scrape test
+      #uri = URI("http://localhost:3030/validateCatalog")
+      #        header = {'Content-Type' => 'application/json'}
+      #        http = Net::HTTP.new(uri.host, uri.port)
+      #        puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+      #        # http.use_ssl = true
+      #        request = Net::HTTP::Post.new(uri.path, header)
+      #
+      #        request.body = @result.to_json
+      #        # Send the request
+      #        response = http.request(request)
+      #        puts "response #{response.body}"
+      #
+      #######
     #logger.debug("the Result of the get entry is : #{@result}")
-    #logger.debug("MASON RIGHT HERE #{@result}")
         @result.each do |k,v|
             #logger.debug("NOW THE KEY MATTERS #{k} ::: V:: #{v}")
                 case k.to_s
