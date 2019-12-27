@@ -28,7 +28,7 @@ module Api
       render :json=> {status: :ok, message: "Request Rejected " }
     end
 
-    def send_patient #Which person should I email if it fails???
+    def send_patient #Which person should I email if it fails??? ext_obe_id
       task_id = params[:task_id]
       task = Task.find(task_id)
       patient = task.referral.patient
@@ -66,7 +66,7 @@ module Api
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n#{patient.patient_email}\r\n
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QUJpC\"\r\n\r\n#{patient.healthcare_coverage}\r\n
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuLl\"\r\n\r\n#{patient.patient_coverage_id}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000cwlRB\"\r\n\r\n#{patient.task.provider}\r\n
+                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000cwlRB\"\r\n\r\n#{patient.task.provider if patient.task.provider }\r\n
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000enVX0\"\r\n\r\n#{patient.notes.first.note_text if patient.notes.first}\r\n
                         ------WebKitFormBoundary7MA4YWxkTrZu0gW--"
 
@@ -331,6 +331,17 @@ module Api
     end
 
 
+    # api :POST, "/rfl_send", "Send Referral "
+    # param :email, String, :desc => "User Email", :required => true
+    # param :ledger_status_id, String, :desc => "need to"
+    # returns :code => 200, :desc => "Details of the Patient" do
+    #   property :first_name, Integer, :desc => ""
+    #   property :last_name, Integer, :desc => ""
+    #   property :dob, Integer, :desc => ""
+    #   property :phone, Integer, :desc => ""
+    #   property :reason_for_visit, Integer, :desc => ""
+    #
+    # end
     def send_referral
       task_id = params[:task_id]
       return_status=  helpers.send_referral_common(task_id,params[:referred_application_id])
@@ -366,6 +377,7 @@ module Api
       render :json=> {status: return_status[1], message: return_status[0] }
 
     end
+
 
     def referred_app_name
       client_name_array = []
@@ -496,6 +508,51 @@ module Api
 
     end
 
+    # api :POST, "/accept_patient", "Accept Patient"
+    # param :ledger_status_id, String, :desc => "need to"
+    # returns :code => 200, :desc => "Details of the Patient" do
+    #   property :first_name, Integer, :desc => ""
+    #   property :last_name, Integer, :desc => ""
+    #   property :dob, Integer, :desc => ""
+    #   property :phone, Integer, :desc => ""
+    #   property :reason_for_visit, Integer, :desc => ""
+    #
+    # end
+    def send_patient_to_DL
+      status_led = LedgerStatus.find(params[:ledger_status_id])
+    end
+
+    api :POST, "/rfl_send_ext", "Api for an external application to send referral to CHC"
+    param :patient_name, String, :desc => "Patient full name (last_name + first_name)", :required => true
+    param :request_title, String, :desc => "Reason for visit to be displayed on the table.", :required => true
+    param :urgency, String, :desc => "Urgency of the request if being used in external application", :required => true
+    param :external_object_id, String, :desc => "d of the patient or lead, this id will be used to retrieve all the data when the referral is accepted.", :required => true
+    returns :code => 200, :desc => "Referral Request sent"
+    def send_referral_by_external
+
+    end
+
+
+    api :POST, "/read_ledg_ext", "Api for an external application to read the ledger"
+    param :external_object_id,String, :desc => "Id of the external object that was transferred"
+    returns :code => 200, :desc => "Details of the ledger record" do
+      property :record_array, :array_of => Hash do
+        property :change, Array
+      end
+
+    end
+    def read_leadger_by_external
+      led_stat = LedgerStatus.where(external_object_id: params[:external_object_id] )
+    end
+
+    api :POST, "/write_ledg_ext", "Api for an external application to write to the ledger"
+    param :external_object_id,String, :desc => "Id of the external object that was transferred. (task_id)"
+    param :change, Hash, :desc => "Hash of all the changes happening on the object eg: {'object' => ['new_value', 'old_value']}"
+    returns :code => 200, :desc => "Ledger successfully updated"
+    def write_ledger_by_external
+
+    end
 
   end
 end
+

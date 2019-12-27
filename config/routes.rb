@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  apipie
   resources :terms_privacies
   resources :about_us
   resources :faqs
@@ -251,6 +252,7 @@ Rails.application.routes.draw do
     post "/int_list", to: "interviews#interview_list"
     post "/int_details", to: "interviews#interview_details"
     post "/int_details_test", to: "interviews#interview_details_test"
+    post "/active_needs", to: "interviews#active_needs"
 
     post "/need_create", to: "interviews#new_need"
     post "/need_update", to: "interviews#update_need"
