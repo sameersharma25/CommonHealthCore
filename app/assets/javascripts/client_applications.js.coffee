@@ -93,7 +93,7 @@ jQuery ($) ->
     row_id = $(this).attr("id")
     console.log("in the reject rule function", row_id)
     numVal = parseInt(row_id) - 2
-    url_id = $('.masterURL')[numVal].innerHTML
+    url_id = $('.masterURL')[numVal].innerHTML.replace(/^\s+|\s+$/g, '')
 
     #Display Reason
     displayObjects = $('.displayReason_' + row_id)
@@ -105,7 +105,7 @@ jQuery ($) ->
     row_id = $(this).attr("class")    
     idVal = row_id.split('_')[1]
     numVal = parseInt(idVal) - 2
-    url_id = $('.masterURL')[numVal].innerHTML
+    url_id = $('.masterURL')[numVal].innerHTML.replace(/^\s+|\s+$/g, '')
 
     textValue = $('#rejectText_' + idVal)
     console.log("he ha har", textValue[0].value, "my url", url_id)
