@@ -220,11 +220,8 @@
                     <%= check_box_tag :P_Disabled, x['P_Disabled'],x['P_Disabled'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_Native %>
                     <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :P_Dental %>
-                    <%= check_box_tag :P_Dental, x['P_Dental'], x['P_Dental'].to_s.downcase == "true" %><br>
-                    <%= label_tag :P_Vision %>
-                    <%= check_box_tag :P_Vision, x['P_Vision'], x['P_Vision'].to_s.downcase == "true" %><br>
+                    <!-- removed dental and vision -->
+           
             </div>
 
             <div class="col-md-4">
@@ -438,9 +435,13 @@ document.getElementById("collectButton").addEventListener("click", function(even
 
         for(var i = 0; i < inputElements.length; i++){
               var inputElement = inputElements[i];
-                    if (inputElement.value == ""){
-                      console.log("skip")
-                    } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain' || inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
+              if (inputElement.value == ""){
+                console.log("skip")
+              }else if (inputElement.type == "checkbox" && inputElement.checked == true){
+                  organizationName[inputElement.name] = true
+              }else if (inputElement.type == "checkbox" && inputElement.checked != true){
+                 organizationName[inputElement.name] = false
+              } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain' || inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
                         console.log("skip")
                     }else{
                       organizationName[inputElement.name] = inputElement.value; 

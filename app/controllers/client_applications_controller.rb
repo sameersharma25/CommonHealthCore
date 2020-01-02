@@ -3,7 +3,7 @@ class ClientApplicationsController < ApplicationController
   include UsersHelper
   before_action :set_client_application, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:new, :create, :contact_management]
- skip_before_action :verify_authenticity_token, only: [:send_for_approval, :approve_catalog]
+ skip_before_action :verify_authenticity_token, only: [:send_for_approval, :approve_catalog, :upload_countersign_doc]
   # GET /client_applications
   # GET /client_applications.json
   def index  
@@ -178,6 +178,7 @@ class ClientApplicationsController < ApplicationController
   end
 
   def master_provider
+    results = []
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
 
     # table_name = 'master_provider'
@@ -189,7 +190,21 @@ class ClientApplicationsController < ApplicationController
         # filter_expression: "url = test1.com"
     }
 
-    @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
+    # result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
+    result = dynamodb.scan(params) #.sort_by!{|k| k["created_at"]}.reverse!
+
+    loop do
+
+      # logger.debug("*************************the count of the iteration is : #{result.items.count}, and the result is : #{result}")
+      results << result.items
+
+      break unless (lek = result.last_evaluated_key)
+
+      result = dynamodb.scan params.merge(exclusive_start_key: lek)
+
+    end
+
+    @result = results.flatten
 
     # @pending_results = @result.select{|p| p["status"] == "Pending"}
 
@@ -215,6 +230,8 @@ class ClientApplicationsController < ApplicationController
     # @result = dynamodb.scan(params)[:items] #.sort_by!{|k| k["created_at"]}.reverse!
 
     @result = helpers.catalog_table_content
+
+    logger.debug("***********************the the count in the result is : #{@result.count}")
 
  
     @pending_results = @result.select{|p| p["status"] == "Pending"}
@@ -339,6 +356,100 @@ class ClientApplicationsController < ApplicationController
 =end
 
 
+#this is for the PDF implementation 
+=begin   
+    pdfSET = []
+    @pdfLinkSet = []
+      @program.each do |k,v|
+            if k['ProgramDescription'].present?
+                  k['ProgramDescription'].each do |x|
+                    logger.debug("program we got #{x['Domain']}")
+                        #if x['Domain'] != 'n/a'
+                            #push each to array
+                            pdfRequest = {}
+                            pdfRequest[:dynamoURL] = @url
+                            pdfRequest[:secondaryURL] = x['Domain']
+                            logger.debug("what is #{pdfRequest}")
+                            pdfSET.push(pdfRequest)
+                        #end 
+                  end 
+            end 
+      end 
+
+      @site.each do |k,v|
+          if k['SiteReference'].present?
+              k['SiteReference'].each do |x|
+                logger.debug("site we got #{x['Domain']}")
+                        if x['Domain'] != 'n/a'
+                            pdfRequest = {}
+                            pdfRequest[:dynamoURL] = @url
+                            pdfRequest[:secondaryURL] = x['Domain']
+                            logger.debug("what is #{pdfRequest}")
+                            pdfSET.push(pdfRequest)
+                        end 
+              end 
+          end 
+      end 
+
+#=end
+
+  pdfSET.each do |thisPDF|
+      #For Testing
+      @pdfLinkSet = []
+      #pdfRequest = {}
+      #pdfRequest[:dynamoURL] = 'drinkblackeye.com'
+      #pdfRequest[:secondaryURL] = 'https://www.drinkblackeye.com/menu-1'
+      #First Perform a GET of the URL, if status = none, CREATE
+
+      uri = URI("http://localhost:3030/scrapePDF")
+      header = {'Content-Type' => 'application/json'}
+      http = Net::HTTP.new(uri.host, uri.port)
+      puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+      # http.use_ssl = true
+      request = Net::HTTP::Get.new(uri.path, header)
+
+      request.body = thisPDF.to_json
+      #request.body =  pdfRequest.to_json
+
+      # Send the request
+      response = http.request(request)
+      puts "response1 #{response.body}"
+      myResponse = JSON.parse(response.body)
+
+      if myResponse['status'] == 'none'
+        uri = URI("http://localhost:3030/scrapePDF")
+        header = {'Content-Type' => 'application/json'}
+        http = Net::HTTP.new(uri.host, uri.port)
+        puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+        # http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.path, header)
+
+        request.body = thisPDF.to_json
+        #request.body =  pdfRequest.to_json
+
+        # Send the request
+        response = http.request(request)
+        puts "response #{response.body}"
+        puts JSON.parse(response.body)
+        myPDF = JSON.parse(response.body)
+
+        puts "PARSED #{myPDF}"
+
+        myPDF['pdf'].each do |x|
+           @pdfLinkSet.push(x)
+        end 
+
+      else
+        logger.debug("In The Else")
+          myResponse['pdf'].each do |x|
+            puts "here #{x}"
+            @pdfLinkSet.push(x)
+          end 
+      end 
+
+ end #end set loop
+
+=end
   end 
 
   def get_contact_management #modal
