@@ -19,6 +19,7 @@ class ScrapingRule
   field :url, type: String
   field :geoScope, type: Hash
   field :programDetails, type: Array
+  field :changed_fields, type: Array
 
 
 
