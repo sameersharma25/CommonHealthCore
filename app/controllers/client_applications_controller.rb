@@ -240,6 +240,8 @@ class ClientApplicationsController < ApplicationController
 
     #@masterStatus = @client_application.master_application_status
 
+    @sr_urls = ScrapingRule.all.pluck(:url)
+    logger.debug("the sr ursls are  : ************************ #{@sr_urls}")
     user = current_user
     @client_application = current_user.client_application
     @masterStatus = @client_application.master_application_status

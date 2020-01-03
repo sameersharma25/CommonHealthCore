@@ -49,17 +49,21 @@ module Api
 
     def scrappy_doo_response
 
-      logger.debug("the parameters are: #{params.inspect}")
-      sr = ScrapingRule.find(params[:rule_id])
-      rules_to_change = params[:ruleToChange]
-      rules_to_change.each do |r_change|
-        if r_change == "organizationName"
-          sr.organizationName_changeeee = true
-        elsif r_change == "organizationDescription"
-          sr.organizationDescription_changeeee = true
-        end
-      end
+      sr = ScrapingRule.new
+      sr.url = params[:ruleToChange][:url]
+      sr.changed_fields = params[:ruleToChange][:ruleToChange]
       sr.save
+      # logger.debug("the parameters are: #{params.inspect}")
+      # sr = ScrapingRule.find(params[:rule_id])
+      # rules_to_change = params[:ruleToChange]
+      # rules_to_change.each do |r_change|
+      #   if r_change == "organizationName"
+      #     sr.organizationName_changeeee = true
+      #   elsif r_change == "organizationDescription"
+      #     sr.organizationDescription_changeeee = true
+      #   end
+      # end
+      # sr.save
       #{"ruleToChange"=>["OrganizationName", "OrganizationDescription"], "rule_id"=>" 5c7418b158f01a070996c531", "service_provider_detail"=>{}}
 
     end
