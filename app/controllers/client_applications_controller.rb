@@ -255,6 +255,8 @@ class ClientApplicationsController < ApplicationController
     @url = details[:url]
     #logger.debug("WHAT IS THE URL  #{@url}")
     @orgDetails = details[:OrgDetails]
+    # sets default org desc display if don't exists
+    set_organization_description_display
     #logger.debug("OrgDetails:::: #{@orgDetails}")
     @OrganizationName = details[:OrganizationName]
     #logger.debug("OrgName::: #{@OrganizationName}")

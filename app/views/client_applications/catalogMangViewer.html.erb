@@ -27,49 +27,54 @@
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
-              <%= label_tag :InactiveCatalog %>
-              <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'] %><br>
+          <%= label_tag :InactiveCatalog %>
+          <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'] %><br>
 
-              <%= label_tag :Type %>
-              <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
+          <%= label_tag :Type %>
+          <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
 
-              <%= label_tag :HomePageURL %>
-              <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL, readonly: true %><br>
+          <%= label_tag :HomePageURL %>
+          <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL, readonly: true %><br>
 
-              <div id="orgName" >
+          <div id="orgName" >
 
-                <h3><i>Organization Name</i></h3>
-                <% if @OrganizationName != nil %>
-                    <% @OrganizationName.each do |pd| %>
-                      <%= label_tag :Xpath %>
-                      <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
+            <h3><i>Organization Name</i></h3>
+            <% if @OrganizationName != nil %>
+                <% @OrganizationName.each do |pd| %>
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
 
-                      <%= label_tag :Text %><br>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                  <%= label_tag :Text %><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
 
 
-                      <%= label_tag :Domain %>
-                      <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
-                    <% end %>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
                 <% end %>
-            </div>
+            <% end %>
+        </div>
 
-            <div id="orgDesc" >
-                <h3><i>Organization Description</i></h3>
-                <% if @OrgDescription != nil %>
-                    <% @OrgDescription.each do |pd| %>
-                      <%= label_tag :Xpath %>
-                      <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
-                      
-                      <%= label_tag :Text %><br>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50' %><br>
+        <div id="orgDesc" >
+            <h3><i>Organization Description</i></h3>
+            <% if @OrgDescription != nil %>
+                <% @OrgDescription.each do |pd| %>
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
+
+                  <%= label_tag :Text %><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50' %><br>
 
 
-                      <%= label_tag :Domain %>
-                      <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
-                    <% end %>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
                 <% end %>
-            </div>
+            <% end %>
+        </div>
+
+        <% if @OrgDescription != nil %>
+          <%= label_tag :OrganizationDescriptionDisplay %><br>
+          <%= text_field_tag :Text, @orgDetails['OrganizationDescriptionDisplay'], name: :OrganizationDescriptionDisplay, size: '50' %><br>
+        <% end %>
     </div>
 
     <div>

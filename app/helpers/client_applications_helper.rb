@@ -41,6 +41,11 @@ module ClientApplicationsHelper
     result = dynamodb.get_item(parameters)[:item]
   end
 
+  def set_organization_description_display
+    if @OrgDescription.present? && @orgDetails["OrganizationDescriptionDisplay"].blank?
+      @orgDetails["OrganizationDescriptionDisplay"] = @OrgDescription.map{|p| p["Text"]}.compact.reject(&:empty?).join(' ')
+    end
+  end
 
   def check_agreement_expiration(ca)
         @client_application = ca
