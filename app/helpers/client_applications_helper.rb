@@ -110,6 +110,9 @@ module ClientApplicationsHelper
         logger.debug("send_referral_common--------NOTIFICATION FOR REFERAL WILL BE SENT**********")
         RegistrationRequestMailer.referral_request(client_user_email,task_id, referred_application_id ).deliver
         # render :json=> {status: :ok, message: "Referral Request was sent" }
+        task = Task.find(task_id)
+        task.transferable = false
+        task.save
         req_status = "ok"
         message = "Referral Request sent"
       end

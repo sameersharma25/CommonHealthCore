@@ -20,6 +20,10 @@ module Api
       existing_status.request_reject_reason = params[:request_reject_reason]
       existing_status.save
 
+      task = Task.find(task_id)
+      task.transferable = true
+      task.save
+
       #mailer { status, referral/task, clientApp }
       ca = ClientApplication.find(existing_status.referred_by_id)
       NotificationMailer.alertParentAppStatusDecline(task, ca).deliver
