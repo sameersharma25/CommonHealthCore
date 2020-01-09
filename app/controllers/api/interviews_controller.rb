@@ -1,6 +1,7 @@
 module Api
   class InterviewsController < ActionController::Base
     include UsersHelper
+    include InterviewsHelper
 
     def new_interview
 
@@ -20,6 +21,7 @@ module Api
       patient.date_of_birth = params[:caller_dob] if params[:caller_dob]
       patient.client_application_id = client_application.id.to_s
       patient.through_call = true
+      patient.patient_created_by = user_id
       if patient.save
         referral = Referral.new
         referral.referral_name = "Interview Call"
@@ -164,7 +166,7 @@ module Api
       #   interview_hash = {interview_id: patient_id ,created_at: int_created_at, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
       #   interview_list_array.push(interview_hash)
       # end
-      interview_list = assessments_list(referrals)
+      interview_list = helpers.assessments_list(referrals)
       # interview_list = interview_list_array#.order(caller_first_name: :asc)
       render :json => {status: :ok, interview_list: interview_list}
     end

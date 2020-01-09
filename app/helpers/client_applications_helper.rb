@@ -82,7 +82,7 @@ module ClientApplicationsHelper
     end
   end
 
-  def send_referral_common(task_id,referred_application_id)
+  def send_referral_common(task_id,referred_application_id, user_id)
 
     referred_by_id = Task.find(task_id).referral.client_application.id.to_s
     ledger_master = LedgerMaster.where(task_id: task_id).first
@@ -106,6 +106,7 @@ module ClientApplicationsHelper
       led_stat.ledger_master_id = ledger_master_id
       led_stat.ledger_status = "Pending"
       led_stat.referred_by_id = referred_by_id
+      led_stat.transferred_by = user_id
       if led_stat.save
         logger.debug("send_referral_common--------NOTIFICATION FOR REFERAL WILL BE SENT**********")
         RegistrationRequestMailer.referral_request(client_user_email,task_id, referred_application_id ).deliver

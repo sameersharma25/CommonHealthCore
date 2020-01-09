@@ -5,6 +5,8 @@ require 'json'
 module Api
   class ExternalApplicationsController < ActionController::Base
     include ClientApplicationsHelper
+
+    before_action :set_user_id
     def render_script
       render html: '<div>html goes here</div>'.html_safe
     end
@@ -348,7 +350,7 @@ module Api
     # end
     def send_referral
       task_id = params[:task_id]
-      return_status=  helpers.send_referral_common(task_id,params[:referred_application_id])
+      return_status=  helpers.send_referral_common(task_id,params[:referred_application_id], @user_id)
       #
       # referred_by_id = Task.find(params[:task_id]).referral.client_application.id.to_s
       # ledger_master = LedgerMaster.where(task_id: task_id).first
@@ -555,6 +557,13 @@ module Api
     returns :code => 200, :desc => "Ledger successfully updated"
     def write_ledger_by_external
 
+    end
+
+    private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_user_id
+      user = User.find_by(email: params[:email])
+      @user_id = user.id.to_s
     end
 
   end

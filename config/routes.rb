@@ -271,6 +271,7 @@ Rails.application.routes.draw do
 
     post "/clients_created_by_a_navigator", to: "reports#clients_created_by_a_navigator"
     post "/assessment_created_by_a_navigator", to: "reports#assessment_created_by_a_navigator"
+    post "/task_transferred_by_navigator", to: "reports#task_transferred_by_navigator"
 
 
   end
