@@ -15,6 +15,7 @@ class Referral
   field :third_party_user_id, type: String
   field :consent_timestamp, type: String
   field :referral_type, type: String
+  field :ref_created_by, type: String
 
   has_many :tasks
   has_many :needs

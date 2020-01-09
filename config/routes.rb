@@ -269,7 +269,8 @@ Rails.application.routes.draw do
     post "/sol_update", to: "interviews#update_soulution"
     post "/sol_remove", to: "interviews#remove_solution"
 
-    post "/number_of_clients_created_by_a_navigator", to: "reports#number_of_clients_created_by_a_navigator"
+    post "/clients_created_by_a_navigator", to: "reports#clients_created_by_a_navigator"
+    post "/assessment_created_by_a_navigator", to: "reports#assessment_created_by_a_navigator"
 
 
   end
