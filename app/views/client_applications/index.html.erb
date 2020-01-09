@@ -89,7 +89,7 @@
 
 <h1>Incoming Referrals</h1>
 <% if @referred_applications.count > 0 %>
-  <table class="table table-responsive table-bordered">
+  <table id="incoming-referrals" class="table table-responsive table-bordered">
     <thead>
       <tr>
         <th>Application Name</th>
@@ -148,33 +148,36 @@
 <% if @client_application.external_application == false || @client_application.external_application.nil? %>
   <% if current_user.admin? %>
     <h1>Registration Requests</h1>
-    <table class="table table-responsive table-bordered user-display">
+    <table id="registration_requests" class="table table-responsive table-bordered user-display">
       <thead>
         <tr>
           <th >Name</th>
           <th >URL</th>
           <th >UserEmail</th>
-          <th ></th>
+          <th >  </th>
         </tr>
       </thead>
       <tbody>
-      <%@registration_request.each do |rr|%>
-        <tr>
+        <%@registration_request.each do |rr|%>
           <% if rr.invitation_accepted == false %>
-            <td><%= rr.application_name%></td>
-            <td><%= rr.application_url%></td>
-            <td><%= rr.user_email%></td>
-            <% if rr.invited == true %>
-                <td><%= link_to "Resend Invite", "#", id: rr.id.to_s,:remote => true %></td>
-            <% elsif rr.invited == false %>
-                <td><%= link_to "Invite", "#", id: rr.id.to_s, class: "requested_application",:remote => true %></td>
-            <% end %>
+            <tr>
+              <td><%= rr.application_name%></td>
+              <td><%= rr.application_url%></td>
+              <td><%= rr.user_email%></td>
+              <% if rr.active == true %>
+                <% if rr.invited == true %>
+                    <td><%= link_to "Resend Invite", "#", id: rr.id.to_s,:remote => true %></td>
+                <% elsif rr.invited == false %>
+                    <td><%= link_to "Invite", "#", id: rr.id.to_s, class: "requested_application",:remote => true %></td>
+                <% end %>
+              <% else %>
+                    <td></td>
+              <%end%>
+            </tr>
           <% end %>
-        </tr>
-      <%end%>
+        <%end%>
       </tbody>
     </table>
-
   <% end %>
 <%end%>
 

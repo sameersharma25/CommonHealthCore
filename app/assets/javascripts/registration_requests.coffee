@@ -4,10 +4,12 @@
 
 
   $(document).on("keyup", "#application_name", ->
-    appName = $('#application_name').val() 
-    console.log("appName::", appName)
+    appName = $('#application_name').val()
+#    console.log("appName::", appName)
     appURL = $('#application_url')
-    console.log("appURL", appURL)
-    appURL[0].value = appName + '.commonhealthcore.com'
+    autoUrl = appName + '.commonhealthcore.com'
+#    console.log("appURL", autoUrl)
+    appURL.val(autoUrl)
+
     )
 
