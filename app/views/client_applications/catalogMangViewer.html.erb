@@ -57,7 +57,8 @@
         <div id="orgDesc" >
             <h3><i>Organization Description</i></h3>
             <% if @OrgDescription != nil %>
-                <% @OrgDescription.each do |pd| %>
+              <% @OrgDescription.each do |pd| %>
+                <div class="orgDescription">
                   <%= label_tag :Xpath %>
                   <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
 
@@ -67,7 +68,8 @@
 
                   <%= label_tag :Domain %>
                   <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
-                <% end %>
+                </div>
+              <% end %>
             <% end %>
         </div>
 
@@ -471,24 +473,28 @@ document.getElementById("collectButton").addEventListener("click", function(even
               nameArray.push(nameObj)
               organizationName['OrganizationName'] = nameArray; 
   //orgDesc
-  var orgDesc = document.getElementById('orgDesc')
-  var orgDescElements = orgDesc.querySelectorAll("input");
+  var orgDesc = document.getElementsByClassName('orgDescription')
+  orgDescArray = []
+
+  for(var i = 0; i < orgDesc.length; i++) {
+    var orgDescElements = orgDesc[i].querySelectorAll("input");
+
     descObj = {}
-        for(var i = 0; i < orgDescElements.length; i++){
-              var inputElement = orgDescElements[i];
-                    if (inputElement.value == ""){
-                      console.log("skip")
-                    } else {
-                    descObj[inputElement.name] = inputElement.value; 
-                    } 
-              console.log(inputElement.name, "=", inputElement.value)
-              
-              }
-              orgDescArray = []
-              orgDescArray.push(descObj)
-              organizationName['OrgDescription'] = orgDescArray;
-          ////
-         organizationDetails['OrganizationName'] = organizationName
+    for (var q = 0; q < orgDescElements.length; q++) {
+      var inputElement = orgDescElements[q];
+      if (inputElement.value == "") {
+          console.log("skip")
+      } else {
+          descObj[inputElement.name] = inputElement.value;
+      }
+      console.log(inputElement.name, "=", inputElement.value)
+
+    }
+    orgDescArray.push(descObj)
+  }
+  organizationName['OrgDescription'] = orgDescArray;
+    ////
+  organizationDetails['OrganizationName'] = organizationName
 
 ///////// 
 console.log("After Org", organizationDetails)
@@ -668,7 +674,7 @@ organizationDetails["OrgSites"] = orgSiteArray
 
             } 
     //Program Description
-    
+
     progDescArray = []
     var programProgDesc = programform[i].getElementsByClassName("programProgramDescription")
           for(var q = 0; q < programProgDesc.length; q++){
