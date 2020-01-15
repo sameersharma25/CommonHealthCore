@@ -74,8 +74,10 @@
         </div>
 
         <% if @OrgDescription != nil %>
-          <%= label_tag :OrganizationDescriptionDisplay %><br>
-          <%= text_field_tag :Text, @orgDetails['OrganizationDescriptionDisplay'], name: :OrganizationDescriptionDisplay, size: '50' %><br>
+          <div id="descdisplay" >
+            <%= label_tag :OrganizationDescriptionDisplay %><br>
+            <%= text_area_tag :Text, @orgDetails['OrganizationDescriptionDisplay'], name: :OrganizationDescriptionDisplay, rows:"4", cols:"50" %><br>
+          </div>
         <% end %>
     </div>
 
@@ -437,7 +439,7 @@ document.getElementById("collectButton").addEventListener("click", function(even
  organizationDetails = {}
  //OrgForm //Need to ignore certain values
   var orgform = document.getElementById('OrgForm')  
-  var inputElements = orgform.querySelectorAll("input");
+  var inputElements = orgform.querySelectorAll("input, textarea");
   var organizationName = {}
 
         for(var i = 0; i < inputElements.length; i++){
