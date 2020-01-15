@@ -67,7 +67,8 @@
 
 
                   <%= label_tag :Domain %>
-                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %>
+                  <button id="deleteButton", onclick = "OrgDescriptionDelete(this)">Delete</button> <br>
                 </div>
               <% end %>
             <% end %>
@@ -433,6 +434,21 @@ var togglePrograms  = document.getElementsByClassName('toggleProgram')
      })
   }
 
+var OrgDescriptionDelete = function (event) {
+    event.closest('div').classList.add("hidden");
+    var default_description = <%= raw @default_description.present? ? true : false %>;
+    var orgDesc = document.querySelectorAll('.orgDescription:not(.hidden)');
+    orgDescDisplay = []
+    if (orgDesc.length == 0) {
+      document.getElementById('descdisplay').classList.add("hidden");
+    }else if (orgDesc.length >= 1 && default_description == true){
+      for(var i = 0; i < orgDesc.length; i++) {
+        result = orgDesc[i].querySelector('input[name="Text"]').value
+          orgDescDisplay.push(result)
+      }
+      document.getElementById("descdisplay").querySelector('textarea[id="Text"]').value = orgDescDisplay.join(" ");
+    }
+}
 
 document.getElementById("collectButton").addEventListener("click", function(event){
 
@@ -475,7 +491,7 @@ document.getElementById("collectButton").addEventListener("click", function(even
               nameArray.push(nameObj)
               organizationName['OrganizationName'] = nameArray; 
   //orgDesc
-  var orgDesc = document.getElementsByClassName('orgDescription')
+  var orgDesc =  document.querySelectorAll('.orgDescription:not(.hidden)')
   orgDescArray = []
 
   for(var i = 0; i < orgDesc.length; i++) {
