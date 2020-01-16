@@ -257,10 +257,11 @@ module Api
             logger.debug("the NEED IS : #{need}******the OBSTACLE IS : #{obstacle}******** THE SOLUTION IS : #{solution}")
             task_id = ''
             task_id = Task.where(solution_id: solution_id ).first.id.to_s if !Task.where(solution_id: solution_id ).first.nil?
-
+            task_transferable = ''
+            task_transferable = Task.where(solution_id: solution_id ).first.transferable if !Task.where(solution_id: solution_id ).first.nil?
             solution_hash = {solution_id: solution_id, solution_title: solution_title,
                              solution_description: solution_description, solution_provider: solution_provider,
-                             task_id: task_id}
+                             task_id: task_id, task_transferable: task_transferable}
             obstacle_hash[:solutions_array].push(solution_hash) if solution_hash
           end
           need_hash[:obstacles_array].push(obstacle_hash)
@@ -346,10 +347,11 @@ module Api
               solution_description = solution.solution_description
               solution_provider = solution.solution_provider
               task_id = Task.find_by(solution_id: solution_id ).id.to_s
+              task_transferable = Task.find_by(solution_id: solution_id ).transferable
 
               solution_hash = {solution_id: solution_id, solution_title: solution_title,
                                solution_description: solution_description, solution_provider: solution_provider,
-                               task_id: task_id}
+                               task_id: task_id, task_transferable: task_transferable}
               obstacle_hash[:solutions_array].push(solution_hash) if solution_hash
             end
             need_hash[:obstacles_array].push(obstacle_hash)
