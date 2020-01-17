@@ -178,7 +178,7 @@
 
                     <div>
                       <%= label_tag :ProgramDescriptionDisplay %><br>
-                      <%= text_area_tag :Text, x['ProgramDescriptionDisplay'], name: :ProgramDescriptionDisplay, rows:"5", cols:"45"%><br>
+                      <%= text_area_tag :Text, x['ProgramDescriptionDisplay'], name: :ProgramDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"45"%><br>
                     </div>
 
                     <% if x['ServiceAreaDescription'] != nil %>
