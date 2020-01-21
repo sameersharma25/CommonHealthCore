@@ -6,7 +6,7 @@ module Api
   class ExternalApplicationsController < ActionController::Base
     include ClientApplicationsHelper
 
-    before_action :set_user_id
+    before_action :set_user_id, except: [:client_list]
     def render_script
       render html: '<div>html goes here</div>'.html_safe
     end
@@ -28,7 +28,7 @@ module Api
 
       #mailer { status, referral/task, clientApp }
       ca = ClientApplication.find(existing_status.referred_by_id)
-      NotificationMailer.alertParentAppStatusDecline(task, ca).deliver
+      #NotificationMailer.alertParentAppStatusDecline(task, ca).deliver
       ##
 
       render :json=> {status: :ok, message: "Request Rejected " }
