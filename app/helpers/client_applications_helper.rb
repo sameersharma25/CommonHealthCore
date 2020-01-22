@@ -41,10 +41,16 @@ module ClientApplicationsHelper
     result = dynamodb.get_item(parameters)[:item]
   end
 
-  def set_organization_description_display
+  def set_default_description_display
     if @OrgDescription.present? && @orgDetails["OrganizationDescriptionDisplay"].blank?
       @default_description = true
       @orgDetails["OrganizationDescriptionDisplay"] = @OrgDescription.map{|p| p["Text"]}.compact.reject(&:empty?).join(' ')
+    end
+
+    @program.each do |program|
+      if program["ProgramDescription"].present? && program["ProgramDescriptionDisplay"].blank?
+        program["ProgramDescriptionDisplay"] = program["ProgramDescription"].map{|p| p["Text"]}.compact.reject(&:empty?).join(' ')
+      end
     end
   end
 

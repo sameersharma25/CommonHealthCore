@@ -176,6 +176,10 @@
                     <% end %>
                     <% end %>
 
+                    <div>
+                      <%= label_tag :ProgramDescriptionDisplay %><br>
+                      <%= text_area_tag :Text, x['ProgramDescriptionDisplay'], name: :ProgramDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"45"%><br>
+                    </div>
 
                     <% if x['ServiceAreaDescription'] != nil %>
                     <h3><i>Service Area Description</i></h3>
@@ -647,7 +651,7 @@ organizationDetails["OrgSites"] = orgSiteArray
   programHash = {};
 
   //basic elements
-    var progrraminputElements = programform[i].querySelectorAll("input");
+    var progrraminputElements = programform[i].querySelectorAll("input, textarea");
       for(var q = 0; q < progrraminputElements.length; q++){
         var inputElement = progrraminputElements[q];
               if (inputElement.value == ""){
