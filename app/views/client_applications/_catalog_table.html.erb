@@ -8,8 +8,11 @@
         <%else %> 
             <tr class="currentRow" id= <%="rule_#{i}" %>  >
         <%end%>  
-
-        <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %> </td>
+        <%if @sr_urls.include?(r["url"])%>
+          <td class = "myURL" style = "color: red" id= <%= "url_#{i}" %>  ><%= r["url"] %> </td>
+        <%else%>
+          <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %> </td>
+        <%end%>
 
         <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"]["OrganizationName"] %> </td>
 

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  apipie
+  # apipie
   resources :terms_privacies
   resources :about_us
   resources :faqs
@@ -44,8 +44,10 @@ Rails.application.routes.draw do
 
 
   devise_for :users, :controllers =>{invitations: 'invitations', sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks'}
-      devise_scope :user do 
-        scope :users, as: :users do 
+      devise_scope :user do
+        apipie
+        scope :users, as: :users do
+
           post 'pre_otp', to: 'users/sessions#pre_otp' 
         end 
       end 
@@ -267,6 +269,9 @@ Rails.application.routes.draw do
     post "/sol_update", to: "interviews#update_soulution"
     post "/sol_remove", to: "interviews#remove_solution"
 
+    post "/clients_created_by_a_navigator", to: "reports#clients_created_by_a_navigator"
+    post "/assessment_created_by_a_navigator", to: "reports#assessment_created_by_a_navigator"
+    post "/task_transferred_by_navigator", to: "reports#task_transferred_by_navigator"
 
 
   end

@@ -3,9 +3,12 @@ module Api
     include UsersHelper
     include ClientApplicationsHelper
     before_action :authenticate_user_from_token, except: [:ext_app_ledger]
+    before_action :set_user_id
     load_and_authorize_resource class: :api, except: [:ext_app_ledger]
 
-    def create_referral 
+    def create_referral
+      # user = User.find_by(email: params[:email])
+      # user_id = user.id.to_s
       patient = Patient.find(params[:patient_id])
       client_id = patient.client_application_id.to_s
       referral = Referral.new
@@ -22,6 +25,7 @@ module Api
       referral.third_party_user_id = params[:third_party_user_id]
       referral.consent_timestamp = params[:consent_timestamp]
       #
+      referral.ref_created_by = @user_id
       referral.save
       if params[:task].blank?
         if referral.save
@@ -166,9 +170,11 @@ module Api
         task_deadline = t.task_deadline
         task_description = t.task_description
         additional_fields = t.additional_fields
+        transferable = t.transferable
+
         task_details = {task_id: task_id , task_type: task_type, task_status: task_status, task_owner: task_owner,
                         provider: provider , task_deadline: task_deadline, task_description: task_description,
-                        additional_fields: additional_fields}
+                        additional_fields: additional_fields, transferable: transferable}
         task_list.push(task_details)
       end
 
@@ -538,7 +544,7 @@ module Api
           user_invite = helpers.send_invite_to_user(params[:user_email],ca,
                                             params[:name], admin_role.id.to_s )
           if user_invite == true
-             helpers.send_referral_common(params[:task_id],ca.id.to_s)
+             helpers.send_referral_common(params[:task_id],ca.id.to_s, @user_id)
           end
           # render :json => {status: :ok ,message: "Organization Invited."}
           req_status = "ok"
@@ -551,6 +557,13 @@ module Api
       end
 
       render :json => {status: req_status ,message: req_message }
+    end
+
+    private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_user_id
+      user = User.find_by(email: params[:email])
+      @user_id = user.id.to_s
     end
 
   end

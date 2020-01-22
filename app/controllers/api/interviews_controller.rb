@@ -1,10 +1,12 @@
 module Api
   class InterviewsController < ActionController::Base
     include UsersHelper
+    include InterviewsHelper
 
     def new_interview
 
       user = User.find_by(email: params[:email])
+      user_id = user.id.to_s
       client_application = user.client_application
 
       # new_call = Interview.new
@@ -19,6 +21,7 @@ module Api
       patient.date_of_birth = params[:caller_dob] if params[:caller_dob]
       patient.client_application_id = client_application.id.to_s
       patient.through_call = true
+      patient.patient_created_by = user_id
       if patient.save
         referral = Referral.new
         referral.referral_name = "Interview Call"
@@ -26,6 +29,7 @@ module Api
         referral.client_application_id = client_application.id.to_s
         referral.patient_id = patient.id.to_s
         referral.referral_type = "Interview"
+        referral.ref_created_by = user_id
         if referral.save
           task = Task.new
           task.task_type = "Interview"
@@ -150,18 +154,6 @@ module Api
     def interview_list
       client_application_id = User.find_by(email: params[:email]).client_application_id
       referrals = Referral.where(client_application_id: client_application_id, referral_type: "Interview" )
-      interview_list_array = []
-      referrals.each do |ref|
-        patient_id = ref.patient.id.to_s
-        patient = Patient.find(patient_id)
-        caller_first_name = patient.last_name + " "+ patient.first_name
-        int_created_at = patient.created_at
-        need_title = ref.needs.first.need_title if ref.needs.first
-        obstacle_title = ref.needs.first.obstacles.first.obstacle_title if (ref.needs.first && ref.needs.first.obstacles.first)
-        interview_hash = {interview_id: patient_id ,referral_id: ref.id.to_s,created_at: int_created_at, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
-        interview_list_array.push(interview_hash)
-      end
-
 
       # client_interviews = Patient.where(client_application_id: client_application_id, through_call: true )
       #
@@ -174,7 +166,8 @@ module Api
       #   interview_hash = {interview_id: patient_id ,created_at: int_created_at, caller_first_name: caller_first_name, need_title: need_title, obstacle_title: obstacle_title }
       #   interview_list_array.push(interview_hash)
       # end
-      interview_list = interview_list_array#.order(caller_first_name: :asc)
+      interview_list = helpers.assessments_list(referrals)
+      # interview_list = interview_list_array#.order(caller_first_name: :asc)
       render :json => {status: :ok, interview_list: interview_list}
     end
 
@@ -264,10 +257,11 @@ module Api
             logger.debug("the NEED IS : #{need}******the OBSTACLE IS : #{obstacle}******** THE SOLUTION IS : #{solution}")
             task_id = ''
             task_id = Task.where(solution_id: solution_id ).first.id.to_s if !Task.where(solution_id: solution_id ).first.nil?
-
+            task_transferable = ''
+            task_transferable = Task.where(solution_id: solution_id ).first.transferable if !Task.where(solution_id: solution_id ).first.nil?
             solution_hash = {solution_id: solution_id, solution_title: solution_title,
                              solution_description: solution_description, solution_provider: solution_provider,
-                             task_id: task_id}
+                             task_id: task_id, task_transferable: task_transferable}
             obstacle_hash[:solutions_array].push(solution_hash) if solution_hash
           end
           need_hash[:obstacles_array].push(obstacle_hash)
@@ -353,10 +347,11 @@ module Api
               solution_description = solution.solution_description
               solution_provider = solution.solution_provider
               task_id = Task.find_by(solution_id: solution_id ).id.to_s
+              task_transferable = Task.find_by(solution_id: solution_id ).transferable
 
               solution_hash = {solution_id: solution_id, solution_title: solution_title,
                                solution_description: solution_description, solution_provider: solution_provider,
-                               task_id: task_id}
+                               task_id: task_id, task_transferable: task_transferable}
               obstacle_hash[:solutions_array].push(solution_hash) if solution_hash
             end
             need_hash[:obstacles_array].push(obstacle_hash)
@@ -381,6 +376,38 @@ module Api
       #                  obstacle_status: obstacle.obstacle_status} if obstacle
 
       render :json => {status: :ok, interview_hash: interview_hash, details_array: details_array  }
+
+    end
+
+    def active_needs
+
+      user = User.find_by(email: params[:email])
+      client_application= user.client_application
+      patients = client_application.patients
+      patient_id_array = []
+
+      patients.each do |p|
+        needs = p.needs
+
+        needs.each do |need|
+          obstacles = need.obstacles
+          obstacles.each do |obstacle|
+            solutions = obstacle.solutions
+            solutions.each do |solution|
+              solution_id = solution.id.to_s
+              sol_task = Task.where(solution_id: solution_id)
+              if sol_task.blank?
+                patient_id_array.push(p.id.to_s)
+              end
+            end
+          end
+        end
+      end
+
+      final_patient_ids = patient_id_array.uniq()
+
+
+
 
     end
 

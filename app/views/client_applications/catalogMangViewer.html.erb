@@ -27,49 +27,59 @@
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
-              <%= label_tag :InactiveCatalog %>
-              <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'] %><br>
+          <%= label_tag :InactiveCatalog %>
+          <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'] %><br>
 
-              <%= label_tag :Type %>
-              <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
+          <%= label_tag :Type %>
+          <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
 
-              <%= label_tag :HomePageURL %>
-              <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL, readonly: true %><br>
+          <%= label_tag :HomePageURL %>
+          <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL, readonly: true %><br>
 
-              <div id="orgName" >
+          <div id="orgName" >
 
-                <h3><i>Organization Name</i></h3>
-                <% if @OrganizationName != nil %>
-                    <% @OrganizationName.each do |pd| %>
-                      <%= label_tag :Xpath %>
-                      <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
+            <h3><i>Organization Name</i></h3>
+            <% if @OrganizationName != nil %>
+                <% @OrganizationName.each do |pd| %>
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
 
-                      <%= label_tag :Text %><br>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                  <%= label_tag :Text %><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
 
 
-                      <%= label_tag :Domain %>
-                      <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
-                    <% end %>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
                 <% end %>
-            </div>
+            <% end %>
+        </div>
 
-            <div id="orgDesc" >
-                <h3><i>Organization Description</i></h3>
-                <% if @OrgDescription != nil %>
-                    <% @OrgDescription.each do |pd| %>
-                      <%= label_tag :Xpath %>
-                      <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
-                      
-                      <%= label_tag :Text %><br>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50' %><br>
+        <div id="orgDesc" >
+            <h3><i>Organization Description</i></h3>
+            <% if @OrgDescription != nil %>
+              <% @OrgDescription.each do |pd| %>
+                <div class="orgDescription">
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
+
+                  <%= label_tag :Text %><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50' %><br>
 
 
-                      <%= label_tag :Domain %>
-                      <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
-                    <% end %>
-                <% end %>
-            </div>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %>
+                  <button id="deleteButton", onclick = "OrgDescriptionDelete(this)">Delete</button> <br>
+                </div>
+              <% end %>
+            <% end %>
+        </div>
+
+        <% if @OrgDescription != nil %>
+          <div id="descdisplay" >
+            <%= label_tag :OrganizationDescriptionDisplay %><br>
+            <%= text_area_tag :Text, @orgDetails['OrganizationDescriptionDisplay'], name: :OrganizationDescriptionDisplay, rows:"4", cols:"50" %><br>
+          </div>
+        <% end %>
     </div>
 
     <div>
@@ -166,6 +176,10 @@
                     <% end %>
                     <% end %>
 
+                    <div>
+                      <%= label_tag :ProgramDescriptionDisplay %><br>
+                      <%= text_area_tag :Text, x['ProgramDescriptionDisplay'], name: :ProgramDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"45"%><br>
+                    </div>
 
                     <% if x['ServiceAreaDescription'] != nil %>
                     <h3><i>Service Area Description</i></h3>
@@ -220,11 +234,8 @@
                     <%= check_box_tag :P_Disabled, x['P_Disabled'],x['P_Disabled'].to_s.downcase == "true" %><br>
                     <%= label_tag :P_Native %>
                     <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :P_Dental %>
-                    <%= check_box_tag :P_Dental, x['P_Dental'], x['P_Dental'].to_s.downcase == "true" %><br>
-                    <%= label_tag :P_Vision %>
-                    <%= check_box_tag :P_Vision, x['P_Vision'], x['P_Vision'].to_s.downcase == "true" %><br>
+                    <!-- removed dental and vision -->
+           
             </div>
 
             <div class="col-md-4">
@@ -427,20 +438,39 @@ var togglePrograms  = document.getElementsByClassName('toggleProgram')
      })
   }
 
+var OrgDescriptionDelete = function (event) {
+    event.closest('div').classList.add("hidden");
+    var default_description = <%= raw @default_description.present? ? true : false %>;
+    var orgDesc = document.querySelectorAll('.orgDescription:not(.hidden)');
+    orgDescDisplay = []
+    if (orgDesc.length == 0) {
+      document.getElementById('descdisplay').classList.add("hidden");
+    }else if (orgDesc.length >= 1 && default_description == true){
+      for(var i = 0; i < orgDesc.length; i++) {
+        result = orgDesc[i].querySelector('input[name="Text"]').value
+          orgDescDisplay.push(result)
+      }
+      document.getElementById("descdisplay").querySelector('textarea[id="Text"]').value = orgDescDisplay.join(" ");
+    }
+}
 
 document.getElementById("collectButton").addEventListener("click", function(event){
 
  organizationDetails = {}
  //OrgForm //Need to ignore certain values
   var orgform = document.getElementById('OrgForm')  
-  var inputElements = orgform.querySelectorAll("input");
+  var inputElements = orgform.querySelectorAll("input, textarea");
   var organizationName = {}
 
         for(var i = 0; i < inputElements.length; i++){
               var inputElement = inputElements[i];
-                    if (inputElement.value == ""){
-                      console.log("skip")
-                    } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain' || inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
+              if (inputElement.value == ""){
+                console.log("skip")
+              }else if (inputElement.type == "checkbox" && inputElement.checked == true){
+                  organizationName[inputElement.name] = true
+              }else if (inputElement.type == "checkbox" && inputElement.checked != true){
+                 organizationName[inputElement.name] = false
+              } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain' || inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
                         console.log("skip")
                     }else{
                       organizationName[inputElement.name] = inputElement.value; 
@@ -465,24 +495,28 @@ document.getElementById("collectButton").addEventListener("click", function(even
               nameArray.push(nameObj)
               organizationName['OrganizationName'] = nameArray; 
   //orgDesc
-  var orgDesc = document.getElementById('orgDesc')
-  var orgDescElements = orgDesc.querySelectorAll("input");
+  var orgDesc =  document.querySelectorAll('.orgDescription:not(.hidden)')
+  orgDescArray = []
+
+  for(var i = 0; i < orgDesc.length; i++) {
+    var orgDescElements = orgDesc[i].querySelectorAll("input");
+
     descObj = {}
-        for(var i = 0; i < orgDescElements.length; i++){
-              var inputElement = orgDescElements[i];
-                    if (inputElement.value == ""){
-                      console.log("skip")
-                    } else {
-                    descObj[inputElement.name] = inputElement.value; 
-                    } 
-              console.log(inputElement.name, "=", inputElement.value)
-              
-              }
-              orgDescArray = []
-              orgDescArray.push(descObj)
-              organizationName['OrgDescription'] = orgDescArray;
-          ////
-         organizationDetails['OrganizationName'] = organizationName
+    for (var q = 0; q < orgDescElements.length; q++) {
+      var inputElement = orgDescElements[q];
+      if (inputElement.value == "") {
+          console.log("skip")
+      } else {
+          descObj[inputElement.name] = inputElement.value;
+      }
+      console.log(inputElement.name, "=", inputElement.value)
+
+    }
+    orgDescArray.push(descObj)
+  }
+  organizationName['OrgDescription'] = orgDescArray;
+    ////
+  organizationDetails['OrganizationName'] = organizationName
 
 ///////// 
 console.log("After Org", organizationDetails)
@@ -617,7 +651,7 @@ organizationDetails["OrgSites"] = orgSiteArray
   programHash = {};
 
   //basic elements
-    var progrraminputElements = programform[i].querySelectorAll("input");
+    var progrraminputElements = programform[i].querySelectorAll("input, textarea");
       for(var q = 0; q < progrraminputElements.length; q++){
         var inputElement = progrraminputElements[q];
               if (inputElement.value == ""){
@@ -662,7 +696,7 @@ organizationDetails["OrgSites"] = orgSiteArray
 
             } 
     //Program Description
-    
+
     progDescArray = []
     var programProgDesc = programform[i].getElementsByClassName("programProgramDescription")
           for(var q = 0; q < programProgDesc.length; q++){

@@ -17,6 +17,7 @@ class Task
   field :security_keys, type: Array, default: []
   field :medical_case, type: Boolean, default: false
   field :solution_id, type: String
+  field :transferable, type: Boolean, default: true
   mount_uploader :patient_document , PatientFileUploader
 
   belongs_to :referral

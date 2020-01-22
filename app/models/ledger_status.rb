@@ -7,6 +7,7 @@ class LedgerStatus
   field :external_object_id, type: String
   field :referred_by_id, type: String
   field :request_reject_reason, type: String
+  field :transferred_by, type: String
 
   belongs_to :ledger_master
   has_many :ledger_records

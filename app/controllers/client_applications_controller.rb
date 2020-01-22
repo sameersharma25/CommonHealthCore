@@ -240,6 +240,8 @@ class ClientApplicationsController < ApplicationController
 
     #@masterStatus = @client_application.master_application_status
 
+    @sr_urls = ScrapingRule.all.pluck(:url)
+    logger.debug("the sr ursls are  : ************************ #{@sr_urls}")
     user = current_user
     @client_application = current_user.client_application
     @masterStatus = @client_application.master_application_status
@@ -253,6 +255,8 @@ class ClientApplicationsController < ApplicationController
     @url = details[:url]
     #logger.debug("WHAT IS THE URL  #{@url}")
     @orgDetails = details[:OrgDetails]
+    # sets default org desc display if don't exists
+    set_default_description_display
     #logger.debug("OrgDetails:::: #{@orgDetails}")
     @OrganizationName = details[:OrganizationName]
     #logger.debug("OrgName::: #{@OrganizationName}")

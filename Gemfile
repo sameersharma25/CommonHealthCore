@@ -47,7 +47,7 @@ gem 'wicked'
 
 gem 'rack-cors', :require => 'rack/cors'
 
-#gem 'simple_token_authentication'
+gem 'simple_token_authentication'
 # gem 'aws-sdk'
 gem 'aws-sdk', '~> 3.0', '>= 3.0.1'
 gem 'whenever', require: false

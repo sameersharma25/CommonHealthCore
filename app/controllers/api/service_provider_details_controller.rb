@@ -49,17 +49,28 @@ module Api
 
     def scrappy_doo_response
 
-      logger.debug("the parameters are: #{params.inspect}")
-      sr = ScrapingRule.find(params[:rule_id])
-      rules_to_change = params[:ruleToChange]
-      rules_to_change.each do |r_change|
-        if r_change == "organizationName"
-          sr.organizationName_changeeee = true
-        elsif r_change == "organizationDescription"
-          sr.organizationDescription_changeeee = true
-        end
+      change_array = []
+      sr = ScrapingRule.new
+      sr.url = params[:ruleToChange][:url]
+      params[:ruleToChange][:ruleToChange].each do |p|
+        # logger.debug("the P is #{p}")
+        change_array.push(p.to_unsafe_h)
       end
+      # logger.debug("Type od chcanges : #{change_array}")
+      sr.changed_fields = change_array
+      # logger.debug("the scrappy params areeee: #{sr.inspect}")
       sr.save
+      # logger.debug("the parameters are: #{params.inspect}")
+      # sr = ScrapingRule.find(params[:rule_id])
+      # rules_to_change = params[:ruleToChange]
+      # rules_to_change.each do |r_change|
+      #   if r_change == "organizationName"
+      #     sr.organizationName_changeeee = true
+      #   elsif r_change == "organizationDescription"
+      #     sr.organizationDescription_changeeee = true
+      #   end
+      # end
+      # sr.save
       #{"ruleToChange"=>["OrganizationName", "OrganizationDescription"], "rule_id"=>" 5c7418b158f01a070996c531", "service_provider_detail"=>{}}
 
     end
@@ -578,8 +589,8 @@ module Api
       #item["status"] = "New"
       #created_at = DateTime.now.strftime("%F %T")
       #item["created_at"] = created_at
-      item["catalog_id"] = SecureRandom.hex(13)
-      item["rejectReason"] = "N/A"
+      # item["catalog_id"] = SecureRandom.hex(13)
+      # item["rejectReason"] = "N/A"
 
       item1=  mandatory_parameters_check(item, "Creating")
       logger.debug(")))))))))))))))))))))))))))))))))))))))))))the item is : #{item1}")

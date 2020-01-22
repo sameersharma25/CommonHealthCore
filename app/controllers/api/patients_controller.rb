@@ -4,9 +4,7 @@ module Api
     before_action :authenticate_user_from_token, except: []
     load_and_authorize_resource class: :api
 
-
-
-  def update_patient 
+    def update_patient
       patient = Patient.find(params[:patient_id])
       patient.first_name = params[:first_name].titleize if params[:first_name]
       patient.last_name = params[:last_name].titleize if params[:last_name]
@@ -45,8 +43,6 @@ module Api
       render :json => {status: :ok, message: "#{patient_name} Details have been updated" }
     end
 
-
-
     def crete_appointment_for_patient
 
       user = User.find_by(email: params[:email])
@@ -75,8 +71,8 @@ module Api
 
     def create_patient
       user = User.find_by(email: params[:email])
+      user_id = user.id.to_s
       client_application = user.client_application
-
       patient = Patient.new
       patient.client_application_id = client_application
       patient.first_name = params[:first_name].titleize if params[:first_name]
@@ -109,6 +105,7 @@ module Api
       patient.population_group = params[:population_group] if params[:population_group]
       patient.service_group = params[:service_group] if params[:service_group]
       patient.client_consent = params[:client_consent] if params[:client_consent]
+      patient.patient_created_by = user_id
 
       if patient.save
         render :json=> {status: :ok, message: "Patient Created Successfully", patient_id: patient.id.to_s}
