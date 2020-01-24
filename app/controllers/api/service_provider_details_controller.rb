@@ -297,7 +297,7 @@ module Api
       params_validation = CatalogManagement::CreateCatalogEntry::CreateRequestWithEmailValidators::PARAMS.new.call(body_json)
       unless params_validation.success?
         InvalidCatalogEntry.new(email: params[:email], catalog_hash: item ,error_hash: params_validation.errors.to_hash).save
-        return render :json => {message: "Entry created successfully" }
+        render :json => { status: :ok, message: "Entry created successfully"  }
       end
 
       user = User.find_by(email: params[:email])
