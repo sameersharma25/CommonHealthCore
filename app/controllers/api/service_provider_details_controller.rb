@@ -289,9 +289,17 @@ module Api
 
     end
 
-    def create_catalog_entry 
+    def create_catalog_entry
 
       item = params[:catalog_data].to_unsafe_h
+
+      body_json = JSON.parse(request.body.read)
+      params_validation = CatalogManagement::CreateCatalogEntry::CreateRequestWithEmailValidators::PARAMS.new.call(body_json)
+      unless params_validation.success?
+        InvalidCatalogEntry.new(email: params[:email], catalog_hash: item ,error_hash: params_validation.errors.to_hash).save
+        return render :json => {message: "Entry created successfully" }
+      end
+
       user = User.find_by(email: params[:email])
       client_application_id = user.client_application_id.to_s
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
