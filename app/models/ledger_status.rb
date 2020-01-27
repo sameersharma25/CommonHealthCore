@@ -22,4 +22,11 @@ class LedgerStatus
                   :track_update  => true,       # track document updates, default is true
                   :track_destroy => true        # track document destruction, default is true
 
+  before_save :add_modifier
+
+  def add_modifier
+    Rails.logger.debug("in the USER in patient model -------- #{User.current.inspect}")
+    self.modifier_id = User.current.id.to_s
+  end
+
 end

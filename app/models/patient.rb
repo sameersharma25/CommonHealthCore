@@ -46,6 +46,8 @@ class Patient
   has_many :needs
   geocoded_by :patient_zipcode
 
+  before_save :add_modifier
+
   # track_history   :on => [:first_name, :last_name]
   track_history   :on => [:all],       # track title and body fields only, default is :all
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier, set to nil to not create modifier_field
@@ -89,6 +91,11 @@ class Patient
     p = Patient.all.count
     a = Appointment.all.count
     puts("Patients Count: #{p} , Appointment Count: #{a}")
+  end
+
+  def add_modifier
+    # Rails.logger.debug("in the USER in patient model -------- #{User.current.inspect}")
+    self.modifier_id = User.current.id.to_s
   end
 
 end

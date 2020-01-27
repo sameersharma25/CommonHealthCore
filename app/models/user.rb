@@ -84,6 +84,8 @@ class User
   has_many :appointments
   # belongs_to :role
 
+  before_save :add_modifier
+
   track_history   :on => [:all],       # track title and body fields only, default is :all
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier, set to nil to not create modifier_field
                   :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
@@ -132,4 +134,16 @@ class User
 
     errors.add :password, 'Complexity requirement not met. Length should be 8-70 characters and include: 1 uppercase, 1 lowercase, 1 digit and 1 special character'
   end
+
+  def self.current
+    Thread.current[:user]
+  end
+  def self.current=(user)
+    Thread.current[:user] = user
+  end
+
+  def add_modifier
+    self.modifier_id = User.current.id.to_s
+  end
+
 end
