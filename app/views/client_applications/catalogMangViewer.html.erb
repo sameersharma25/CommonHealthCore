@@ -74,7 +74,7 @@
             <% end %>
         </div>
 
-        <% if @OrgDescription != nil %>
+        <% if @OrgDescription != nil && @OrgDescription != [] %>
           <div id="descdisplay" >
             <%= label_tag :OrganizationDescriptionDisplay %><br>
             <%= text_area_tag :Text, @orgDetails['OrganizationDescriptionDisplay'], name: :OrganizationDescriptionDisplay, rows:"4", cols:"50" %><br>
@@ -514,7 +514,10 @@ document.getElementById("collectButton").addEventListener("click", function(even
     }
     orgDescArray.push(descObj)
   }
-  organizationName['OrgDescription'] = orgDescArray;
+
+  if (orgDescArray.length > 0 ) {
+    organizationName['OrgDescription'] = orgDescArray;
+  }
     ////
   organizationDetails['OrganizationName'] = organizationName
 
@@ -638,8 +641,9 @@ console.log("After Org", organizationDetails)
 
             orgSiteArray.push(siteHash)
 }// End Site Loop
-organizationDetails["OrgSites"] = orgSiteArray
-
+if (orgSiteArray.length > 0){
+  organizationDetails["OrgSites"] = orgSiteArray
+}
 //End Site Form
 
 //Program
