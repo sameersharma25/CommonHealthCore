@@ -3,6 +3,9 @@ module Api
     include UsersHelper
     include InterviewsHelper
 
+    before_action :authenticate_user_from_token, except: [ ]
+    load_and_authorize_resource class: :api, except: [ ]
+
     def new_interview
 
       user = User.find_by(email: params[:email])
@@ -22,6 +25,7 @@ module Api
       patient.client_application_id = client_application.id.to_s
       patient.through_call = true
       patient.patient_created_by = user_id
+      patient.modifier_id = current_user.id.to_s
       if patient.save
         referral = Referral.new
         referral.referral_name = "Interview Call"
@@ -30,6 +34,7 @@ module Api
         referral.patient_id = patient.id.to_s
         referral.referral_type = "Interview"
         referral.ref_created_by = user_id
+        referral.modifier_id = current_user.id.to_s
         if referral.save
           task = Task.new
           task.task_type = "Interview"
@@ -78,6 +83,7 @@ module Api
     def new_need
       ref = Referral.find(params[:referral_id])
       ref.referral_type = "Interview"
+      ref.modifier_id = current_user.id.to_s
       ref.save
       patient_id = ref.patient.id.to_s
       new_need = Need.new

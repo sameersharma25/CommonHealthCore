@@ -11,11 +11,22 @@ module Api
       # user = User.find_by(email: params[:email])
       # user_id = user.id.to_s
 
-      patients = Patient.where(patient_created_by: @user_id)
+      all_patient_array = []
+      patient_created_by_me = HistoryTracker.where(scope: "patient", action: "create" ,  modifier_id: current_user.id.to_s)
 
-      patients_count = patients.count
+      patient_created_by_me.each do |pc|
+        patient_id = pc.association_chain[0]["id"].to_s
+        patient = Patient.find(patient_id)
+        patient_name = patient.last_name + " " + patient.first_name
+        created_on = pc.created_at.strftime("%D")
+        patient_hash = {patient_name: patient_name, created_on: created_on }
+        all_patient_array.push(patient_hash)
+      end
 
-      render :json => {status: :ok, patients: patients, patients_count: patients_count  }
+      # patients = Patient.where(patient_created_by: @user_id)
+      # patients_count = patients.count
+
+      render :json => {status: :ok, all_patient_array: all_patient_array  }
     end
 
     def assessment_created_by_a_navigator
@@ -23,12 +34,29 @@ module Api
       # user = User.find_by(email: params[:email])
       # user_id = user.id.to_s
 
-      client_application_id = User.find_by(email: params[:email]).client_application_id
-      referrals = Referral.where(client_application_id: client_application_id, referral_type: "Interview", ref_created_by: @user_id  )
+      assessment_array = []
+      assessment_created_by_me = HistoryTracker.where(scope: "referral", action: "create" ,  modifier_id: current_user.id.to_s)
 
-      interview_list = helpers.assessments_list(referrals)
-      interview_count = interview_list.count
-      render :json => {status: :ok, interview_list: interview_list, interview_count: interview_count }
+      assessment_created_by_me.each do |ac|
+        ref_id = ac.association_chain[0]["id"].to_s
+        ref = Referral.find(ref_id)
+        if ref.referral_type == "Interview"
+          patient_id = ref.patient.id.to_s
+          patient = Patient.find(patient_id)
+          ref_name = ref.referral_name
+          caller_first_name = patient.last_name + " "+ patient.first_name
+          created_on = ac.created_at.strftime("%D")
+          assessment_hash = {created_on: created_on, caller_first_name: caller_first_name, ref_name: ref_name }
+          assessment_array.push(assessment_hash)
+        end
+
+      end
+      # client_application_id = User.find_by(email: params[:email]).client_application_id
+      # referrals = Referral.where(client_application_id: client_application_id, referral_type: "Interview", ref_created_by: @user_id  )
+      #
+      # interview_list = helpers.assessments_list(referrals)
+      # interview_count = interview_list.count
+      render :json => {status: :ok, interview_list: assessment_array}
 
     end
 

@@ -1,5 +1,7 @@
 class User
   include Mongoid::Document
+  include Mongoid::Timestamps
+  include Mongoid::History::Trackable
 
 
   devise :two_factor_authenticatable, :two_factor_backupable, :otp_secret_encryption_key => Rails.application.secrets.otp_key
@@ -81,6 +83,15 @@ class User
   belongs_to :client_application, inverse_of: :users
   has_many :appointments
   # belongs_to :role
+
+  track_history   :on => [:all],       # track title and body fields only, default is :all
+                  :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier, set to nil to not create modifier_field
+                  :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
+                  :modifier_field_optional => true, # marks the modifier relationship as optional (requires Mongoid 6 or higher)
+                  :version_field => :version,   # adds "field :version, :type => Integer" to track current version, default is :version
+                  :track_create  => true,       # track document creation, default is true
+                  :track_update  => true,       # track document updates, default is true
+                  :track_destroy => true        # track document destruction, default is true
 
   def encrypted_otp_secret
     self[:encrypted_otp_secret]
