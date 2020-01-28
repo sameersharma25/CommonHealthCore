@@ -36,7 +36,7 @@ module Api
       patient.population_group = params[:population_group] if params[:population_group]
       patient.service_group = params[:service_group] if params[:service_group]
       patient.client_consent = params[:client_consent] if params[:client_consent]
-
+      patient.modifier_id = current_user.id.to_s
       patient.save
 
       patient_name = patient.first_name+" "+ patient.last_name
@@ -106,6 +106,8 @@ module Api
       patient.service_group = params[:service_group] if params[:service_group]
       patient.client_consent = params[:client_consent] if params[:client_consent]
       patient.patient_created_by = user_id
+      patient.modifier_id = current_user.id.to_s
+
 
       if patient.save
         render :json=> {status: :ok, message: "Patient Created Successfully", patient_id: patient.id.to_s}

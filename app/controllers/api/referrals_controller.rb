@@ -26,6 +26,7 @@ module Api
       referral.consent_timestamp = params[:consent_timestamp]
       #
       referral.ref_created_by = @user_id
+      referral.modifier_id = current_user.id.to_s
       referral.save
       if params[:task].blank?
         if referral.save
@@ -150,6 +151,7 @@ module Api
       referral.client_consent = params[:client_consent]
       referral.third_party_user_id = params[:third_party_user_id]
       referral.consent_timestamp = params[:consent_timestamp]
+      referral.modifier_id = current_user.id.to_s
       
       if referral.save
         render :json=> {status: :ok, message: "Referral Updated"}

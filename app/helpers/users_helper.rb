@@ -12,6 +12,7 @@ module UsersHelper
     if user && Devise.secure_compare(user.authentication_token, user_token)
       logger.debug("In the authenticate_user_from_token INSIDE THE IF *************")
       @current_user = user
+      User.current = current_user
       # sign_in user, store: false
     else
       logger.debug("In the authenticate_user_from_token INSIDE THE ELSE *************")

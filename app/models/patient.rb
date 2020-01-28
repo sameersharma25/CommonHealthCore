@@ -2,6 +2,7 @@ class Patient
   include Mongoid::Document
   include Mongoid::Timestamps
   include Geocoder::Model::Mongoid
+  include Mongoid::History::Trackable
   # include Geocoder::Model::MongoMapper
 
   # json {firstName: first_name, lastNname: last_name}
@@ -45,6 +46,18 @@ class Patient
   has_many :needs
   geocoded_by :patient_zipcode
 
+  before_save :add_modifier
+
+  # track_history   :on => [:first_name, :last_name]
+  track_history   :on => [:all],       # track title and body fields only, default is :all
+                  :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier, set to nil to not create modifier_field
+                  :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
+                  :modifier_field_optional => true, # marks the modifier relationship as optional (requires Mongoid 6 or higher)
+                  :version_field => :version,   # adds "field :version, :type => Integer" to track current version, default is :version
+                  :track_create  => true,       # track document creation, default is true
+                  :track_update  => true,       # track document updates, default is true
+                  :track_destroy => true        # track document destruction, default is true
+
   def self.update_patient_status
 
     ap = Patient.all
@@ -78,6 +91,11 @@ class Patient
     p = Patient.all.count
     a = Appointment.all.count
     puts("Patients Count: #{p} , Appointment Count: #{a}")
+  end
+
+  def add_modifier
+    # Rails.logger.debug("in the USER in patient model -------- #{User.current.inspect}")
+    self.modifier_id = User.current.id.to_s
   end
 
 end
