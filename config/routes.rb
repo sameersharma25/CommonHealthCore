@@ -273,7 +273,7 @@ Rails.application.routes.draw do
     post "/assessment_created_by_a_navigator", to: "reports#assessment_created_by_a_navigator"
     post "/task_transferred_by_navigator", to: "reports#task_transferred_by_navigator"
     post "/requests_accepted_by_navigator", to: "reports#requests_accepted_by_navigator"
-    post "/requests_accepted_by_navigator", to: "reports#requests_rejected_by_navigator"
+    post "/requests_rejected_by_navigator", to: "reports#requests_rejected_by_navigator"
     post "/customers_referred_by_navigator", to: "reports#organizations_referred_by_my_organization"
     post "/customers_referred_to_navigator", to: "reports#organizations_referred_to_my_organization"
 
