@@ -36,6 +36,12 @@
               <%= f.file_field :logo %>
             </div>
 
+          <div class="field">
+            <%= f.label :theme %>
+            <%= select_tag "theme", options_for_select(ClientApplication::THEME, @client_application.theme) %>
+          </div>
+
+
 
 
             <h3>Users</h3>

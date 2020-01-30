@@ -1,0 +1,20 @@
+.user-display > tbody > tr:nth-child(2n+1) > td {
+  background-color: #FE5E00;
+}
+
+.btn-primary, input[type=submit] {
+  background-color: #FE5E00 !important;
+  border-color: #FE5E00 !important;
+}
+
+.submit_button{
+  background-color: #FE5E00 !important;
+  border-radius: 5px;
+}
+
+input[type=text] {
+  border-top: transparent;
+  border-left: transparent;
+  border-right: transparent;
+  border-bottom: 2px solid #FE5E00;
+}

@@ -14,6 +14,10 @@ module Api
       all_patient_array = []
       patient_created_by_me = HistoryTracker.where(scope: "patient", action: "create" ,  modifier_id: current_user.id.to_s)
 
+      if !params[:date_filter].blank?
+        patient_created_by_me = data_filtering(patient_created_by_me)
+      end
+
       patient_created_by_me.each do |pc|
         patient_id = pc.association_chain[0]["id"].to_s
         patient = Patient.find(patient_id)
@@ -36,7 +40,9 @@ module Api
 
       assessment_array = []
       assessment_created_by_me = HistoryTracker.where(scope: "referral", action: "create" ,  modifier_id: current_user.id.to_s)
-
+      if !params[:date_filter].blank?
+        assessment_created_by_me = data_filtering(assessment_created_by_me)
+      end
       assessment_created_by_me.each do |ac|
         ref_id = ac.association_chain[0]["id"].to_s
         ref = Referral.find(ref_id)
@@ -64,6 +70,10 @@ module Api
 
       out_rfl_array = []
       task_tranferred_by_me = HistoryTracker.where(scope: "ledger_status", action: "create" ,  modifier_id: current_user.id.to_s)
+
+      if !params[:date_filter].blank?
+        task_tranferred_by_me = data_filtering(task_tranferred_by_me)
+      end
 
       task_tranferred_by_me.each do |tt|
         if tt["modified"].keys.include?("ledger_status")
@@ -106,6 +116,10 @@ module Api
       out_rfl_array = []
       request_accepted_by_me = HistoryTracker.where(scope: "ledger_status", action: "update" ,  modifier_id: current_user.id.to_s)
 
+      if !params[:date_filter].blank?
+        request_accepted_by_me = data_filtering(request_accepted_by_me)
+      end
+
       request_accepted_by_me.each do |tt|
         if tt["modified"].keys.include?("ledger_status")
           if tt["modified"]["ledger_status"] == "Transferred"
@@ -135,9 +149,13 @@ module Api
       out_rfl_array = []
       request_rejected_by_me = HistoryTracker.where(scope: "ledger_status", action: "update" ,  modifier_id: current_user.id.to_s)
 
+      if !params[:date_filter].blank?
+        request_rejected_by_me = data_filtering(request_rejected_by_me)
+      end
+
       request_rejected_by_me.each do |tt|
         if tt["modified"].keys.include?("ledger_status")
-          if tt["modified"]["ledger_status"] == "Transferred"
+          if tt["modified"]["ledger_status"] == "Rejected"
             led_status_id = tt.association_chain[0]["id"].to_s
             led_status = LedgerStatus.find(led_status_id)
 
@@ -163,7 +181,13 @@ module Api
 
       customer_id = current_user.client_application.id.to_s
 
-      request_sent_by_my_org = LedgerStatus.where(referred_by_id: customer_id).pluck(:referred_application_id).group_by(&:itself).map{|k, v| [k, v.length]}
+      request_sent_by_my_org = LedgerStatus.where(referred_by_id: customer_id)
+
+      if !params[:date_filter].blank?
+        request_sent_by_my_org = data_filtering(request_sent_by_my_org)
+      end
+
+      request_sent_by_my_org = request_sent_by_my_org.pluck(:referred_application_id).group_by(&:itself).map{|k, v| [k, v.length]}
 
       organizaiton_hash_array = []
 
@@ -180,7 +204,14 @@ module Api
 
       customer_id = current_user.client_application.id.to_s
 
-      request_sent_by_my_org = LedgerStatus.where(referred_application_id: customer_id).pluck(:referred_by_id).group_by(&:itself).map{|k, v| [k, v.length]}
+      request_sent_by_my_org = LedgerStatus.where(referred_application_id: customer_id)
+
+
+      if !params[:date_filter].blank?
+        request_sent_by_my_org = data_filtering(request_sent_by_my_org)
+      end
+
+      request_sent_by_my_org = request_sent_by_my_org.pluck(:referred_by_id).group_by(&:itself).map{|k, v| [k, v.length]}
 
       organizaiton_hash_array = []
 
@@ -193,6 +224,37 @@ module Api
       render :json=> {status: :ok, organizaiton_hash_array: organizaiton_hash_array }
     end
 
+    def data_filtering(data)
+      if params[:duration] == "monthly"
+        filtered_hash = monthly_report(params[:date_filter], data )
+      elsif params[:duration] == "quarterly"
+        filtered_hash = quarterly_report(params[:date_filter], data )
+      elsif params[:duration] == "yearly"
+        filtered_hash = yearly_report(params[:date_filter], data )
+      end
+      filtered_hash
+    end
+
+    def monthly_report(date, data_hash)
+      start_date = Date.parse(date).beginning_of_month
+      end_date = Date.parse(date).end_of_month
+
+      new_data =  data_hash.where(created_at: start_date..end_date)
+    end
+
+    def quarterly_report(date, data_hash)
+      start_date = Date.parse(date).beginning_of_quarter
+      end_date = Date.parse(date).end_of_quarter
+
+      new_data =  data_hash.where(created_at: start_date..end_date)
+    end
+
+    def yearly_report(date, data_hash)
+      start_date = Date.parse(date).beginning_of_year
+      end_date = Date.parse(date).end_of_year
+
+      new_data =  data_hash.where(created_at: start_date..end_date)
+    end
 
 
 

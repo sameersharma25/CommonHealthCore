@@ -51,6 +51,15 @@ module ClientApplicationsHelper
       if program["ProgramDescription"].present? && program["ProgramDescriptionDisplay"].blank?
         program["ProgramDescriptionDisplay"] = program["ProgramDescription"].map{|p| p["Text"]}.compact.reject(&:empty?).join(' ')
       end
+
+      if program["ServiceAreaDescription"].present? && program["ServiceAreaDescriptionDisplay"].blank?
+        program["ServiceAreaDescriptionDisplay"] = program["ServiceAreaDescription"].map{|p| p["Text"]}.compact.reject(&:empty?).join(' ')
+      end
+
+      if program["PopulationDescription"].present? && program["PopulationDescriptionDisplay"].blank?
+        program["PopulationDescriptionDisplay"] = program["PopulationDescription"].map{|p| p["Text"]}.compact.reject(&:empty?).join(' ')
+      end
+
     end
   end
 

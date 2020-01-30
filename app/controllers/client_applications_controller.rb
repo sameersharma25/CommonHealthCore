@@ -107,6 +107,7 @@ class ClientApplicationsController < ApplicationController
   # PATCH/PUT /client_applications/1.json
   def update
     @client_application.logo = params['client_application']['logo']
+    @client_application.theme = params['theme']
     @client_application.save
     respond_to do |format|
       if @client_application.update(client_application_params)
@@ -1179,7 +1180,7 @@ class ClientApplicationsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_application_params
     # params.fetch(:client_application, {})
-    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :custom_agreement, :custom_agreement_comment, :agreement_expiration_date, :valid_for_integer, :valid_for_interval, :client_agreement_valid_til, :client_agreement_valid_for, :client_agreement_expiration, :client_agreement_sign_date, :accept_referrals, :client_speciality, :client_agreement, :agreement_type, :logo ,#users_attributes: [:name, :email, :_destroy],
+    params.require(:client_application).permit(:name, :application_url,:service_provider_url, :custom_agreement, :custom_agreement_comment, :agreement_expiration_date, :valid_for_integer, :valid_for_interval, :client_agreement_valid_til, :client_agreement_valid_for, :client_agreement_expiration, :client_agreement_sign_date, :accept_referrals, :client_speciality, :client_agreement, :agreement_type, :logo, :theme ,#users_attributes: [:name, :email, :_destroy],
 
     notification_rules_attributes: [:appointment_status, :time_difference,:subject, :body])
   end
