@@ -2,10 +2,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Chc</title>
+    <title>CHC</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <% if current_user.nil?%>
+        <%= stylesheet_link_tag "green"%>
+    <% else %>
+        <% ca = ClientApplication.find(current_user.client_application_id)%>
+        <% if ca.theme == "#43b02a"%>
+            <%= stylesheet_link_tag "green"%>
+        <% elsif ca.theme == "#27aacc" %>
+            <%= stylesheet_link_tag "blue"%>
+        <% elsif ca.theme == "#FE5E00" %>
+            <%= stylesheet_link_tag "orange"%>
+        <% elsif ca.theme == "#666362" %>
+            <%= stylesheet_link_tag "grey"%>
+        <% end %>
+    <% end %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
   </head>

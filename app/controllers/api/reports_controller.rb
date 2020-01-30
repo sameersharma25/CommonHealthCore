@@ -205,7 +205,7 @@ module Api
       customer_id = current_user.client_application.id.to_s
 
       request_sent_by_my_org = LedgerStatus.where(referred_application_id: customer_id)
-      
+
 
       if !params[:date_filter].blank?
         request_sent_by_my_org = data_filtering(request_sent_by_my_org)
@@ -227,8 +227,8 @@ module Api
     def data_filtering(data)
       if params[:duration] == "monthly"
         filtered_hash = monthly_report(params[:date_filter], data )
-      elsif params[:duration] == "quaterly"
-        filtered_hash = quaterly_report(params[:date_filter], data )
+      elsif params[:duration] == "quarterly"
+        filtered_hash = quarterly_report(params[:date_filter], data )
       elsif params[:duration] == "yearly"
         filtered_hash = yearly_report(params[:date_filter], data )
       end
@@ -242,7 +242,7 @@ module Api
       new_data =  data_hash.where(created_at: start_date..end_date)
     end
 
-    def quaterly_report(date, data_hash)
+    def quarterly_report(date, data_hash)
       start_date = Date.parse(date).beginning_of_quarter
       end_date = Date.parse(date).end_of_quarter
 
