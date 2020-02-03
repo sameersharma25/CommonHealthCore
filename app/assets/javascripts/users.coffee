@@ -25,7 +25,7 @@ jQuery ($) ->
       #alert("else")
       #$("#logoutID a").trigger("click")
       $.ajax({ 
-      type: 'DELETE', 
+      type: 'GET', 
       url: 'users/sign_out' 
       });
       console.log("After click")

@@ -4,6 +4,7 @@ require 'json'
 
 module Api
   class ExternalApplicationsController < ActionController::Base
+    include UsersHelper
     include ClientApplicationsHelper
 
     before_action :set_user_id, except: [:client_list]
