@@ -251,7 +251,9 @@ class ClientApplicationsController < ApplicationController
   end
 
   def catalogMangViewer
-    details = get_catalog_details(ENV["CATALOG_TABLE_NAME"]) 
+
+    table = params.has_key?(:provider_page) ? ENV["MASTER_TABLE_NAME"] : ENV["CATALOG_TABLE_NAME"]
+    details = get_catalog_details(table)
     logger.debug("looking at the details, #{details}")
     @url = details[:url]
     #logger.debug("WHAT IS THE URL  #{@url}")
@@ -274,6 +276,8 @@ class ClientApplicationsController < ApplicationController
     @ProgramDescription = details[:progDesc]
     @ServiceAreaDescription = details[:servArea]
     @ProgramReferences = details[:progRef]
+
+    @provider = params.has_key?(:provider_page) ? "master" : ""
 
 #this is for the PDF implementation 
 @pdfLinkSet = [] 
