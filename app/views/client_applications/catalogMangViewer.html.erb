@@ -21,8 +21,10 @@
 
 <div class="container-fluid" id="createMargin">
    <h3 class="pull-right" id ="theurl"> <%= @url %> </h3><br>
-    <button id="collectButton">Update</button> 
-     <h3 id="portalStatus"></h3>
+    <% if @provider != "master" %>
+      <button id="collectButton">Update</button>
+    <%end%>
+    <h3 id="portalStatus"></h3>
          
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
