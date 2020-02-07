@@ -143,6 +143,7 @@ module Api
       }
 
       result = dynamodb.get_item(parameters)[:item]["OrgSites"]
+      result = result.nil? ? [] : result
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
       site_id = params[:SelectSiteID]
 

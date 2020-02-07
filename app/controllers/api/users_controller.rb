@@ -2,9 +2,9 @@ module Api
   class UsersController < ActionController::Base
     include UsersHelper
     require 'securerandom'
-    before_action :authenticate_user_from_token, except: [:give_appointment_details_for_notification,  :set_password, :chcAuthentication]
+    before_action :authenticate_user_from_token, except: [:get_terms,:get_about_us,:get_faq,:give_appointment_details_for_notification,  :set_password, :chcAuthentication]
     # before_action :authenticate_user!
-    load_and_authorize_resource class: :api, except: [:give_appointment_details_for_notification, :chcAuthentication]
+    load_and_authorize_resource class: :api, except: [:get_terms,:get_about_us,:get_faq,:give_appointment_details_for_notification, :chcAuthentication]
 
     #skip_before_action :verify_authenticity_token, only: [:chcAuthentication]
 
@@ -370,19 +370,27 @@ module Api
     end
 
     def get_faq
-      
-      user = User.find_by(email: params['email'])
-      cc_id = user.client_application_id
-      
+
+      if !params['email'].blank?
+        user = User.find_by(email: params['email'])
+        cc_id = user.client_application_id
+      else
+        cc_id = ClientApplication.where(master_application_status: true).first
+      end
+
       @faqs = Faq.where(client_application_id: cc_id)
 
       render :json => { status: :ok, faqs: @faqs}
     end 
 
     def get_about_us
-      
-      user = User.find_by(email: params['email'])
-      cc_id = user.client_application_id
+
+      if !params['email'].blank?
+        user = User.find_by(email: params['email'])
+        cc_id = user.client_application_id
+      else
+        cc_id = ClientApplication.where(master_application_status: true).first
+      end
 
       @about_us = AboutU.where(client_application_id: cc_id)
 
@@ -390,9 +398,14 @@ module Api
     end 
 
     def get_terms
-      
-      user = User.find_by(email: params['email'])
-      cc_id = user.client_application_id
+
+      if !params['email'].blank?
+        user = User.find_by(email: params['email'])
+        cc_id = user.client_application_id
+      else
+        cc_id = ClientApplication.where(master_application_status: true).first
+      end
+
       @terms = TermsPrivacy.where(client_application_id: cc_id)
        render :json => { status: :ok, terms: @terms}
 
