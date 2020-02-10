@@ -37,6 +37,7 @@ module Api
       patient.service_group = params[:service_group] if params[:service_group]
       patient.client_consent = params[:client_consent] if params[:client_consent]
       patient.modifier_id = current_user.id.to_s
+      patient.caller_additional_fields = params["caller_additional_fields"].to_unsafe_h if params[:caller_additional_fields]
       patient.save
 
       patient_name = patient.first_name+" "+ patient.last_name
@@ -107,6 +108,7 @@ module Api
       patient.client_consent = params[:client_consent] if params[:client_consent]
       patient.patient_created_by = user_id
       patient.modifier_id = current_user.id.to_s
+      patient.caller_additional_fields = params["caller_additional_fields"].to_unsafe_h if params[:caller_additional_fields]
 
 
       if patient.save
@@ -184,7 +186,8 @@ module Api
                           emergency_contact_fName: patient.emergency_contact_fName, emergency_contact_lName: patient.emergency_contact_lName,
                           emergency_contact_phone: patient.emergency_contact_phone, emergency_contact_email: patient.emergency_contact_email,
                           emergency_contact_relationship: patient.emergency_contact_relationship, population_group: patient.population_group,
-                          service_group: patient.service_group, client_consent: patient.client_consent}
+                          service_group: patient.service_group, client_consent: patient.client_consent,
+                          caller_additional_fields: patient.caller_additional_fields}
 
       render :json => {status: :ok, patients_details: patients_details }
     end
