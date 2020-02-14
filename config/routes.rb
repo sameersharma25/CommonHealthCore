@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   post "/save_all_details", to: "client_applications#save_all_details"
   post "/copy_default_settings", to: "client_applications#copy_default_settings"
   post "send_application_invitation", to: "client_applications#send_application_invitation"
+  post "send_application_prep_request", to: "client_applications#send_application_prep_request"
   get "/contact_management_details", to: "client_applications#contact_management"
   get "/master_provider", to: "client_applications#master_provider"
   get "/plugin_page", to: "client_applications#plugin"

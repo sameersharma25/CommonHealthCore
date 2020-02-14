@@ -178,6 +178,17 @@ class ClientApplicationsController < ApplicationController
 
   end
 
+
+  def send_application_prep_request
+    rr = RegistrationRequest.find(params[:id])
+
+    name = rr.application_name
+
+    RegistrationRequestMailer.send_application_prep( name ).deliver
+
+
+  end
+
   def master_provider
     results = []
     dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")

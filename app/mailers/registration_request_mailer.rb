@@ -13,4 +13,10 @@ class RegistrationRequestMailer < ActionMailer::Base
     mail(to: email, subject: "Patient Referral")
   end
 
+  def send_application_prep(name)
+    @name =  name
+    mail(to: ENV["BACKEND_USER_EMAIL"], subject: "Prepare referral request")
+  end
+
+
 end

@@ -8,8 +8,8 @@ module Api
     include ClientApplicationsHelper
 
     before_action :set_user_id, except: [:client_list]
-    before_action :authenticate_user_from_token, except: []
-    load_and_authorize_resource class: :api, except: []
+    before_action :authenticate_user_from_token, except: [:client_list]
+    load_and_authorize_resource class: :api, except: [:client_list]
 
     def render_script
       render html: '<div>html goes here</div>'.html_safe
