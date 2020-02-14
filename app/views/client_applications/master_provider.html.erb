@@ -4,7 +4,7 @@
   <tr>
     <th >URL</th>
     <th >Organization</th>
-    <th >Description</th>
+    <!--<th >Description</th>-->
     <th >Status</th>
     <th></th>
 
@@ -21,8 +21,8 @@
           <%end%>
           <!--<td id= <%#= "url_#{i}" %> ><%#= r["url"] %></td>-->
           <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %>
-          <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["OrganizationName"]["OrganizationName_Text"][0]['text'] if r["OrganizationName"] %></td>
-          <td id= <%#= "Orgdescription_#{i}" %> ><%#= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]["OrgDescription"]  %></td>
+          <td class = "nameOrg" id=<%= "nameOfOrg_"%> ><%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %></td>
+          <!--<td id= <%#= "Orgdescription_#{i}" %> ><%#= r["organizationName"]["OrgDescription"][0]['text'].truncate(50) if r["organizationName"]["OrgDescription"]  %></td>-->
 
           <%= hidden_field_tag r["organizationDescription_xpath"] ,i, :id => "orgdescription_xpath_#{i}" %>
           <%= hidden_field_tag r["organizationDescription_URL"] ,i, :id => "orgdescription_url_#{i}" %>
@@ -31,7 +31,7 @@
           <%= hidden_field_tag r["organizationName_xpath"] ,i, :id => "orgName_xpath_#{i}" %>
           <%= hidden_field_tag r["organizationName_URL"] ,i, :id => "orgName_url_#{i}" %>
           <td><%= r["status"] %></td>
-          <!--<td><%= link_to "See More", master_provider_details_path(org_url: r["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
+          <!--<td><%#= link_to "See More", master_provider_details_path(org_url: r["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
         <td><%= link_to "See More", catalogMangViewer_path(org_url: r["url"], provider_page: "master" ), {target: :_blank} %> </td>
       </tr>
   <%end%>
