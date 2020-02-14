@@ -143,7 +143,9 @@ class User
   end
 
   def add_modifier
-    self.modifier_id = User.current.id.to_s
+    if !User.current.nil?
+      self.modifier_id = User.current.id.to_s
+    end
   end
 
 end

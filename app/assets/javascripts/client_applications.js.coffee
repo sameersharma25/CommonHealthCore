@@ -11,6 +11,14 @@ jQuery ($) ->
     return
   )
 
+  $(document).on("click", ".prepare_application", ->
+    id = $(this).attr("id")
+    console.log("the id of the invite is ", id)
+    $.post "/send_application_prep_request",
+      id: id
+    return
+  )
+
   $('#notification_rules').DataTable();
 
   $('#user_list').DataTable({ responsive: true });
