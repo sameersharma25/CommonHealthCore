@@ -35,7 +35,7 @@ class Patient
   
   field :population_group, type: Array, default: []
   field :service_group, type: Array, default: []
-  field :client_consent, type: Boolean
+  field :client_consent, type: String, default: ->{"not_answered"}
   field :patient_created_by, type: String
 
 

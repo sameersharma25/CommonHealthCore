@@ -17,6 +17,7 @@ class Referral
   field :consent_timestamp, type: String
   field :referral_type, type: String
   field :ref_created_by, type: String
+  field :transferred_referral, type: Boolean, default: false
 
   has_many :tasks
   has_many :needs

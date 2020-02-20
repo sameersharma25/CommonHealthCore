@@ -284,6 +284,7 @@ module Api
         patient = Patient.find(p_id)
         
         r.referral_name = "Test"
+        r.transferred_referral = true
         if r.save
           logger.debug("Creating TASK FOR INTERNAL APPLICATION*************************")
           t = Task.new
