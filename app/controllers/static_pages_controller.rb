@@ -2,7 +2,7 @@ class StaticPagesController < ApplicationController
 
 	def about
 	    ca_id = current_user.client_application_id
-	    @about = AboutU.where(client_application_id: ca_id).entries
+			@about_us = AboutU.where(client_application_id: ca_id).entries
 	end 
 
 	def faq

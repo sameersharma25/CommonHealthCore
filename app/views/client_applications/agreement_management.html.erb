@@ -38,5 +38,15 @@
 </div><br>
 
 <div>
+  <h3>CBO</h3>
+
+  <div id="CBO">
+    <%= render :partial => "agreement_management", locals: {agreements: @cbos }%>
+  </div>
+  <br>
+  <%#= link_to "Add new CE-B", add_agreement_template_path %>
+</div><br>
+
+<div>
   <%= link_to "Add New Agreement", add_agreement_template_path %>
 </div>

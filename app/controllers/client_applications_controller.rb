@@ -1074,6 +1074,7 @@ class ClientApplicationsController < ApplicationController
     @cebs = AgreementTemplate.where(agreement_type: "CE-B")
     @ba1s = AgreementTemplate.where(agreement_type: "BA-1")
     @babs = AgreementTemplate.where(agreement_type: "BA-B")
+    @cbos = AgreementTemplate.where(agreement_type: "CBO")
 
   end
 
