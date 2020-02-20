@@ -64,7 +64,7 @@ module Api
         task.save
 
         source_application = ClientApplication.find(led_status.referred_by_id)
-        NotificationMailer.alertParentAppStatusAccept(task, source_application).deliver
+        NotificationMailer.referral_reverted(task, source_application).deliver
 
       end
 

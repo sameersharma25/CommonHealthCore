@@ -248,6 +248,7 @@ Rails.application.routes.draw do
     post "rfl_in", to: "external_applications#in_coming_referrals"
     post "tsk_changes", to: "external_applications#new_ledger_record"
     post "/ledg_details", to: "external_applications#ledger_details"
+    post "/revert_request", to: "external_applications#revert_request"
 
     #API's for Interview
     post "/int_create", to: "interviews#new_interview"
