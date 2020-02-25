@@ -68,6 +68,7 @@ Rails.application.routes.draw do
   post "send_application_invitation", to: "client_applications#send_application_invitation"
   post "send_application_prep_request", to: "client_applications#send_application_prep_request"
   get "/contact_management_details", to: "client_applications#contact_management"
+  get "/invalid_contact_management_details", to: "client_applications#invalid_catalog_management"
   get "/master_provider", to: "client_applications#master_provider"
   get "/plugin_page", to: "client_applications#plugin"
   get "/pending_agreements", to: "client_applications#pending_agreements"
