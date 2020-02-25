@@ -43,7 +43,8 @@ Rails.application.routes.draw do
 
 
 
-  devise_for :users, :controllers =>{invitations: 'invitations', sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks'}
+  devise_for :users, :controllers =>{invitations: 'invitations', sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks',
+                                     passwords: 'passwords' }
       devise_scope :user do
         apipie
         scope :users, as: :users do
