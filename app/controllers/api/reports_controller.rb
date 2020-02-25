@@ -236,22 +236,22 @@ module Api
     end
 
     def monthly_report(date, data_hash)
-      start_date = Date.parse(date).beginning_of_month
-      end_date = Date.parse(date).end_of_month
+      start_date = Date.strptime(date, "%m/%d/%Y").beginning_of_month
+      end_date = Date.strptime(date, "%m/%d/%Y").end_of_month
 
       new_data =  data_hash.where(created_at: start_date..end_date)
     end
 
     def quarterly_report(date, data_hash)
-      start_date = Date.parse(date).beginning_of_quarter
-      end_date = Date.parse(date).end_of_quarter
+      start_date = Date.strptime(date, "%m/%d/%Y").beginning_of_quarter
+      end_date = Date.strptime(date, "%m/%d/%Y").end_of_quarter
 
       new_data =  data_hash.where(created_at: start_date..end_date)
     end
 
     def yearly_report(date, data_hash)
-      start_date = Date.parse(date).beginning_of_year
-      end_date = Date.parse(date).end_of_year
+      start_date = Date.strptime(date, "%m/%d/%Y").beginning_of_year
+      end_date = Date.strptime(date, "%m/%d/%Y").end_of_year
 
       new_data =  data_hash.where(created_at: start_date..end_date)
     end

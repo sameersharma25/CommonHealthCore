@@ -38,6 +38,19 @@ module Api
       render :json=> {status: :ok, message: "Request Rejected " }
     end
 
+    def revert_request
+      task_id = params[:task_id]
+      task = Task.find(task_id)
+      ledg_master = LedgerMaster.find_by(task_id: task_id)
+      ledg_status = ledg_master.ledger_statuses.last
+      ledg_status.referred_application_id = nil
+      ledg_status.save
+
+      task.transferable = true
+      task.save
+      render :json=> {status: :ok, message: "Request was successfully canceled. " }
+    end
+
     def send_patient #Which person should I email if it fails??? ext_obe_id
       task_id = params[:task_id]
       task = Task.find(task_id)
@@ -284,6 +297,7 @@ module Api
         patient = Patient.find(p_id)
         
         r.referral_name = "Test"
+        r.transferred_referral = true
         if r.save
           logger.debug("Creating TASK FOR INTERNAL APPLICATION*************************")
           t = Task.new

@@ -36,6 +36,9 @@ module Api
       patient.population_group = params[:population_group] if params[:population_group]
       patient.service_group = params[:service_group] if params[:service_group]
       patient.client_consent = params[:client_consent] if params[:client_consent]
+      if params[:client_consent] == "no"
+        revert_transferred_referral(patient)
+      end
       patient.modifier_id = current_user.id.to_s
       patient.caller_additional_fields = params["caller_additional_fields"].to_unsafe_h if params[:caller_additional_fields]
       patient.save
@@ -44,31 +47,55 @@ module Api
       render :json => {status: :ok, message: "#{patient_name} Details have been updated" }
     end
 
-    def crete_appointment_for_patient
+    def revert_transferred_referral(patient)
 
-      user = User.find_by(email: params[:email])
-      client_application = user.client_application
-      if user.cc == true
-        cc_id = user.id.to_s
-      else
-        cc_id = client_application.users.where(cc: true).last.id.to_s
-      end
-      patient = Patient.find(params[:patient_id])
-      patient_name = patient.first_name + " "+ patient.last_name
+      referral_count = patient.referrals.count
+      if (referral_count == 1 && patient.referrals.first.transferred_referral == true)
+        referral = patient.referrals.first
+        task = referral.tasks.first
+        led_status = LedgerStatus.find_by(external_object_id: task.id.to_s)
+        led_status.ledger_status = "Reverted"
+        led_status.request_reject_reason = "Client did not Consent"
+        led_status.save
+        led_master = led_status.ledger_master
+        task_id = led_master.task_id
+        task = Task.find(task_id)
+        task.transferable = true
+        task.save
 
-      a = Appointment.new
-      a.date_of_appointment = params[:date_of_appointment]
-      a.reason_for_visit = params[:reason_for_visit] ? params[:reason_for_visit] : " "
-      a.status = "New"
-      a.user_id = user
-      a.client_application_id = client_application
-      a.patient_id = patient
-      a.cc_id = cc_id
-      a.notes = params[:note] if params[:note]
-      if a.save
-        render :json=> {status: :ok, message: "Appointment Created for #{patient_name}"}
+        source_application = ClientApplication.find(led_status.referred_by_id)
+        NotificationMailer.referral_reverted(task, source_application).deliver
+
       end
+
     end
+
+
+    # def crete_appointment_for_patient
+    #
+    #   user = User.find_by(email: params[:email])
+    #   client_application = user.client_application
+    #   if user.cc == true
+    #     cc_id = user.id.to_s
+    #   else
+    #     cc_id = client_application.users.where(cc: true).last.id.to_s
+    #   end
+    #   patient = Patient.find(params[:patient_id])
+    #   patient_name = patient.first_name + " "+ patient.last_name
+    #
+    #   a = Appointment.new
+    #   a.date_of_appointment = params[:date_of_appointment]
+    #   a.reason_for_visit = params[:reason_for_visit] ? params[:reason_for_visit] : " "
+    #   a.status = "New"
+    #   a.user_id = user
+    #   a.client_application_id = client_application
+    #   a.patient_id = patient
+    #   a.cc_id = cc_id
+    #   a.notes = params[:note] if params[:note]
+    #   if a.save
+    #     render :json=> {status: :ok, message: "Appointment Created for #{patient_name}"}
+    #   end
+    # end
 
     def create_patient
       user = User.find_by(email: params[:email])

@@ -43,7 +43,8 @@ Rails.application.routes.draw do
 
 
 
-  devise_for :users, :controllers =>{invitations: 'invitations', sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks'}
+  devise_for :users, :controllers =>{invitations: 'invitations', sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks',
+                                     passwords: 'passwords' }
       devise_scope :user do
         apipie
         scope :users, as: :users do
@@ -169,6 +170,7 @@ Rails.application.routes.draw do
     post 'user_profile', to: 'users#user_profile'
     post 'edit_profile', to: 'users#edit_profile'
     post 'app_version', to: "users#app_version"
+    post 'forgot_password', to: "users#forgot_password"
     
 
     post 'chcAuthentication', to: 'users#chcAuthentication' 
@@ -248,6 +250,7 @@ Rails.application.routes.draw do
     post "rfl_in", to: "external_applications#in_coming_referrals"
     post "tsk_changes", to: "external_applications#new_ledger_record"
     post "/ledg_details", to: "external_applications#ledger_details"
+    post "/revert_request", to: "external_applications#revert_request"
 
     #API's for Interview
     post "/int_create", to: "interviews#new_interview"

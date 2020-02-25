@@ -60,13 +60,16 @@ class AfterSignupController < ApplicationController
       @customer_id = current_user.client_application_id.to_s
       @template = "nothing"
 
+      redirect_to destroy_user_session_path and return
+
     when :default_settings   #wicked_finish
       logger.debug("IN SHOW default setting *****************")
       # @user = current_user
       # @user.sign_in_count += 1
       # @user.save
       set_defaults_values
-      jump_to(:wicked_finish)
+      # jump_to(:wicked_finish)
+      redirect_to destroy_user_session_path and return
 
     end
 
@@ -183,7 +186,8 @@ class AfterSignupController < ApplicationController
         else
           logger.debug("the service provider is EMPTY******")
           jump_to(:wicked_finish)
-          redirect_to root_path
+          # redirect_to root_path
+          redirect_to destroy_user_session_path
         end
 
         # jump_to(:wicked_finish)
@@ -233,7 +237,6 @@ class AfterSignupController < ApplicationController
       new_nr.appointment_status = nr.appointment_status
       new_nr.save
     end
-
   end
 
   private

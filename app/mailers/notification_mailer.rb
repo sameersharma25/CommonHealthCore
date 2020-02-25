@@ -27,10 +27,10 @@ class NotificationMailer < ApplicationMailer
 	def alertParentAppStatusAccept(task, ca)
 		@task = task
 		logger.debug("the task is #{@task.inspect}")
-		@ca = ca
-		logger.debug("The Origin Client App is #{@ca.email}")
+		@ca_user = ca.users.first
+		logger.debug("The Origin Client App is #{@ca_user.email}")
 		
-		mail(to: @ca.email, subject: "Task transfer has been accepted")
+		mail(to: @ca_user.email, subject: "Task transfer has been accepted")
 	end 
 
 	def alertPendingContactJoined(user, adminUser)
@@ -40,5 +40,14 @@ class NotificationMailer < ApplicationMailer
 			logger.debug("pending user ADMIN is #{@userAdmin}")
 			#NotificationMailer.AlertPendingContactJoined(user, adminUser).deliver
 			mail(to: @adminUser.email, subject: "A pending contact has joined")
-	end 
+	end
+
+	def referral_reverted(task, ca)
+		@task = task
+		logger.debug("the task is #{@task.inspect}")
+		@ca_user = ca.users.first
+		logger.debug("The Origin Client App is #{@ca_user.email}")
+
+		mail(to: @ca_user.email, subject: "Task transfer has been Reverted")
+	end
 end
