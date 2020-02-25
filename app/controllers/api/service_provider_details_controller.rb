@@ -292,14 +292,14 @@ module Api
     def create_catalog_entry
 
       item = params[:catalog_data].to_unsafe_h
-
       body_json = JSON.parse(request.body.read)
-      params_validation = CatalogManagement::CreateCatalogEntry::CreateRequestWithEmailValidators::PARAMS.new.call(body_json)
+      params_validation = CatalogManagement::CatalogEntryWithEmailContract.new.call(body_json)
       unless params_validation.success?
-        InvalidCatalogEntry.new(email: params[:email], catalog_hash: item ,error_hash: params_validation.errors.to_hash).save
+        InvalidCatalogEntry.new(email: params[:email], url: item[:url] ,catalog_hash: item ,error_hash: params_validation.errors.to_hash).save
+        logger.debug("catalog errors: #{params_validation.errors.to_hash}")
         return render :json => { status: :ok, message: "Entry created successfully"  }
       end
-
+      item = CatalogManagement::CatalogEntityValidator.new(item).to_h.deep_stringify_keys
       user = User.find_by(email: params[:email])
       client_application_id = user.client_application_id.to_s
       dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
@@ -327,6 +327,7 @@ module Api
         dynamodb.put_item(params)
         render :json => { status: :ok, message: "Entry created successfully"  }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
+        InvalidCatalogEntry.new(email: params[:email], url: item[:url], catalog_hash: item ,error_hash: error).save
         render :json => {message: error  }
       end
 
