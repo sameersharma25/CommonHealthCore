@@ -170,6 +170,7 @@ Rails.application.routes.draw do
     post 'user_profile', to: 'users#user_profile'
     post 'edit_profile', to: 'users#edit_profile'
     post 'app_version', to: "users#app_version"
+    post 'forgot_password', to: "users#forgot_password"
     
 
     post 'chcAuthentication', to: 'users#chcAuthentication' 

@@ -479,7 +479,15 @@ module Api
         #else 
           #render :json => {message: :unauthorized, :redirect_url => "originURL"}
         #end 
-    end 
+    end
+
+    def forgot_password
+      @user = User.find_by(email: params[:email])
+
+      @user.send_reset_password_instructions
+
+      render :json => {status: :ok, message: "Instructions have been sent to your email." }
+    end
 
     ##oAuth Stuff
 
