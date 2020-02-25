@@ -80,6 +80,12 @@ gem 'apipie-rails'
 # gem 'mongoid-audit', '~> 1.0.0'
 # gem 'kaminari'
 gem 'mongoid-history'
+
+gem 'dry-schema', '~> 1.0'
+gem 'dry-validation', '~> 1.0'
+gem 'dry-types','~> 1.2'
+gem 'dry-struct', '~> 1.0'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
