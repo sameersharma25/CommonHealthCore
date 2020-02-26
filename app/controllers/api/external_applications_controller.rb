@@ -309,6 +309,10 @@ module Api
           t.additional_fields = task.additional_fields
           t.task_referred_from = ledg_stat.referred_by_id
           t.security_keys = helpers.security_keys_for_task(task, patient)
+
+          task.transfer_status = "Accepted"
+          task.save
+
           if t.save
             ledg_stat.ledger_status = "Transferred"
             ledg_stat.external_object_id = t.id.to_s

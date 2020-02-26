@@ -129,6 +129,7 @@ module ClientApplicationsHelper
         # render :json=> {status: :ok, message: "Referral Request was sent" }
         task = Task.find(task_id)
         task.transferable = false
+        task.transfer_status = "Pending"
         task.save
         req_status = "ok"
         message = "Referral Request sent"
