@@ -2,9 +2,9 @@ module Api
   class UsersController < ActionController::Base
     include UsersHelper
     require 'securerandom'
-    before_action :authenticate_user_from_token, except: [:get_terms,:get_about_us,:get_faq,:give_appointment_details_for_notification,  :set_password, :chcAuthentication]
+    before_action :authenticate_user_from_token, except: [:forgot_password,:get_terms,:get_about_us,:get_faq,:give_appointment_details_for_notification,  :set_password, :chcAuthentication]
     # before_action :authenticate_user!
-    load_and_authorize_resource class: :api, except: [:get_terms,:get_about_us,:get_faq,:give_appointment_details_for_notification, :chcAuthentication]
+    load_and_authorize_resource class: :api, except: [:forgot_password,:get_terms,:get_about_us,:get_faq,:give_appointment_details_for_notification, :chcAuthentication]
 
     #skip_before_action :verify_authenticity_token, only: [:chcAuthentication]
 
