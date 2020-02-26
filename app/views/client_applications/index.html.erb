@@ -145,7 +145,7 @@
 <%end%>
 
 
-<% if @client_application.external_application == false || @client_application.external_application.nil? %>
+<% if (@client_application.external_application == false || @client_application.external_application.nil?) && @client_application.master_application_status == true %>
   <% if current_user.admin? %>
     <h1>Registration Requests</h1>
     <table id="registration_requests" class="table table-responsive table-bordered user-display">
@@ -215,6 +215,7 @@
   <%= link_to "Questions", questions_path %><br>
   <%= link_to "Question Sequence", question_sequence_path  %><br>
   <%= link_to "Show Templates", show_templates_path  %><br>
+  <%#= link_to 'Plug-in Page', plugin_page_path,  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}  %>
   <br>
 <%end%>
 
@@ -227,7 +228,7 @@
 <%#= link_to "Catalogue Management" , scraping_rules_path %><br>
 <%#= link_to "Plug-in Link", "https://drive.google.com/uc?id=1oYTrCH6JmNqaA3VjADNWmilWeQGczUJu&export=dowload"%>
 <%#= link_to "Plug-in Page", plugin_page_path %>
-<%= link_to 'Plug-in Page', plugin_page_path,  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}  %><br>
+
 <div id="modal-window" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content"></div>
