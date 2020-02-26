@@ -35,7 +35,7 @@ module CatalogManagement
     attribute :P_Other,                                       Types::Strict::Bool.optional.meta(omittable: true)
     attribute :P_Senior,                                      Types::Strict::Bool.optional.meta(omittable: true)
     attribute :P_Veteran,                                     Types::Strict::Bool.optional.meta(omittable: true)
-    attribute :PopulationTagss,                               Types::Strict::String.optional.meta(omittable: true)
+    attribute :PopulationTags,                               Types::Strict::String.optional.meta(omittable: true)
     attribute? :ServiceAreaDescription, Types::Strict::Array do
       attribute :Text,                                        Types::Strict::String.optional.meta(omittable: true)
       attribute :Xpath,                                       Types::Strict::String.optional.meta(omittable: true)

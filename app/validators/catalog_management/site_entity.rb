@@ -31,7 +31,7 @@ module CatalogManagement
     attribute :SelectSiteID,                                  Types::Coercible::Integer.optional.meta(omittable: true)
     attribute? :POCs, Types::Strict::Array do
       attribute :id,                                          Types::Coercible::Integer.optional.meta(omittable: true)
-      attribute? :poc, Types::Strict::Array do
+      attribute? :poc do
         attribute :Name,                                      Types::Strict::String.optional.meta(omittable: true)
         attribute :MobilePhone,                               Types::Coercible::Integer.optional.meta(omittable: true)
         attribute :OfficePhone,                               Types::Coercible::Integer.optional.meta(omittable: true)

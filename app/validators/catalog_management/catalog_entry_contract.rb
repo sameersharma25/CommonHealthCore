@@ -98,7 +98,7 @@ module CatalogManagement
           optional(:P_Senior).filled(:bool)
           optional(:P_Veteran).filled(:bool)
           # optional(:PopulationTags).maybe(:string, :filled?) #TODO
-          optional(:PopulationTagss).filled(:string)
+          optional(:PopulationTags).filled(:string)
           optional(:ServiceAreaDescription).array(:hash) do
             optional(:Text).filled(:string)
             optional(:Xpath).filled(:string)
@@ -211,33 +211,45 @@ module CatalogManagement
     # program rules
     rule(catalog_data: :Programs).each do
 
-      url = URI.parse(value[:ContactWebPage])
-      unless url &&  url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
-        # key(catalog_data: {Programs: {keys[0][2]=> :ContactWebPage}}).failure('is invalid')
-        # key.failure("ContactWebPage has invalid format")
-        key(catalog_data: {Programs: {value[:ProgramName]=> :ContactWebPage}}).failure(:format?)
+      if value[:ContactWebPage]
+
+        url = URI.parse(value[:ContactWebPage])
+
+        unless url &&  url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
+          # key(catalog_data: {Programs: {keys[0][2]=> :ContactWebPage}}).failure('is invalid')
+          # key.failure("ContactWebPage has invalid format")
+          key(catalog_data: {Programs: {value[:ProgramName]=> :ContactWebPage}}).failure(:format?)
+        end
+
+        unless (Net::HTTP.get_response(URI(value[:ContactWebPage])).code rescue nil) == "200"
+          key(catalog_data: {Programs: {value[:ProgramName]=> :ContactWebPage}}).failure(:invalid_url)
+        end
       end
 
-      unless (Net::HTTP.get_response(URI(value[:ContactWebPage])).code rescue nil) == "200"
-        key(catalog_data: {Programs: {value[:ProgramName]=> :ContactWebPage}}).failure(:invalid_url)
+      if value[:QuickConnectWebPage]
+
+        url = URI.parse(value[:QuickConnectWebPage])
+
+        unless url &&  url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
+          key(catalog_data: {Programs: {value[:ProgramName]=> :QuickConnectWebPage}}).failure(:format?)
+        end
+
+        unless (Net::HTTP.get_response(URI(value[:QuickConnectWebPage])).code rescue nil) == "200"
+          key(catalog_data: {Programs: {value[:ProgramName]=> :QuickConnectWebPage}}).failure(:invalid_url)
+        end
       end
 
-      url = URI.parse(value[:QuickConnectWebPage])
-      unless url &&  url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
-        key(catalog_data: {Programs: {value[:ProgramName]=> :QuickConnectWebPage}}).failure(:format?)
-      end
+      if value[:ProgramWebPage]
 
-      unless (Net::HTTP.get_response(URI(value[:QuickConnectWebPage])).code rescue nil) == "200"
-        key(catalog_data: {Programs: {value[:ProgramName]=> :QuickConnectWebPage}}).failure(:invalid_url)
-      end
+        url = URI.parse(value[:ProgramWebPage])
 
-      url = URI.parse(value[:ProgramWebPage])
-      unless url &&  url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
-        key(catalog_data: {Programs: {value[:ProgramName]=> :ProgramWebPage}}).failure(:format?)
-      end
+        unless url &&  url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
+          key(catalog_data: {Programs: {value[:ProgramName]=> :ProgramWebPage}}).failure(:format?)
+        end
 
-      unless (Net::HTTP.get_response(URI(value[:QuickConnectWebPage])).code rescue nil) == "200"
-        key(catalog_data: {Programs: {value[:ProgramName]=> :ProgramWebPage}}).failure(:invalid_url)
+        unless (Net::HTTP.get_response(URI(value[:QuickConnectWebPage])).code rescue nil) == "200"
+          key(catalog_data: {Programs: {value[:ProgramName]=> :ProgramWebPage}}).failure(:invalid_url)
+        end
       end
 
       if value[:P_Other] == true && value[:PopulationTags].blank?
