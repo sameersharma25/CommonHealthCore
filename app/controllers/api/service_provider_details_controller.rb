@@ -302,7 +302,11 @@ module Api
         item = CatalogManagement::CatalogEntityValidator.new(item).to_h.deep_stringify_keys
         user = User.find_by(email: params[:email])
         client_application_id = user.client_application_id.to_s
-        dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
+        dynamodb = if Rails.env.test?  #TODO: For now checking in controller need to move initializers and pick based on env
+                     Aws::DynamoDB::Client.new(stub_responses: true)
+                   else
+                     Aws::DynamoDB::Client.new(region: "us-west-2")
+                   end
         table_name = ENV["CATALOG_TABLE_NAME"]
         # domain_name = Addressable::URI.parse(params[:catalog_data]["url"]).host
         # item["url"] = "https://"+domain_name+"/"
