@@ -56,7 +56,7 @@ module CatalogManagement
           optional(:SelectSiteID).filled(:integer)
           optional(:POCs).array(:hash) do
             optional(:id).filled(:integer)
-            optional(:poc).array(:hash) do
+            optional(:poc).hash do
               optional(:Name).filled(:string)
               optional(:MobilePhone).filled(:integer)
               optional(:OfficePhone).filled(:integer)

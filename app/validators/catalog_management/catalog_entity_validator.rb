@@ -3,7 +3,7 @@ require 'dry-struct'
 module CatalogManagement
   class CatalogEntityValidator < Dry::Struct
 
-    include Types
+    include CatalogManagement::Types
 
     schema schema.strict                                    # throw an error when unknown keys provided
     transform_keys(&:to_sym)                                # convert string keys to symbols
