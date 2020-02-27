@@ -842,6 +842,7 @@ GEM
     chunky_png (1.3.11)
     climate_control (0.2.0)
     cocoon (1.2.14)
+    coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -851,6 +852,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
     crass (1.0.4)
+    database_cleaner (1.8.3)
     devise (4.6.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -866,6 +868,7 @@ GEM
     devise_invitable (2.0.1)
       actionmailer (>= 5.0)
       devise (>= 4.6)
+    diff-lcs (1.3)
     dry-configurable (0.11.3)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.4, >= 0.4.7)
@@ -914,6 +917,11 @@ GEM
     erubi (1.8.0)
     excon (0.65.0)
     execjs (2.7.0)
+    factory_bot (4.11.1)
+      activesupport (>= 3.0.0)
+    factory_bot_rails (4.11.1)
+      factory_bot (~> 4.11.1)
+      railties (>= 3.0.0)
     faraday (1.0.0)
       multipart-post (>= 1.2, < 3)
     ffi (1.11.1)
@@ -1030,6 +1038,12 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-byebug (3.8.0)
+      byebug (~> 11.0)
+      pry (~> 0.10)
     public_suffix (3.1.1)
     puma (3.12.1)
     rack (2.0.7)
@@ -1072,6 +1086,23 @@ GEM
     rotp (2.1.2)
     rqrcode (0.10.1)
       chunky_png (~> 1.0)
+    rspec-core (3.9.1)
+      rspec-support (~> 3.9.1)
+    rspec-expectations (3.9.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.9.0)
+    rspec-mocks (3.9.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.9.0)
+    rspec-rails (3.9.0)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.9.0)
+      rspec-expectations (~> 3.9.0)
+      rspec-mocks (~> 3.9.0)
+      rspec-support (~> 3.9.0)
+    rspec-support (3.9.2)
     ruby_dep (1.5.0)
     rubyzip (1.2.3)
     sass (3.7.4)
@@ -1091,6 +1122,8 @@ GEM
     selenium-webdriver (3.142.3)
       childprocess (>= 0.5, < 2.0)
       rubyzip (~> 1.2, >= 1.2.2)
+    shoulda-matchers (3.1.3)
+      activesupport (>= 4.0.0)
     simple_token_authentication (1.15.1)
       actionmailer (>= 3.2.6, < 6)
       actionpack (>= 3.2.6, < 6)
@@ -1152,6 +1185,7 @@ DEPENDENCIES
   ckeditor!
   cocoon
   coffee-rails (~> 4.2)
+  database_cleaner (~> 1.7)
   devise
   devise-two-factor
   devise_invitable
@@ -1159,6 +1193,7 @@ DEPENDENCIES
   dry-struct (~> 1.0)
   dry-types (~> 1.2)
   dry-validation (~> 1.0)
+  factory_bot_rails (~> 4.11)
   fog-aws
   geocoder
   jbuilder (~> 2.5)
@@ -1173,14 +1208,17 @@ DEPENDENCIES
   mongoid-paperclip
   mongoid_orderable
   omniauth-google-oauth2
+  pry-byebug
   puma (~> 3.7)
   rack-cors
   rails (~> 5.1.5)
   rb-readline
   recaptcha (= 3.4.0)
   rqrcode (~> 0.10.1)
+  rspec-rails (~> 3.8)
   sass-rails (~> 5.0)
   selenium-webdriver
+  shoulda-matchers (~> 3)
   simple_token_authentication
   spring
   spring-watcher-listen (~> 2.0.0)
