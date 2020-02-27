@@ -71,7 +71,7 @@ class User
   field :cc, type: Boolean
   field :pcp, type: Boolean
   field :service_provider_id, type: Integer
-  field :active, type: Boolean, default: trust
+  field :active, type: Boolean, default: true
 
   field :roles, type: Array, default: []
 

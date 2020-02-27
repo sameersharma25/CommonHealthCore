@@ -26,43 +26,48 @@ module Api
       user = User.find_by(email: params[:email])
       client_url = user.client_application.application_url
       otp_required = user.otp_required_for_login
-      if otp_required == true # check the otp_attemp
+      if user.active == true
+        if otp_required == true # check the otp_attemp
 
-          if params[:otp_attempt] == current_otp(user)
-              logger.debug("Allow the user to login")
-              # if host == client_url
-                if user&.valid_password?(params[:password])
-                  render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
-                else
-                  render :json => {status: :unauthorized ,message: "The email or password was incorrect. Please try again"}
-                end
-              # else
-              #   render :json => {status: :unauthorized ,message: "You are not authorizes to access this applicaiton."}
-              # end
+            if params[:otp_attempt] == current_otp(user)
+                logger.debug("Allow the user to login")
+                # if host == client_url
+                  if user&.valid_password?(params[:password])
+                    render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
+                  else
+                    render :json => {status: :unauthorized ,message: "The email or password was incorrect. Please try again"}
+                  end
+                # else
+                #   render :json => {status: :unauthorized ,message: "You are not authorizes to access this applicaiton."}
+                # end
 
-          else 
-            logger.debug("Something went wrong ")
-            #Dont Allow the user to login
-            render :json => {status: :unauthorized ,message: "The email or password was incorrect. Please try again"}
-          end 
-      else 
-          #catch the request from Wordpress HERE
-
-          # if host == client_url
-            if user&.valid_password?(params[:password])
-              render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
-            elsif params[:googleOauthLogin] == 'true' && params[:tempToken] == user.tempToken
-                user.tempToken = ''
-                user.save
-
-                render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
             else
+              logger.debug("Something went wrong ")
+              #Dont Allow the user to login
               render :json => {status: :unauthorized ,message: "The email or password was incorrect. Please try again"}
             end
-          # else
-          #   render :json => {status: :unauthorized ,message: "You are not authorizes to access this applicaiton."}
-          # end
-      end 
+        else
+            #catch the request from Wordpress HERE
+
+            # if host == client_url
+              if user&.valid_password?(params[:password])
+                render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
+              elsif params[:googleOauthLogin] == 'true' && params[:tempToken] == user.tempToken
+                  user.tempToken = ''
+                  user.save
+
+                  render json: user.as_json(only: [:email, :authentication_token,:cc, :application_representative, :pcp]),status: :created
+              else
+                render :json => {status: :unauthorized ,message: "The email or password was incorrect. Please try again"}
+              end
+            # else
+            #   render :json => {status: :unauthorized ,message: "You are not authorizes to access this applicaiton."}
+            # end
+        end
+      else
+        render :json => {status: :unauthorized ,message: "This user is deactivatted, please contact the admin to activate the user."}
+      end
+
 
 
 
