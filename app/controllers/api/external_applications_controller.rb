@@ -235,9 +235,11 @@ module Api
           end
         else
           render :json=> {status: :ok, message: "Waiting for CHC Admin to counter sign your agreement. You will be able to accept the referal after counter sign is done." }
+          return
         end
       else
         render :json=> {status: :ok, message: "Please Sign the agreement to accept the referral." }
+        return
       end
 
     end 
