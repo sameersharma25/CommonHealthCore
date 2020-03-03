@@ -534,29 +534,37 @@ module Api
     end
 
     def invite_org
-      ca = ClientApplication.new
-      ca.name = params[:name]
-      ca.application_url = params[:application_url]
-      ca.external_application = params[:external_application]
-      ca.master_application_status = false
-      if ca.save
-        admin_role = Role.create(client_application_id: ca.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
-        if params[:user_email]
-          logger.debug("*********invit_org Before the send invire to user ")
-          user_invite = helpers.send_invite_to_user(params[:user_email],ca,
-                                            params[:name], admin_role.id.to_s )
-          if user_invite == true
-             helpers.send_referral_common(params[:task_id],ca.id.to_s, @user_id)
-          end
-          # render :json => {status: :ok ,message: "Organization Invited."}
-          req_status = "ok"
-          req_message = "Thank you your invitation to the CHC network was successfully submitted."
-        end
-      else
-        # render :json => {status: :bad_request ,message: "Organization not invited."}
+      all_applications = ClientApplication.all.pluck(:name)
+
+      if all_applications.include?(params[:name])
         req_status = "bad_request"
-        req_message = "Organization not invited."
+        req_message = "An account with the same name already exists."
+      else
+        ca = ClientApplication.new
+        ca.name = params[:name]
+        ca.application_url = params[:application_url]
+        ca.external_application = params[:external_application]
+        ca.master_application_status = false
+        if ca.save
+          admin_role = Role.create(client_application_id: ca.id.to_s ,role_name: "Admin", role_abilities: [{"action"=>[:manage], "subject"=>[:all]}])
+          if params[:user_email]
+            logger.debug("*********invit_org Before the send invire to user ")
+            user_invite = helpers.send_invite_to_user(params[:user_email],ca,
+                                              params[:name], admin_role.id.to_s )
+            if user_invite == true
+               helpers.send_referral_common(params[:task_id],ca.id.to_s, @user_id)
+            end
+            # render :json => {status: :ok ,message: "Organization Invited."}
+            req_status = "ok"
+            req_message = "Thank you your invitation to the CHC network was successfully submitted."
+          end
+        else
+          # render :json => {status: :bad_request ,message: "Organization not invited."}
+          req_status = "bad_request"
+          req_message = "Organization not invited."
+        end
       end
+
 
       render :json => {status: req_status ,message: req_message }
     end

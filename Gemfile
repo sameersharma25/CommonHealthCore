@@ -80,12 +80,23 @@ gem 'apipie-rails'
 # gem 'mongoid-audit', '~> 1.0.0'
 # gem 'kaminari'
 gem 'mongoid-history'
+
+gem 'dry-schema', '~> 1.0'
+gem 'dry-validation', '~> 1.0'
+gem 'dry-types','~> 1.2'
+gem 'dry-struct', '~> 1.0'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'rspec-rails',        '~> 3.8'
+  gem 'factory_bot_rails',  '~> 4.11'
+  gem 'shoulda-matchers',   '~> 3'
+  gem 'database_cleaner',   '~> 1.7'
+  gem 'pry-byebug'
 end
 
 group :development do

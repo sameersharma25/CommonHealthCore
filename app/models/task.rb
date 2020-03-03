@@ -19,6 +19,7 @@ class Task
   field :medical_case, type: Boolean, default: false
   field :solution_id, type: String
   field :transferable, type: Boolean, default: true
+  field :transfer_status, type: String
   mount_uploader :patient_document , PatientFileUploader
 
   belongs_to :referral

@@ -261,6 +261,10 @@ class ClientApplicationsController < ApplicationController
 
   end
 
+  def invalid_catalog_management
+    @invalid_catalog = InvalidCatalogEntry.all
+  end
+
   def catalogMangViewer
 
     table = params.has_key?(:provider_page) ? ENV["MASTER_TABLE_NAME"] : ENV["CATALOG_TABLE_NAME"]

@@ -1,0 +1,20 @@
+<h2> Invalid Catalog Entries  </h2>
+<table id="contact_management_table" class="table table-responsive table-bordered user-display">
+  <thead>
+  <tr>
+    <th >URL</th>
+    <th >Errors</th>
+    <th >Created_at</th>
+  </tr>
+  </thead>
+  <tbody id="catalog_table">
+
+  <% @invalid_catalog.each do |catalog|%>
+    <tr>
+      <td> <%= catalog.url %> </td>
+      <td> <%= catalog.error_hash %> </td>
+      <td> <%= catalog.created_at %> </td>
+    </tr>
+  <%end%>
+  </tbody>
+</table>

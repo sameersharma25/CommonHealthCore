@@ -63,173 +63,183 @@ module Api
       external_application = ClientApplication.find(external_application_id)
       client_application = ClientApplication.find(patient.client_application_id)
 
+      if external_application.agreement_signed == true
+        if external_application.agreement_counter_sign == "Done"
+          if external_application.name == "Dentistlink"
 
-      if external_application.name == "Dentistlink"
+            url = URI("https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8")
 
-        url = URI("https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8")
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-        http = Net::HTTP.new(url.host, url.port)
-        http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            request = Net::HTTP::Post.new(url)
+            request["content-type"] = 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
+            request["cache-control"] = 'no-cache'
+            request["postman-token"] = '5127317f-ae78-f5f0-5a15-2e1814eb0e2c'
+            request.body = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"recordType\"\r\n\r\n01241000000vbjk\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000bdkqr\"\r\n\r\nCHC-Test\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"oid\"\r\n\r\n00D41000001itfQ\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"retURL\"\r\n\r\nhttp://demo.dentislink.org\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"first_name\"\r\n\r\n#{patient.first_name}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"last_name\"\r\n\r\n#{patient.last_name}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"zip\"\r\n\r\n#{patient.patient_zipcode}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuKi\"\r\n\r\n#{patient.date_of_birth}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuYV\"\r\n\r\n#{patient.mode_of_contact}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n#{patient.patient_phone}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n#{patient.patient_email}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QUJpC\"\r\n\r\n#{patient.healthcare_coverage}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuLl\"\r\n\r\n#{patient.patient_coverage_id}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000cwlRB\"\r\n\r\n#{patient.task.provider if patient.task.provider }\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000enVX0\"\r\n\r\n#{patient.notes.first.note_text if patient.notes.first}\r\n
+                            ------WebKitFormBoundary7MA4YWxkTrZu0gW--"
 
-        request = Net::HTTP::Post.new(url)
-        request["content-type"] = 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
-        request["cache-control"] = 'no-cache'
-        request["postman-token"] = '5127317f-ae78-f5f0-5a15-2e1814eb0e2c'
-        request.body = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"recordType\"\r\n\r\n01241000000vbjk\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000bdkqr\"\r\n\r\nCHC-Test\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"oid\"\r\n\r\n00D41000001itfQ\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"retURL\"\r\n\r\nhttp://demo.dentislink.org\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"first_name\"\r\n\r\n#{patient.first_name}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"last_name\"\r\n\r\n#{patient.last_name}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"zip\"\r\n\r\n#{patient.patient_zipcode}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuKi\"\r\n\r\n#{patient.date_of_birth}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuYV\"\r\n\r\n#{patient.mode_of_contact}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobile\"\r\n\r\n#{patient.patient_phone}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n#{patient.patient_email}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QUJpC\"\r\n\r\n#{patient.healthcare_coverage}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000QTuLl\"\r\n\r\n#{patient.patient_coverage_id}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000cwlRB\"\r\n\r\n#{patient.task.provider if patient.task.provider }\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"00N4100000enVX0\"\r\n\r\n#{patient.notes.first.note_text if patient.notes.first}\r\n
-                        ------WebKitFormBoundary7MA4YWxkTrZu0gW--"
-
-        response = http.request(request)
-        puts response.read_body
-      end
-
-
-      if external_application.external_application == true
-        external_api = ExternalApiSetup.where(client_application_id: external_application_id, api_for: "send_patient").first
-
-        patient_hash = Hash.new
-        logger.debug("the MAPPED PARAMETERS ARE: #{external_api.mapped_parameters.entries}")
-        external_api.mapped_parameters.each do|mp|
-          external_parameter = mp.external_parameter
-          chc_parameter = mp.chc_parameter # first_name
-          chc_value = patient[chc_parameter]
-          patient_hash[external_parameter] = chc_value
-          logger.debug("the parameter value is : EXTERNAL:  #{external_parameter}, CHC : #{chc_parameter} -----#{chc_value}")
-        end
-
-        input = {"patient_hash": patient_hash}
-        uri = URI("http://localhost:3001/api/add_external_patients")
-
-
-        header = {'Content-Type' => 'application/json'}
-
-        http = Net::HTTP.new(uri.host, uri.port)
-        puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
-        # http.use_ssl = true
-        request = Net::HTTP::Post.new(uri.path, header)
-        request.body = input.to_json
-
-        # Send the request
-        response = http.request(request)
-        puts "response #{response.body}"
-        puts JSON.parse(response.body)
-        result = JSON.parse(response.body)
-        logger.debug("the patient id is : #{result}")
-          if !result["p_id"].nil?
-            logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-                ###
-                if patient.security_keys.length > 0 || task.security_keys.length > 0
-                    #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
-                        if client_application.agreement_type == external_application.agreement_type
-                            #logger.debug("client_application #{client_application.inspect}")
-                              #logger.debug("external_application #{external_application.inspect}")
-                             if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
-                               send_task(result["p_id"], task,external_application_id,existing_status, patient)
-                             else 
-                              #Do Not Send: Email: Sorry, the agreement types do not match
-                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                             end 
-                        else
-                            #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                            SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                        end 
-                else 
-                    send_task(result["p_id"], task,external_application_id,existing_status,patient)
-                end 
-                ###
-          else
-            logger.debug('the PATIENT ID WAS nil***************')
+            response = http.request(request)
+            puts response.read_body
           end
-      else
-        patient_check = Patient.where(client_application_id: external_application_id, first_name: patient.first_name, last_name: patient.last_name).first
-        logger.debug("Creating patient for internal application******************* #{patient_check}")
-        if patient_check.nil?
-          logger.debug("Creating new Patient*********************")
-          new_patient = Patient.new
-          new_patient.client_application_id = external_application_id
-          new_patient.first_name = patient.first_name
-          new_patient.last_name = patient.last_name
-          new_patient.date_of_birth = patient.date_of_birth
-          new_patient.patient_email = patient.patient_email
-          new_patient.patient_phone = patient.patient_phone
-          new_patient.patient_coverage_id = patient.patient_coverage_id
-          new_patient.healthcare_coverage = patient.healthcare_coverage
-          new_patient.patient_address = patient.patient_address
-          new_patient.mode_of_contact = patient.mode_of_contact
-          new_patient.patient_zipcode = patient.patient_zipcode
-          new_patient.patient_status = patient.patient_status
-          new_patient.gender = patient.gender
-          new_patient.race = patient.race
-          new_patient.ethnicity = patient.ethnicity
-          #
-          new_patient.security_keys =  helpers.security_keys_for_patients(new_patient)
-          logger.debug("NEW PATIENT IS #{new_patient.inspect}")
-          new_patient.save
 
-          logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-                if new_patient.security_keys.length > 0 || task.security_keys.length > 0 
-                    #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
-                        # if client_application.agreement_type == external_application.agreement_type
-                            #logger.debug("client_application #{client_application.inspect}")
-                              #logger.debug("external_application #{external_application.inspect}")
-                             if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
-                                send_task(new_patient.id.to_s, task,external_application_id, existing_status, patient)
-                             else 
-                              #Do Not Send: Email: Sorry, the agreement types do not match
-                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                             end
-                        # else
-                        #     #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                        #     SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                        # end
-                else 
-                    send_task(new_patient.id.to_s, task,external_application_id, existing_status, patient)
-                end 
+          if external_application.external_application == true
 
+            external_api = ExternalApiSetup.where(client_application_id: external_application_id, api_for: "send_patient").first
+
+            patient_hash = Hash.new
+            logger.debug("the MAPPED PARAMETERS ARE: #{external_api.mapped_parameters.entries}")
+            external_api.mapped_parameters.each do|mp|
+              external_parameter = mp.external_parameter
+              chc_parameter = mp.chc_parameter # first_name
+              chc_value = patient[chc_parameter]
+              patient_hash[external_parameter] = chc_value
+              logger.debug("the parameter value is : EXTERNAL:  #{external_parameter}, CHC : #{chc_parameter} -----#{chc_value}")
+            end
+
+            input = {"patient_hash": patient_hash}
+            uri = URI("http://localhost:3001/api/add_external_patients")
+
+
+            header = {'Content-Type' => 'application/json'}
+
+            http = Net::HTTP.new(uri.host, uri.port)
+            puts "HOST IS : #{uri.host}, PORT IS: #{uri.port}, PATH IS : #{uri.path}"
+            # http.use_ssl = true
+            request = Net::HTTP::Post.new(uri.path, header)
+            request.body = input.to_json
+
+            # Send the request
+            response = http.request(request)
+            puts "response #{response.body}"
+            puts JSON.parse(response.body)
+            result = JSON.parse(response.body)
+            logger.debug("the patient id is : #{result}")
+              if !result["p_id"].nil?
+                logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+                    ###
+                    if patient.security_keys.length > 0 || task.security_keys.length > 0
+                        #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
+                            if client_application.agreement_type == external_application.agreement_type
+                                #logger.debug("client_application #{client_application.inspect}")
+                                  #logger.debug("external_application #{external_application.inspect}")
+                                 if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
+                                   send_task(result["p_id"], task,external_application_id,existing_status, patient)
+                                 else
+                                  #Do Not Send: Email: Sorry, the agreement types do not match
+                                  SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                                 end
+                            else
+                                #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                                SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                            end
+                    else
+                        send_task(result["p_id"], task,external_application_id,existing_status,patient)
+                    end
+                    ###
+              else
+                logger.debug('the PATIENT ID WAS nil***************')
+              end
+          else
+            patient_check = Patient.where(client_application_id: external_application_id, first_name: patient.first_name, last_name: patient.last_name).first
+            logger.debug("Creating patient for internal application******************* #{patient_check}")
+            if patient_check.nil?
+              logger.debug("Creating new Patient*********************")
+              new_patient = Patient.new
+              new_patient.client_application_id = external_application_id
+              new_patient.first_name = patient.first_name
+              new_patient.last_name = patient.last_name
+              new_patient.date_of_birth = patient.date_of_birth
+              new_patient.patient_email = patient.patient_email
+              new_patient.patient_phone = patient.patient_phone
+              new_patient.patient_coverage_id = patient.patient_coverage_id
+              new_patient.healthcare_coverage = patient.healthcare_coverage
+              new_patient.patient_address = patient.patient_address
+              new_patient.mode_of_contact = patient.mode_of_contact
+              new_patient.patient_zipcode = patient.patient_zipcode
+              new_patient.patient_status = patient.patient_status
+              new_patient.gender = patient.gender
+              new_patient.race = patient.race
+              new_patient.ethnicity = patient.ethnicity
+              #
+              new_patient.security_keys =  helpers.security_keys_for_patients(new_patient)
+              logger.debug("NEW PATIENT IS #{new_patient.inspect}")
+              new_patient.save
+
+              logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
+                    if new_patient.security_keys.length > 0 || task.security_keys.length > 0
+                        #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
+                            # if client_application.agreement_type == external_application.agreement_type
+                                #logger.debug("client_application #{client_application.inspect}")
+                                  #logger.debug("external_application #{external_application.inspect}")
+                                 if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
+                                    send_task(new_patient.id.to_s, task,external_application_id, existing_status, patient)
+                                 else
+                                  #Do Not Send: Email: Sorry, the agreement types do not match
+                                  SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                                 end
+                            # else
+                            #     #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                            #     SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                            # end
+                    else
+                        send_task(new_patient.id.to_s, task,external_application_id, existing_status, patient)
+                    end
+
+            else
+              logger.debug("the patient IS ALREADY PRESENT************* #{patient.inspect} ******** #{task.inspect}")
+
+                    if patient.security_keys.length > 0  || task.security_keys.length > 0
+                        #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
+
+                                logger.debug("client_application #{client_application.inspect}")
+                                logger.debug("external_application #{external_application.inspect}")
+                            # if client_application.agreement_type == external_application.agreement_type
+                                #logger.debug("client_application #{client_application.inspect}")
+                                  #logger.debug("external_application #{external_application.inspect}")
+                                 if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
+                                    send_task(patient_check.id.to_s, task,external_application_id, existing_status, patient)
+                                 else
+                                  #Do Not Send: Email: Sorry, the agreement types do not match
+                                  SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                                 end
+                            # else
+                                #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
+                                # SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
+                            # end
+                    else
+                        logger.debug("NIL NIL NIL NIL NIL NIL NIL")
+
+                        send_task(patient_check.id.to_s, task,external_application_id, existing_status, patient)
+                    end
+
+            end
+
+          end
         else
-          logger.debug("the patient IS ALREADY PRESENT************* #{patient.inspect} ******** #{task.inspect}")
-
-                if patient.security_keys.length > 0  || task.security_keys.length > 0 
-                    #logger.debug("patient details #{patient.inspect}******* task details #{task.inspect}")
-
-                            logger.debug("client_application #{client_application.inspect}")
-                            logger.debug("external_application #{external_application.inspect}")
-                        # if client_application.agreement_type == external_application.agreement_type
-                            #logger.debug("client_application #{client_application.inspect}")
-                              #logger.debug("external_application #{external_application.inspect}")
-                             if !client_application.client_agreement.url.nil? && !external_application.client_agreement.url.nil?
-                                send_task(patient_check.id.to_s, task,external_application_id, existing_status, patient)
-                             else 
-                              #Do Not Send: Email: Sorry, the agreement types do not match
-                              SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                             end 
-                        # else
-                            #Do Not Sent: Email: Sorry, you still need to sign your Agreement or more.
-                            # SendPatientTaskMailer.patient_not_sent(external_application.users.first.email).deliver
-                        # end
-                else 
-                    logger.debug("NIL NIL NIL NIL NIL NIL NIL")
- 
-                    send_task(patient_check.id.to_s, task,external_application_id, existing_status, patient)
-                end 
-
+          render :json=> {status: :ok, message: "Waiting for CHC Admin to counter sign your agreement. You will be able to accept the referal after counter sign is done." }
+          return
         end
-
+      else
+        render :json=> {status: :ok, message: "Please Sign the agreement to accept the referral." }
+        return
       end
 
     end 
@@ -309,6 +319,10 @@ module Api
           t.additional_fields = task.additional_fields
           t.task_referred_from = ledg_stat.referred_by_id
           t.security_keys = helpers.security_keys_for_task(task, patient)
+
+          task.transfer_status = "Accepted"
+          task.save
+
           if t.save
             ledg_stat.ledger_status = "Transferred"
             ledg_stat.external_object_id = t.id.to_s
@@ -338,7 +352,7 @@ module Api
 
     def client_list
       #all_client = ClientApplication.where(accept_referrals: true)
-      all_client = ClientApplication.all
+      all_client = ClientApplication.all.where(agreement_signed: true)
       all_client_array = []
       all_client.each do |ac|
         name = ac.name

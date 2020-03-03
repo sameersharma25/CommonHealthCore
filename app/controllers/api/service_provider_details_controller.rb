@@ -289,36 +289,48 @@ module Api
 
     end
 
-    def create_catalog_entry 
-
-      item = params[:catalog_data].to_unsafe_h
-      user = User.find_by(email: params[:email])
-      client_application_id = user.client_application_id.to_s
-      dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-      table_name = ENV["CATALOG_TABLE_NAME"]
-      # domain_name = Addressable::URI.parse(params[:catalog_data]["url"]).host
-      # item["url"] = "https://"+domain_name+"/"
-      #url_split = params[:catalog_data]["url"].split("/")
-      #item["url"] = url_split[0]+"//"+url_split[2]+"/"
-      item["customer_id"] = client_application_id
-      item["status"] = "New"
-      created_at = DateTime.now.strftime("%F %T")
-      item["created_at"] = created_at
-      item["catalog_id"] = SecureRandom.hex(13)
-      item["rejectReason"] = "N/A"
-
-      item1=  mandatory_parameters_check(item, "Creating")
-      logger.debug(")))))))))))))))))))))))))))))))))))))))))))the item is : #{item1}")
-
-      params = {
-          table_name: table_name,
-          item: item1
-      }
-
+    def create_catalog_entry
       begin
+        item = params[:catalog_data].to_unsafe_h
+        body_json = JSON.parse(request.body.read)
+        params_validation = CatalogManagement::CatalogEntryWithEmailContract.new.call(body_json)
+        unless params_validation.success?
+          InvalidCatalogEntry.new(email: params[:email], url: item[:url] ,catalog_hash: item ,error_hash: params_validation.errors.to_hash).save
+          logger.debug("catalog errors: #{params_validation.errors.to_hash}")
+          return render :json => { status: :ok, message: "Entry created successfully"  }
+        end
+        item = CatalogManagement::CatalogEntityValidator.new(item).to_h.deep_stringify_keys
+        user = User.find_by(email: params[:email])
+        client_application_id = user.client_application_id.to_s
+        dynamodb = if Rails.env.test?  #TODO: For now checking in controller need to move initializers and pick based on env
+                     Aws::DynamoDB::Client.new(stub_responses: true)
+                   else
+                     Aws::DynamoDB::Client.new(region: "us-west-2")
+                   end
+        table_name = ENV["CATALOG_TABLE_NAME"]
+        # domain_name = Addressable::URI.parse(params[:catalog_data]["url"]).host
+        # item["url"] = "https://"+domain_name+"/"
+        #url_split = params[:catalog_data]["url"].split("/")
+        #item["url"] = url_split[0]+"//"+url_split[2]+"/"
+        item["customer_id"] = client_application_id
+        item["status"] = "New"
+        created_at = DateTime.now.strftime("%F %T")
+        item["created_at"] = created_at
+        item["catalog_id"] = SecureRandom.hex(13)
+        item["rejectReason"] = "N/A"
+
+        item1=  mandatory_parameters_check(item, "Creating")
+        logger.debug(")))))))))))))))))))))))))))))))))))))))))))the item is : #{item1}")
+
+        params = {
+            table_name: table_name,
+            item: item1
+        }
+
         dynamodb.put_item(params)
         render :json => { status: :ok, message: "Entry created successfully"  }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
+        InvalidCatalogEntry.new(email: params[:email], url: item[:url], catalog_hash: item ,error_hash: error).save
         render :json => {message: error  }
       end
 
