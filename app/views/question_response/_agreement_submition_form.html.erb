@@ -34,3 +34,10 @@
     </div>
 
 <%end %>
+
+<%= hidden_field_tag :client_application_id, @client_application.id.to_s%>
+<br>
+
+<div class="actions">
+  <%= link_to "Reset Questionnaire", root_path, :class => "skip_survey" %>
+</div>
