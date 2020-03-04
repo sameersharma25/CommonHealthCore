@@ -135,6 +135,9 @@ class QuestionResponseController < ApplicationController
       cr.destroy
     end
 
+    customer.agreement_signed = false
+    customer.save
+
     redirect_to root_path
   end
 
