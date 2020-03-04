@@ -380,6 +380,10 @@ module Api
 
       @faqs = Faq.where(client_application_id: cc_id)
 
+      if @faqs.empty?
+        @faqs = ClientApplication.where(master_application_status: true).first.faq
+      end
+
       render :json => { status: :ok, faqs: @faqs}
     end 
 
@@ -407,6 +411,9 @@ module Api
       end
 
       @terms = TermsPrivacy.where(client_application_id: cc_id)
+      if @terms.empty?
+        @terms = ClientApplication.where(master_application_status: true).first.terms_privacy
+      end
        render :json => { status: :ok, terms: @terms}
 
     end 
