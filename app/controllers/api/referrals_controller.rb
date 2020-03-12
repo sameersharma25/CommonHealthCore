@@ -173,10 +173,11 @@ module Api
         task_description = t.task_description
         additional_fields = t.additional_fields
         transferable = t.transferable
+        transfer_status = t.transfer_status
 
         task_details = {task_id: task_id , task_type: task_type, task_status: task_status, task_owner: task_owner,
                         provider: provider , task_deadline: task_deadline, task_description: task_description,
-                        additional_fields: additional_fields, transferable: transferable}
+                        additional_fields: additional_fields, transferable: transferable, transfer_status: transfer_status}
         task_list.push(task_details)
       end
 
