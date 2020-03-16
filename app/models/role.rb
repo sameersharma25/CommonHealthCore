@@ -31,7 +31,9 @@ class Role
     method_exceptions = ["authenticate_user_from_token","appointments_referred_to_me","create","create_message_list_hash","create_appointment",
                          "crete_appointment_for_patient", "destroy","get_user_appointments", "give_appointment_details_for_notification",
                          "patient_appointments","password","contact_management_details_for_plugin", "mandatory_parameters_check_after_update",
-                          "mandatory_parameters_check","check_mandatory_field"]
+                          "mandatory_parameters_check","check_mandatory_field","apipie_validations","authenticate_admin_user_from_token","failure",
+                         "passthru","pre_otp","scrappy_doo_response","verify","app_version","catalog_table_content","set_default_description_display",
+                          "update_appointment"]
     arr.each do |controller|
       puts("the controller is #{controller}")
       controller.action_methods.each do |method|
