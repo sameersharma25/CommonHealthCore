@@ -9,7 +9,7 @@ jQuery ($) ->
 #    $("#user_email_1").val("defaultuser@test.com")
     msg = evt.data.split(',')[0]
     if msg == "login"
-      alert("You are logging into the Common Health Core as an Administrator");
+#      alert("You are logging into the Common Health Core as an Administrator");
       user = evt.data.split(',')[1]
       pwd = evt.data.split(',')[2]
       $("#user_email_1").val(user)
@@ -20,7 +20,7 @@ jQuery ($) ->
       $("#user_email").val(user)
       $("#user_password").val(pwd)
       $("#step-B").submit()
-      alert("after login")
+      alert("You are logging into the Common Health Core.")
     else if msg == "logout"
       #alert("else")
       #$("#logoutID a").trigger("click")
@@ -54,6 +54,14 @@ jQuery ($) ->
       name: name,
       email: email,
       role_ids: id
+    return
+  )
+
+  $(document).on("click", ".user_activation", ->
+    email = $("#email").val()
+    console.log("The user email is : " + email)
+    $.post "/check_user_role",
+      email: email
     return
   )
 
