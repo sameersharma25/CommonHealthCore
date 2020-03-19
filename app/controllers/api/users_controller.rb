@@ -320,21 +320,21 @@ module Api
     end
 
 
-    def update_patient
-      patient = Patient.find(params[:patient_id])
-      patient.first_name = params[:first_name] if params[:first_name]
-      patient.last_name = params[:last_name] if params[:last_name]
-      patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
-      patient.patient_email = params[:patient_email] if params[:patient_email]
-      patient.patient_phone = params[:patient_phone] if params[:patient_phone]
-      patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
-      patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
-      patient.mode_of_contact = params[:mode_of_contac] if params[:mode_of_contac]
-      patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
-      patient.save
-
-      render :json => {status: :ok, message: "Patient Details have been updated" }
-    end
+    # def update_patient
+    #   patient = Patient.find(params[:patient_id])
+    #   patient.first_name = params[:first_name] if params[:first_name]
+    #   patient.last_name = params[:last_name] if params[:last_name]
+    #   patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
+    #   patient.patient_email = params[:patient_email] if params[:patient_email]
+    #   patient.patient_phone = params[:patient_phone] if params[:patient_phone]
+    #   patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
+    #   patient.healthcare_coverage = params[:healthcare_coverage] if params[:healthcare_coverage]
+    #   patient.mode_of_contact = params[:mode_of_contac] if params[:mode_of_contac]
+    #   patient.patient_zipcode = params[:patient_zipcode] if params[:patient_zipcode]
+    #   patient.save
+    #
+    #   render :json => {status: :ok, message: "Patient Details have been updated" }
+    # end
 
     def crete_appointment_for_patient
       patient = Patient.find(params[:patient_id])
@@ -460,8 +460,8 @@ module Api
     def edit_profile
       user = User.find_by(email: params['email'])
         user.email = params[:email] if params[:email]
-        user.active = params[:active] if params[:active]
-        user.admin = params[:admin] if params[:admin]
+        #user.active = params[:active] if params[:active]
+        #user.admin = params[:admin] if params[:admin]
         user.phone_number = params[:phone_number] if params[:phone_number]
         user.name  = params[:name] if params[:name]
         user.otp_required_for_login = params[:otp_required_for_login] if params[:otp_required_for_login]
