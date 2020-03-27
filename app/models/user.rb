@@ -19,7 +19,8 @@ class User
 
   #two Factor stuff 
   field :otp_backup_codes, type: Array, default: []
-
+            #testing active_otp
+  field :active_otp , type: String, default: ""
   field :encrypted_otp_secret , type: String, default: ""
   field :encrypted_otp_secret_iv , type: String, default: ""
   field :encrypted_otp_secret_salt , type: String, default: ""
