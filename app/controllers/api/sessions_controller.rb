@@ -2,6 +2,7 @@ module Api
   class SessionsController < ActionController::Base
     include UsersHelper
     before_action :authenticate_user_from_token, except: [:create, :verify]
+    after_create :clear_otp
 
     def verify
         my_user = User.find_by(email: params[:email])
@@ -76,6 +77,12 @@ module Api
 
 
 
+    end
+
+    def clear_otp
+      user = User.find_by(email: params[:email])
+      user.active_otp = ""
+      user.save!
     end
 
     def destroy

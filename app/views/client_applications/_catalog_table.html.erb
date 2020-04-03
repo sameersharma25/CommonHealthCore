@@ -35,7 +35,15 @@
 
         <%= hidden_field_tag r["url"] ,i, :id => "url_#{i}" %>
 
-        <td><%= r["status"] %></td>
+        <% if r["OrganizationName"]["InactiveCatalog"] %>
+
+          <% if r["OrganizationName"]["InactiveCatalog"] == true %>
+            <td> inactive </td>
+          <% end %>
+               
+        <% else %>
+          <td><%= r["status"] %></td>
+        <% end %>
 
 
         <!--<% if r["missing_mandatory_fields"] == "1" || r["missing_mandatory_fields"].nil? %>
@@ -60,7 +68,7 @@
         <% if r['status'] == "Rejected"%>
             <script type="text/javascript">
                 var myID = 'rule_' + <%= i %>
-                document.getElementById(myID).style.color = "red";
+                document.getElementById(myID).style.color  = "red";
             </script>
         <% end %>
 
