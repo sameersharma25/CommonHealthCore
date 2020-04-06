@@ -8,6 +8,9 @@ class ClientApplicationsController < ApplicationController
   # GET /client_applications.json
   def index  
     user = current_user
+    user.active_otp = ""
+    user.save!
+    logger.debug("-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU #{user.inspect}")
     @client_application = current_user.client_application
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
