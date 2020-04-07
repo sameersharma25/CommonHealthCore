@@ -25,7 +25,11 @@ jQuery ($) ->
 
   $('#client_application').DataTable( );
 
-  $('#contact_management_table').DataTable( "order": []);
+  $('#contact_management_table').DataTable({
+   "pagingType": "input"
+  }
+
+  );
 
   $(document).on("click", ".external_api_setup", ->
 #    text = $("#send_patient").val()
