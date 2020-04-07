@@ -33,7 +33,9 @@ class Role
                          "patient_appointments","password","contact_management_details_for_plugin", "mandatory_parameters_check_after_update",
                           "mandatory_parameters_check","check_mandatory_field","apipie_validations","authenticate_admin_user_from_token","failure",
                          "passthru","pre_otp","scrappy_doo_response","verify","app_version","catalog_table_content","set_default_description_display",
-                          "update_appointment"]
+                          "update_appointment", "check_agreement_expiration","create_ledger_master_and_status","data_filtering","ext_app_ledger",
+                         "assessments_list","get_catalog","send_invite_to_user","send_referral_common","set_current_user","set_current_user",
+                          "edit_appointment","update" ]
     arr.each do |controller|
       puts("the controller is #{controller}")
       controller.action_methods.each do |method|

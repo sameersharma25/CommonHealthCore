@@ -192,7 +192,7 @@ module Api
     def patient_details
       patient = Patient.find(params[:patient_id])
       dob = patient.date_of_birth
-      age = dob.blank? ? "" :((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+      age = dob.blank? ? "" :((Time.zone.now - Date.strptime(dob, '%m-%d-%Y' ).to_time) / 1.year.seconds).floor
       # if patient.patient_zipcode?
       #   patient_coords = Geocoder.search(patient.patient_zipcode)
       #   logger.debug("******the coordinates are : #{patient_coords.inspect}")
@@ -244,7 +244,7 @@ module Api
         p_status = p.patient_status
         p_email = p.patient_email
         dob = p.date_of_birth
-        p_age = dob.blank? ? "" : ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+        p_age = dob.blank? ? "" : ((Time.zone.now - Date.strptime(dob, '%m-%d-%Y' ).to_time) / 1.year.seconds).floor
         active_notification = false
         p.appointments.each do |a|
           a.notifications.each do |n|
