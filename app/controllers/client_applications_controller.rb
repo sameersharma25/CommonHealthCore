@@ -285,8 +285,8 @@ class ClientApplicationsController < ApplicationController
     #logger.debug("OrgDesc::: #{@OrgDescription}")
     @siteHash = details[:siteHash]
     @poc = details[:poc]
-    @site = details[:OrgSites]
-    #logger.debug("ORG SITES #{@site}")
+    @site = details[:OrgSites].sort_by {|s| s['SelectSiteID'].to_i}
+    #@site = details[:OrgSites]
     @geoscope = details[:geoscope]
     @program = details[:programs] 
     logger.debug("PROGRAM #{@program}")

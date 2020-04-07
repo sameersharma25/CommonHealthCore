@@ -403,6 +403,8 @@
                                     <div class="sitePOC">
                                         <%= label_tag :DefaultPOC %>
                                         <%= check_box_tag :DefaultPOC, pd['poc']['DefaultPOC'] , pd['poc']['DefaultPOC'.to_s.downcase == "true" ]%><br>
+                                        <%= label_tag :InactivePOC %>
+                                        <%= check_box_tag :InactivePOC, pd['poc']['InactivePOC'] , pd['poc']['InactivePOC'] == true %><br>
                                         <%= label_tag :id %>
                                         <%= text_field_tag :id, pd['id'], name: :id, readonly: true   %><br>
                                         <%= label_tag :OfficePhone %>

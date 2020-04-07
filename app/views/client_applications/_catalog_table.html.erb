@@ -39,8 +39,10 @@
 
           <% if r["OrganizationName"]["InactiveCatalog"] == true %>
             <td> inactive </td>
+          <% else %>
+               <td><%= r["status"] %></td>
           <% end %>
-               
+          
         <% else %>
           <td><%= r["status"] %></td>
         <% end %>
