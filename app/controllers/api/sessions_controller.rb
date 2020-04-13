@@ -6,8 +6,11 @@ module Api
     def verify
         my_user = User.find_by(email: params[:email])
         otp_required = my_user.otp_required_for_login
-      
+        my_user.active_otp = current_otp(my_user)
+        my_user.save!
+        
         if otp_required == true
+        #if active_otp == true
           #mail/text the OTP
           @otp_is = current_otp(my_user)
           logger.debug("EMAIL/TEXT THIS VALUE::: #{@otp_is}")
@@ -26,10 +29,12 @@ module Api
       user = User.find_by(email: params[:email])
       client_url = user.client_application.application_url
       otp_required = user.otp_required_for_login
+      
       if user.active == true
         if otp_required == true # check the otp_attemp
+        #if active_otp == true
 
-            if params[:otp_attempt] == current_otp(user)
+            if params[:otp_attempt] == user.active_otp
                 logger.debug("Allow the user to login")
                 # if host == client_url
                   if user&.valid_password?(params[:password])

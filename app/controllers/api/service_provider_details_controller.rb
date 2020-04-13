@@ -605,6 +605,17 @@ module Api
       # item["catalog_id"] = SecureRandom.hex(13)
       # item["rejectReason"] = "N/A"
 
+      item["Programs"].each do |p|
+        # logger.debug("-----------Program sites are #{p["ProgramSites"]}")
+        if p["ProgramSites"]
+          ps = p["ProgramSites"].first
+          # ps.split(',')
+          # logger.debug("-----------SSplit program is Program sites are #{ps.split(',')}")
+          p["ProgramSites"] = ps.split(',')
+          # logger.debug("-----------At the end Program sites are #{p["ProgramSites"]}")
+        end
+
+      end
       item1=  mandatory_parameters_check(item, "Creating")
       logger.debug(")))))))))))))))))))))))))))))))))))))))))))the item is : #{item1}")
 
