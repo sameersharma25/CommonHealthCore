@@ -29,7 +29,7 @@
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
-          <%= label_tag :InactiveCatalog %>
+          <%= label_tag :InactiveOrganization %>
           <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'] %><br>
 
           <%= label_tag :Type %>
@@ -247,7 +247,7 @@
             </div>
 
             <div class="col-md-4">
-              <h1>Service Tags</h1>
+              <h1>Service Groups</h1>
                     <%= label_tag :S_Addiction %>
                     <%= check_box_tag :S_Addiction, x['S_Addiction'], x['S_Addiction'].to_s.downcase == "true"  %><br>
                     <%= label_tag :S_Identification %>
@@ -403,6 +403,8 @@
                                     <div class="sitePOC">
                                         <%= label_tag :DefaultPOC %>
                                         <%= check_box_tag :DefaultPOC, pd['poc']['DefaultPOC'] , pd['poc']['DefaultPOC'.to_s.downcase == "true" ]%><br>
+                                        <%= label_tag :InactivePOC %>
+                                        <%= check_box_tag :InactivePOC, pd['poc']['InactivePOC'] , pd['poc']['InactivePOC'] == true %><br>
                                         <%= label_tag :id %>
                                         <%= text_field_tag :id, pd['id'], name: :id, readonly: true   %><br>
                                         <%= label_tag :OfficePhone %>

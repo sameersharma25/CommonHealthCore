@@ -8,6 +8,9 @@ class ClientApplicationsController < ApplicationController
   # GET /client_applications.json
   def index  
     user = current_user
+    user.active_otp = ""
+    user.save!
+    logger.debug("-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU #{user.inspect}")
     @client_application = current_user.client_application
     @registration_request = RegistrationRequest.all
     @notification_rules = @client_application.notification_rules
@@ -282,8 +285,8 @@ class ClientApplicationsController < ApplicationController
     #logger.debug("OrgDesc::: #{@OrgDescription}")
     @siteHash = details[:siteHash]
     @poc = details[:poc]
-    @site = details[:OrgSites]
-    #logger.debug("ORG SITES #{@site}")
+    @site = details[:OrgSites].sort_by {|s| s['SelectSiteID'].to_i}
+    #@site = details[:OrgSites]
     @geoscope = details[:geoscope]
     @program = details[:programs] 
     logger.debug("PROGRAM #{@program}")
