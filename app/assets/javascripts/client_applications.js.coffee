@@ -6,7 +6,7 @@ jQuery ($) ->
   $(document).on("click", ".requested_application", ->
     id = $(this).attr("id")
     console.log("the id of the invite is ", id)
-    $.post "/send_application_invitation",
+    $.post "/backend/send_application_invitation",
       id: id
     return
   )
