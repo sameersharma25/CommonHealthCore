@@ -6,7 +6,7 @@ jQuery ($) ->
   $(document).on("click", ".requested_application", ->
     id = $(this).attr("id")
     console.log("the id of the invite is ", id)
-    $.post "/backend/send_application_invitation",
+    $.post "/send_application_invitation",
       id: id
     return
   )
@@ -26,7 +26,8 @@ jQuery ($) ->
   $('#client_application').DataTable( );
 
   $('#contact_management_table').DataTable({
-   "pagingType": "input"
+   "pagingType": "input",
+   "sDom": '<"top"<"actions">lfpi<"clear">><"clear">rt<"bottom">'
   }
 
   );
