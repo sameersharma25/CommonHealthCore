@@ -26,7 +26,8 @@ jQuery ($) ->
   $('#client_application').DataTable( );
 
   $('#contact_management_table').DataTable({
-   "pagingType": "input"
+   "pagingType": "input",
+   "sDom": '<"top"<"actions">lfpi<"clear">><"clear">rt<"bottom">'
   }
 
   );
