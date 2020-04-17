@@ -41,14 +41,14 @@ module Adapter
             http = Net::HTTP.new(url.host, url.port)
             http.use_ssl = true
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
+            dob = patient.date_of_birth.split('/').rotate(-1).join('-')
             request = Net::HTTP::Post.new(url)
             input = 
             {
                 "Referring_Provider_Name": "CHC",
                 "Patient_FirstName": patient.first_name,
                 "Patient_LastName": patient.last_name,
-                "Patient_DOB": patient.date_of_birth,
+                "Patient_DOB": patient.date_of_birth.split('/').rotate(-1).join('-'),
                 "Reason_For_Visit": "Cleaning/Checkup",
                 "Zip": "42351",
                 "Preferred_Contact_Method": "Text",
