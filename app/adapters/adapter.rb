@@ -48,7 +48,7 @@ module Adapter
                 "Referring_Provider_Name": "CHC",
                 "Patient_FirstName": patient.first_name,
                 "Patient_LastName": patient.last_name,
-                "Patient_DOB": patient.date_of_birth.split('/').rotate(-1).join('-'),
+                "Patient_DOB": patient.date_of_birth.to_date.strftime('%Y-%m-%d'),
                 "Reason_For_Visit": "Cleaning/Checkup",
                 "Zip": "42351",
                 "Preferred_Contact_Method": "Text",
