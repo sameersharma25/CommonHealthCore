@@ -7,9 +7,9 @@ module Api
     include UsersHelper
     include ClientApplicationsHelper
 
-    before_action :set_user_id, except: [:client_list, :send_patient]
-    before_action :authenticate_user_from_token, except: [:client_list, :send_patient]
-    load_and_authorize_resource class: :api, except: [:client_list, :send_patient]
+    before_action :set_user_id, except: [:client_list]
+    before_action :authenticate_user_from_token, except: [:client_list]
+    load_and_authorize_resource class: :api, except: [:client_list]
 
     def render_script
       render html: '<div>html goes here</div>'.html_safe
@@ -73,7 +73,7 @@ module Api
 
             Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient)
             render :json=> {status: :ok, message: "Patient has been sent." }
-
+            return
 
           elsif external_application.external_application == true
 
