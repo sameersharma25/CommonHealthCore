@@ -71,9 +71,17 @@ module Api
         if external_application.agreement_counter_sign == "Done"
           if external_application.name == "Dentistlink"
 
-            Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient)
-            render :json=> {status: :ok, message: "Patient has been sent." }
+            res = Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient)
+            logger.debug("WHAT IS ISERROR?????? #{res.inspect}")
+            if res["IsError"] == true
+              render :json=> {status: :error, message: res["ErrorData"] }
             return
+
+            else
+              render :json=> {status: :ok, message: "Patient has been sent." }
+            return
+            end
+            
 
           elsif external_application.external_application == true
 

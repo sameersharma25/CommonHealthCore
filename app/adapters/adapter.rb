@@ -66,7 +66,8 @@ module Adapter
             Rails.logger.debug("SEND PATIENT REQUEST #{request.body.inspect}")
             response = http.request(request)
             puts response.read_body
-            return
+            res = JSON.parse(response.read_body)
+            
     end
   end
 end
