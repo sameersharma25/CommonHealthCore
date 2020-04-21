@@ -7,6 +7,10 @@ module Api
     include UsersHelper
     include ClientApplicationsHelper
 
+    # before_action :set_user_id, except: [:client_list, :send_patient]
+    # before_action :authenticate_user_from_token, except: [:client_list, :send_patient]
+    # load_and_authorize_resource class: :api, except: [:client_list, :send_patient]
+
     before_action :set_user_id, except: [:client_list]
     before_action :authenticate_user_from_token, except: [:client_list]
     load_and_authorize_resource class: :api, except: [:client_list]
@@ -62,16 +66,17 @@ module Api
 
       external_application_id = params[:external_application_id]
       external_application = ClientApplication.find(external_application_id)
-      #external_application_id = "5e8f5a3f55668f031da74b89"
-      #patient = Patient.find("5cdc55d858f01a7d72faec1e")
-      #external_application = ClientApplication.find("5e8f5a3f55668f031da74b89")
+      # task = Task.last
+      # external_application_id = "5e8f5a3f55668f031da74b89"
+      # patient = Patient.find("5ab9785858f01a5ed376cf5c")
+      # external_application = ClientApplication.find("5e8f5a3f55668f031da74b89")
       client_application = ClientApplication.find(patient.client_application_id)
 
       if external_application.agreement_signed == true
         if external_application.agreement_counter_sign == "Done"
           if external_application.name == "Dentistlink"
 
-            res = Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient)
+            res = Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient, task)
             logger.debug("WHAT IS ISERROR?????? #{res.inspect}")
             if res["IsError"] == true
               render :json=> {status: :error, message: res["ErrorData"] }

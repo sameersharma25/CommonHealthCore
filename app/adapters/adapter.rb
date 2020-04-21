@@ -27,7 +27,14 @@ module Adapter
       
     end
 
-    def send_patient_sf(patient)
+    def reason_for_visit(patient, task)
+
+      @reason_for_visit = "Cleaning/Checkup"
+
+    end
+
+    def send_patient_sf(patient, task)
+      reason_for_visit = reason_for_visit(patient, task)
       token = @token
       Rails.logger.debug("SEND PATIENT TOKEN #{token.inspect}")
       #Authorization = @token
@@ -49,10 +56,10 @@ module Adapter
                 "Patient_FirstName": patient.first_name,
                 "Patient_LastName": patient.last_name,
                 "Patient_DOB": patient.date_of_birth.to_date.strftime('%Y-%m-%d'),
-                "Reason_For_Visit": "Cleaning/Checkup",
-                "Zip": "42351",
+                "Reason_For_Visit": reason_for_visit,
+                "Zip": patient.patient_zipcode,
                 "Preferred_Contact_Method": "Text",
-                "Mobile": "9876543210",
+                "Mobile": patient.patient_phone,
                 "Pregnant_Diabetic": "Pregnant",
                 "Coverage_Type": "Other",
                 "Care_Coordination_Notes": "Testing from CHC",
