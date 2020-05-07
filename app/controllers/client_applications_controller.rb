@@ -268,37 +268,109 @@ class ClientApplicationsController < ApplicationController
     @invalid_catalog = InvalidCatalogEntry.all
   end
 
+
+
+
+
+  def new_site_adding
+
+    if params["catalog_data"]
+
+      logger.debug("*************IN the mang VIEWER CONTROLER  CATALOG DATA***********")
+
+      @result = JSON.parse(params[:catalog_data])
+      # @result = params[:catalog_data]
+
+      new_site = {"InactiveSite"=>false, "LocationName"=>"", "AddrState"=>"", "AddrCity"=>"",
+                  "AddrZip"=>"", "ServiceDeliverySite"=>true, "AdminSite"=>false, "ResourceDirectory"=>false, "SelectSiteID"=>"5",
+                  "DefaultPOC"=>false, "InactivePOC"=>false, "OfficePhone"=>"", "Name"=>"",
+                  "POCs"=>[{"id"=>"1.0", "poc"=>{"DefaultPOC"=>false, "InactivePOC"=>false, "OfficePhone"=>"",
+                  "Name"=>""}}], "Addr1"=>[{"Xpath"=>"", "Text"=>"", "Domain"=>""}]}
+      # logger.debug("THE ORG SITE IS #{@result["OrgSites"]}-------------#{new_site.class}")
+      @result["OrgSites"].append(new_site)
+
+      details = cat_details(@result)
+
+      @url = details[:url]
+      #logger.debug("WHAT IS THE URL  #{@url}")
+      @orgDetails = details[:OrgDetails]
+      # sets default org desc display if don't exists
+      set_default_description_display
+      #logger.debug("OrgDetails:::: #{@orgDetails}")
+      @OrganizationName = details[:OrganizationName]
+      #logger.debug("OrgName::: #{@OrganizationName}")
+      @OrgDescription = details[:OrganizationDescription]
+      #logger.debug("OrgDesc::: #{@OrgDescription}")
+      @siteHash = details[:siteHash]
+      @poc = details[:poc]
+      if details[:OrgSites] == [nil]
+        @site = details[:OrgSites]
+      else
+        @site = details[:OrgSites].sort_by {|s| s['SelectSiteID'].to_i}
+      end
+      @geoscope = details[:geoscope]
+      @program = details[:programs]
+      # logger.debug("PROGRAM #{@program}")
+      @PopulationDescription = details[:popDesc]
+      @ProgramDescription = details[:progDesc]
+      @ServiceAreaDescription = details[:servArea]
+      @ProgramReferences = details[:progRef]
+
+      @provider = params.has_key?(:provider_page) ? "master" : ""
+
+      logger.debug("----------THE DETAILS OF THE ORG SITE IS : #{@site.count} /n ")
+      @site.each do |s|
+        logger.debug("*************** SITE Id is : #{s["SelectSiteID"]}")
+      end
+
+
+    end
+
+    @pdfLinkSet = []
+
+
+
+  end
+
+
+
+
+
+
   def catalogMangViewer
 
-    table = params.has_key?(:provider_page) ? ENV["MASTER_TABLE_NAME"] : ENV["CATALOG_TABLE_NAME"]
-    details = get_catalog_details(table)
-    logger.debug("looking at the details, #{details}")
-    @url = details[:url]
-    #logger.debug("WHAT IS THE URL  #{@url}")
-    @orgDetails = details[:OrgDetails]
-    # sets default org desc display if don't exists
-    set_default_description_display
-    #logger.debug("OrgDetails:::: #{@orgDetails}")
-    @OrganizationName = details[:OrganizationName]
-    #logger.debug("OrgName::: #{@OrganizationName}")
-    @OrgDescription = details[:OrganizationDescription]
-    #logger.debug("OrgDesc::: #{@OrgDescription}")
-    @siteHash = details[:siteHash]
-    @poc = details[:poc]
-    if details[:OrgSites] == [nil]
-      @site = details[:OrgSites]
-    else
-    @site = details[:OrgSites].sort_by {|s| s['SelectSiteID'].to_i}
-    end
-    @geoscope = details[:geoscope]
-    @program = details[:programs] 
-    logger.debug("PROGRAM #{@program}")
-    @PopulationDescription = details[:popDesc]
-    @ProgramDescription = details[:progDesc]
-    @ServiceAreaDescription = details[:servArea]
-    @ProgramReferences = details[:progRef]
+      table = params.has_key?(:provider_page) ? ENV["MASTER_TABLE_NAME"] : ENV["CATALOG_TABLE_NAME"]
 
-    @provider = params.has_key?(:provider_page) ? "master" : ""
+      details = get_catalog_details(table)
+      logger.debug("looking at the details, #{details}")
+      @url = details[:url]
+      #logger.debug("WHAT IS THE URL  #{@url}")
+      @orgDetails = details[:OrgDetails]
+      # sets default org desc display if don't exists
+      set_default_description_display
+      #logger.debug("OrgDetails:::: #{@orgDetails}")
+      @OrganizationName = details[:OrganizationName]
+      #logger.debug("OrgName::: #{@OrganizationName}")
+      @OrgDescription = details[:OrganizationDescription]
+      #logger.debug("OrgDesc::: #{@OrgDescription}")
+      @siteHash = details[:siteHash]
+      @poc = details[:poc]
+      if details[:OrgSites] == [nil]
+        @site = details[:OrgSites]
+      else
+        @site = details[:OrgSites].sort_by {|s| s['SelectSiteID'].to_i}
+      end
+      @geoscope = details[:geoscope]
+      @program = details[:programs]
+      logger.debug("PROGRAM #{@program}")
+      @PopulationDescription = details[:popDesc]
+      @ProgramDescription = details[:progDesc]
+      @ServiceAreaDescription = details[:servArea]
+      @ProgramReferences = details[:progRef]
+
+      @provider = params.has_key?(:provider_page) ? "master" : ""
+
+
 
 #this is for the PDF implementation 
 @pdfLinkSet = [] 
@@ -581,6 +653,8 @@ class ClientApplicationsController < ApplicationController
 
     @result = dynamodb.get_item(parameters)[:item]
 
+    cat_details(@result)
+
       #######Update Selenium scrape test
       #uri = URI("http://localhost:3030/validateCatalog")
       #        header = {'Content-Type' => 'application/json'}
@@ -595,96 +669,97 @@ class ClientApplicationsController < ApplicationController
       #        puts "response #{response.body}"
       #
       #######
-    #logger.debug("the Result of the get entry is : #{@result}")
-        @result.each do |k,v|
-            #logger.debug("NOW THE KEY MATTERS #{k} ::: V:: #{v}")
-                case k.to_s
-                    when 'url'
-                      @url = v
-                      logger.debug("GETTING THE URL #{@url}")
-                    when 'Programs'
-                      @program = v
-                      #logger.debug("PROGRAM VALUE #{v}")
+  end
 
-                      v.each do |ary|
-                          ary.each do |key,value|
-                            if key.to_s == 'PopulationDescription'
-                        #      logger.debug("Value #{value}")
-                              @PopulationDescription = value
+  def cat_details(catalog)
+    catalog.each do |k,v|
+      #logger.debug("NOW THE KEY MATTERS #{k} ::: V:: #{v}")
+      case k.to_s
+        when 'url'
+          @url = v
+          logger.debug("GETTING THE URL #{@url}")
+        when 'Programs'
+          @program = v
+          #logger.debug("PROGRAM VALUE #{v}")
 
-                            elsif key.to_s == 'ProgramDescription'
-                              @ProgramDescription = value
-                              logger.debug("my mind is too busy:: #{@ProgramDescription}")
+          v.each do |ary|
+            ary.each do |key,value|
+              if key.to_s == 'PopulationDescription'
+                #      logger.debug("Value #{value}")
+                @PopulationDescription = value
 
-                            elsif key.to_s == 'ServiceAreaDescription'
-                              @ServiceAreaDescription = value
+              elsif key.to_s == 'ProgramDescription'
+                @ProgramDescription = value
+                logger.debug("my mind is too busy:: #{@ProgramDescription}")
 
-                            elsif key.to_s == 'ProgramReferences'
-                              @ProgramReferences = value
-                            end 
-                          end
-                      end 
- 
+              elsif key.to_s == 'ServiceAreaDescription'
+                @ServiceAreaDescription = value
 
-                    when 'OrgSites'
-                      #logger.debug("SITE SITE  #{v}")
-                      @site = v
-
-                      #v.each do |ary|
-                        v.each do |key,value|
-                          if key.to_s == 'Addr1'
-                            @Addr1 = v
-                          elsif key.to_s == 'SiteReference' 
-                            @SiteReference = v
-                          elsif key.to_s == 'poc'
-                            @poc = v
-                          end 
-                        end 
-                      #end 
+              elsif key.to_s == 'ProgramReferences'
+                @ProgramReferences = value
+              end
+            end
+          end
 
 
-                    when 'OrganizationName'
-                      
-                      logger.debug("Org Name #{v}")
-                      @orgDetails = v 
+        when 'OrgSites'
+          #logger.debug("SITE SITE  #{v}")
+          @site = v
 
-                      v.each do |key,value|
-                          logger.debug("breakdown:: #{key} value:: #{value}")
-                          if key.to_s == 'OrganizationName'
-                            @OrganizationName = value
-                            logger.debug("Value #{@OrganizationName}")
-                          elsif key.to_s == 'OrgDescription'
-                            @OrgDescription = value
-                            #logger.debug("Value #{@OrgDescription}")
-                          end 
-                      end 
+          #v.each do |ary|
+          v.each do |key,value|
+            if key.to_s == 'Addr1'
+              @Addr1 = v
+            elsif key.to_s == 'SiteReference'
+              @SiteReference = v
+            elsif key.to_s == 'poc'
+              @poc = v
+            end
+          end
+        #end
 
-                    when 'GeoScope'
-                      #logger.debug("Geo #{v}")
-                      @geoscope = v
-                end 
 
-        end 
+        when 'OrganizationName'
 
-    #details = {OrganizationName: @orgDetails, siteHash: @siteHash, poc: @poc, OrgSites: @sites,
-     #          programHash: @programHash, geoscope: @geoscope, programs: @programs }
+          logger.debug("Org Name #{v}")
+          @orgDetails = v
+
+          v.each do |key,value|
+            logger.debug("breakdown:: #{key} value:: #{value}")
+            if key.to_s == 'OrganizationName'
+              @OrganizationName = value
+              logger.debug("Value #{@OrganizationName}")
+            elsif key.to_s == 'OrgDescription'
+              @OrgDescription = value
+              #logger.debug("Value #{@OrgDescription}")
+            end
+          end
+
+        when 'GeoScope'
+          #logger.debug("Geo #{v}")
+          @geoscope = v
+      end
+
+    end
+
     details = {
-    url: @url,
-    OrgDetails: @orgDetails,
-    OrganizationName: @OrganizationName, 
-    OrganizationDescription: @OrgDescription,
-    site: @site,
-    addr1: @Addr1,
-    siteref: @SiteReference,
-    siteHash: @siteHash, 
-    poc: @poc, 
-    OrgSites: @site,
-    geoscope: @geoscope, 
-    programs: @program,
-    popDesc: @PopulationDescription,
-    progDesc: @ProgramDescription,
-    servArea: @ServiceAreaDescription,
-    progRef: @ProgramReferences }
+        url: @url,
+        OrgDetails: @orgDetails,
+        OrganizationName: @OrganizationName,
+        OrganizationDescription: @OrgDescription,
+        site: @site,
+        addr1: @Addr1,
+        siteref: @SiteReference,
+        siteHash: @siteHash,
+        poc: @poc,
+        OrgSites: @site,
+        geoscope: @geoscope,
+        programs: @program,
+        popDesc: @PopulationDescription,
+        progDesc: @ProgramDescription,
+        servArea: @ServiceAreaDescription,
+        progRef: @ProgramReferences }
+
   end
 
 

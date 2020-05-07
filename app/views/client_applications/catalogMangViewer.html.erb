@@ -1,65 +1,65 @@
 <div class="container-fluid" style="display: none;">
-    <div class ="row" id="pdfSection">
+  <div class ="row" id="pdfSection">
 
-        <ul>
-            <% @pdfLinkSet.each do |x| %>
+    <ul>
+      <% @pdfLinkSet.each do |x| %>
 
-                <li style="display: inline-block;">
-                    <%= x['url'] %><br>
-                    <button class="pdfID" type="button">refresh</button>
-                    <p style="display: none;"><%= x['_id'] %></p><br>
+          <li style="display: inline-block;">
+            <%= x['url'] %><br>
+            <button class="pdfID" type="button">refresh</button>
+            <p style="display: none;"><%= x['_id'] %></p><br>
 
-                    <button type="button" class="pdfToggle">toggle</button><br>
+            <button type="button" class="pdfToggle">toggle</button><br>
 
-                    <embed class="pdfSelector"  width="250" height="188" src= <%= "https://drive.google.com/viewerng/viewer?embedded=true&url=#{x['pdf_s3_link']}" %> >
-                </li>
-            <% end %> 
-        </ul>      
-    </div>
+            <embed class="pdfSelector"  width="250" height="188" src= <%= "https://drive.google.com/viewerng/viewer?embedded=true&url=#{x['pdf_s3_link']}" %> >
+          </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
 
 
 <div class="container-fluid" id="createMargin">
-   <h3 class="pull-right" id ="theurl"> <%= @url %> </h3><br>
-    <% if @provider != "master" %>
+  <h3 class="pull-right" id ="theurl"> <%= @url %> </h3><br>
+  <% if @provider != "master" %>
       <button id="collectButton">Update</button>
-    <%end%>
-    <h3 id="portalStatus"></h3>
-         
+  <%end%>
+  <h3 id="portalStatus"></h3>
+
   <div class="row">
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
-          <%= label_tag :InactiveOrganization %>
-          <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'] %><br>
+      <%= label_tag :InactiveOrganization %>
+      <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'] %><br>
 
-          <%= label_tag :Type %>
-          <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
+      <%= label_tag :Type %>
+      <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
 
-          <%= label_tag :HomePageURL %>
-          <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL, readonly: true %><br>
+      <%= label_tag :HomePageURL %>
+      <%= text_field_tag :HomePageURL, @orgDetails['HomePageURL'], name: :HomePageURL, readonly: true %><br>
 
-          <div id="orgName" >
+      <div id="orgName" >
 
-            <h3><i>Organization Name</i></h3>
-            <% if @OrganizationName != nil %>
-                <% @OrganizationName.each do |pd| %>
-                  <%= label_tag :Xpath %>
-                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
+        <h3><i>Organization Name</i></h3>
+        <% if @OrganizationName != nil %>
+            <% @OrganizationName.each do |pd| %>
+                <%= label_tag :Xpath %>
+                <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
 
-                  <%= label_tag :Text %><br>
-                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
+                <%= label_tag :Text %><br>
+                <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
 
 
-                  <%= label_tag :Domain %>
-                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
-                <% end %>
+                <%= label_tag :Domain %>
+                <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %><br>
             <% end %>
-        </div>
+        <% end %>
+      </div>
 
-        <div id="orgDesc" >
-            <h3><i>Organization Description</i></h3>
-            <% if @OrgDescription != nil %>
-              <% @OrgDescription.each do |pd| %>
+      <div id="orgDesc" >
+        <h3><i>Organization Description</i></h3>
+        <% if @OrgDescription != nil %>
+            <% @OrgDescription.each do |pd| %>
                 <div class="orgDescription">
                   <%= label_tag :Xpath %>
                   <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true %><br>
@@ -72,38 +72,38 @@
                   <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true %>
                   <button id="deleteButton", onclick = "OrgDescriptionDelete(this)">Delete</button> <br>
                 </div>
-              <% end %>
             <% end %>
-        </div>
+        <% end %>
+      </div>
 
-        <% if @OrgDescription != nil && @OrgDescription != [] %>
+      <% if @OrgDescription != nil && @OrgDescription != [] %>
           <div id="descdisplay" >
             <%= label_tag :OrganizationDescriptionDisplay %><br>
             <%= text_area_tag :Text, @orgDetails['OrganizationDescriptionDisplay'], name: :OrganizationDescriptionDisplay, rows:"4", cols:"50" %><br>
           </div>
-        <% end %>
+      <% end %>
     </div>
 
     <div>
       <div class="col-md-6" id="GeoScopeForm">
-          <h1>Geoscope</h1>
+        <h1>Geoscope</h1>
 
-              <%= label_tag :Scope %> 
-              <%= text_field_tag :Scope, @geoscope['Scope'] %>  <br>
-              <%= label_tag :Neighborhoods %> 
-              <%= text_field_tag :Neighborhoods, @geoscope['Neighborhoods'] %>  <br>
-              <%= label_tag :ServiceAreaName %> 
-              <%= text_field_tag :ServiceAreaName, @geoscope['ServiceAreaName'] %>  <br>
-              <%= label_tag :State %> 
-              <%= text_field_tag :State, @geoscope['State'] %>  <br>
-              <%= label_tag :Country %> 
-              <%= text_field_tag :Country, @geoscope['Country'] %>  <br>
-              <%= label_tag :Region %> 
-              <%= text_field_tag :Region, @geoscope['Region'] %> <br>
-              <%= label_tag :City %> 
-              <%= text_field_tag :City, @geoscope['City'] %>  <br>
-              <%= label_tag :County %> 
-              <%= text_field_tag :County, @geoscope['County'] %> <br> 
+        <%= label_tag :Scope %>
+        <%= text_field_tag :Scope, @geoscope['Scope'] %>  <br>
+        <%= label_tag :Neighborhoods %>
+        <%= text_field_tag :Neighborhoods, @geoscope['Neighborhoods'] %>  <br>
+        <%= label_tag :ServiceAreaName %>
+        <%= text_field_tag :ServiceAreaName, @geoscope['ServiceAreaName'] %>  <br>
+        <%= label_tag :State %>
+        <%= text_field_tag :State, @geoscope['State'] %>  <br>
+        <%= label_tag :Country %>
+        <%= text_field_tag :Country, @geoscope['Country'] %>  <br>
+        <%= label_tag :Region %>
+        <%= text_field_tag :Region, @geoscope['Region'] %> <br>
+        <%= label_tag :City %>
+        <%= text_field_tag :City, @geoscope['City'] %>  <br>
+        <%= label_tag :County %>
+        <%= text_field_tag :County, @geoscope['County'] %> <br>
       </div>
     </div>
   </div>
@@ -111,694 +111,605 @@
 
 
 
-    <h1>Programs</h1>
-      <% @program.each do |x| %>
-            <% if x['InactiveProgram'] == true %>
-                <p>Inactive Program</p>
-                <button type="button" class="toggleProgram">Toggle Program</button>
-                <div class=" ProgramForm row" style="display: none;">
-            <% else %>
-              <!-- <div class=" ProgramForm row"> -->
-                <div class=" ProgramForm row">
-            <% end %>
-
-            <div class="col-md-4">
-                    <%= label_tag :InactiveProgram %>
-                    <%= check_box_tag :InactiveProgram, x['InactiveProgram'], x['InactiveProgram']%><br>
-
-                    <%= label_tag :ProgramName %>
-                    <%= text_field_tag :ProgramName, x['ProgramName'] %><br>
-
-                    <%= label_tag :QuickConnectWebPage %>
-                    <%= text_field_tag :QuickConnectWebPage, x['QuickConnectWebPage'] %><br>
-                    <%= label_tag :ContactWebPage %>
-                    <%= text_field_tag :ContactWebPage, x['ContactWebPage'] %><br>
-                    <%= label_tag :ProgramWebPage %>
-                    <%= text_field_tag :ProgramWebPage, x['ProgramWebPage'] %><br>
-
-                    <%= label_tag :ProgramComment %>
-                    <%= text_field_tag :ProgramComment, x['ProgramComment'] %><br>
-
-                    <%= label_tag :SelectprogramID %>
-                    <%= text_field_tag :SelectprogramID, x['SelectprogramID'], readonly: true %><br>
-
-                    <%= label_tag :ProgramSites %>
-                    <% if !x['ProgramSites'].nil? %>
-                      <%= text_field_tag :ProgramSites, x['ProgramSites'].join(','), name: :ProgramSites %><br>
-                    <% else %>
-                      <%= text_field_tag :ProgramSites, x['ProgramSites'], name: :ProgramSites %><br>
-                    <% end %>
-
-                    <% if x['ProgramDescription'] != nil %>
-                    <h3><i>Program Description</i></h3>
-                    <% x['ProgramDescription'].each do |pd| %>
-                      <div class="programProgramDescription" >
-                        <%= label_tag :Xpath %>
-                        <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true  %><br>
-                      <%= label_tag :Text %><br>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '45'%><br>
-                        <%= label_tag :Domain %>
-                        <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true  %><br>
-                      </div>
-                    <% end %>
-                    <% end %>
-
-                    <div>
-                      <%= label_tag :ProgramDescriptionDisplay %><br>
-                      <%= text_area_tag :Text, x['ProgramDescriptionDisplay'], name: :ProgramDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"44"%><br>
-                    </div>
-
-                    <% if x['ServiceAreaDescription'] != nil %>
-                    <h3><i>Service Area Description</i></h3>
-                    <% x['ServiceAreaDescription'].each do |pd| %>
-                      <div class="programServiceAreaDescription" >
-                        <%= label_tag :Xpath %>
-                        <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                      <%= label_tag :Text %><br>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '45'%><br>
-                        <%= label_tag :Domain %>
-                        <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
-                      </div>
-                    <% end %>
-                    <% end %>
-
-                    <div>
-                      <%= label_tag :ServiceAreaDescriptionDisplay %><br>
-                      <%= text_area_tag :Text, x['ServiceAreaDescriptionDisplay'], name: :ServiceAreaDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"44"%><br>
-                    </div>
-
-                    <% if x['ProgramReferences'] != nil %>
-                    <h3><i>Program References</i></h3>
-                    <% x['ProgramReferences'].each do |pd| %>
-                      <div class="programProgramReferences" >
-                        <%= label_tag :Xpath %>
-                        <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                      <%= label_tag :Text %><br>
-                      <%= text_field_tag :Text, pd['Text'], name: :Text, size: '45'%><br>
-                        <%= label_tag :Domain %>
-                        <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
-                      </div>
-                    <% end %>  
-                    <% end %>    
-            </div>
-
-            <div class="col-md-4">
-              <h1>Population Tags</h1>
-                    <%= label_tag :P_Veteran %>
-                    <%= check_box_tag :P_Veteran, x['P_Veteran'] , x['P_Veteran'].to_s.downcase == "true"   %><br>
-                    <%= label_tag :P_Family %>
-                    <%= check_box_tag :P_Family, x['P_Family'], x['P_Family'].to_s.downcase == "true" %><br>
-                    <%= label_tag :P_Citizenship %>
-                    <%= check_box_tag :P_Citizenship, x['P_Citizenship'], x['P_Citizenship'].to_s.downcase == "true" %><br>
-                    <%= label_tag :P_Senior %>
-                    <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'].to_s.downcase == "true"  %><br>
-
-                    <%= label_tag :P_Any %>
-                    <%= check_box_tag :P_Any, x['P_Any'], x['P_Any'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :P_Other %>
-                    <%= check_box_tag :P_Other, x['P_Other'], x['P_Other'].to_s.downcase == "true" %><br>
-                    <%= label_tag :P_LGBTQ %>
-                    <%= check_box_tag :P_LGBTQ, x['P_LGBTQ'], x['P_LGBTQ'].to_s.downcase == "true" %><br>
-                    <%= label_tag :P_LowIncome %>
-                    <%= check_box_tag :P_LowIncome, x['P_LowIncome'], x['P_LowIncome'].to_s.downcase == "true" %><br>
-                    <%= label_tag :P_Disabled %>
-                    <%= check_box_tag :P_Disabled, x['P_Disabled'],x['P_Disabled'].to_s.downcase == "true" %><br>
-                    <%= label_tag :P_Native %>
-                    <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'].to_s.downcase == "true" %><br>
-                    <%= label_tag :PopulationTags %>
-                    <%= text_field_tag :PopulationTags, x['PopulationTags'] %><br>
-                    <% if x['PopulationDescription'] != nil %>
-                      <h3><i>Population Description</i></h3>
-                      <% x['PopulationDescription'].each do |pd| %>
-                          <div class="programPopulationDescription" >
-                            <%= label_tag :Xpath %>
-                            <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true  %><br>
-                            <%= label_tag :Text %><br>
-                            <%= text_field_tag :Text, pd['Text'], name: :Text, size: '45'%><br>
-                            <%= label_tag :Domain %>
-                            <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true  %><br>
-                          </div>
-                      <% end %>
-                    <% end %>
-
-                    <div>
-                      <%= label_tag :PopulationDescriptionDisplay %><br>
-                      <%= text_area_tag :Text, x['PopulationDescriptionDisplay'], name: :PopulationDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"44"%><br>
-                    </div>
-                    <!-- removed dental and vision -->
-           
-            </div>
-
-            <div class="col-md-4">
-              <h1>Service Groups</h1>
-                    <%= label_tag :S_Addiction %>
-                    <%= check_box_tag :S_Addiction, x['S_Addiction'], x['S_Addiction'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Identification %>
-                    <%= check_box_tag :S_Identification, x['S_Identification'], x['S_Identification'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Research %>
-                    <%= check_box_tag :S_Research, x['S_Research'], x['S_Research'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Legal %>
-                    <%= check_box_tag :S_Legal, x['S_Legal'], x['S_Legal'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Medical %>
-                    <%= check_box_tag :S_Medical, x['S_Medical'], x['S_Medical'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Food %>
-                    <%= check_box_tag :S_Food, x['S_Food'], x['S_Food'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_GeneralSupport %>
-                    <%= check_box_tag :S_GeneralSupport, x['S_GeneralSupport'], x['S_GeneralSupport'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Education %>
-                    <%= check_box_tag :S_Education, x['S_Education'], x['S_Education'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Family %>
-                    <%= check_box_tag :S_Family, x['S_Family'], x['S_Family'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Employment %>
-                    <%= check_box_tag :S_Employment, x['S_Employment'] , x['S_Employment'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :S_Abuse %>
-                    <%= check_box_tag :S_Abuse, x['S_Abuse'], x['S_Abuse'].to_s.downcase == "true"  %><br>
-
-                    <%= label_tag :S_Resources %>
-                    <%= check_box_tag :S_Resources, x['S_Resources'], x['S_Resources'].to_s.downcase == "true"  %><br>
-
-                    <%= label_tag :S_Victim %>
-                    <%= check_box_tag :S_Victim, x['S_Victim'] , x['S_Victim'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :S_Disabled %>
-                    <%= check_box_tag :S_Disabled, x['S_Disabled'] , x['S_Disabled'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :S_Housing %>
-                    <%= check_box_tag :S_Housing, x['S_Housing'] , x['S_Housing'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :S_Veterans %>
-                    <%= check_box_tag :S_Veterans, x['S_Veterans'] , x['S_Veterans'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_BasicNeeds %>
-                    <%= check_box_tag :S_BasicNeeds, x['S_BasicNeeds'] , x['S_BasicNeeds'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_Financial %>
-                    <%= check_box_tag :S_Financial, x['S_Financial'] , x['S_Financial'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_Clothing %>
-                    <%= check_box_tag :S_Clothing, x['S_Clothing'], x['S_Clothing'].to_s.downcase == "true"  %><br>
-                    <%= label_tag :S_Respite %>
-                    <%= check_box_tag :S_Respite, x['S_Respite'] , x['S_Respite'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :S_IndependentLiving %>
-                    <%= check_box_tag :S_IndependentLiving, x['S_IndependentLiving'], x['S_IndependentLiving'].to_s.downcase == "true" %><br>
-
-                    <%= label_tag :S_CaseManagement %>
-                    <%= check_box_tag :S_CaseManagement, x['S_CaseManagement'], x['S_CaseManagement'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_Senior %>
-                    <%= check_box_tag :S_Senior, x['S_Senior'], x['S_Senior'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_Emergency %>
-                    <%= check_box_tag :S_Emergency, x['S_Emergency'], x['S_Emergency'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_DayCare %>
-                    <%= check_box_tag :S_DayCare, x['S_DayCare'], x['S_DayCare'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_Transportation %>
-                    <%= check_box_tag :S_Transportation, x['S_Transportation'], x['S_Transportation'].to_s.downcase == "true" %><br>
-                    <%= label_tag :S_Behavioral %>
-                    <%= check_box_tag :S_Behavioral, x['S_Behavioral'], x['S_Behavioral'].to_s.downcase == "true" %><br>
-                    <%= label_tag :ServiceTags %>
-                    <%= text_field_tag :ServiceTags, x['ServiceTags'] %><br>
-
-            </div>
-
-        </div><br>
-      <% end %> <br>
-
-
-
-
-
-    <h1>Sites</h1>
-    <% if @site.present? && @site != [nil] %>
-      <% @site.each do |site| %>
-
-          <% if site['InactiveSite'] == true %>
-              <p>Inactive Site </p>
-              <button type="button" class="toggleProgram">Toggle Site</button>
-              <div class="SiteForm" style="display: none;">
-          <% else %>
-              <div class="SiteForm">
-          <% end %>
-                <div class="row">
-                    <div class="col-md-4">
-                                  <%= label_tag :InactiveSite %>
-                                  <%= check_box_tag :InactiveSite, site['InactiveSite'], site['InactiveSite']%><br>
-
-                                  <%= label_tag :LocationName %>
-                                  <%= text_field_tag :LocationName, site['LocationName'] %><br>
-
-                                    <h3><i>Address One</i></h3>
-                                      <% if site['Addr1'] != nil %>
-                                          <% site['Addr1'].each do |pd| %>
-                                                <div class="siteAddr1">
-                                                  <%= label_tag :Xpath %>
-                                                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                                                  <%= label_tag :Text %>
-                                                  <%= text_field_tag :Text, pd['Text'], name: :Text%><br>
-                                                  <%= label_tag :Domain %>
-                                                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
-                                                </div>
-                                          <% end %>
-
-                                      <% end %>
-                                  <%= label_tag :Addr2 %>
-                                  <%= text_field_tag :Addr2, site['Addr2'] %><br>
-
-                                  <%= label_tag :AddrState %>
-                                  <%= text_field_tag :AddrState, site['AddrState'] %><br>
-
-                                  <%= label_tag :AddrCity %>
-                                  <%= text_field_tag :AddrCity, site['AddrCity'] %><br>
-
-                                  <%= label_tag :AddrZip %>
-                                  <%= text_field_tag :AddrZip, site['AddrZip'] %><br>
-
-                                      <% if site[:SiteReference] != nil %>
-                                        <h3><i>Site Reference</i></h3>
-                                          <% site[:SiteReference].each do |pd| %>
-                                            <div class="siteSiteReference">
-                                                <%= label_tag :Xpath %>
-                                                <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
-                                                <%= label_tag :Text %><br>
-                                                <%= text_field_tag :Text, pd['Text'], name: :Text, size: '50'%><br>
-                                                <%= label_tag :Domain %>
-                                                <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
-                                            </div>
-                                          <% end %>
-                                      <% end %>
-                    </div>
-
-                    <div class="col-md-4">
-                                      <%= label_tag :ServiceDeliverySite %>
-                                      <%= check_box_tag :ServiceDeliverySite, site['ServiceDeliverySite'], site['ServiceDeliverySite'].to_s.downcase == "true" %><br>
-                                      <%= label_tag :AdminSite %>
-                                      <%= check_box_tag :AdminSite, site['AdminSite'] , site['AdminSite'].to_s.downcase == "true" %><br>
-                                      <%= label_tag :ResourceDirectory %>
-                                      <%= check_box_tag :ResourceDirectory, site['ResourceDirectory'], site['ResourceDirectory'].to_s.downcase == "true" %><br>
-                                      <%= label_tag :SelectSiteID %>
-                                      <%= text_field_tag :SelectSiteID, site['SelectSiteID'], readonly: true  %><br>
-                                      <%= label_tag :Webpage %>
-                                      <%= text_field_tag :Webpage, site['Webpage'] %><br>
-                    </div>
-
-                    <div class="col-md-4">
-
-                            <h3><i>POC</i></h3>
-                              <% if site['POCs'] != nil %>
-                                <% site['POCs'].each do |pd| %>
-                                    <div class="sitePOC">
-                                        <%= label_tag :DefaultPOC %>
-                                        <%= check_box_tag :DefaultPOC, pd['poc']['DefaultPOC'] , pd['poc']['DefaultPOC'.to_s.downcase == "true" ]%><br>
-                                        <%= label_tag :InactivePOC %>
-                                        <%= check_box_tag :InactivePOC, pd['poc']['InactivePOC'] , pd['poc']['InactivePOC'] == true %><br>
-                                        <%= label_tag :id %>
-                                        <%= text_field_tag :id, pd['id'], name: :id, readonly: true   %><br>
-                                        <%= label_tag :OfficePhone %>
-                                        <%= text_field_tag :OfficePhone, pd['poc']['OfficePhone'] %><br>
-                                        <%= label_tag :Email %>
-                                        <%= text_field_tag :Email, pd['poc']['Email'] %><br>
-                                        <%= label_tag :Referrals %>
-                                        <%= text_field_tag :Referrals, pd['poc']['Referrals'] %><br>
-                                        <%= label_tag :ContactPage %>
-                                        <%= text_field_tag :ContactPage, pd['poc']['ContactPage'] %><br>
-                                        <%= label_tag :Title %>
-                                        <%= text_field_tag :Title, pd['poc']['Title'] %><br>
-                                        <%= label_tag :MobilePhone %>
-                                        <%= text_field_tag :MobilePhone, pd['poc']['MobilePhone'] %><br>
-                                        <%= label_tag :Name %>
-                                        <%= text_field_tag :Name, pd['poc']['Name'] %><br>
-                                    </div>
-                                <% end %>
-                            <% end %>
-                    </div>
-                </div><!-- end row -->
-              </div><!-- end site form -->  
+  <h1>Programs</h1>
+  <% @program.each do |x| %>
+      <% if x['InactiveProgram'] == true %>
+          <p>Inactive Program</p>
+          <button type="button" class="toggleProgram">Toggle Program</button>
+          <div class=" ProgramForm row" style="display: none;">
+      <% else %>
+          <!-- <div class=" ProgramForm row"> -->
+          <div class=" ProgramForm row">
       <% end %>
-    <% end %>
 
-<!-- End Container-->
-</div>
+      <div class="col-md-4">
+        <%= label_tag :InactiveProgram %>
+        <%= check_box_tag :InactiveProgram, x['InactiveProgram'], x['InactiveProgram']%><br>
+
+        <%= label_tag :ProgramName %>
+        <%= text_field_tag :ProgramName, x['ProgramName'] %><br>
+
+        <%= label_tag :QuickConnectWebPage %>
+        <%= text_field_tag :QuickConnectWebPage, x['QuickConnectWebPage'] %><br>
+        <%= label_tag :ContactWebPage %>
+        <%= text_field_tag :ContactWebPage, x['ContactWebPage'] %><br>
+        <%= label_tag :ProgramWebPage %>
+        <%= text_field_tag :ProgramWebPage, x['ProgramWebPage'] %><br>
+
+        <%= label_tag :ProgramComment %>
+        <%= text_field_tag :ProgramComment, x['ProgramComment'] %><br>
+
+        <%= label_tag :SelectprogramID %>
+        <%= text_field_tag :SelectprogramID, x['SelectprogramID'], readonly: true %><br>
+
+        <%= label_tag :ProgramSites %>
+        <% if !x['ProgramSites'].nil? %>
+            <%= text_field_tag :ProgramSites, x['ProgramSites'].join(','), name: :ProgramSites %><br>
+        <% else %>
+            <%= text_field_tag :ProgramSites, x['ProgramSites'], name: :ProgramSites %><br>
+        <% end %>
+
+        <% if x['ProgramDescription'] != nil %>
+            <h3><i>Program Description</i></h3>
+            <% x['ProgramDescription'].each do |pd| %>
+                <div class="programProgramDescription" >
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true  %><br>
+                  <%= label_tag :Text %><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '45'%><br>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true  %><br>
+                </div>
+            <% end %>
+        <% end %>
+
+        <div>
+          <%= label_tag :ProgramDescriptionDisplay %><br>
+          <%= text_area_tag :Text, x['ProgramDescriptionDisplay'], name: :ProgramDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"44"%><br>
+        </div>
+
+        <% if x['ServiceAreaDescription'] != nil %>
+            <h3><i>Service Area Description</i></h3>
+            <% x['ServiceAreaDescription'].each do |pd| %>
+                <div class="programServiceAreaDescription" >
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
+                  <%= label_tag :Text %><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '45'%><br>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
+                </div>
+            <% end %>
+        <% end %>
+
+        <div>
+          <%= label_tag :ServiceAreaDescriptionDisplay %><br>
+          <%= text_area_tag :Text, x['ServiceAreaDescriptionDisplay'], name: :ServiceAreaDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"44"%><br>
+        </div>
+
+        <% if x['ProgramReferences'] != nil %>
+            <h3><i>Program References</i></h3>
+            <% x['ProgramReferences'].each do |pd| %>
+                <div class="programProgramReferences" >
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true   %><br>
+                  <%= label_tag :Text %><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '45'%><br>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true   %><br>
+                </div>
+            <% end %>
+        <% end %>
+      </div>
+
+      <div class="col-md-4">
+        <h1>Population Tags</h1>
+        <%= label_tag :P_Veteran %>
+        <%= check_box_tag :P_Veteran, x['P_Veteran'] , x['P_Veteran'].to_s.downcase == "true"   %><br>
+        <%= label_tag :P_Family %>
+        <%= check_box_tag :P_Family, x['P_Family'], x['P_Family'].to_s.downcase == "true" %><br>
+        <%= label_tag :P_Citizenship %>
+        <%= check_box_tag :P_Citizenship, x['P_Citizenship'], x['P_Citizenship'].to_s.downcase == "true" %><br>
+        <%= label_tag :P_Senior %>
+        <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'].to_s.downcase == "true"  %><br>
+
+        <%= label_tag :P_Any %>
+        <%= check_box_tag :P_Any, x['P_Any'], x['P_Any'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :P_Other %>
+        <%= check_box_tag :P_Other, x['P_Other'], x['P_Other'].to_s.downcase == "true" %><br>
+        <%= label_tag :P_LGBTQ %>
+        <%= check_box_tag :P_LGBTQ, x['P_LGBTQ'], x['P_LGBTQ'].to_s.downcase == "true" %><br>
+        <%= label_tag :P_LowIncome %>
+        <%= check_box_tag :P_LowIncome, x['P_LowIncome'], x['P_LowIncome'].to_s.downcase == "true" %><br>
+        <%= label_tag :P_Disabled %>
+        <%= check_box_tag :P_Disabled, x['P_Disabled'],x['P_Disabled'].to_s.downcase == "true" %><br>
+        <%= label_tag :P_Native %>
+        <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'].to_s.downcase == "true" %><br>
+        <%= label_tag :PopulationTags %>
+        <%= text_field_tag :PopulationTags, x['PopulationTags'] %><br>
+        <% if x['PopulationDescription'] != nil %>
+            <h3><i>Population Description</i></h3>
+            <% x['PopulationDescription'].each do |pd| %>
+                <div class="programPopulationDescription" >
+                  <%= label_tag :Xpath %>
+                  <%= text_field_tag :Xpath, pd['Xpath'], name: :Xpath, readonly: true  %><br>
+                  <%= label_tag :Text %><br>
+                  <%= text_field_tag :Text, pd['Text'], name: :Text, size: '45'%><br>
+                  <%= label_tag :Domain %>
+                  <%= text_field_tag :Domain, pd['Domain'], name: :Domain, readonly: true  %><br>
+                </div>
+            <% end %>
+        <% end %>
+
+        <div>
+          <%= label_tag :PopulationDescriptionDisplay %><br>
+          <%= text_area_tag :Text, x['PopulationDescriptionDisplay'], name: :PopulationDescriptionDisplay, onmouseover:'this.style.height = this.scrollHeight + "px"',rows:"5", cols:"44"%><br>
+        </div>
+        <!-- removed dental and vision -->
+
+      </div>
+
+      <div class="col-md-4">
+        <h1>Service Groups</h1>
+        <%= label_tag :S_Addiction %>
+        <%= check_box_tag :S_Addiction, x['S_Addiction'], x['S_Addiction'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Identification %>
+        <%= check_box_tag :S_Identification, x['S_Identification'], x['S_Identification'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Research %>
+        <%= check_box_tag :S_Research, x['S_Research'], x['S_Research'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Legal %>
+        <%= check_box_tag :S_Legal, x['S_Legal'], x['S_Legal'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Medical %>
+        <%= check_box_tag :S_Medical, x['S_Medical'], x['S_Medical'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Food %>
+        <%= check_box_tag :S_Food, x['S_Food'], x['S_Food'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_GeneralSupport %>
+        <%= check_box_tag :S_GeneralSupport, x['S_GeneralSupport'], x['S_GeneralSupport'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Education %>
+        <%= check_box_tag :S_Education, x['S_Education'], x['S_Education'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Family %>
+        <%= check_box_tag :S_Family, x['S_Family'], x['S_Family'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Employment %>
+        <%= check_box_tag :S_Employment, x['S_Employment'] , x['S_Employment'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :S_Abuse %>
+        <%= check_box_tag :S_Abuse, x['S_Abuse'], x['S_Abuse'].to_s.downcase == "true"  %><br>
+
+        <%= label_tag :S_Resources %>
+        <%= check_box_tag :S_Resources, x['S_Resources'], x['S_Resources'].to_s.downcase == "true"  %><br>
+
+        <%= label_tag :S_Victim %>
+        <%= check_box_tag :S_Victim, x['S_Victim'] , x['S_Victim'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :S_Disabled %>
+        <%= check_box_tag :S_Disabled, x['S_Disabled'] , x['S_Disabled'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :S_Housing %>
+        <%= check_box_tag :S_Housing, x['S_Housing'] , x['S_Housing'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :S_Veterans %>
+        <%= check_box_tag :S_Veterans, x['S_Veterans'] , x['S_Veterans'].to_s.downcase == "true" %><br>
+        <%= label_tag :S_BasicNeeds %>
+        <%= check_box_tag :S_BasicNeeds, x['S_BasicNeeds'] , x['S_BasicNeeds'].to_s.downcase == "true" %><br>
+        <%= label_tag :S_Financial %>
+        <%= check_box_tag :S_Financial, x['S_Financial'] , x['S_Financial'].to_s.downcase == "true" %><br>
+        <%= label_tag :S_Clothing %>
+        <%= check_box_tag :S_Clothing, x['S_Clothing'], x['S_Clothing'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Respite %>
+        <%= check_box_tag :S_Respite, x['S_Respite'] , x['S_Respite'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :S_IndependentLiving %>
+        <%= check_box_tag :S_IndependentLiving, x['S_IndependentLiving'], x['S_IndependentLiving'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :S_CaseManagement %>
+        <%= check_box_tag :S_CaseManagement, x['S_CaseManagement'], x['S_CaseManagement'].to_s.downcase == "true" %><br>
+        <%= label_tag :S_Senior %>
+        <%= check_box_tag :S_Senior, x['S_Senior'], x['S_Senior'].to_s.downcase == "true" %><br>
+        <%= label_tag :S_Emergency %>
+        <%= check_box_tag :S_Emergency, x['S_Emergency'], x['S_Emergency'].to_s.downcase == "true" %><br>
+        <%= label_tag :S_DayCare %>
+        <%= check_box_tag :S_DayCare, x['S_DayCare'], x['S_DayCare'].to_s.downcase == "true" %><br>
+        <%= label_tag :S_Transportation %>
+        <%= check_box_tag :S_Transportation, x['S_Transportation'], x['S_Transportation'].to_s.downcase == "true" %><br>
+        <%= label_tag :S_Behavioral %>
+        <%= check_box_tag :S_Behavioral, x['S_Behavioral'], x['S_Behavioral'].to_s.downcase == "true" %><br>
+        <%= label_tag :ServiceTags %>
+        <%= text_field_tag :ServiceTags, x['ServiceTags'] %><br>
+
+      </div>
+
+      </div><br>
+  <% end %> <br>
 
 
 
 
-<script type="text/javascript">
 
-var togglePrograms  = document.getElementsByClassName('toggleProgram')
-  for (var i =0; i < togglePrograms.length; i++){
-     togglePrograms[i].addEventListener('click', function(e){
-      console.log("what i am i clicking on", e)
-      console.log("what i am i clicking on", e.srcElement.nextElementSibling.style.display)
-      if (e.srcElement.nextElementSibling.style.display == "none"){
-      e.srcElement.nextElementSibling.style.display = "block" } else {
-        e.srcElement.nextElementSibling.style.display = "none"
+  <h1>Sites</h1>
+  <div id="org_site">
+    <%= render partial: "org_site"%>
+  </div>
+
+
+
+  <!-- End Container-->
+
+
+
+  <script type="text/javascript">
+
+      var togglePrograms  = document.getElementsByClassName('toggleProgram')
+      for (var i =0; i < togglePrograms.length; i++){
+          togglePrograms[i].addEventListener('click', function(e){
+              console.log("what i am i clicking on", e)
+              console.log("what i am i clicking on", e.srcElement.nextElementSibling.style.display)
+              if (e.srcElement.nextElementSibling.style.display == "none"){
+                  e.srcElement.nextElementSibling.style.display = "block" } else {
+                  e.srcElement.nextElementSibling.style.display = "none"
+              }
+          })
       }
-     })
-  }
 
-var OrgDescriptionDelete = function (event) {
-    event.closest('div').classList.add("hidden");
-    var default_description = <%= raw @default_description.present? ? true : false %>;
-    var orgDesc = document.querySelectorAll('.orgDescription:not(.hidden)');
-    orgDescDisplay = []
-    if (orgDesc.length == 0) {
-      document.getElementById('descdisplay').classList.add("hidden");
-    }else if (orgDesc.length >= 1 && default_description == true){
-      for(var i = 0; i < orgDesc.length; i++) {
-        result = orgDesc[i].querySelector('input[name="Text"]').value
-          orgDescDisplay.push(result)
+      var OrgDescriptionDelete = function (event) {
+          event.closest('div').classList.add("hidden");
+          var default_description = <%= raw @default_description.present? ? true : false %>;
+          var orgDesc = document.querySelectorAll('.orgDescription:not(.hidden)');
+          orgDescDisplay = []
+          if (orgDesc.length == 0) {
+              document.getElementById('descdisplay').classList.add("hidden");
+          }else if (orgDesc.length >= 1 && default_description == true){
+              for(var i = 0; i < orgDesc.length; i++) {
+                  result = orgDesc[i].querySelector('input[name="Text"]').value
+                  orgDescDisplay.push(result)
+              }
+              document.getElementById("descdisplay").querySelector('textarea[id="Text"]').value = orgDescDisplay.join(" ");
+          }
       }
-      document.getElementById("descdisplay").querySelector('textarea[id="Text"]').value = orgDescDisplay.join(" ");
-    }
-}
 
-document.getElementById("collectButton").addEventListener("click", function(event){
+      document.getElementById("collectButton").addEventListener("click", function(event){
 
- organizationDetails = {}
- //OrgForm //Need to ignore certain values
-  var orgform = document.getElementById('OrgForm')  
-  var inputElements = orgform.querySelectorAll("input, textarea");
-  var organizationName = {}
+          organizationDetails = {}
+          //OrgForm //Need to ignore certain values
+          var orgform = document.getElementById('OrgForm')
+          var inputElements = orgform.querySelectorAll("input, textarea");
+          var organizationName = {}
 
-        for(var i = 0; i < inputElements.length; i++){
+          for(var i = 0; i < inputElements.length; i++){
               var inputElement = inputElements[i];
               if (inputElement.value == ""){
-                console.log("skip")
+                  console.log("skip")
               }else if (inputElement.type == "checkbox" && inputElement.checked == true){
                   organizationName[inputElement.name] = true
               }else if (inputElement.type == "checkbox" && inputElement.checked != true){
-                 organizationName[inputElement.name] = false
+                  organizationName[inputElement.name] = false
               } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain' || inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
-                        console.log("skip")
-                    }else{
-                      organizationName[inputElement.name] = inputElement.value; 
-                    } 
-
+                  console.log("skip")
+              }else{
+                  organizationName[inputElement.name] = inputElement.value;
               }
-  //orgName
-  var orgName = document.getElementById('orgName')
-  var orgNameElements = orgName.querySelectorAll("input");
-    nameObj = {}
-        for(var i = 0; i < orgNameElements.length; i++){
+
+          }
+          //orgName
+          var orgName = document.getElementById('orgName')
+          var orgNameElements = orgName.querySelectorAll("input");
+          nameObj = {}
+          for(var i = 0; i < orgNameElements.length; i++){
               var inputElement = orgNameElements[i];
-                    if (inputElement.value == ""){
-                      console.log("skip")
-                    } else {
-                    nameObj[inputElement.name] = inputElement.value; 
-                    } 
-              console.log(inputElement.name, "=", inputElement.value)
-              
+              if (inputElement.value == ""){
+                  console.log("skip")
+              } else {
+                  nameObj[inputElement.name] = inputElement.value;
               }
-              nameArray = []
-              nameArray.push(nameObj)
-              organizationName['OrganizationName'] = nameArray; 
-  //orgDesc
-  var orgDesc =  document.querySelectorAll('.orgDescription:not(.hidden)')
-  orgDescArray = []
+              console.log(inputElement.name, "=", inputElement.value)
 
-  for(var i = 0; i < orgDesc.length; i++) {
-    var orgDescElements = orgDesc[i].querySelectorAll("input");
+          }
+          nameArray = []
+          nameArray.push(nameObj)
+          organizationName['OrganizationName'] = nameArray;
+          //orgDesc
+          var orgDesc =  document.querySelectorAll('.orgDescription:not(.hidden)')
+          orgDescArray = []
 
-    descObj = {}
-    for (var q = 0; q < orgDescElements.length; q++) {
-      var inputElement = orgDescElements[q];
-      if (inputElement.value == "") {
-          console.log("skip")
-      } else {
-          descObj[inputElement.name] = inputElement.value;
-      }
-      console.log(inputElement.name, "=", inputElement.value)
+          for(var i = 0; i < orgDesc.length; i++) {
+              var orgDescElements = orgDesc[i].querySelectorAll("input");
 
-    }
-    orgDescArray.push(descObj)
-  }
+              descObj = {}
+              for (var q = 0; q < orgDescElements.length; q++) {
+                  var inputElement = orgDescElements[q];
+                  if (inputElement.value == "") {
+                      console.log("skip")
+                  } else {
+                      descObj[inputElement.name] = inputElement.value;
+                  }
+                  console.log(inputElement.name, "=", inputElement.value)
 
-  if (orgDescArray.length > 0 ) {
-    organizationName['OrgDescription'] = orgDescArray;
-  }
-    ////
-  organizationDetails['OrganizationName'] = organizationName
+              }
+              orgDescArray.push(descObj)
+          }
 
-///////// 
-console.log("After Org", organizationDetails)
+          if (orgDescArray.length > 0 ) {
+              organizationName['OrgDescription'] = orgDescArray;
+          }
+          ////
+          organizationDetails['OrganizationName'] = organizationName
+
+/////////
+          console.log("After Org", organizationDetails)
 
 
 
 // Geo
-  geoHash = {}
-  var geoform = document.getElementById('GeoScopeForm')  
-  var geoinputElements = geoform.querySelectorAll("input");
+          geoHash = {}
+          var geoform = document.getElementById('GeoScopeForm')
+          var geoinputElements = geoform.querySelectorAll("input");
 
-        for(var i = 0; i < geoinputElements.length; i++){
-            var inputElement = geoinputElements[i];
-                  if (inputElement.value == ""){
-                    console.log("skip")
-                  } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
-                        console.log("skip")
-                  }else{
-                    geoHash[inputElement.name] = inputElement.value; 
-                  } 
+          for(var i = 0; i < geoinputElements.length; i++){
+              var inputElement = geoinputElements[i];
+              if (inputElement.value == ""){
+                  console.log("skip")
+              } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
+                  console.log("skip")
+              }else{
+                  geoHash[inputElement.name] = inputElement.value;
+              }
 
-            }
-            organizationDetails["GeoScope"] = geoHash
+          }
+          organizationDetails["GeoScope"] = geoHash
 /// End Geo
 
 /// Site Form
-    var siteForm = document.getElementsByClassName("SiteForm")
-    
-    orgSiteArray = []
-    for(var k = 0; k < siteForm.length; k++){
-    siteHash = {}
+          var siteForm = document.getElementsByClassName("SiteForm")
 
-      var siteinputElements = siteForm[k].querySelectorAll("input");
+          orgSiteArray = []
+          for(var k = 0; k < siteForm.length; k++){
+              siteHash = {}
 
-      for(var i = 0; i < siteinputElements.length; i++){
-        var inputElement = siteinputElements[i];
-              if (inputElement.value == ""){
-                console.log("skip")
-              }else if (inputElement.type == "checkbox" && inputElement.checked == true){
-                  siteHash[inputElement.name] = true
-              }else if (inputElement.type == "checkbox" && inputElement.checked != true){
-                 siteHash[inputElement.name] = false
-              } else if (inputElement.name == 'Text' || inputElement.name == 'Xpath' || inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8' || inputElement.name == 'id'){
-                    console.log("skip")
-              }else{
-              siteHash[inputElement.name] = inputElement.value; 
-              } 
+              var siteinputElements = siteForm[k].querySelectorAll("input");
 
-        }//inside loop #1
+              for(var i = 0; i < siteinputElements.length; i++){
+                  var inputElement = siteinputElements[i];
+                  if (inputElement.value == ""){
+                      console.log("skip")
+                  }else if (inputElement.type == "checkbox" && inputElement.checked == true){
+                      siteHash[inputElement.name] = true
+                  }else if (inputElement.type == "checkbox" && inputElement.checked != true){
+                      siteHash[inputElement.name] = false
+                  } else if (inputElement.name == 'Text' || inputElement.name == 'Xpath' || inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8' || inputElement.name == 'id'){
+                      console.log("skip")
+                  }else{
+                      siteHash[inputElement.name] = inputElement.value;
+                  }
 
-      
-      pocSArray = []
-      var sitepoc = siteForm[k].getElementsByClassName("sitePOC")
-          for(var i = 0; i < sitepoc.length; i++){
-              singlePOC = {}
-              pocpoc = {}
-              var sitepocinput = sitepoc[i].querySelectorAll("input")
+              }//inside loop #1
 
-                for(var i = 0; i < sitepocinput.length; i++){
-                  var inputElement = sitepocinput[i];
-                        if (inputElement.value == ""){
+
+              pocSArray = []
+              var sitepoc = siteForm[k].getElementsByClassName("sitePOC")
+              for(var i = 0; i < sitepoc.length; i++){
+                  singlePOC = {}
+                  pocpoc = {}
+                  var sitepocinput = sitepoc[i].querySelectorAll("input")
+
+                  for(var i = 0; i < sitepocinput.length; i++){
+                      var inputElement = sitepocinput[i];
+                      if (inputElement.value == ""){
                           console.log("skip")
-                        }else if (inputElement.type == "checkbox" && inputElement.checked == true){
-                            singlePOC[inputElement.name] = true
-                        }else if (inputElement.type == "checkbox" && inputElement.checked != true){
-                           singlePOC[inputElement.name] = false
-                        } else if( inputElement.name == "id"){
+                      }else if (inputElement.type == "checkbox" && inputElement.checked == true){
+                          singlePOC[inputElement.name] = true
+                      }else if (inputElement.type == "checkbox" && inputElement.checked != true){
+                          singlePOC[inputElement.name] = false
+                      } else if( inputElement.name == "id"){
                           pocpoc['id'] = inputElement.value
-                        }else
-                        {
-                        singlePOC[inputElement.name] = inputElement.value; 
-                        }
+                      }else
+                      {
+                          singlePOC[inputElement.name] = inputElement.value;
+                      }
                   }
                   pocpoc['poc'] = singlePOC
                   pocSArray.push(pocpoc)
                   siteHash['POCs'] = pocSArray
 
-            } //
+              } //
 
-     siterefArray = [];
-      var siteref = siteForm[k].getElementsByClassName("siteSiteReference")
-          for(var i = 0; i < siteref.length; i++){
-             siterefHash = {}
+              siterefArray = [];
+              var siteref = siteForm[k].getElementsByClassName("siteSiteReference")
+              for(var i = 0; i < siteref.length; i++){
+                  siterefHash = {}
 
-              var siterefinput = siteref[i].querySelectorAll("input")
+                  var siterefinput = siteref[i].querySelectorAll("input")
 
-                for(var i = 0; i < siterefinput.length; i++){
-                  var inputElement = siterefinput[i];
-                        if (inputElement.value == ""){
+                  for(var i = 0; i < siterefinput.length; i++){
+                      var inputElement = siterefinput[i];
+                      if (inputElement.value == ""){
                           console.log("skip")
-                        } else {
-                        siterefHash[inputElement.name] = inputElement.value; 
-                        } 
+                      } else {
+                          siterefHash[inputElement.name] = inputElement.value;
+                      }
 
                   }siterefArray.push(siterefHash)
-                  siteHash['SiteReference'] = siterefArray 
+                  siteHash['SiteReference'] = siterefArray
 
-            } 
+              }
 
-      
-      addr1array = []
-      var siteAddr1 = siteForm[k].getElementsByClassName("siteAddr1")
-          for(var i = 0; i < siteAddr1.length; i++){
-              addr1 = {}
-              var addInput = siteAddr1[i].querySelectorAll("input")
-                for(var i = 0; i < addInput.length; i++){
-                  var inputElement = addInput[i];
-                        if (inputElement.value == ""){
+
+              addr1array = []
+              var siteAddr1 = siteForm[k].getElementsByClassName("siteAddr1")
+              for(var i = 0; i < siteAddr1.length; i++){
+                  addr1 = {}
+                  var addInput = siteAddr1[i].querySelectorAll("input")
+                  for(var i = 0; i < addInput.length; i++){
+                      var inputElement = addInput[i];
+                      if (inputElement.value == ""){
                           console.log("skip")
-                        } else {
-                        addr1[inputElement.name] = inputElement.value; 
-                        } 
+                      } else {
+                          addr1[inputElement.name] = inputElement.value;
+                      }
 
                   }
-                  addr1array.push(addr1) 
+                  addr1array.push(addr1)
                   siteHash['Addr1'] = addr1array
 
-            } //
+              } //
 
-            orgSiteArray.push(siteHash)
-}// End Site Loop
-  organizationDetails["OrgSites"] = orgSiteArray
+              orgSiteArray.push(siteHash)
+          }// End Site Loop
+          organizationDetails["OrgSites"] = orgSiteArray
 //End Site Form
 
 //Program
 
- var programform = document.getElementsByClassName('ProgramForm')  
- programsArray = []
+          var programform = document.getElementsByClassName('ProgramForm')
+          programsArray = []
 
- for(var i = 0; i < programform.length; i++){
-  programHash = {};
+          for(var i = 0; i < programform.length; i++){
+              programHash = {};
 
-  //basic elements
-    var progrraminputElements = programform[i].querySelectorAll("input, textarea");
-      for(var q = 0; q < progrraminputElements.length; q++){
-        var inputElement = progrraminputElements[q];
-              if (inputElement.value == ""){
-                console.log("skip")
-              }else if (inputElement.type == "checkbox" && inputElement.checked == true){
-                  programHash[inputElement.name] = true
-              }else if (inputElement.type == "checkbox" && inputElement.checked != true){
-                 programHash[inputElement.name] = false
-              } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
-                console.log("skip")
-              }else if (inputElement.name =='ProgramSites'){
-                  programSiteArray = []
-                  programSiteArray.push(inputElement.value)
+              //basic elements
+              var progrraminputElements = programform[i].querySelectorAll("input, textarea");
+              for(var q = 0; q < progrraminputElements.length; q++){
+                  var inputElement = progrraminputElements[q];
+                  if (inputElement.value == ""){
+                      console.log("skip")
+                  }else if (inputElement.type == "checkbox" && inputElement.checked == true){
+                      programHash[inputElement.name] = true
+                  }else if (inputElement.type == "checkbox" && inputElement.checked != true){
+                      programHash[inputElement.name] = false
+                  } else if (inputElement.name == 'Text' ||inputElement.name == 'Xpath' ||inputElement.name == 'Domain'|| inputElement.name == 'authenticity_token'|| inputElement.name == 'utf8'){
+                      console.log("skip")
+                  }else if (inputElement.name =='ProgramSites'){
+                      programSiteArray = []
+                      programSiteArray.push(inputElement.value)
 
-                  programHash['ProgramSites'] = programSiteArray
-              }else {
-                programHash[inputElement.name] = inputElement.value; 
+                      programHash['ProgramSites'] = programSiteArray
+                  }else {
+                      programHash[inputElement.name] = inputElement.value;
+                  }
+
+
               }
-              
 
-        }
+              //PopDesc
 
-    //PopDesc
-    
-    popDescArray = []
-    var programPopDecs = programform[i].getElementsByClassName("programPopulationDescription")
-    
-          for(var q = 0; q < programPopDecs.length; q++){
-            popDescHash = {}
-            var popDescinputElements = programPopDecs[q].querySelectorAll("input");
+              popDescArray = []
+              var programPopDecs = programform[i].getElementsByClassName("programPopulationDescription")
 
-                for(var k = 0; k < popDescinputElements.length; k++){
-                  var inputElement = popDescinputElements[k];
-                        if (inputElement.value == ""){
+              for(var q = 0; q < programPopDecs.length; q++){
+                  popDescHash = {}
+                  var popDescinputElements = programPopDecs[q].querySelectorAll("input");
+
+                  for(var k = 0; k < popDescinputElements.length; k++){
+                      var inputElement = popDescinputElements[k];
+                      if (inputElement.value == ""){
                           console.log("skip")
-                        } else {
-                        popDescHash[inputElement.name] = inputElement.value; 
-                        } 
+                      } else {
+                          popDescHash[inputElement.name] = inputElement.value;
+                      }
 
-                  }popDescArray.push(popDescHash) 
+                  }popDescArray.push(popDescHash)
                   programHash['PopulationDescription'] = popDescArray
 
-            } 
-    //Program Description
+              }
+              //Program Description
 
-    progDescArray = []
-    var programProgDesc = programform[i].getElementsByClassName("programProgramDescription")
-          for(var q = 0; q < programProgDesc.length; q++){
-            progDescHash = {}
-              var progDescinputElements = programProgDesc[q].querySelectorAll("input")
-                for(var k = 0; k < progDescinputElements.length; k++){
-                  var inputElement = progDescinputElements[k];
-                        if (inputElement.value == ""){
+              progDescArray = []
+              var programProgDesc = programform[i].getElementsByClassName("programProgramDescription")
+              for(var q = 0; q < programProgDesc.length; q++){
+                  progDescHash = {}
+                  var progDescinputElements = programProgDesc[q].querySelectorAll("input")
+                  for(var k = 0; k < progDescinputElements.length; k++){
+                      var inputElement = progDescinputElements[k];
+                      if (inputElement.value == ""){
                           console.log("skip")
-                        } else {
-                        progDescHash[inputElement.name] = inputElement.value; 
-                        } 
+                      } else {
+                          progDescHash[inputElement.name] = inputElement.value;
+                      }
 
-                  } progDescArray.push(progDescHash) 
+                  } progDescArray.push(progDescHash)
                   programHash['ProgramDescription'] = progDescArray
-            } 
+              }
 
-    // program Service area
-   
-    serviceAreaArray = [];
-    var programServiceArea = programform[i].getElementsByClassName("programServiceAreaDescription")
-          for(var q = 0; q < programServiceArea.length; q++){
-             serviceAreaHash = {};
-              var progServAinputElements = programServiceArea[q].querySelectorAll("input")
+              // program Service area
 
-                for(var k = 0; k < progServAinputElements.length; k++){
-                  var inputElement = progServAinputElements[k];
-                        if (inputElement.value == ""){
+              serviceAreaArray = [];
+              var programServiceArea = programform[i].getElementsByClassName("programServiceAreaDescription")
+              for(var q = 0; q < programServiceArea.length; q++){
+                  serviceAreaHash = {};
+                  var progServAinputElements = programServiceArea[q].querySelectorAll("input")
+
+                  for(var k = 0; k < progServAinputElements.length; k++){
+                      var inputElement = progServAinputElements[k];
+                      if (inputElement.value == ""){
                           console.log("skip")
-                        } else {
-                        serviceAreaHash[inputElement.name] = inputElement.value; 
-                        } 
+                      } else {
+                          serviceAreaHash[inputElement.name] = inputElement.value;
+                      }
 
                   } serviceAreaArray.push(serviceAreaHash)
                   programHash['ServiceAreaDescription'] = serviceAreaArray
-            } 
-            programsArray.push(programHash)
-          
- } //End of Program Loop 
- organizationDetails["Programs"] = programsArray
- organizationDetails["url"] = document.getElementById('theurl').innerText
+              }
+              programsArray.push(programHash)
 
-  submitChange(organizationDetails)
-     
-  }) // end of Click
+          } //End of Program Loop
+          organizationDetails["Programs"] = programsArray
+          organizationDetails["url"] = document.getElementById('theurl').innerText
 
-  function submitChange(data){
-        catalog = {}
-        catalog['catalog_data'] = data
-        var crud = JSON.stringify(catalog);
-          //  
-         sendCataData(crud);
+          submitChange(organizationDetails)
 
-         function sendCataData(crud) {
-          var XHR = new XMLHttpRequest();
-          XHR.addEventListener("load", function(event) {
-          });
-          //error
-          XHR.addEventListener("error", function(event) {
-          alert('Oops! Something went wrong.');
-          });
-          //XHR.open("POST", "https://dev7.resourcestack.com/api/update_entire_catalog");
+      }) // end of Click
+
+      function submitChange(data){
+          catalog = {}
+          catalog['catalog_data'] = data
+          var crud = JSON.stringify(catalog);
+          //
+//          redirectPost(data)
+//
+//          function redirectPost(data) {
+//              console.log("INSIDE THE REDIRECT METTHOD")
+//              var form = document.createElement('form');
+//              form.method = 'post';
+//              form.action = "http://localhost:3000/new_site_adding";
+//              form.value = data;
+//              form.submit();
+//          }
+
+
+
+          sendCataData(crud);
+
+          function sendCataData(crud) {
+              var XHR = new XMLHttpRequest();
+              XHR.addEventListener("load", function(event) {
+              });
+              //error
+              XHR.addEventListener("error", function(event) {
+                  alert('Oops! Something went wrong.');
+              });
+              //XHR.open("POST", "https://dev7.resourcestack.com/api/update_entire_catalog");
           XHR.open("POST", "https://dev11.resourcestack.com/backend/api/update_entire_catalog");
-          
 
-          XHR.setRequestHeader('Content-Type', 'application/json');
-          XHR.send(crud);
+
+
+              XHR.setRequestHeader('Content-Type', 'application/json');
+              XHR.send(crud);
               XHR.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    response = this.responseText
-                    console.log(this.response)
-                    document.getElementById('portalStatus').innerText = "Catalog Updated"
-                } else {
-                  console.log(XHR.responseText)
-                  document.getElementById('portalStatus').innerText = "Something Went Wrong..."
-                }
+                  if (this.readyState == 4 && this.status == 200) {
+                      response = this.responseText
+                      console.log("this is the response" , this.response)
+                      document.getElementById('portalStatus').innerText = "Catalog Updated"
+                  } else {
+                      console.log(XHR.responseText)
+                      document.getElementById('portalStatus').innerText = "Something Went Wrong..."
+                  }
               };
           }
 
-  }
-  //
+      }
+      //
       var togglePdf  = document.getElementsByClassName('pdfToggle')
-        for (var i =0; i < togglePdf.length; i++){
-           togglePdf[i].addEventListener('click', function(e){
+      for (var i =0; i < togglePdf.length; i++){
+          togglePdf[i].addEventListener('click', function(e){
               if (e.srcElement.nextElementSibling.nextElementSibling.height < 200){
                   e.srcElement.nextElementSibling.nextElementSibling.height = "1000";
                   e.srcElement.nextElementSibling.nextElementSibling.width = "750";
@@ -807,55 +718,55 @@ console.log("After Org", organizationDetails)
                   e.srcElement.nextElementSibling.nextElementSibling.height = "188";
                   e.srcElement.nextElementSibling.nextElementSibling.width = "250"
                   document.getElementById('pdfSection').style.height = '250px'
-            }
-           })
-        }
-        ///////////
+              }
+          })
+      }
+      ///////////
       var resetPDF  = document.getElementsByClassName('pdfID')
-        for (var i =0; i < resetPDF.length; i++){
-           resetPDF[i].addEventListener('click', function(e){
+      for (var i =0; i < resetPDF.length; i++){
+          resetPDF[i].addEventListener('click', function(e){
               console.log(" DELETE THIS ID", e.srcElement.nextElementSibling.innerText)
               deletePDF(e.srcElement.nextElementSibling.innerText)
 
-           })
-        }
+          })
+      }
 
-  ////
-  function deletePDF(data){
-        catalog = {}
-        catalog['_id'] = data
-        console.log("WHAT ID DELETE", catalog)
-        var crud = JSON.stringify(catalog);
-          //  
-         sendCataData(crud);
+      ////
+      function deletePDF(data){
+          catalog = {}
+          catalog['_id'] = data
+          console.log("WHAT ID DELETE", catalog)
+          var crud = JSON.stringify(catalog);
+          //
+          sendCataData(crud);
 
-         function sendCataData(crud) {
-          var XHR = new XMLHttpRequest();
-          XHR.addEventListener("load", function(event) {
-          });
-          //error
-          XHR.addEventListener("error", function(event) {
-          alert('Oops! Something went wrong.');
-          });
+          function sendCataData(crud) {
+              var XHR = new XMLHttpRequest();
+              XHR.addEventListener("load", function(event) {
+              });
+              //error
+              XHR.addEventListener("error", function(event) {
+                  alert('Oops! Something went wrong.');
+              });
 
-          XHR.open("DELETE", "http://localhost:3030/scrapePDF");
+              XHR.open("DELETE", "http://localhost:3030/scrapePDF");
 
-          XHR.setRequestHeader('Content-Type', 'application/json');
-          XHR.send(crud);
+              XHR.setRequestHeader('Content-Type', 'application/json');
+              XHR.send(crud);
               XHR.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    response = this.responseText
-                    console.log(this.response)
+                  if (this.readyState == 4 && this.status == 200) {
+                      response = this.responseText
+                      console.log(this.response)
 
-                } else {
-                  console.log(XHR.responseText)
-                }
+                  } else {
+                      console.log(XHR.responseText)
+                  }
               };
           }
 
-  }
+      }
 
-</script>
+  </script>
 
 
 
