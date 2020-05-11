@@ -6,7 +6,7 @@ jQuery ($) ->
   $(document).on("click", ".requested_application", ->
     id = $(this).attr("id")
     console.log("the id of the invite is ", id)
-    $.post "/backend/send_application_invitation",
+    $.post "/send_application_invitation",
       id: id
     return
   )
@@ -21,6 +21,7 @@ jQuery ($) ->
 
   $('#notification_rules').DataTable();
 
+
   $('#user_list').DataTable({ responsive: true });
 
   $('#client_application').DataTable( );
@@ -31,6 +32,9 @@ jQuery ($) ->
   }
 
   );
+
+  $('#master_catalog').DataTable();
+
 
   $(document).on("click", ".external_api_setup", ->
 #    text = $("#send_patient").val()
@@ -66,6 +70,26 @@ jQuery ($) ->
       url: url_id
     return
     )
+
+
+    
+  #send for approval onclick js
+  $(document).on("click", ".sendForApprovals", ->
+    row_id = $(this).attr("id")
+    console.log("THAT's MY BUTTON", row_id)
+    url = $('#url_' + row_id).text()
+    orgName = $('#nameOfOrg_' + row_id).text()
+    console.log("THAT's MY BUTTON", url, orgName)
+    cRow = $('#rule_' + row_id).text()
+    console.log("WHAT IS CrOW", cRow)
+    $.post "/send_for_approval",
+      row_id: row_id
+      orgName: orgName
+      url: url
+      cRow: cRow
+      console.log("inside post")
+    return
+  )
 
   #Delete Catalog Entry  
   $(document).on("click", ".delete_rule", ->    

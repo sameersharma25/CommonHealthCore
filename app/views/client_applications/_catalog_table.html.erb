@@ -3,18 +3,21 @@
 
         <% i += 1 %>
 
+
         <% if r["missing_mandatory_fields"] == "1" %>
             <tr class="currentRow missing_fields" id= <%="rule_#{i}"%>  >
         <%else %> 
             <tr class="currentRow" id= <%="rule_#{i}" %>  >
         <%end%>  
-        <%if @sr_urls.include?(r["url"])%>
+        
+        <%if @sr_urls.to_a.include?(r["url"])%>
           <td class = "myURL" style = "color: red" id= <%= "url_#{i}" %>  ><%= r["url"] %> </td>
         <%else%>
           <td class = "myURL" id= <%= "url_#{i}" %> ><%= r["url"] %> </td>
         <%end%>
+        
 
-        <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"]["OrganizationName"] %> </td>
+        <td class = "nameOrg" id=<%= "nameOfOrg_#{i}"%> > <%= r["OrganizationName"]["OrganizationName"][0]['Text'] if r["OrganizationName"] %> </td>
 
         <td id= <%= "Orgdescription_#{i}" %> >
 
@@ -35,7 +38,7 @@
 
         <%= hidden_field_tag r["url"] ,i, :id => "url_#{i}" %>
 
-        <% if r["OrganizationName"]["InactiveCatalog"] %>
+        <% if r["OrganizationName"] %>
 
           <% if r["OrganizationName"]["InactiveCatalog"] == true %>
             <td> inactive </td>
@@ -55,8 +58,11 @@
             <td><%= button_to "Send For Approval", '#', class: "add_rule", id: "#{i}", :remote => true, type: "button", method: :get %> </td> 
         <%end%> -->
 
-
-        <td><%= button_tag "Send For Approval", id: "send_#{i}", class: "sendForApproval", type: 'button' %>  </td>
+        <!--
+        <td><%#= button_tag "Send For Approval", id: "send_#{i}", class: "sendForApproval", type: 'button' %>  </td>  -->
+        
+        <td> 
+        <%= link_to "Send For Approval", "#", class: "sendForApprovals", id: "#{i}",:remote => true %> </td>  
 
         <td><%= link_to "Delete", '#', class: "delete_rule", id: "#{i}", :remote => true %></td>
 
