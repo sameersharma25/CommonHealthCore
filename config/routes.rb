@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   get "new_user" => "users#new", as: :new_user
   post "create_user" => "users#create", as: :create_user
   post "/wizard_add_user", to: "users#wizard_add_user"
+  post "/check_user_role", to: "users#check_user_role"
 
   get "/all_details", to: "client_applications#all_details"
   post "/save_all_details", to: "client_applications#save_all_details"
@@ -81,7 +82,10 @@ Rails.application.routes.draw do
   post "/parameters_mapping", to: "client_applications#parameters_mapping"
 
   get "/download_plugin", to: "client_applications#download_plugin"
-  get "/catalogMangViewer", to: "client_applications#catalogMangViewer"
+  match "/catalogMangViewer" => "client_applications#catalogMangViewer", via: [:get, :post]
+  match "/new_site_adding" => "client_applications#new_site_adding", via: [:get, :post]
+
+  # match "user/account" => "user#account", as: :user_account, via: [:get, :post]
   post "/get_contact_management", to: "client_applications#get_contact_management"
   post "/master_provider_details", to: "client_applications#master_provider_details"
 
@@ -271,7 +275,7 @@ Rails.application.routes.draw do
     post "/obstacle_remove", to: "interviews#remove_obstacle"
 
     post "/sol_create", to: "interviews#new_solution"
-    post "/sol_update", to: "interviews#update_soulution"
+    post "/sol_update", to: "interviews#update_solution"
     post "/sol_remove", to: "interviews#remove_solution"
 
     post "/clients_created_by_a_navigator", to: "reports#clients_created_by_a_navigator"
