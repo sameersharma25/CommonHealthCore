@@ -1,5 +1,4 @@
 <%= button_tag "Add Site",type: "button", id: "collectButton1",remote: true%>
-<%= @site.collect {|s| s["SelectSiteID"]}%>
 <% if @site.present? && @site != [nil] %>
     <% @site.each do |site| %>
 
