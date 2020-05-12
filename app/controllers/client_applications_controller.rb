@@ -247,7 +247,6 @@ class ClientApplicationsController < ApplicationController
     @result = helpers.catalog_table_content
 
     logger.debug("***********************the the count in the result is : #{@result.count}")
-
  
     @pending_results = @result.select{|p| p["status"] == "Pending"}
 
@@ -279,7 +278,7 @@ class ClientApplicationsController < ApplicationController
       logger.debug("*************IN the mang VIEWER CONTROLER  CATALOG DATA***********")
 
       @result = JSON.parse(params[:catalog_data])
-      new_site_id = (@result["OrgSites"].collect {|s| s["SelectSiteID"].to_i}.sort.last + 1).to_s
+      new_site_id = @result["OrgSites"].blank? ? "1" : (@result["OrgSites"].collect {|s| s["SelectSiteID"].to_i}.sort.last + 1).to_s
       logger.debug("the new site ids are: #{new_site_id}")
 
       # @result = params[:catalog_data]
