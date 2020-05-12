@@ -27,6 +27,7 @@ module Adapter
       
     end
 
+#<<<<<<< HEAD
     def reason_for_visit(patient, task)
 
       @reason_for_visit = "Cleaning/Checkup"
@@ -35,6 +36,9 @@ module Adapter
 
     def send_patient_sf(patient, task)
       reason_for_visit = reason_for_visit(patient, task)
+# =======
+#     def send_patient_sf(patient)
+# >>>>>>> 93e9ae26c0865f0e9f5b7e789cba4d2f00122abf
       token = @token
       Rails.logger.debug("SEND PATIENT TOKEN #{token.inspect}")
       #Authorization = @token
@@ -48,18 +52,30 @@ module Adapter
             http = Net::HTTP.new(url.host, url.port)
             http.use_ssl = true
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+#<<<<<<< HEAD
             dob = patient.date_of_birth.split('/').rotate(-1).join('-')
+#=======
+
+#>>>>>>> 93e9ae26c0865f0e9f5b7e789cba4d2f00122abf
             request = Net::HTTP::Post.new(url)
             input = 
             {
                 "Referring_Provider_Name": "CHC",
                 "Patient_FirstName": patient.first_name,
                 "Patient_LastName": patient.last_name,
+#<<<<<<< HEAD
                 "Patient_DOB": patient.date_of_birth.to_date.strftime('%Y-%m-%d'),
                 "Reason_For_Visit": reason_for_visit,
                 "Zip": patient.patient_zipcode,
                 "Preferred_Contact_Method": "Text",
                 "Mobile": patient.patient_phone,
+# =======
+#                 "Patient_DOB": patient.date_of_birth,
+#                 "Reason_For_Visit": "Cleaning/Checkup",
+#                 "Zip": "42351",
+#                 "Preferred_Contact_Method": "Text",
+#                 "Mobile": "9876543210",
+# >>>>>>> 93e9ae26c0865f0e9f5b7e789cba4d2f00122abf
                 "Pregnant_Diabetic": "Pregnant",
                 "Coverage_Type": "Other",
                 "Care_Coordination_Notes": "Testing from CHC",

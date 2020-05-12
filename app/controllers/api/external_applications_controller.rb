@@ -66,17 +66,27 @@ module Api
 
       external_application_id = params[:external_application_id]
       external_application = ClientApplication.find(external_application_id)
+
       # task = Task.last
       # external_application_id = "5e8f5a3f55668f031da74b89"
       # patient = Patient.find("5ab9785858f01a5ed376cf5c")
       # external_application = ClientApplication.find("5e8f5a3f55668f031da74b89")
+
+      #external_application_id = "5e8f5a3f55668f031da74b89"
+      #patient = Patient.find("5cdc55d858f01a7d72faec1e")
+      #external_application = ClientApplication.find("5e8f5a3f55668f031da74b89")
+
       client_application = ClientApplication.find(patient.client_application_id)
 
       if external_application.agreement_signed == true
         if external_application.agreement_counter_sign == "Done"
           if external_application.name == "Dentistlink"
 
+
             res = Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient, task)
+# =======
+#             res = Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient)
+# >>>>>>> 93e9ae26c0865f0e9f5b7e789cba4d2f00122abf
             logger.debug("WHAT IS ISERROR?????? #{res.inspect}")
             if res["IsError"] == true
               render :json=> {status: :error, message: res["ErrorData"] }
