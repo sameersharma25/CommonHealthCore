@@ -279,10 +279,13 @@ class ClientApplicationsController < ApplicationController
       logger.debug("*************IN the mang VIEWER CONTROLER  CATALOG DATA***********")
 
       @result = JSON.parse(params[:catalog_data])
+      new_site_id = (@result["OrgSites"].collect {|s| s["SelectSiteID"].to_i}.sort.last + 1).to_s
+      logger.debug("the new site ids are: #{new_site_id}")
+
       # @result = params[:catalog_data]
 
       new_site = {"InactiveSite"=>false, "LocationName"=>"", "AddrState"=>"", "AddrCity"=>"",
-                  "AddrZip"=>"", "ServiceDeliverySite"=>true, "AdminSite"=>false, "ResourceDirectory"=>false, "SelectSiteID"=>"5",
+                  "AddrZip"=>"", "ServiceDeliverySite"=>true, "AdminSite"=>false, "ResourceDirectory"=>false, "SelectSiteID"=> new_site_id,
                   "DefaultPOC"=>false, "InactivePOC"=>false, "OfficePhone"=>"", "Name"=>"",
                   "POCs"=>[{"id"=>"1.0", "poc"=>{"DefaultPOC"=>false, "InactivePOC"=>false, "OfficePhone"=>"",
                   "Name"=>""}}], "Addr1"=>[{"Xpath"=>"", "Text"=>"", "Domain"=>""}]}
