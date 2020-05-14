@@ -26,7 +26,8 @@ jQuery ($) ->
   $('#client_application').DataTable( );
 
   $('#contact_management_table').DataTable({
-   "pagingType": "input"
+   "pagingType": "input",
+   "sDom": '<"top"<"actions">lfpi<"clear">><"clear">rt<"bottom">'
   }
 
   );
@@ -203,3 +204,293 @@ jQuery ($) ->
       if clickCount == 10
         $.get "/users/sign_out"
   )
+
+  $(document).on("click", "#collectButton1", ->
+    console.log("collect button clicked Coffee****")
+    `var i`
+    `var inputElement`
+    `var i`
+    `var inputElement`
+    `var i`
+    `var inputElement`
+    `var i`
+    `var inputElement`
+    `var i`
+    `var i`
+    `var inputElement`
+    `var i`
+    `var i`
+    `var inputElement`
+    `var i`
+    `var i`
+    `var inputElement`
+    `var i`
+    `var q`
+    `var inputElement`
+    `var q`
+    `var k`
+    `var inputElement`
+    `var q`
+    `var k`
+    `var inputElement`
+    `var q`
+    `var k`
+    `var inputElement`
+    organizationDetails = {}
+    #OrgForm //Need to ignore certain values
+    orgform = document.getElementById('OrgForm')
+    inputElements = orgform.querySelectorAll('input, textarea')
+    organizationName = {}
+    i = 0
+    while i < inputElements.length
+      inputElement = inputElements[i]
+      if inputElement.value == ''
+        console.log 'skip'
+      else if inputElement.type == 'checkbox' and inputElement.checked == true
+        organizationName[inputElement.name] = true
+      else if inputElement.type == 'checkbox' and inputElement.checked != true
+        organizationName[inputElement.name] = false
+      else if inputElement.name == 'Text' or inputElement.name == 'Xpath' or inputElement.name == 'Domain' or inputElement.name == 'authenticity_token' or inputElement.name == 'utf8'
+        console.log 'skip'
+      else
+        organizationName[inputElement.name] = inputElement.value
+      i++
+    #orgName
+    orgName = document.getElementById('orgName')
+    orgNameElements = orgName.querySelectorAll('input')
+    nameObj = {}
+    i = 0
+    while i < orgNameElements.length
+      inputElement = orgNameElements[i]
+      if inputElement.value == ''
+        console.log 'skip'
+      else
+        nameObj[inputElement.name] = inputElement.value
+      console.log inputElement.name, '=', inputElement.value
+      i++
+    nameArray = []
+    nameArray.push nameObj
+    organizationName['OrganizationName'] = nameArray
+    #orgDesc
+    orgDesc = document.querySelectorAll('.orgDescription:not(.hidden)')
+    orgDescArray = []
+    i = 0
+    while i < orgDesc.length
+      orgDescElements = orgDesc[i].querySelectorAll('input')
+      descObj = {}
+      q = 0
+      while q < orgDescElements.length
+        inputElement = orgDescElements[q]
+        if inputElement.value == ''
+          console.log 'skip'
+        else
+          descObj[inputElement.name] = inputElement.value
+        console.log inputElement.name, '=', inputElement.value
+        q++
+      orgDescArray.push descObj
+      i++
+    if orgDescArray.length > 0
+      organizationName['OrgDescription'] = orgDescArray
+    #//
+    organizationDetails['OrganizationName'] = organizationName
+    #///////
+    console.log 'After Org', organizationDetails
+    # Geo
+    geoHash = {}
+    geoform = document.getElementById('GeoScopeForm')
+    geoinputElements = geoform.querySelectorAll('input')
+    i = 0
+    while i < geoinputElements.length
+      inputElement = geoinputElements[i]
+      if inputElement.value == ''
+        console.log 'skip'
+      else if inputElement.name == 'Text' or inputElement.name == 'Xpath' or inputElement.name == 'Domain' or inputElement.name == 'authenticity_token' or inputElement.name == 'utf8'
+        console.log 'skip'
+      else
+        geoHash[inputElement.name] = inputElement.value
+      i++
+    organizationDetails['GeoScope'] = geoHash
+    #/ End Geo
+    #/ Site Form
+    siteForm = document.getElementsByClassName('SiteForm')
+    orgSiteArray = []
+    k = 0
+    while k < siteForm.length
+      siteHash = {}
+      siteinputElements = siteForm[k].querySelectorAll('input')
+      i = 0
+      while i < siteinputElements.length
+        inputElement = siteinputElements[i]
+        if inputElement.value == ''
+          console.log 'skip'
+        else if inputElement.type == 'checkbox' and inputElement.checked == true
+          siteHash[inputElement.name] = true
+        else if inputElement.type == 'checkbox' and inputElement.checked != true
+          siteHash[inputElement.name] = false
+        else if inputElement.name == 'Text' or inputElement.name == 'Xpath' or inputElement.name == 'Domain' or inputElement.name == 'authenticity_token' or inputElement.name == 'utf8' or inputElement.name == 'id'
+          console.log 'skip'
+        else
+          siteHash[inputElement.name] = inputElement.value
+        i++
+      #inside loop #1
+      pocSArray = []
+      sitepoc = siteForm[k].getElementsByClassName('sitePOC')
+      i = 0
+      while i < sitepoc.length
+        singlePOC = {}
+        pocpoc = {}
+        sitepocinput = sitepoc[i].querySelectorAll('input')
+        i = 0
+        while i < sitepocinput.length
+          inputElement = sitepocinput[i]
+          if inputElement.value == ''
+            console.log 'skip'
+          else if inputElement.type == 'checkbox' and inputElement.checked == true
+            singlePOC[inputElement.name] = true
+          else if inputElement.type == 'checkbox' and inputElement.checked != true
+            singlePOC[inputElement.name] = false
+          else if inputElement.name == 'id'
+            pocpoc['id'] = inputElement.value
+          else
+            singlePOC[inputElement.name] = inputElement.value
+          i++
+        pocpoc['poc'] = singlePOC
+        pocSArray.push pocpoc
+        siteHash['POCs'] = pocSArray
+        i++
+      #
+      siterefArray = []
+      siteref = siteForm[k].getElementsByClassName('siteSiteReference')
+      i = 0
+      while i < siteref.length
+        siterefHash = {}
+        siterefinput = siteref[i].querySelectorAll('input')
+        i = 0
+        while i < siterefinput.length
+          inputElement = siterefinput[i]
+          if inputElement.value == ''
+            console.log 'skip'
+          else
+            siterefHash[inputElement.name] = inputElement.value
+          i++
+        siterefArray.push siterefHash
+        siteHash['SiteReference'] = siterefArray
+        i++
+      addr1array = []
+      siteAddr1 = siteForm[k].getElementsByClassName('siteAddr1')
+      i = 0
+      while i < siteAddr1.length
+        addr1 = {}
+        addInput = siteAddr1[i].querySelectorAll('input')
+        i = 0
+        while i < addInput.length
+          inputElement = addInput[i]
+          if inputElement.value == ''
+            console.log 'skip'
+          else
+            addr1[inputElement.name] = inputElement.value
+          i++
+        addr1array.push addr1
+        siteHash['Addr1'] = addr1array
+        i++
+      #
+      orgSiteArray.push siteHash
+      k++
+    # End Site Loop
+    organizationDetails['OrgSites'] = orgSiteArray
+    #End Site Form
+    #Program
+    programform = document.getElementsByClassName('ProgramForm')
+    programsArray = []
+    i = 0
+    while i < programform.length
+      programHash = {}
+      #basic elements
+      progrraminputElements = programform[i].querySelectorAll('input, textarea')
+      q = 0
+      while q < progrraminputElements.length
+        inputElement = progrraminputElements[q]
+        if inputElement.value == ''
+          console.log 'skip'
+        else if inputElement.type == 'checkbox' and inputElement.checked == true
+          programHash[inputElement.name] = true
+        else if inputElement.type == 'checkbox' and inputElement.checked != true
+          programHash[inputElement.name] = false
+        else if inputElement.name == 'Text' or inputElement.name == 'Xpath' or inputElement.name == 'Domain' or inputElement.name == 'authenticity_token' or inputElement.name == 'utf8'
+          console.log 'skip'
+        else if inputElement.name == 'ProgramSites'
+          programSiteArray = []
+          programSiteArray.push inputElement.value
+          programHash['ProgramSites'] = programSiteArray
+        else
+          programHash[inputElement.name] = inputElement.value
+        q++
+      #PopDesc
+      popDescArray = []
+      programPopDecs = programform[i].getElementsByClassName('programPopulationDescription')
+      q = 0
+      while q < programPopDecs.length
+        popDescHash = {}
+        popDescinputElements = programPopDecs[q].querySelectorAll('input')
+        k = 0
+        while k < popDescinputElements.length
+          inputElement = popDescinputElements[k]
+          if inputElement.value == ''
+            console.log 'skip'
+          else
+            popDescHash[inputElement.name] = inputElement.value
+          k++
+        popDescArray.push popDescHash
+        programHash['PopulationDescription'] = popDescArray
+        q++
+      #Program Description
+      progDescArray = []
+      programProgDesc = programform[i].getElementsByClassName('programProgramDescription')
+      q = 0
+      while q < programProgDesc.length
+        progDescHash = {}
+        progDescinputElements = programProgDesc[q].querySelectorAll('input')
+        k = 0
+        while k < progDescinputElements.length
+          inputElement = progDescinputElements[k]
+          if inputElement.value == ''
+            console.log 'skip'
+          else
+            progDescHash[inputElement.name] = inputElement.value
+          k++
+        progDescArray.push progDescHash
+        programHash['ProgramDescription'] = progDescArray
+        q++
+      # program Service area
+      serviceAreaArray = []
+      programServiceArea = programform[i].getElementsByClassName('programServiceAreaDescription')
+      q = 0
+      while q < programServiceArea.length
+        serviceAreaHash = {}
+        progServAinputElements = programServiceArea[q].querySelectorAll('input')
+        k = 0
+        while k < progServAinputElements.length
+          inputElement = progServAinputElements[k]
+          if inputElement.value == ''
+            console.log 'skip'
+          else
+            serviceAreaHash[inputElement.name] = inputElement.value
+          k++
+        serviceAreaArray.push serviceAreaHash
+        programHash['ServiceAreaDescription'] = serviceAreaArray
+        q++
+      programsArray.push programHash
+      i++
+    #End of Program Loop
+    organizationDetails['Programs'] = programsArray
+    organizationDetails['url'] = document.getElementById('theurl').innerText
+    submitChange organizationDetails
+    return
+  )
+
+  submitChange = (data) ->
+    catalog = {}
+    crud = JSON.stringify(data)
+    $.post "/backend/new_site_adding",
+      catalog_data: crud
+    return
