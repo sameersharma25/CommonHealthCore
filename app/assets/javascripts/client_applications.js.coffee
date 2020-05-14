@@ -491,6 +491,6 @@ jQuery ($) ->
   submitChange = (data) ->
     catalog = {}
     crud = JSON.stringify(data)
-    $.post "/new_site_adding",
+    $.post "/backend/new_site_adding",
       catalog_data: crud
     return
