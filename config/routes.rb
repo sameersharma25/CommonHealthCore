@@ -84,6 +84,7 @@ Rails.application.routes.draw do
   get "/download_plugin", to: "client_applications#download_plugin"
   match "/catalogMangViewer" => "client_applications#catalogMangViewer", via: [:get, :post]
   match "/new_site_adding" => "client_applications#new_site_adding", via: [:get, :post]
+  match "/new_program_adding" => "client_applications#new_program_adding", via: [:get, :post]
 
   # match "user/account" => "user#account", as: :user_account, via: [:get, :post]
   post "/get_contact_management", to: "client_applications#get_contact_management"

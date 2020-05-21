@@ -334,7 +334,35 @@ class ClientApplicationsController < ApplicationController
 
   end
 
+  def new_program_adding
 
+    logger.debug("IT's NEW ADD PROGRAM, #{params.inspect}")
+
+    if params["program_data"]
+
+    @result = JSON.parse(params[:program_data])
+
+    logger.debug("BEFORE RESULT DETAILS  #{@result.inspect}")
+
+    new_program = {"S_Addiction"=>'', "S_Identification"=>'', "S_Housing"=>'', "S_Research"=>'', "P_Veteran"=>'', "S_Veterans"=>'', "PopulationDescription"=>[{}], "S_Legal"=>'', "P_Any"=>'', "P_LowIncome"=>'', "S_Medical"=>'', "S_BasicNeeds"=>'', "S_Food"=>'', "S_GeneralSupport"=>'', "ProgramDescriptionDisplay"=>'', "S_Financial"=>'', "QuickConnectWebPage"=>"", "S_Clothing"=>'', "P_Family"=>'', "S_Education"=>'', "InactiveProgram"=>'', "P_Citizenship"=>'', "S_Family"=>'', "P_Other"=>'', "S_Respite"=>'', "S_IndependentLiving"=>'', "ContactWebPage"=>'', "ServiceAreaDescription"=>'', "S_CaseManagement"=>'', "ProgramWebPage"=>'', "S_Employment"=>'', "P_LGBTQ"=>'', "S_Senior"=>'', "P_Senior"=>'', "ProgramName"=>'', "P_Disabled"=>'', "P_Native"=>'', "S_Emergency"=>'', "ServiceTags"=>'', "S_DayCare"=>'', "SelectprogramID"=>'', "S_Abuse"=>'', "S_Transportation"=>'', "S_Resources"=>'', "S_Victim"=>'', "S_Disabled"=>'', "S_Behavioral"=>'', "ServiceAreaDescriptionDisplay"=>"", "PopulationDescriptionDisplay"=>""}
+
+    @result["Programs"].append(new_program)
+
+    logger.debug("RESULT DETAILS  #{@result.inspect}")
+
+    details = cat_details(@result)
+
+    logger.debug("WHAT ARE THE DETAILS #{details.inspect}")
+
+    @program = details[:programs]
+      logger.debug("INSIDE ADD NEW PROGRAM #{@program}")
+      @PopulationDescription = details[:popDesc]
+      @ProgramDescription = details[:progDesc]
+      @ServiceAreaDescription = details[:servArea]
+      @ProgramReferences = details[:progRef]
+
+    end
+  end
 
 
 

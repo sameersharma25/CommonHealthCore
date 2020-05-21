@@ -229,8 +229,10 @@ jQuery ($) ->
         $.get "/users/sign_out"
   )
 
-  $(document).on("click", "#collectButton1", ->
+  $(document).on("click", ".collectButton", ->
     console.log("collect button clicked Coffee****")
+    id = this.id
+    console.log("COLLECTION BUTTON ID ", id)
     `var i`
     `var inputElement`
     `var i`
@@ -508,13 +510,20 @@ jQuery ($) ->
     #End of Program Loop
     organizationDetails['Programs'] = programsArray
     organizationDetails['url'] = document.getElementById('theurl').innerText
-    submitChange organizationDetails
-    return
-  )
+    #submitChange organizationDetails
+    #return
 
-  submitChange = (data) ->
-    catalog = {}
-    crud = JSON.stringify(data)
-    $.post "/new_site_adding",
+    if id == 'add_sites'
+      crud = JSON.stringify(organizationDetails)
+      console.log("INSIDE THIS CRUD", crud)
+      $.post "/new_site_adding",
       catalog_data: crud
-    return
+      return
+
+    else if id == 'add_programs'
+      console.log("INSIDE SUBMIT PROGRAM")
+      crud = JSON.stringify(organizationDetails)
+      $.post "/new_program_adding",
+        program_data: crud
+      return
+  )
