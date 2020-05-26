@@ -75,10 +75,10 @@ class ScrapingRule
       organizationName = sr.organizationName
       organizationDescription = sr.organizationDescription
 
-      sr_hash = {rule_id: rule_id, organizationName: organizationName,organizationDescription: organizationDescription}
+      sr_hash = {catalog: {rule_id: rule_id, organizationName: organizationName,organizationDescription: organizationDescription, url: sr.url}}
 
       sr.programDetails.each do |pd|
-        sr_hash[pd.keys[0]] = pd.values[0]
+        sr_hash[:catalog][pd.keys[0]] = pd.values[0]
       end
 
       # sr_hash = {rule_id: rule_id, organizationName: organizationName,organizationDescription: organizationDescription, OrganizationName_Text: organizationName_Text , OrganizationName_URL: organizationName_URL, OrganizationName_xpath: organizationName_xpath,

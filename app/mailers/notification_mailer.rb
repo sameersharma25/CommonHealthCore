@@ -36,7 +36,7 @@ class NotificationMailer < ApplicationMailer
 	def alertPendingContactJoined(user, adminUser)
 			@user = user
 			logger.debug("pending user was #{@user}")
-			@userAdmin = userAdmin
+			@userAdmin = adminUser
 			logger.debug("pending user ADMIN is #{@userAdmin}")
 			#NotificationMailer.AlertPendingContactJoined(user, adminUser).deliver
 			mail(to: @adminUser.email, subject: "A pending contact has joined")
