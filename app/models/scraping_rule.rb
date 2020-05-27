@@ -14,6 +14,7 @@ class ScrapingRule
   # field :organizationDescription_URL, type: String
   # field :organizationDescription_xpath, type: String
   field :organizationDescription_changeeee, type: Boolean, default: false
+  field :url_changeeee, type: Boolean, default: false
   field :organizationName, type: Hash
   field :organizationDescription, type: Hash
   field :url, type: String

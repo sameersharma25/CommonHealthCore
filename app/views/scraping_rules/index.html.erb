@@ -15,6 +15,11 @@
     <% i  = 1 %>
     <% @scraping_rules.each do |scraping_rule| %>
       <tr id= <%="catalogue_row_#{i}"%> >
+        <% if scraping_rule.url_changeeee == true %>
+            <td style="color: red"><%= scraping_rule.url if scraping_rule.url%></td>
+        <%else%>
+            <td> <%= scraping_rule.url if scraping_rule.url%></td>
+        <%end%>
         <% if scraping_rule.organizationName_changeeee == true %>
           <td style="color: red"><%= scraping_rule.organizationName["Text"] if scraping_rule.organizationName%></td>
         <%else%>

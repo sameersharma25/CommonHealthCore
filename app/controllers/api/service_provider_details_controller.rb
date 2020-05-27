@@ -54,12 +54,23 @@ module Api
       sr.url = params[:ruleToChange][:url]
       params[:ruleToChange][:ruleToChange].each do |p|
         # logger.debug("the P is #{p}")
-        change_array.push(p.to_unsafe_h)
+        change_array.push(p.keys)
       end
       # logger.debug("Type od chcanges : #{change_array}")
-      sr.changed_fields = change_array
+      sr.changed_fields = change_array.flatten
       # logger.debug("the scrappy params areeee: #{sr.inspect}")
+      change_array.flatten.each do |c|
+        if c == "OrganizationName"
+          sr.organizationName_changeeee = true
+        elsif c == "OrganizationName"
+          sr.organizationDescription_changeeee = true
+        elsif c == "url"
+          sr.url_changeeee = true
+        end
+      end
+
       sr.save
+
       # logger.debug("the parameters are: #{params.inspect}")
       # sr = ScrapingRule.find(params[:rule_id])
       # rules_to_change = params[:ruleToChange]

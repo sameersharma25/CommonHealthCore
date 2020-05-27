@@ -1054,7 +1054,7 @@ class ClientApplicationsController < ApplicationController
       begin
         dynamodb1.update_item(parameters)
         insert_in_master_provider(params["url"], params['pocEmail'])
-
+        helpers.creating_scraping_rule(params["url"])
         render :json => {status: :ok, message: "Catalog Updated" }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
         render :json => {message: error  }
