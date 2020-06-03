@@ -30,7 +30,12 @@
 
           <%= hidden_field_tag r["organizationName_xpath"] ,i, :id => "orgName_xpath_#{i}" %>
           <%= hidden_field_tag r["organizationName_URL"] ,i, :id => "orgName_url_#{i}" %>
-          <td><%= r["status"] %></td>
+          <% if @rules_url.include?(r["url"]) %>
+            <td> ! </td>
+          <%else%>
+            <td> </td>
+          <%end%>
+
           <!--<td><%#= link_to "See More", master_provider_details_path(org_url: r["url"] ), { method: :post ,:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} %> </td>-->
         <td><%= link_to "See More", catalogMangViewer_path(org_url: r["url"], provider_page: "master" ), {target: :_blank} %> </td>
       </tr>

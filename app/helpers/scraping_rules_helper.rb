@@ -30,7 +30,9 @@ module ScrapingRulesHelper
 
 
     # @row = params[:row_id]
-    sr = ScrapingRule.new
+    sr = ScrapingRule.where(url: result["url"]).empty? ? ScrapingRule.new : ScrapingRule.find_by(url: result["url"])
+
+    # sr = ScrapingRule.new
     # sr.url = params[:url]
     # sr.organizationName_Text = result["OrganizationName_Text"]
     # sr.organizationName_xpath = result["OrganizationName_xpath"]
