@@ -50,8 +50,9 @@ module Api
     def scrappy_doo_response
 
       change_array = []
-      sr = ScrapingRule.new
-      sr.url = params[:ruleToChange][:url]
+      # sr = ScrapingRule.new
+      sr = ScrapingRule.find(params[:ruleToChange][:rule_id])
+      #sr.url = params[:ruleToChange][:url]
       params[:ruleToChange][:ruleToChange].each do |p|
         # logger.debug("the P is #{p}")
         change_array.push(p.keys)
@@ -62,7 +63,7 @@ module Api
       change_array.flatten.each do |c|
         if c == "OrganizationName"
           sr.organizationName_changeeee = true
-        elsif c == "OrganizationName"
+        elsif c == "OrganizationDescription"
           sr.organizationDescription_changeeee = true
         elsif c == "url"
           sr.url_changeeee = true

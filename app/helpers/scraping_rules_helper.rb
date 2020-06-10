@@ -18,14 +18,18 @@ module ScrapingRulesHelper
 
     logger.debug("***********************************************the Result of the get entry is : #{result}")
     programDetails_array = []
+    siteDetails_array = []
     result.each do |key, value|
       logger.debug("************************the key is : #{key}, and the value is : #{value.class}")
       if key.include?("Programs")
-        programDetails_array.push("#{key}"=> value )
+        programDetails_array.push("#{key}"=> value)
+      elsif key.include?("OrgSites")
+        siteDetails_array.push(value)
       end
     end
 
     logger.debug("*************************the number of programDetails are : #{programDetails_array}")
+    logger.debug("*************************the number of siteDetails are : #{siteDetails_array}")
     # logger.debug("!!!!!!!!!!!!!!!!!!!!!!!!!the OrgDescription is : #{result["OrganizationName"]["OrgDescription"][0].class}")
 
 
@@ -45,6 +49,7 @@ module ScrapingRulesHelper
     sr.organizationDescription = result["OrganizationName"]["OrgDescription"][0] if result["OrganizationName"]["OrgDescription"]
     sr.geoScope = result["GeoScope"] if result["GeoScope"]
     sr.programDetails = programDetails_array
+    sr.siteDetails = siteDetails_array
     #
     sr.save
   end

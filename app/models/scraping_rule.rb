@@ -20,6 +20,7 @@ class ScrapingRule
   field :url, type: String
   field :geoScope, type: Hash
   field :programDetails, type: Array
+  field :siteDetails, type: Array
   field :changed_fields, type: Array
 
 
@@ -78,11 +79,14 @@ class ScrapingRule
       organizationName = sr.organizationName
       organizationDescription = sr.organizationDescription
 
-      sr_hash = {catalog: {rule_id: rule_id, OrganizationName: organizationName,OrganizationDescription: organizationDescription, url: sr.url}}
+      sr_hash = {catalog: {rule_id: rule_id, OrganizationName: organizationName,OrganizationDescription: organizationDescription,
+                           url: sr.url, Programs: sr.programDetails, OrgSites: sr.siteDetails }}
 
       sr.programDetails.each do |pd|
         sr_hash[:catalog][pd.keys[0]] = pd.values[0]
       end
+
+
 
       # sr_hash = {rule_id: rule_id, organizationName: organizationName,organizationDescription: organizationDescription, OrganizationName_Text: organizationName_Text , OrganizationName_URL: organizationName_URL, OrganizationName_xpath: organizationName_xpath,
       #            OrganizationDescription_Text: organizationDescription_Text, OrganizationDescription_URL: organizationDescription_URL,
@@ -93,6 +97,7 @@ class ScrapingRule
       #                       OrganizationDescription_xpath: organizationDescription_xpath}
       # sr_hash = {OrganizationName_Text: organizationName_Text , OrganizationName_URL: organizationName_URL}
       uri = URI("https://dev4.resourcestack.com/checkRule")
+      # uri = URI("http://localhost:3001/checkRule")
 
       header = {'Content-Type' => 'application/json'}
 
