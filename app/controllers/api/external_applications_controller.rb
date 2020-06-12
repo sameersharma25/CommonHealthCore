@@ -1,11 +1,13 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require "kafka"
 
 module Api
   class ExternalApplicationsController < ActionController::Base
     include UsersHelper
     include ClientApplicationsHelper
+    include Adapter
 
     before_action :set_user_id, except: [:client_list]
     before_action :authenticate_user_from_token, except: [:client_list]
@@ -70,8 +72,36 @@ module Api
       if external_application.agreement_signed == true
         if external_application.agreement_counter_sign == "Done"
           if external_application.name == "Dentistlink"
+            if patient.security_keys.length > 0  || task.security_keys.length > 0
 
-            res = Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient)
+              logger.debug("the patient is : #{patient.inspect}")
+              input =
+                  {
+                      "Referring_Provider_Name": "CHC",
+                      "Patient_FirstName": "Kelly",#patient.first_name,
+                      "Patient_LastName": "Johnson",#patient.last_name,
+                      "Patient_DOB": patient.date_of_birth,
+                      "Reason_For_Visit": "Cleaning/Checkup",
+                      "Zip": patient.patient_zipcode.nil? ? "" : patient.patient_zipcode ,
+                      "Preferred_Contact_Method": "Text",#patient.mode_of_contact.nil? ? "" : patient.mode_of_contact  ,
+                      "Mobile": patient.patient_phone.nil? ? "" : patient.patient_phone ,
+                      "Pregnant_Diabetic": "",# "Pregnant",
+                      "Coverage_Type": patient.healthcare_coverage.nil? ? "" : patient.healthcare_coverage,
+                      "Care_Coordination_Notes": "Testing from CHC",
+                      "Other_Coverage_Type": "Other coverage type",
+                      "Care": "No",
+                      "Patient_Source__c": "CHC Referral",
+                      "Referral_Source": "CHC-Test"
+                  }
+              kafka = Kafka.new(["localhost:9092"], client_id: "my-application")
+              producer = kafka.producer
+              producer.produce(input.to_json,topic: "Dentistlink-sending-patient")
+              # producer.produce(input.to_json,topic: "my-topic")
+              producer.deliver_messages
+
+              # res = Adapter::DentistlinkWrapper.new(patient).send_patient_sf(patient)
+            end
+
             logger.debug("WHAT IS ISERROR?????? #{res.inspect}")
             if res["IsError"] == true
               render :json=> {status: :error, message: res["ErrorData"] }
@@ -223,6 +253,12 @@ module Api
           return
         end
       else
+
+        new_record = LedgerRecord.new
+        new_record.ledger_status_id = existing_status.id.to_s
+        new_record.referred_application_id = external_application_id
+        new_record.save
+
         render :json=> {status: :ok, message: "Please Sign the agreement to accept the referral." }
         return
       end
