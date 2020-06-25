@@ -5,6 +5,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th >Url</th>
       <th >Name</th>
       <th >Description</th>
       <th colspan="3"></th>
@@ -15,15 +16,20 @@
     <% i  = 1 %>
     <% @scraping_rules.each do |scraping_rule| %>
       <tr id= <%="catalogue_row_#{i}"%> >
-        <% if scraping_rule.organizationName_changeeee == true %>
-          <td style="color: red"><%= scraping_rule.organizationName["organizationName_Text"] if scraping_rule.organizationName%></td>
+        <% if scraping_rule.url_changeeee == true %>
+            <td style="color: red"><%= scraping_rule.url if scraping_rule.url%></td>
         <%else%>
-          <td> <%= scraping_rule.organizationName["organizationName_Text"] if scraping_rule.organizationName%></td>
+            <td> <%= scraping_rule.url if scraping_rule.url%></td>
+        <%end%>
+        <% if scraping_rule.organizationName_changeeee == true %>
+          <td style="color: red"><%= scraping_rule.organizationName["Text"] if scraping_rule.organizationName%></td>
+        <%else%>
+          <td> <%= scraping_rule.organizationName["Text"] if scraping_rule.organizationName%></td>
         <%end%>
         <% if scraping_rule.organizationDescription_changeeee == true %>
-            <td style="color: red"><%= scraping_rule.organizationDescription["organizationDescription_Text"].truncate(50) if !scraping_rule.organizationDescription.blank? %> </td>
+            <td style="color: red"><%= scraping_rule.organizationDescription["Text"].truncate(50) if !scraping_rule.organizationDescription.blank? %> </td>
         <%else%>
-          <td><%= scraping_rule.organizationDescription["organizationDescription_Text"].truncate(50) if !scraping_rule.organizationDescription.blank?%> </td>
+          <td><%= scraping_rule.organizationDescription["Text"].truncate(50) if !scraping_rule.organizationDescription.blank?%> </td>
         <%end %>
         <td><%= check_box_tag i , scraping_rule.id.to_s ,false, :class => "catalogue_checkboxes" %> </td>
         <td><%#= link_to 'Show', scraping_rule %></td>

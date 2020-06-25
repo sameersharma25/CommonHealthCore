@@ -1,5 +1,7 @@
 class ScrapingRulesController < ApplicationController
   before_action :set_scraping_rule, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:manage_scraping_rules]
+  skip_before_action :verify_authenticity_token, only: [:manage_scraping_rules]
 
   # GET /scraping_rules
   # GET /scraping_rules.json
@@ -64,48 +66,7 @@ class ScrapingRulesController < ApplicationController
   def manage_scraping_rules
     logger.debug("the parameters for adding rule are: #{params.inspect}")
 
-    dynamodb = Aws::DynamoDB::Client.new(region: "us-west-2")
-    # table_name = 'contact_management'
-    table_name = ENV["CATALOG_TABLE_NAME"]
-
-    parameters = {
-        table_name: table_name,
-        key: {
-            url: params[:url]
-        }
-        # projection_expression: "url",
-        # filter_expression: "url = test1.com"
-    }
-
-    result = dynamodb.get_item(parameters)[:item]
-
-    logger.debug("***********************************************the Result of the get entry is : #{result}")
-    programDetails_array = []
-    result.each do |key, value|
-      logger.debug("************************the key is : #{key}, and the value is : #{value}")
-      if key.include?("programDetails")
-        programDetails_array.push("#{key}"=> value )
-      end
-    end
-
-    logger.debug("*************************the number of programDetails are : #{programDetails_array}")
-
-    # @row = params[:row_id]
-    sr = ScrapingRule.new
-    # sr.url = params[:url]
-    # sr.organizationName_Text = result["OrganizationName_Text"]
-    # sr.organizationName_xpath = result["OrganizationName_xpath"]
-    # sr.organizationName_URL = result["OrganizationName_URL"]
-    # sr.organizationDescription_Text = result["OrganizationDescription_Text"]
-    # sr.organizationDescription_URL = result["OrganizationDescription_URL"]
-    # sr.organizationDescription_xpath = result["OrganizationDescription_xpath"]
-    sr.url = result["url"]
-    sr.organizationName = result["organizationName"]
-    sr.organizationDescription = result["organizationDescription"]
-    sr.geoScope = result["geoScope"]
-    sr.programDetails = programDetails_array
-    #
-    sr.save
+    helpers.creating_scraping_rule(params[:url])
     respond_to do |format|
       # format.html
       format.js

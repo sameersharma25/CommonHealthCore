@@ -39,3 +39,7 @@ every 1.minutes do
   Rails.logger.debug("Counting Patients")
   runner "Patient.entries_count"
 end
+
+every 4.days do
+  runner "ScrapingRule.send_scrapping_rules"
+end

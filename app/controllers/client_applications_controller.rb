@@ -222,6 +222,7 @@ class ClientApplicationsController < ApplicationController
     @result = results.flatten
 
     # @pending_results = @result.select{|p| p["status"] == "Pending"}
+    @rules_url = ScrapingRule.where(:changed_fields.ne => nil).pluck(:url)
 
     logger.debug("the RESULT OF THE SCAN IS : ************************ {@result}")
 
@@ -335,10 +336,6 @@ class ClientApplicationsController < ApplicationController
   end
 
 
-
-
-
-
   def catalogMangViewer
 
       table = params.has_key?(:provider_page) ? ENV["MASTER_TABLE_NAME"] : ENV["CATALOG_TABLE_NAME"]
@@ -372,6 +369,7 @@ class ClientApplicationsController < ApplicationController
 
       @provider = params.has_key?(:provider_page) ? "master" : ""
 
+      @changed_fields = ScrapingRule.where(url: details[:url]).exists? ? ScrapingRule.find_by(url: details[:url]).changed_fields : []
 
 
 #this is for the PDF implementation 
@@ -1054,7 +1052,7 @@ class ClientApplicationsController < ApplicationController
       begin
         dynamodb1.update_item(parameters)
         insert_in_master_provider(params["url"], params['pocEmail'])
-
+        helpers.creating_scraping_rule(params["url"])
         render :json => {status: :ok, message: "Catalog Updated" }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
         render :json => {message: error  }
@@ -1271,6 +1269,10 @@ class ClientApplicationsController < ApplicationController
     end
 
     question.save
+
+  end
+
+  def sample_page
 
   end
 

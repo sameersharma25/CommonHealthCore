@@ -100,6 +100,7 @@ Rails.application.routes.draw do
   post "/change_status_of_agreement_template", to: "client_applications#change_status_of_agreement_template"
   get "/question_sequence", to: "client_applications#question_sequence"
   post "/update_sequence", to: "client_applications#update_sequence"
+  get "/sample_page", to: "client_applications#sample_page"
 
   ###THINGS THAT MASON ADDED
   post "send_for_approval", to: "client_applications#send_for_approval"
