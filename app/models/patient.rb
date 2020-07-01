@@ -37,6 +37,7 @@ class Patient
   field :service_group, type: Array, default: []
   field :client_consent, type: String, default: ->{"not_answered"}
   field :patient_created_by, type: String
+  field :external_patient_id, type: String
 
 
   belongs_to :client_application

@@ -1,15 +1,16 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require "kafka"
 
 module Api
   class ExternalApplicationsController < ActionController::Base
     include UsersHelper
     include ClientApplicationsHelper
 
-    before_action :set_user_id, except: [:client_list]
-    before_action :authenticate_user_from_token, except: [:client_list]
-    load_and_authorize_resource class: :api, except: [:client_list]
+    before_action :set_user_id, except: [:client_list,:receive_fhir_patient]
+    before_action :authenticate_user_from_token, except: [:client_list,:receive_fhir_patient]
+    load_and_authorize_resource class: :api, except: [:client_list,:receive_fhir_patient]
 
     def render_script
       render html: '<div>html goes here</div>'.html_safe
@@ -573,6 +574,31 @@ module Api
     param :change, Hash, :desc => "Hash of all the changes happening on the object eg: {'object' => ['new_value', 'old_value']}"
     returns :code => 200, :desc => "Ledger successfully updated"
     def write_ledger_by_external
+
+    end
+
+    def receive_fhir_patient
+      logger.debug("********************* receiving patient from FHIR" )
+      kafka = Kafka.new(["167.172.150.43:9092"], client_id: "my-application")
+      # kafka = Kafka.new(["localhost:9092"], client_id: "my-application")
+
+
+      consumer = kafka.consumer(group_id: "my-group")
+      consumer.subscribe("CHC-Dentistlink-receive-patient")
+      consumer.each_message do |message|
+        logger.debug "topic issssssss!!!!!!!! #{message.topic}, #{message.partition}, #{message.offset}, #{message.key}, #{message.value.class}"
+
+        p_details = JSON.parse(message.value)
+        client_id = ClientApplication.find_by(name: "Dentistlink").id.to_s
+        patient = Patient.new
+        patient.first_name = p_details["first_name"]
+        patient.last_name = p_details["last_name"]
+        patient.date_of_birth = "05-29-1983"
+        patient.client_application_id = client_id
+        patient.external_patient_id = p_details["id"]
+        logger.debug("the Patient created was : #{patient.inspect}")
+        patient.save
+      end
 
     end
 
