@@ -151,6 +151,8 @@ Rails.application.routes.draw do
   post "/next_question", to: "question_response#next_question"
   post "/skip_survey", to: "question_response#skip_survey"
 
+
+
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]
     # post 'generate_end_point', to: 'minors#generate_end_point'
@@ -257,6 +259,8 @@ Rails.application.routes.draw do
     post "tsk_changes", to: "external_applications#new_ledger_record"
     post "/ledg_details", to: "external_applications#ledger_details"
     post "/revert_request", to: "external_applications#revert_request"
+
+    get "receive_fhir_patient", to: "external_applications#receive_fhir_patient"
 
     #API's for Interview
     post "/int_create", to: "interviews#new_interview"

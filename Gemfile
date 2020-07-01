@@ -85,6 +85,7 @@ gem 'dry-schema', '~> 1.0'
 gem 'dry-validation', '~> 1.0'
 gem 'dry-types','~> 1.2'
 gem 'dry-struct', '~> 1.0'
+gem 'ruby-kafka'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
