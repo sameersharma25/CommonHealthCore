@@ -8,7 +8,13 @@ module Api
       patient = Patient.find(params[:patient_id])
       patient.first_name = params[:first_name].titleize if params[:first_name]
       patient.last_name = params[:last_name].titleize if params[:last_name]
-      patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
+      date_check = check_client_dob(params[:date_of_birth])
+      if date_check == false
+        patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
+      else
+        render :json=> {message: "Date of Birth format is incorrect. The correct format is mm-dd-yyyy"}
+        return
+      end
       patient.patient_email = params[:patient_email] if params[:patient_email]
       patient.patient_phone = params[:patient_phone] if params[:patient_phone]
       patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
@@ -96,7 +102,7 @@ module Api
     #     render :json=> {status: :ok, message: "Appointment Created for #{patient_name}"}
     #   end
     # end
-
+    
     def create_patient
       user = User.find_by(email: params[:email])
       user_id = user.id.to_s
@@ -105,7 +111,13 @@ module Api
       patient.client_application_id = client_application
       patient.first_name = params[:first_name].titleize if params[:first_name]
       patient.last_name = params[:last_name].titleize if params[:last_name]
-      patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
+      date_check = check_client_dob(params[:date_of_birth])
+      if date_check == false
+        patient.date_of_birth = params[:date_of_birth] if params[:date_of_birth]
+      else
+        render :json=> {message: "Date of Birth format is incorrect. The correct format is mm-dd-yyyy"}
+        return
+      end
       patient.patient_email = params[:patient_email] if params[:patient_email]
       patient.patient_phone = params[:patient_phone] if params[:patient_phone]
       patient.patient_coverage_id = params[:patient_coverage_id] if params[:patient_coverage_id]
@@ -219,8 +231,6 @@ module Api
       render :json => {status: :ok, patients_details: patients_details }
     end
 
-
-
     def patients_list
       user = User.find_by(email: params[:email])
       c = user.client_application_id
@@ -261,6 +271,23 @@ module Api
       active_notification_array_count = active_notification_array.count(true)
       render :json => {status: :ok, patients_details: patients_details , active_notifications_count: active_notification_array_count}
     end
+
+    def check_client_dob(dob)
+      #logger.debug("------------************** Yes you are in the right CHECK")
+      bad_format = false
+      begin
+        #logger.debug("------**** inside the begin check")
+        p_age = ((Time.zone.now - Date.strptime(dob, '%m-%d-%Y' ).to_time) / 1.year.seconds).floor
+      rescue ArgumentError => e
+        #logger.debug("----------*******the error is : #{e}")
+        bad_format = true
+        #render :json=> {message: "Date of Birth format is incorrect. The correct format is mm-dd-yyyy"}
+        #return
+      end
+      #logger.debug("-----------value of bad format is : #{bad_format}")
+      bad_format
+    end
+
 
   end
 end
