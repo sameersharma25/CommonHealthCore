@@ -76,6 +76,7 @@ Rails.application.routes.draw do
   post "/counter_sign_popup", to: "client_applications#counter_sign_popup"
   post "/upload_countersign_doc", to: "client_applications#upload_countersign_doc"
   post "/reject_agreement_template", to: "client_applications#reject_agreement_template"
+  get "/fhir_response", to: "client_applications#fhir_response"
 
   post "/define_parameters", to: "client_applications#define_parameters"
   post "/external_api_setup", to: "client_applications#external_api_setup"

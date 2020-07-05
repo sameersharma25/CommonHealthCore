@@ -1,3 +1,8 @@
+require 'net/http'
+require 'uri'
+require 'json'
+require "kafka"
+
 class ClientApplicationsController < ApplicationController
   include ClientApplicationsHelper
   include UsersHelper
@@ -1273,6 +1278,44 @@ class ClientApplicationsController < ApplicationController
   end
 
   def sample_page
+
+  end
+
+  def fhir_response
+
+    url = URI("http://64.227.10.117:8080/baseDstu3/Patient?_pretty=true")
+    header = {'Content-Type' => 'application/json'}
+    http = Net::HTTP.new(url.host, url.port)
+    # http.use_ssl = true
+    request = Net::HTTP::Get.new(url.path, header)
+    # request.body = input.to_json
+    response = http.request(request)
+    # logger.debug("RESPONSE #{response.body}")
+    # result = JSON.parse(response.body["entry"])
+    result = JSON.parse(response.body)["entry"]
+
+    result.each do |r|
+      # logger.debug(r["resource"]["name"][0]["family"])
+      # logger.debug(r["resource"]["name"][0]["given"][0])
+      # logger.debug(r["resource"]["gender"])
+
+      input= {
+          "last_name": r["resource"]["name"][0]["family"],
+          "first_name": r["resource"]["name"][0]["given"][0],
+          "gender": r["resource"]["gender"],
+          "dob": "05-29-1980",
+          "id": r["resource"]["id"]
+      }
+
+      logger.debug("the input is : #{input}")
+      kafka = Kafka.new(["167.172.150.43:9092"], client_id: "my-application")
+      # kafka = Kafka.new(["localhost:9092"], client_id: "my-application")
+      producer = kafka.producer
+      producer.produce(input.to_json,topic: "CHC-Dentistlink-receive-patient")
+      # producer.produce(input.to_json,topic: "my-topic")
+      producer.deliver_messages
+
+    end
 
   end
 
