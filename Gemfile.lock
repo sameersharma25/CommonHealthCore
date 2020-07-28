@@ -1,9 +1,9 @@
 GIT
-  remote: git://github.com/probablycorey/mini_magick.git
-  revision: f309fbf390cd21a845264bca9bec95b9bdae8029
+  remote: https://github.com/galetahub/ckeditor.git
+  revision: f9e48420ccb6dc99f4453397554a6ae60bc2274b
   specs:
-    mini_magick (3.4)
-      subexec (~> 0.2.1)
+    ckeditor (5.1.0)
+      orm_adapter (~> 0.5.0)
 
 GEM
   remote: https://rubygems.org/
@@ -47,7 +47,11 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
+    apipie-rails (0.5.18)
+      rails (>= 4.1)
     arel (8.0.0)
+    attr_encrypted (3.1.0)
+      encryptor (~> 3.0.0)
     autoprefixer-rails (9.6.1)
       execjs
     aws-eventstream (1.0.3)
@@ -835,7 +839,10 @@ GEM
     childprocess (1.0.1)
       rake (< 13.0)
     chronic (0.10.2)
+    chunky_png (1.3.11)
+    climate_control (0.2.0)
     cocoon (1.2.14)
+    coderay (1.1.3)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -845,18 +852,79 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
     crass (1.0.4)
+    database_cleaner (1.8.5)
     devise (4.6.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0, < 6.0)
       responders
       warden (~> 1.2.3)
+    devise-two-factor (3.1.0)
+      activesupport (< 6.1)
+      attr_encrypted (>= 1.3, < 4, != 2)
+      devise (~> 4.0)
+      railties (< 6.1)
+      rotp (~> 2.0)
     devise_invitable (2.0.1)
       actionmailer (>= 5.0)
       devise (>= 4.6)
+    diff-lcs (1.4.4)
+    digest-crc (0.6.0)
+    dry-configurable (0.11.6)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.4, >= 0.4.7)
+      dry-equalizer (~> 0.2)
+    dry-container (0.7.2)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 0.1, >= 0.1.3)
+    dry-core (0.4.9)
+      concurrent-ruby (~> 1.0)
+    dry-equalizer (0.3.0)
+    dry-inflector (0.2.0)
+    dry-initializer (3.0.3)
+    dry-logic (1.0.6)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.2)
+      dry-equalizer (~> 0.2)
+    dry-schema (1.5.2)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 0.8, >= 0.8.3)
+      dry-core (~> 0.4)
+      dry-equalizer (~> 0.2)
+      dry-initializer (~> 3.0)
+      dry-logic (~> 1.0)
+      dry-types (~> 1.4)
+    dry-struct (1.3.0)
+      dry-core (~> 0.4, >= 0.4.4)
+      dry-equalizer (~> 0.3)
+      dry-types (~> 1.3)
+      ice_nine (~> 0.11)
+    dry-types (1.4.0)
+      concurrent-ruby (~> 1.0)
+      dry-container (~> 0.3)
+      dry-core (~> 0.4, >= 0.4.4)
+      dry-equalizer (~> 0.3)
+      dry-inflector (~> 0.1, >= 0.1.2)
+      dry-logic (~> 1.0, >= 1.0.2)
+    dry-validation (1.5.3)
+      concurrent-ruby (~> 1.0)
+      dry-container (~> 0.7, >= 0.7.1)
+      dry-core (~> 0.4)
+      dry-equalizer (~> 0.2)
+      dry-initializer (~> 3.0)
+      dry-schema (~> 1.5)
+    easy_diff (1.0.0)
+    encryptor (3.0.0)
     erubi (1.8.0)
     excon (0.65.0)
     execjs (2.7.0)
+    factory_bot (4.11.1)
+      activesupport (>= 3.0.0)
+    factory_bot_rails (4.11.1)
+      factory_bot (~> 4.11.1)
+      railties (>= 3.0.0)
+    faraday (1.0.1)
+      multipart-post (>= 1.2, < 3)
     ffi (1.11.1)
     fog-aws (3.5.2)
       fog-core (~> 2.1)
@@ -878,8 +946,10 @@ GEM
     geocoder (1.5.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    hashie (4.1.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
+    ice_nine (0.11.2)
     ipaddress (0.8.3)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
@@ -898,7 +968,8 @@ GEM
       turbolinks
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    json (2.2.0)
+    json (2.3.1)
+    jwt (2.2.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -912,6 +983,8 @@ GEM
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.0331)
+    mimemagic (0.3.5)
+    mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
@@ -926,14 +999,52 @@ GEM
     mongoid-grid_fs (2.4.0)
       mime-types (>= 1.0, < 4.0)
       mongoid (>= 3.0, < 8.0)
+    mongoid-history (0.8.3)
+      activesupport
+      easy_diff
+      mongoid (>= 3.0)
+      mongoid-compatibility (>= 0.5.1)
+    mongoid-paperclip (0.0.11)
+      mongoid
+      paperclip (>= 2.3.6, != 4.3.0)
     mongoid_orderable (5.2.0)
       mongoid (>= 3.0.0)
       mongoid-compatibility
     multi_json (1.13.1)
+    multi_xml (0.6.0)
+    multipart-post (2.1.1)
     nio4r (2.4.0)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
+    oauth2 (1.4.4)
+      faraday (>= 0.8, < 2.0)
+      jwt (>= 1.0, < 3.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 3)
+    omniauth (1.9.1)
+      hashie (>= 3.4.6)
+      rack (>= 1.6.2, < 3)
+    omniauth-google-oauth2 (0.8.0)
+      jwt (>= 2.0)
+      omniauth (>= 1.1.1)
+      omniauth-oauth2 (>= 1.6)
+    omniauth-oauth2 (1.6.0)
+      oauth2 (~> 1.1)
+      omniauth (~> 1.9)
     orm_adapter (0.5.0)
+    paperclip (6.1.0)
+      activemodel (>= 4.2.0)
+      activesupport (>= 4.2.0)
+      mime-types
+      mimemagic (~> 0.3.0)
+      terrapin (~> 0.6.0)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-byebug (3.8.0)
+      byebug (~> 11.0)
+      pry (~> 0.10)
     public_suffix (3.1.1)
     puma (3.12.1)
     rack (2.0.7)
@@ -967,11 +1078,34 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
+    rb-readline (0.5.5)
     recaptcha (3.4.0)
       json
     responders (2.4.1)
       actionpack (>= 4.2.0, < 6.0)
       railties (>= 4.2.0, < 6.0)
+    rotp (2.1.2)
+    rqrcode (0.10.1)
+      chunky_png (~> 1.0)
+    rspec-core (3.9.2)
+      rspec-support (~> 3.9.3)
+    rspec-expectations (3.9.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.9.0)
+    rspec-mocks (3.9.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.9.0)
+    rspec-rails (3.9.1)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.9.0)
+      rspec-expectations (~> 3.9.0)
+      rspec-mocks (~> 3.9.0)
+      rspec-support (~> 3.9.0)
+    rspec-support (3.9.3)
+    ruby-kafka (1.1.0)
+      digest-crc
     ruby_dep (1.5.0)
     rubyzip (1.2.3)
     sass (3.7.4)
@@ -991,6 +1125,8 @@ GEM
     selenium-webdriver (3.142.3)
       childprocess (>= 0.5, < 2.0)
       rubyzip (~> 1.2, >= 1.2.2)
+    shoulda-matchers (3.1.3)
+      activesupport (>= 4.0.0)
     simple_token_authentication (1.15.1)
       actionmailer (>= 3.2.6, < 6)
       actionpack (>= 3.2.6, < 6)
@@ -1007,7 +1143,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    subexec (0.2.3)
+    terrapin (0.6.0)
+      climate_control (>= 0.0.3, < 1.0)
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.9)
@@ -1040,6 +1177,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  apipie-rails
   aws-sdk (~> 3.0, >= 3.0.1)
   bootstrap-sass
   byebug
@@ -1047,10 +1185,18 @@ DEPENDENCIES
   capybara (~> 2.13)
   carrierwave
   carrierwave-mongoid
+  ckeditor!
   cocoon
   coffee-rails (~> 4.2)
+  database_cleaner (~> 1.7)
   devise
+  devise-two-factor
   devise_invitable
+  dry-schema (~> 1.0)
+  dry-struct (~> 1.0)
+  dry-types (~> 1.2)
+  dry-validation (~> 1.0)
+  factory_bot_rails (~> 4.11)
   fog-aws
   geocoder
   jbuilder (~> 2.5)
@@ -1059,15 +1205,24 @@ DEPENDENCIES
   jquery-turbolinks
   jquery-ui-rails
   listen (>= 3.0.5, < 3.2)
-  mini_magick!
+  mini_magick
   mongoid (~> 6.1.0)
+  mongoid-history
+  mongoid-paperclip
   mongoid_orderable
+  omniauth-google-oauth2
+  pry-byebug
   puma (~> 3.7)
   rack-cors
   rails (~> 5.1.5)
+  rb-readline
   recaptcha (= 3.4.0)
+  rqrcode (~> 0.10.1)
+  rspec-rails (~> 3.8)
+  ruby-kafka
   sass-rails (~> 5.0)
   selenium-webdriver
+  shoulda-matchers (~> 3)
   simple_token_authentication
   spring
   spring-watcher-listen (~> 2.0.0)
