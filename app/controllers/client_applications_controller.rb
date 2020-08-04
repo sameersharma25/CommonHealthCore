@@ -227,7 +227,8 @@ class ClientApplicationsController < ApplicationController
     @result = results.flatten
 
     # @pending_results = @result.select{|p| p["status"] == "Pending"}
-    @rules_url = ScrapingRule.where(:changed_fields.ne => nil).pluck(:url)
+    # @rules_url = ScrapingRule.where(:changed_fields.ne => nil).pluck(:url)
+     @rules_url = ScrapingRule.nin(changed_fields: [[],nil]).pluck(:url)
 
     logger.debug("the RESULT OF THE SCAN IS : ************************ {@result}")
 
@@ -374,7 +375,17 @@ class ClientApplicationsController < ApplicationController
 
       @provider = params.has_key?(:provider_page) ? "master" : ""
 
-      @changed_fields = ScrapingRule.where(url: details[:url]).exists? ? ScrapingRule.find_by(url: details[:url]).changed_fields : []
+      #@changed_fields = ScrapingRule.where(url: details[:url]).exists? ? ScrapingRule.find_by(url: details[:url]).changed_fields : ""
+      if ScrapingRule.where(url: details[:url]).exists?
+        sr = ScrapingRule.find_by(url: details[:url])
+        if sr.changed_fields.nil? || sr.changed_fields.empty?
+          @changed_fields = ''
+        else
+          @changed_fields = sr.changed_fields
+        end
+      else
+        @changed_fields = ""
+      end
 
 
 #this is for the PDF implementation 
@@ -1023,6 +1034,8 @@ class ClientApplicationsController < ApplicationController
     @result = helpers.catalog_table_content
 
     @pending_results = @result.select{|p| p["status"] == "Pending"}
+    @sr_urls = ScrapingRule.all.pluck(:url)
+    logger.debug("the sr ursls are  : ************************ #{@sr_urls}")
 
     logger.debug("the RESULT OF THE SCAN IS : ************************")
 
