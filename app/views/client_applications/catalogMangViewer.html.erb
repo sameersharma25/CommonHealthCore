@@ -292,7 +292,7 @@
         <%= label_tag :S_Clothing %>
         <%= check_box_tag :S_Clothing, x['S_Clothing'], x['S_Clothing'].to_s.downcase == "true"  %><br>
         <%= label_tag :S_COVID19 %>
-        <%= check_box_tag :S_COVID19, x['S_COVID-19'], x['S_COVID-19'].to_s.downcase == "true" %><br>
+        <%= check_box_tag :S_COVID19, x['S_COVID19'], x['S_COVID19'].to_s.downcase == "true" %><br>
 
         <%= label_tag :S_DayCare %>
         <%= check_box_tag :S_DayCare, x['S_DayCare'], x['S_DayCare'].to_s.downcase == "true" %><br>
@@ -328,6 +328,9 @@
 
         <%= label_tag :S_Legal %>
         <%= check_box_tag :S_Legal, x['S_Legal'], x['S_Legal'].to_s.downcase == "true"  %><br>
+        <%= label_tag "S_Lists & Guides" %>
+        <%= check_box_tag "S_Lists & Guides", x['S_Lists & Guides'], x['S_Lists & Guides'].to_s.downcase == "true"  %><br>
+
         <%= label_tag :S_Medical %>
         <%= check_box_tag :S_Medical, x['S_Medical'], x['S_Medical'].to_s.downcase == "true"  %><br>
 
