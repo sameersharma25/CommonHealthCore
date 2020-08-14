@@ -50,15 +50,22 @@ module Api
     def scrappy_doo_response
 
       change_array = []
+      full_change_array = []
       # sr = ScrapingRule.new
       sr = ScrapingRule.find(params[:ruleToChange][:rule_id])
+      sr.organizationName_changeeee = false
+      sr.organizationDescription_changeeee = false
+      sr.url_changeeee = false
       #sr.url = params[:ruleToChange][:url]
       params[:ruleToChange][:ruleToChange].each do |p|
         # logger.debug("the P is #{p}")
         change_array.push(p.keys)
+        full_change_array.push(p.to_unsafe_h)
       end
       # logger.debug("Type od chcanges : #{change_array}")
-      sr.changed_fields = change_array.flatten
+      # sr.changed_fields = change_array.flatten
+      # sr.changed_fields = params[:ruleToChange][:ruleToChange]
+      sr.changed_fields = full_change_array
       # logger.debug("the scrappy params areeee: #{sr.inspect}")
       change_array.flatten.each do |c|
         if c == "OrganizationName"
@@ -304,12 +311,14 @@ module Api
     def create_catalog_entry
       begin
         item = params[:catalog_data].to_unsafe_h
+        item["GeoScope"]["Country"] = "US"
         body_json = JSON.parse(request.body.read)
+        body_json["catalog_data"]["GeoScope"]["Country"] = "US"
         params_validation = CatalogManagement::CatalogEntryWithEmailContract.new.call(body_json)
         unless params_validation.success?
           InvalidCatalogEntry.new(email: params[:email], url: item[:url] ,catalog_hash: item ,error_hash: params_validation.errors.to_hash).save
           logger.debug("catalog errors: #{params_validation.errors.to_hash}")
-          return render :json => { status: :ok, message: "Entry created successfully"  }
+          return render :json => { status: "error", message: params_validation.errors.to_hash  }
         end
         item = CatalogManagement::CatalogEntityValidator.new(item).to_h.deep_stringify_keys
         user = User.find_by(email: params[:email])
