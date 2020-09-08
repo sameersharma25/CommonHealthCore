@@ -196,6 +196,22 @@ module Api
 
       begin
         dynamodb1.update_item(parameters)
+
+        input = {"catalog": {url: params["url"], sites: result} }
+        uri = URI("http://pg.commonhealthcore.org/update_sites")
+        # uri = URI("http://localhost:3000/update_sites")
+        header = {'Content-Type' => 'application/json'}
+
+        http = Net::HTTP.new(uri.host, uri.port)
+        # http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.path, header)
+        request.body = input.to_json
+
+        logger.debug(" the request body is : #{request}")
+        response = http.request(request)
+        puts "response {response.body} "
+        # puts JSON.parse(response.body)
+
         mandatory_parameters_check_after_update(params["url"], "Updating")
         render :json => {status: :ok, message: "Site Updated" }
 
@@ -268,8 +284,8 @@ module Api
           # projection_expression: "url",
           # filter_expression: "url = test1.com"
       }
-
-      result = dynamodb.get_item(parameters)[:item]["Programs"]
+      result1 = dynamodb.get_item(parameters)[:item]
+      result = result1["Programs"]
       # result = dynamodb.get_item(parameters)[:item]["OrgSites"].collect{|item| item["ID"]}
       program_id = params[:SelectprogramID]
 
@@ -299,6 +315,22 @@ module Api
 
       begin
         dynamodb1.update_item(parameters)
+        input = {"catalog": {url: params["url"], programs: result, dyna_entry: result1} }
+        uri = URI("http://pg.commonhealthcore.org/update_programs")
+        # uri = URI("http://localhost:3000/update_programs")
+        header = {'Content-Type' => 'application/json'}
+
+        http = Net::HTTP.new(uri.host, uri.port)
+        # http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.path, header)
+        request.body = input.to_json
+
+        logger.debug(" the request body is : #{request}")
+        response = http.request(request)
+        puts "response {response.body} "
+        # puts JSON.parse(response.body)
+
+
         render :json => {status: :ok, message: "Program Updated" }
 
       rescue  Aws::DynamoDB::Errors::ServiceError => error
@@ -349,12 +381,34 @@ module Api
         }
 
         dynamodb.put_item(params)
+
+
+        create_pg_entry(item1)
+
         render :json => { status: :ok, message: "Entry created successfully"  }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
         InvalidCatalogEntry.new(email: params[:email], url: item[:url], catalog_hash: item ,error_hash: error).save
         render :json => {message: error  }
       end
 
+    end
+
+    def create_pg_entry(item)
+
+      input = {"catalog": item }
+      uri = URI("http://pg.commonhealthcore.org/create_new_entry")
+      # uri = URI("http://localhost:3000/create_new_entry")
+      header = {'Content-Type' => 'application/json'}
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      # http.use_ssl = true
+      request = Net::HTTP::Post.new(uri.path, header)
+      request.body = input.to_json
+
+      logger.debug(" the request body is : #{request}")
+      response = http.request(request)
+      puts "response {response.body} "
+      # puts JSON.parse(response.body)
     end
 
     def update_catalog_entry
@@ -406,6 +460,8 @@ module Api
 
       begin
         dynamodb.update_item(parameters)
+        # logger.debug("**********the parameters are #{params.to_unsafe_h}")
+        create_pg_entry(params.to_unsafe_h)
         mandatory_parameters_check_after_update(params["url"], "Updating")
         render :json => {status: :ok, message: "Catalog Updated" }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
