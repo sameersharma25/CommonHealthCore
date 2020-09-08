@@ -703,6 +703,7 @@ module Api
 
       begin
         dynamodb.put_item(params)
+        create_pg_entry(item1)
         render :json => { status: :ok, message: "Entry created successfully"  }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
         render :json => {message: error  }
