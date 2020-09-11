@@ -20,6 +20,8 @@ class Task
   field :solution_id, type: String
   field :transferable, type: Boolean, default: true
   field :transfer_status, type: String
+  field :task_additional_fields, type: Hash
+  field :task_note, type: String
   mount_uploader :patient_document , PatientFileUploader
 
   belongs_to :referral

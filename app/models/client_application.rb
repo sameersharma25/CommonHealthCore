@@ -47,10 +47,10 @@ class ClientApplication
   accepts_nested_attributes_for :notification_rules, reject_if: :all_blank, allow_destroy: true
 
   THEME = {
-    'Orange': '#FE5E00',
+    'Magenta': '#b491bf',#'#FE5E00' css file is orange.css
     'Green': '#43b02a',
-    'Blue': '#27aacc',
-    'Grey': '#666362'
+    'Blue': '#91c5ff​',
+    'Gray Green': '#76a37f'
   }
 
   def humanized_theme
