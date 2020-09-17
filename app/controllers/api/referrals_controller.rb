@@ -24,6 +24,8 @@ module Api
       referral.client_consent = params[:client_consent]
       referral.third_party_user_id = params[:third_party_user_id]
       referral.consent_timestamp = params[:consent_timestamp]
+      referral.ref_additional_fields = params[:ref_additional_fields].to_unsafe_h if params[:ref_additional_fields]
+      referral.ref_note = params[:ref_note]
       #
       referral.ref_created_by = @user_id
       referral.modifier_id = current_user.id.to_s
@@ -46,6 +48,8 @@ module Api
           task.task_deadline = t[:task_deadline]
           task.task_description = t[:task_description]
           task.patient_document = params[:patient_document] if params[:patient_document]
+          task.task_additional_fields = params[:task_additional_fields].to_unsafe_h if params[:task_additional_fields]
+          task.task_note = params[:task_note]
           task.referral_id = referral.id.to_s
           task.security_keys = helpers.security_keys_for_task(task, patient)
           if task.save
@@ -127,11 +131,13 @@ module Api
       follow_up_date = r.follow_up_date
       agreement_notification_flag = r.agreement_notification_flag
       patient_id = r.patient.id.to_s
+      ref_additional_fields = r.ref_additional_fields
+      ref_note = r.ref_note
 
       referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
                           urgency: urgency, due_date: due_date,source: source, task_count: task_count,  status: status, 
                           follow_up_date: follow_up_date, agreement_notification_flag: agreement_notification_flag,
-                          patient_id: patient_id}
+                          patient_id: patient_id, ref_additional_fields: ref_additional_fields, ref_note: ref_note}
       render :json => {status: :ok, referral_details: referral_details }
     end
 
@@ -151,6 +157,8 @@ module Api
       referral.client_consent = params[:client_consent]
       referral.third_party_user_id = params[:third_party_user_id]
       referral.consent_timestamp = params[:consent_timestamp]
+      referral.ref_additional_fields = params[:ref_additional_fields].to_unsafe_h if params[:ref_additional_fields]
+      referral.ref_note = params[:ref_note]
       referral.modifier_id = current_user.id.to_s
       
       if referral.save
@@ -282,7 +290,9 @@ module Api
       #task.task_deadline = params[:task_deadline].to_datetime.strftime('%m/%d/%Y') if params[:task_deadline]
 
       task.task_description = params[:task_description] if params[:task_description]
-      task.additional_fields = params[:additional_fields] if params[:additional_fields]
+      # task.additional_fields = params[:additional_fields] if params[:additional_fields]
+      task.task_additional_fields = params[:task_additional_fields].to_unsafe_h if params[:task_additional_fields]
+      task.task_note = params[:task_note]
       if task.save
         create_ledger_master_and_status(task)
         # lm = LedgerMaster.new
@@ -325,10 +335,12 @@ module Api
       end
       task_deadline = t.task_deadline
       task_description = t.task_description
-      additional_fields = t.additional_fields
+      # additional_fields = t.additional_fields
+      task_additional_fields = t.task_additional_fields
+      task_note = t.task_note
       task_details = {task_id: task_id , task_type: task_type, task_status: task_status, task_owner: task_owner,
                       provider: provider , task_deadline: task_deadline, task_description: task_description,
-                      additional_fields: additional_fields}
+                      task_additional_fields: task_additional_fields, task_note: task_note}
       render :json => {status: :ok, task_details: task_details }
     end
 
@@ -342,6 +354,8 @@ module Api
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
       task.task_description = params[:task_description] if params[:task_description]
       task.patient_document = params[:patient_document] if params[:patient_document]
+      task.task_additional_fields = params[:task_additional_fields].to_unsafe_h if params[:task_additional_fields]
+      task.task_note = params[:task_note]
       #Create Ledger Record
       #new_ledger = LedgerRecord.new
 

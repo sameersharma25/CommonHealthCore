@@ -19,6 +19,7 @@ class Referral
   field :ref_created_by, type: String
   field :transferred_referral, type: Boolean, default: false
   field :ref_additional_fields, type: Hash
+  field :ref_note, type: String
 
   has_many :tasks
   has_many :needs
