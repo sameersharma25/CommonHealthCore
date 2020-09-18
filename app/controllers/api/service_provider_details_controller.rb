@@ -713,8 +713,15 @@ module Api
     ###
 
 
+    def invite_new_provider
+      new_provider = ProviderInvitation.new
+      new_provider.org_url = params[:org_url]
+      new_provider.org_name = params[:org_name]
+      new_provider.org_invited_by = params[:email]
+      new_provider.save
 
-
+      render :json => { status: :ok, message: "Invitation Created"  }
+    end
 
 
 
