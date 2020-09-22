@@ -228,7 +228,18 @@ class ClientApplicationsController < ApplicationController
 
     # @pending_results = @result.select{|p| p["status"] == "Pending"}
     # @rules_url = ScrapingRule.where(:changed_fields.ne => nil).pluck(:url)
-     @rules_url = ScrapingRule.nin(changed_fields: [[],nil]).pluck(:url)
+    rules = ScrapingRule.nin(changed_fields: [[],nil])
+    rules.each do |r|
+      keys_present = []
+      rule_changes = r.changed_fields
+      rule_changes.each do |cr|
+        keys_present.push(cr.keys)
+      end
+
+    end
+
+    @rules_url = rules.pluck(:url)
+
 
     logger.debug("the RESULT OF THE SCAN IS : ************************ {@result}")
 
@@ -1112,6 +1123,7 @@ class ClientApplicationsController < ApplicationController
 
     begin
       dynamodb.put_item(params1)
+      helper.create_pg_entry(result)
       # render :json => { status: :ok, message: "Entry created successfully"  }
     rescue  Aws::DynamoDB::Errors::ServiceError => error
       render :json => {message: error  }

@@ -249,6 +249,7 @@ Rails.application.routes.draw do
     post "/get_site_by_id", to: "service_provider_details#get_catalogue_site_by_id"
     post "/get_program_by_id", to: "service_provider_details#get_catalogue_program_by_id"
     post "/program_update", to: "service_provider_details#program_update"
+    post "/invite_new_provider", to: "service_provider_details#invite_new_provider"
 
     #API's for External Application
     post "/send_patient", to: "external_applications#send_patient"
