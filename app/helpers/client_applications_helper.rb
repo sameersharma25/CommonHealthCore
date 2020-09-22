@@ -139,4 +139,22 @@ module ClientApplicationsHelper
   end
 
 
+  def create_pg_entry(item)
+    input = {"catalog": item }
+    uri = URI("http://pg.commonhealthcore.org/create_new_entry")
+    # uri = URI("http://localhost:3000/create_new_entry")
+    header = {'Content-Type' => 'application/json'}
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    # http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, header)
+    request.body = input.to_json
+
+    logger.debug(" the request body is : #{request}")
+    response = http.request(request)
+    puts "response {response.body} "
+    # puts JSON.parse(response.body)
+  end
+
+
 end
