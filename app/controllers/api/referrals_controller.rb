@@ -15,7 +15,7 @@ module Api
 
       referral.source = params[:source]
       referral.referral_name = params[:referral_name]
-      referral.referral_description = params[:referral_description]
+      referral.referral_description = params[:referral_description].gsub("\\'", "'")
       referral.urgency = params[:urgency]
       referral.due_date = params[:due_date]
       referral.patient_id = patient
@@ -24,8 +24,10 @@ module Api
       referral.client_consent = params[:client_consent]
       referral.third_party_user_id = params[:third_party_user_id]
       referral.consent_timestamp = params[:consent_timestamp]
-      referral.ref_additional_fields = params[:ref_additional_fields].to_unsafe_h if params[:ref_additional_fields]
-      referral.ref_note = params[:ref_note]
+      additional_fields = eval(params[:ref_additional_fields]) if params[:ref_additional_fields]
+      referral.ref_additional_fields = additional_fields if params[:ref_additional_fields]
+
+      referral.ref_note = params[:ref_note].gsub("\\'", "'")
       #
       referral.ref_created_by = @user_id
       referral.modifier_id = current_user.id.to_s
@@ -46,10 +48,11 @@ module Api
           task.task_owner = t[:task_owner]
           task.provider = t[:provider]
           task.task_deadline = t[:task_deadline]
-          task.task_description = t[:task_description]
+          task.task_description = t[:task_description].gsub("\\'", "'")
           task.patient_document = params[:patient_document] if params[:patient_document]
-          task.task_additional_fields = params[:task_additional_fields].to_unsafe_h if params[:task_additional_fields]
-          task.task_note = params[:task_note]
+          t_additional_fields = eval(params[:task_additional_fields]) if params[:task_additional_fields]
+          task.task_additional_fields = t_additional_fields if params[:task_additional_fields]
+          task.task_note = params[:task_note].gsub("\\'", "'")
           task.referral_id = referral.id.to_s
           task.security_keys = helpers.security_keys_for_task(task, patient)
           if task.save
@@ -101,6 +104,8 @@ module Api
         source = r.source
         task_count = r.tasks.count
         client_consent = r.client_consent
+        ref_additional_fields = r.ref_additional_fields
+        ref_note = r.ref_note
 
         status = r.status
         follow_up_date = r.follow_up_date
@@ -109,7 +114,8 @@ module Api
 
         referral_details = {referral_id: referral_id, referral_name: referral_name, referral_description: referral_description,
                             urgency: urgency, due_date: due_date,source: source, task_count: task_count,  status: status, 
-                            follow_up_date: follow_up_date, agreement_notification_flag: agreement_notification_flag}
+                            follow_up_date: follow_up_date, agreement_notification_flag: agreement_notification_flag,
+                            ref_additional_fields: ref_additional_fields, ref_note: ref_note}
         referral_list.push(referral_details)
       end
 
@@ -146,7 +152,7 @@ module Api
 
       referral.source = params[:source] if params[:source]
       referral.referral_name = params[:referral_name] if params[:referral_name]
-      referral.referral_description = params[:referral_description] if params[:referral_description]
+      referral.referral_description = params[:referral_description].gsub("\\'", "'") if params[:referral_description]
       referral.urgency = params[:urgency] if params[:urgency]
       referral.due_date = params[:due_date] if params[:due_date]
 
@@ -157,8 +163,10 @@ module Api
       referral.client_consent = params[:client_consent]
       referral.third_party_user_id = params[:third_party_user_id]
       referral.consent_timestamp = params[:consent_timestamp]
-      referral.ref_additional_fields = params[:ref_additional_fields].to_unsafe_h if params[:ref_additional_fields]
-      referral.ref_note = params[:ref_note]
+      additional_fields = eval(params[:ref_additional_fields]) if params[:ref_additional_fields]
+      referral.ref_additional_fields = additional_fields if params[:ref_additional_fields]
+
+      referral.ref_note = params[:ref_note].gsub("\\'", "'")
       referral.modifier_id = current_user.id.to_s
       
       if referral.save
@@ -182,10 +190,13 @@ module Api
         additional_fields = t.additional_fields
         transferable = t.transferable
         transfer_status = t.transfer_status
+        task_additional_fields = t.task_additional_fields
+        task_note = t.task_note.gsub("\\'", "'")
 
         task_details = {task_id: task_id , task_type: task_type, task_status: task_status, task_owner: task_owner,
                         provider: provider , task_deadline: task_deadline, task_description: task_description,
-                        additional_fields: additional_fields, transferable: transferable, transfer_status: transfer_status}
+                        additional_fields: additional_fields, transferable: transferable, transfer_status: transfer_status,
+                        task_additional_fields: task_additional_fields, task_note: task_note}
         task_list.push(task_details)
       end
 
@@ -289,10 +300,11 @@ module Api
       task.security_keys = helpers.security_keys_for_task(task, referral.patient)
       #task.task_deadline = params[:task_deadline].to_datetime.strftime('%m/%d/%Y') if params[:task_deadline]
 
-      task.task_description = params[:task_description] if params[:task_description]
+      task.task_description = params[:task_description].gsub("\\'", "'") if params[:task_description]
       # task.additional_fields = params[:additional_fields] if params[:additional_fields]
-      task.task_additional_fields = params[:task_additional_fields].to_unsafe_h if params[:task_additional_fields]
-      task.task_note = params[:task_note]
+      t_additional_fields = eval(params[:task_additional_fields]) if params[:task_additional_fields]
+      task.task_additional_fields = t_additional_fields if params[:task_additional_fields]
+      task.task_note = params[:task_note].gsub("\\'", "'")
       if task.save
         create_ledger_master_and_status(task)
         # lm = LedgerMaster.new
@@ -352,10 +364,11 @@ module Api
       task.task_owner = params[:task_owner] if params[:task_owner]
       task.provider = params[:provider] if params[:provider]
       task.task_deadline = params[:task_deadline] if params[:task_deadline]
-      task.task_description = params[:task_description] if params[:task_description]
+      task.task_description = params[:task_description].gsub("\\'", "'") if params[:task_description]
       task.patient_document = params[:patient_document] if params[:patient_document]
-      task.task_additional_fields = params[:task_additional_fields].to_unsafe_h if params[:task_additional_fields]
-      task.task_note = params[:task_note]
+      t_additional_fields = eval(params[:task_additional_fields]) if params[:task_additional_fields]
+      task.task_additional_fields = t_additional_fields if params[:task_additional_fields]
+      task.task_note = params[:task_note].gsub("\\'", "'")
       #Create Ledger Record
       #new_ledger = LedgerRecord.new
 
