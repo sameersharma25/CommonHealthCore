@@ -102,7 +102,7 @@ module Api
     #     render :json=> {status: :ok, message: "Appointment Created for #{patient_name}"}
     #   end
     # end
-    
+
     def create_patient
       user = User.find_by(email: params[:email])
       user_id = user.id.to_s
@@ -158,7 +158,7 @@ module Api
     def create_note
       patient_id = params[:patient_id]
       note = Note.new
-      note.note_text = params[:text]
+      note.note_text = params[:text].gsub("\\'", "'")
       note.patient_id = patient_id
       if note.save
         render :json=> {status: :ok, message: "Note was created"}
