@@ -384,7 +384,7 @@ module Api
         dynamodb.put_item(params)
 
 
-        helper.create_pg_entry(item1)
+        helpers.create_pg_entry(item1)
 
         render :json => { status: :ok, message: "Entry created successfully"  }
       rescue  Aws::DynamoDB::Errors::ServiceError => error
@@ -724,7 +724,27 @@ module Api
       render :json => { status: :ok, message: "Invitation Created"  }
     end
 
+    def advanced_search
+      logger.debug("********* * in THE ADVANCED SSEARCH")
+      input = {"search_params": params[:search_params] }
+      uri = URI("http://pg.commonhealthcore.org/advanced_search")
 
+      header = {'Content-Type' => 'application/json'}
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      # # http.use_ssl = true
+      request = Net::HTTP::Post.new(uri.path, header)
+      request.body = input.to_json
+
+      #logger.debug("***********the request body is : #{request}")
+      response = http.request(request)
+      #logger.debug("*********response {response.body} ")
+      #logger.debug("******the response is : #{JSON.parse(response.body)}")
+      result = JSON.parse(response.body)
+       
+
+      render :json => {status: :ok, result_count: result["result_count"] , complete_result: result["complete_result"] }
+    end
 
 
   end
