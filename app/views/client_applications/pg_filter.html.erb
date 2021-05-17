@@ -1,0 +1,19 @@
+
+Filter : <%= text_field_tag 'tag_field', nil , placeholder: "Enter tag name here" %> <button type="button" id="filter_tag_button"> Search </button>
+
+
+<table id="" class="table table-responsive table-bordered user-display">
+  <thead>
+  <tr>
+
+    <th >Organization Name</th>
+    <th >Program Name</th>
+    <th > </th>
+  </tr>
+  </thead>
+  <tbody id="filtered_list">
+  <%= render partial: "filtered_list", locals: {programs: @programs}%>
+
+  </tbody>
+</table>
+

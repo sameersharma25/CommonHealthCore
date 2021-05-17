@@ -493,8 +493,18 @@ module Api
         changes_array = []
         changes.keys.each do |k|
           if changes[k][1] != ""
-            first_hash[k] = changes[k][0]
-            second_hash[k] = changes[k][1]
+            if changes[k][0] == "_new_" || changes[k][0] == "_old_"
+             first_hash[k] = ""
+            else
+              first_hash[k] = changes[k][0]
+            end
+            if changes[k][1] == "_new_" || changes[k][1] == "_old_"
+              second_hash[k] = ""
+            else
+              second_hash[k] = changes[k][1]
+             end
+            #first_hash[k] = changes[k][0]
+            #second_hash[k] = changes[k][1]
           end
         end
         changes_array.push(first_hash)
@@ -516,8 +526,18 @@ module Api
           changes_array = []
           changes.keys.each do |k|
             if changes[k][1] != ""
-              first_hash[k] = changes[k][0]
-              second_hash[k] = changes[k][1]
+              if changes[k][0] == "_new_" || changes[k][0] == "_old_"
+              first_hash[k] = ""
+            else
+               first_hash[k] = changes[k][0]
+            end
+            if changes[k][1] == "_new_" || changes[k][1] == "_old_"
+              second_hash[k] = ""
+            else
+               second_hash[k] = changes[k][1]
+             end
+              #first_hash[k] = changes[k][0]
+              #second_hash[k] = changes[k][1]
             end
           end
           changes_array.push(first_hash)
@@ -589,8 +609,14 @@ module Api
         logger.debug "topic issssssss!!!!!!!! #{message.topic}, #{message.partition}, #{message.offset}, #{message.key}, #{message.value.class}"
 
         p_details = JSON.parse(message.value)
+         p = Patient.where(external_patient_id: p_details["id"])
+        if p.empty?
+          patient = Patient.new
+        else
+          patient = p.first
+        end
         client_id = ClientApplication.find_by(name: "Dentistlink").id.to_s
-        patient = Patient.new
+        #patient = Patient.new
         patient.first_name = p_details["first_name"]
         patient.last_name = p_details["last_name"]
         patient.date_of_birth = "05-29-1983"

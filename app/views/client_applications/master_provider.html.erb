@@ -30,7 +30,7 @@
 
           <%= hidden_field_tag r["organizationName_xpath"] ,i, :id => "orgName_xpath_#{i}" %>
           <%= hidden_field_tag r["organizationName_URL"] ,i, :id => "orgName_url_#{i}" %>
-          <% if @rules_url.include?(r["url"]) %>
+          <% if (@rules_url.include?(r["url"]) && r["OrganizationName"]["InactiveCatalog"] == false) %>
             <td> ! </td>
           <%else%>
             <td> </td>

@@ -49,7 +49,7 @@ class ClientApplication
   THEME = {
     'Magenta': '#b491bf',#'#FE5E00' css file is orange.css
     'Green': '#43b02a',
-    'Blue': '#91c5ff​',
+    'Blue': '#91c5ff',
     'Gray Green': '#76a37f'
   }
 

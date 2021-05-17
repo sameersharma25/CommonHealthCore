@@ -3,6 +3,25 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 jQuery ($) ->
   console.log("Client Application Coffee****")
+  $(document).on("click", "#filter_tag_button", ->
+    tag = $('#tag_field').val()
+    $.post "/backend/filtered_list",
+      tag: tag
+    return
+  )
+
+  $(document).on("click", "input.inactive_org_checkbox", ->
+    console.log("**** inside inactive catalog check")
+    if $(this).is(":checked")
+      console.log("********* it is checked")
+      $('.inactive_program_checkbox').prop('checked', true)
+    else
+      console.log("***** not checked")
+      $('input.inactive_program_checkbox').prop('checked', false)
+
+
+  )
+
   $(document).on("click", ".requested_application", ->
     id = $(this).attr("id")
     console.log("the id of the invite is ", id)
@@ -487,6 +506,7 @@ jQuery ($) ->
     submitChange organizationDetails
     return
   )
+
 
   submitChange = (data) ->
     catalog = {}

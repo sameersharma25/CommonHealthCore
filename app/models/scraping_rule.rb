@@ -66,7 +66,10 @@ class ScrapingRule
   end
 
   def self.validate_scraping_rules(rule_ids)
+    i = 0
     rule_ids.each do |scraping_rule_id|
+      i += 1
+      puts "***************** Entry number is #{i}"
       sr = ScrapingRule.find(scraping_rule_id)
 
       rule_id = sr.id.to_s
@@ -96,8 +99,11 @@ class ScrapingRule
       #                       OrganizationDescription_Text: "wrong desscription", OrganizationDescription_URL: organizationDescription_URL,
       #                       OrganizationDescription_xpath: organizationDescription_xpath}
       # sr_hash = {OrganizationName_Text: organizationName_Text , OrganizationName_URL: organizationName_URL}
-      uri = URI("https://dev4.resourcestack.com/checkRule")
+      begin
+      uri = URI("https://4625.commonhealthcore.org/checkRule")
       # uri = URI("http://localhost:3001/checkRule")
+      #logger.debug("***************--------------------- ************ Sending request to scrapy ****************************")
+      #uri = URI("https://dev4.resourcestack.com/checkRule")
 
       header = {'Content-Type' => 'application/json'}
 
@@ -107,11 +113,15 @@ class ScrapingRule
 
       request = Net::HTTP::Post.new(uri.path, header)
       request.body = sr_hash.to_json
-      puts"the request body is : #{request.body}"
+      #puts"the request body is : #{request.body}"
       # Send the request
       response = http.request(request)
-      puts "response #{response.body}"
-      puts JSON.parse(response.body)
+      #puts "response #{response.body}"
+     # puts JSON.parse(response.body)
+     rescue => e
+        Rails.logger.debug("*************you are in the UNKNOWN rescue block--------#{e}")
+      end
+
     end
   end
 

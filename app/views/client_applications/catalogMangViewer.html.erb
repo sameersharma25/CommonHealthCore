@@ -18,22 +18,32 @@
   </div>
 </div>
 
+<% if @pg_entry %>
+    <%= hidden_field_tag "check_db", "pg" %>
+<% else %>
+  <%= hidden_field_tag "check_db", "dynamo" %>
+<%end%>
+
 <% if !@changed_fields.empty? %>
     <% @changed_fields.each do |cf| %>
-           <%  key = cf.keys[0]%>
-            <% key_value = cf[cf.keys[0]]%>
-            <%if cf[cf.keys[0]].key?("program_id") %>
-                    <% program_id = key_value["program_id"] %>
-                    Key = <%= key %> , Program ID = <%= program_id %>, Text = <%= key_value["Text"].truncate(27) %><br>
-                <%elsif cf[cf.keys[0]].key?("site_id") %>
-                    <% site_id = key_value["site_id"] %>
-                    Key = <%= key %> , Site ID = <%= site_id %>, Text = <%= key_value["Text"].truncate(27) %><br>
-                <%else %>
-                    Key = <%= key %> , Text = <%= key_value["Text"].truncate(27) %><br>
-                <%end%>
+       <%  key = cf.keys[0]%>
+        <% key_value = cf[cf.keys[0]]%>
+        <% if key_value.is_a?(Hash) %>
+          <%if cf[cf.keys[0]].key?("program_id") %>
+                  <% program_id = key_value["program_id"] %>
+                  <%= link_to "See More", catalogMangViewer_path(org_url: @url ), {target: :_blank} %> ( Key = <%= key %> , Program ID = <%= program_id %>, Text = <%= key_value["Text"].truncate(52) if key_value["Text"] %>, Reason = <%= key_value["reason"] if key_value["reason"]%>) <br>
+              <%elsif cf[cf.keys[0]].key?("site_id") %>
+                  <% site_id = key_value["site_id"] %>
+                  <%= link_to "See More", catalogMangViewer_path(org_url: @url ), {target: :_blank} %> ( Key = <%= key %> , Site ID = <%= site_id %>, Text = <%= key_value["Text"].truncate(50) %>, Reason = <%= key_value["reason"] if key_value["reason"]%>) <br>
+              <%else %>
+                  <%= link_to "See More", catalogMangViewer_path(org_url: @url ), {target: :_blank} %> ( Key = <%= key %> , Text = <%= key_value["Text"].truncate(50) %>, Reason = <%= key_value["reason"] if key_value["reason"]%>) <br>
+              <%end%>
+        <% else %>
+           <%= link_to "See More", catalogMangViewer_path(org_url: @url ), {target: :_blank} %> ( Key = <%= key %> , Text = <%= key_value.truncate(50) %>)<br>
+        <% end %>
+    <% end%>
+<% end %>
 
-        <% end%>
-    <% end %>
 
 <div class="container-fluid" id="createMargin">
   <h3 class="pull-right" id ="theurl"> <%= @url %> </h3><br>
@@ -46,7 +56,7 @@
     <div class="col-md-6" id ="OrgForm">
       <h1>Organization Details  </h1>
       <%= label_tag :InactiveOrganization %>
-      <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'] %><br>
+      <%= check_box_tag :InactiveCatalog, @orgDetails['InactiveCatalog'], @orgDetails['InactiveCatalog'], class: "inactive_org_checkbox" %><br>
 
       <%= label_tag :Type %>
       <%= text_field_tag :Type, @orgDetails['Type'], name: :Type %><br>
@@ -140,7 +150,7 @@
 
       <div class="col-md-4">
         <%= label_tag :InactiveProgram %>
-        <%= check_box_tag :InactiveProgram, x['InactiveProgram'], x['InactiveProgram']%><br>
+        <%= check_box_tag :InactiveProgram, x['InactiveProgram'], x['InactiveProgram'], class: "inactive_program_checkbox"%><br>
 
         <%= label_tag :ProgramName %>
         <%= text_field_tag :ProgramName, x['ProgramName'] %><br>
@@ -356,7 +366,7 @@
 
 
         <%= label_tag :ServiceTags %>
-        <%= text_field_tag :ServiceTags, x['ServiceTags'] %><br>
+        <%= text_area_tag :ServiceTags, x['ServiceTags'], rows:"5", cols:"44" %><br>
 
       </div>
 
@@ -727,9 +737,16 @@
               XHR.addEventListener("error", function(event) {
                   alert('Oops! Something went wrong.');
               });
-              //XHR.open("POST", "https://dev7.resourcestack.com/api/update_entire_catalog");
-          XHR.open("POST", "https://dev11.resourcestack.com/backend/api/update_entire_catalog");
 
+              var database_name = document.getElementById('check_db').value ;
+              if(database_name == "pg"){
+                  XHR.open("POST", "https://demo.commonhealthcore.org/backend/api/update_pg_catalog_entry");
+              }else{
+                  XHR.open("POST", "https://demo.commonhealthcore.org/backend/api/update_entire_catalog");
+              }
+              //XHR.open("POST", "https://dev7.resourcestack.com/api/update_entire_catalog");
+          //XHR.open("POST", "https://dev11.resourcestack.com/backend/api/update_entire_catalog");
+            //XHR.open("POST", "https://demo.commonhealthcore.org/backend/api/update_entire_catalog");
 
 
               XHR.setRequestHeader('Content-Type', 'application/json');

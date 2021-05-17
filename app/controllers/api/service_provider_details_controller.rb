@@ -4,7 +4,7 @@ module Api
     include ClientApplicationsHelper
     before_action :authenticate_user_from_token, except: [:create_catalog_entry,:update_catalog_entry,:scrappy_doo_response, :authenticate_user_email, :site_update,
                                                           :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
-                                                          :site_program_list,:program_update,:contact_management_details_for_plugin, :update_entire_catalog]
+                                                          :site_program_list,:program_update,:contact_management_details_for_plugin, :update_entire_catalog, :update_pg_catalog_entry]
     load_and_authorize_resource class: :api, except: [:create_catalog_entry,:update_catalog_entry,:scrappy_doo_response, :authenticate_user_email,:site_update,
                                                       :get_catalogue_site_by_id,:catalogue_site_list,:get_catalogue_program_by_id,
                                                       :site_program_list,:program_update,:contact_management_details_for_plugin]
@@ -726,8 +726,70 @@ module Api
 
     def advanced_search
       logger.debug("********* * in THE ADVANCED SSEARCH")
-      input = {"search_params": params[:search_params] }
+
+      #result = api_call(params[:search_params], "advanced_search")
+      input = {"search_params": params[:search_params], email: params[:email], global_query: params[:global_query], query_name: params[:query_name] }
       uri = URI("http://pg.commonhealthcore.org/advanced_search")
+
+      header = {'Content-Type' => 'application/json'}
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      # http.use_ssl = true
+      request = Net::HTTP::Post.new(uri.path, header)
+      request.body = input.to_json
+      logger.debug("**************the input is #{request.body}")
+      response = http.request(request)
+      logger.debug("**************the final result is: #{response}")
+       puts "response {response.body} "
+      # puts JSON.parse(response.body)
+      result = JSON.parse(response.body) 
+
+      render :json => {status: :ok, result_count: result["result_count"] , complete_result: result["complete_result"] }
+    end
+  
+    def service_group_list
+
+      sg_list = api_call(params[:search_params], "service_group_list", params[:email])["sg_list"]
+
+
+      render :json => {status: :ok, sg_list: sg_list }
+
+    end
+
+    def population_group_list
+
+      popg_list = api_call(params[:search_params], "population_group_list", params[:email])["popg_list"]
+
+      render :json => {status: :ok, popg_list: popg_list }
+
+    end
+
+    def service_tag_list
+      stg_list = api_call(params[:search_params], "service_tag_list", params[:email])["stg_list"]
+
+      render :json => {status: :ok, stg_list: stg_list }
+
+    end
+
+    def favorite_query_list
+
+      fql_list = api_call({}, "favorite_query_list", params[:email])["favorite_queries"]
+
+      render :json => {status: :ok, favorite_queries: fql_list }
+
+    end
+
+    def delete_favorite_query
+      fq = api_call(params[:query_id], "delete_favorite_query", params[:email])["message"]
+      logger.debug("******************************the response of hte delete is #{fq}-----------------------")
+      render :json => {status: :ok, message: fq}
+
+    end
+
+    def api_call(search_params, url, email)
+
+      input = {"search_params": search_params, email: email }
+      uri = URI("http://pg.commonhealthcore.org/#{url}")
 
       header = {'Content-Type' => 'application/json'}
 
@@ -736,15 +798,38 @@ module Api
       request = Net::HTTP::Post.new(uri.path, header)
       request.body = input.to_json
 
-      #logger.debug("***********the request body is : #{request}")
+      # logger.debug(" the request body is : #{request}")
       response = http.request(request)
-      #logger.debug("*********response {response.body} ")
-      #logger.debug("******the response is : #{JSON.parse(response.body)}")
+      # puts "response {response.body} "
+      # puts JSON.parse(response.body)
       result = JSON.parse(response.body)
-       
 
-      render :json => {status: :ok, result_count: result["result_count"] , complete_result: result["complete_result"] }
+      result
     end
+
+    def update_pg_catalog_entry
+
+      item = params[:catalog_data].to_unsafe_h
+      input = {"catalog": item }
+      uri = URI("http://pg.commonhealthcore.org/create_new_entry")
+
+      header = {'Content-Type' => 'application/json'}
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      # # http.use_ssl = true
+      request = Net::HTTP::Post.new(uri.path, header)
+      request.body = input.to_json
+
+      # logger.debug(" the request body is : #{request}")
+      response = http.request(request)
+      # puts "response {response.body} "
+      logger.debug JSON.parse(response.body)
+      result = JSON.parse(response.body)
+      
+      render :json => { status: :ok, message: "Entry created successfully"  }
+    end
+
+
 
 
   end

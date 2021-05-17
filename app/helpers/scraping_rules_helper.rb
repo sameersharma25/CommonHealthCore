@@ -46,10 +46,12 @@ module ScrapingRulesHelper
     # sr.organizationDescription_xpath = result["OrganizationDescription_xpath"]
     sr.url = result["url"]
     sr.organizationName = result["OrganizationName"]["OrganizationName"][0] if result["OrganizationName"]["OrganizationName"]
-    sr.organizationDescription = result["OrganizationName"]["OrgDescription"][0] if result["OrganizationName"]["OrgDescription"]
+   # sr.organizationDescription = result["OrganizationName"]["OrgDescription"][0] if result["OrganizationName"]["OrgDescription"]
+    sr.organizationDescription = result["OrganizationName"]["OrgDescription"] ? result["OrganizationName"]["OrgDescription"][0] : {}
     sr.geoScope = result["GeoScope"] if result["GeoScope"]
     sr.programDetails = programDetails_array
-    sr.siteDetails = siteDetails_array
+    sr.siteDetails = siteDetails_array.flatten
+    logger.debug("*************** The SR being saved is #{sr.inspect}")
     #
     sr.save
   end

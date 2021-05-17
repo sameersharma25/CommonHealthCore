@@ -166,7 +166,7 @@ module Api
       additional_fields = eval(params[:ref_additional_fields]) if params[:ref_additional_fields]
       referral.ref_additional_fields = additional_fields if params[:ref_additional_fields]
 
-      referral.ref_note = params[:ref_note].gsub("\\'", "'")
+      referral.ref_note = params[:ref_note].gsub("\\'", "'") if params[:ref_note]
       referral.modifier_id = current_user.id.to_s
       
       if referral.save
@@ -191,7 +191,7 @@ module Api
         transferable = t.transferable
         transfer_status = t.transfer_status
         task_additional_fields = t.task_additional_fields
-        task_note = t.task_note.gsub("\\'", "'")
+        task_note = !t.task_note.nil? ?  t.task_note.gsub("\\'", "'") : t.task_note
 
         task_details = {task_id: task_id , task_type: task_type, task_status: task_status, task_owner: task_owner,
                         provider: provider , task_deadline: task_deadline, task_description: task_description,

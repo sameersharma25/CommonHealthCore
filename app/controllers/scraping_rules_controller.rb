@@ -6,7 +6,7 @@ class ScrapingRulesController < ApplicationController
   # GET /scraping_rules
   # GET /scraping_rules.json
   def index
-    @scraping_rules = ScrapingRule.all
+    @scraping_rules = ScrapingRule.all.order(url: :asc)
   end
 
   # GET /scraping_rules/1

@@ -264,16 +264,16 @@ class ClientApplicationsController < ApplicationController
 
     @result = helpers.catalog_table_content
 
-    logger.debug("***********************the the count in the result is : #{@result.count}")
+    #logger.debug("***********************the the count in the result is : #{@result.count}")
  
     @pending_results = @result.select{|p| p["status"] == "Pending"}
 
-    logger.debug("the RESULT OF THE SCAN IS : ************************ #{@pending_results}")
+    #logger.debug("the RESULT OF THE SCAN IS : ************************ #{@pending_results}")
 
     #@masterStatus = @client_application.master_application_status
 
     @sr_urls = ScrapingRule.all.pluck(:url)
-    logger.debug("the sr ursls are  : ************************ #{@sr_urls}")
+    #logger.debug("the sr ursls are  : ************************ #{@sr_urls}")
     user = current_user
     @client_application = current_user.client_application
     @masterStatus = @client_application.master_application_status
@@ -359,48 +359,51 @@ class ClientApplicationsController < ApplicationController
 
       details = get_catalog_details(table)
       logger.debug("looking at the details, #{details}")
-      @url = details[:url]
-      #logger.debug("WHAT IS THE URL  #{@url}")
-      @orgDetails = details[:OrgDetails]
-      # sets default org desc display if don't exists
-      set_default_description_display
-      #logger.debug("OrgDetails:::: #{@orgDetails}")
-      @OrganizationName = details[:OrganizationName]
-      #logger.debug("OrgName::: #{@OrganizationName}")
-      @OrgDescription = details[:OrganizationDescription]
-      #logger.debug("OrgDesc::: #{@OrgDescription}")
-      @siteHash = details[:siteHash]
-      @poc = details[:poc]
-      if details[:OrgSites] == [nil]
-        @site = details[:OrgSites]
-      else
-        @site = details[:OrgSites].sort_by {|s| s['SelectSiteID'].to_i}
-      end
-      @geoscope = details[:geoscope]
-      @program = details[:programs]
-      logger.debug("PROGRAM #{@program}")
-      @PopulationDescription = details[:popDesc]
-      @ProgramDescription = details[:progDesc]
-      @ServiceAreaDescription = details[:servArea]
-      @ProgramReferences = details[:progRef]
+     
+      get_details_for_catalog_mang_viewer(details)
+      @pg_entry = false
+      #@url = details[:url]
+      ##logger.debug("WHAT IS THE URL  #{@url}")
+      #@orgDetails = details[:OrgDetails]
+      ## sets default org desc display if don't exists
+      #set_default_description_display
+      ##logger.debug("OrgDetails:::: #{@orgDetails}")
+      #@OrganizationName = details[:OrganizationName]
+      ##logger.debug("OrgName::: #{@OrganizationName}")
+      #@OrgDescription = details[:OrganizationDescription]
+      ##logger.debug("OrgDesc::: #{@OrgDescription}")
+      #@siteHash = details[:siteHash]
+      #@poc = details[:poc]
+      #if details[:OrgSites] == [nil]
+      #  @site = details[:OrgSites]
+      #else
+      #  @site = details[:OrgSites].sort_by {|s| s['SelectSiteID'].to_i}
+      #end
+      #@geoscope = details[:geoscope]
+      #@program = details[:programs]
+      #logger.debug("PROGRAM #{@program}")
+      #@PopulationDescription = details[:popDesc]
+      #@ProgramDescription = details[:progDesc]
+      #@ServiceAreaDescription = details[:servArea]
+      #@ProgramReferences = details[:progRef]
 
-      @provider = params.has_key?(:provider_page) ? "master" : ""
+      #@provider = params.has_key?(:provider_page) ? "master" : ""
 
-      #@changed_fields = ScrapingRule.where(url: details[:url]).exists? ? ScrapingRule.find_by(url: details[:url]).changed_fields : ""
-      if ScrapingRule.where(url: details[:url]).exists?
-        sr = ScrapingRule.find_by(url: details[:url])
-        if sr.changed_fields.nil? || sr.changed_fields.empty?
-          @changed_fields = ''
-        else
-          @changed_fields = sr.changed_fields
-        end
-      else
-        @changed_fields = ""
-      end
+      ##@changed_fields = ScrapingRule.where(url: details[:url]).exists? ? ScrapingRule.find_by(url: details[:url]).changed_fields : ""
+      #if ScrapingRule.where(url: details[:url]).exists?
+      #  sr = ScrapingRule.find_by(url: details[:url])
+      #  if sr.changed_fields.nil? || sr.changed_fields.empty?
+      #    @changed_fields = ''
+      #  else
+      #    @changed_fields = sr.changed_fields
+      #  end
+      #else
+      #  @changed_fields = ""
+      #end
 
 
 #this is for the PDF implementation 
-@pdfLinkSet = [] 
+#@pdfLinkSet = [] 
 =begin   
     pdfSET = []
     @pdfLinkSet = []
@@ -580,6 +583,50 @@ class ClientApplicationsController < ApplicationController
 
 =end
   end 
+
+  def get_details_for_catalog_mang_viewer(details)
+
+    @url = details[:url]
+    #logger.debug("WHAT IS THE URL  #{@url}")
+    @orgDetails = details[:OrgDetails]
+    # sets default org desc display if don't exists
+    set_default_description_display
+    #logger.debug("OrgDetails:::: #{@orgDetails}")
+    @OrganizationName = details[:OrganizationName]
+    #logger.debug("OrgName::: #{@OrganizationName}")
+    @OrgDescription = details[:OrganizationDescription]
+    #logger.debug("OrgDesc::: #{@OrgDescription}")
+    @siteHash = details[:siteHash]
+    @poc = details[:poc]
+    if details[:OrgSites] == [nil]
+      @site = details[:OrgSites]
+    else
+      @site = details[:OrgSites].sort_by {|s| s['SelectSiteID'].to_i}
+    end
+    @geoscope = details[:geoscope]
+    @program = details[:programs]
+    logger.debug("PROGRAM #{@program}")
+    @PopulationDescription = details[:popDesc]
+    @ProgramDescription = details[:progDesc]
+    @ServiceAreaDescription = details[:servArea]
+    @ProgramReferences = details[:progRef]
+   
+    @provider = params.has_key?(:provider_page) ? "master" : ""
+ 
+    if ScrapingRule.where(url: details[:url]).exists?
+      sr = ScrapingRule.find_by(url: details[:url])
+      if sr.changed_fields.nil? || sr.changed_fields.empty?
+        @changed_fields = ''
+      else
+        @changed_fields = sr.changed_fields
+      end
+    else
+      @changed_fields = ""
+    end
+
+    @pdfLinkSet = []
+
+  end
 
   def get_contact_management #modal
 
@@ -1123,7 +1170,7 @@ class ClientApplicationsController < ApplicationController
 
     begin
       dynamodb.put_item(params1)
-      helper.create_pg_entry(result)
+      helpers.create_pg_entry(result)
       # render :json => { status: :ok, message: "Entry created successfully"  }
     rescue  Aws::DynamoDB::Errors::ServiceError => error
       render :json => {message: error  }
@@ -1343,6 +1390,60 @@ class ClientApplicationsController < ApplicationController
     end
 
   end
+
+  def pg_filter
+
+  end
+
+  def filtered_list
+
+
+    input = {"tag": params[:tag]}
+    uri = URI("http://pg.commonhealthcore.org/filter_service_tag")
+
+    header = {'Content-Type' => 'application/json'}
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    # http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, header)
+    request.body = input.to_json
+
+    # logger.debug(" the request body is : #{request}")
+    response = http.request(request)
+    #puts "*******************response #{response.body} "
+    #logger.debug("******* the response is ---------#{JSON.parse(response.body}")
+    result = JSON.parse(response.body)
+    logger.debug("--------in the filtered_list #{result}")
+    @programs = result["result"]
+
+  end
+
+  def see_pg_entry
+
+    input = {"domain": params[:domain]}
+    uri = URI("http://pg.commonhealthcore.org/get_entry_by_domain")
+
+    header = {'Content-Type' => 'application/json'}
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    # http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, header)
+    request.body = input.to_json
+
+    # logger.debug(" the request body is : #{request}")
+    response = http.request(request)
+    # puts "response {response.body} "
+    logger.debug("********** the response of get entry by domain is  #{JSON.parse(response.body)}")
+    result = JSON.parse(response.body)
+
+    details = cat_details(result["catalog"])
+    get_details_for_catalog_mang_viewer(details)
+    @pg_entry = true
+
+    render :template => 'client_applications/catalogMangViewer'
+
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

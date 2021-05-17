@@ -1,0 +1,13 @@
+<% if programs.nil? %>
+
+<% else %>
+
+    <% programs.each do |p|%>
+        <tr class="currentRow">
+          <td> <%= p["org_name"] %> </td>
+          <td> <%= p["program_name"] %> </td>
+          <td> <%= link_to "See More", "/backend/see_pg_entry?domain=#{p['domain']}" , {target: :_blank} %> </td>
+        </tr>
+    <% end %>
+
+<% end %>

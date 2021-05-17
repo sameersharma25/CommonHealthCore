@@ -152,6 +152,10 @@ Rails.application.routes.draw do
   post "/next_question", to: "question_response#next_question"
   post "/skip_survey", to: "question_response#skip_survey"
 
+  get "pg_filter", to: "client_applications#pg_filter"
+  post "/filtered_list", to: "client_applications#filtered_list"
+  #post "/see_pg_entry", to: "client_applications#see_pg_entry"
+  match "/see_pg_entry" => "client_applications#see_pg_entry", via: [:get, :post]
 
 
   namespace :api do
@@ -240,7 +244,15 @@ Rails.application.routes.draw do
     post "/create_catalog", to: "service_provider_details#create_catalog_entry"
     post "/update_catalog", to: "service_provider_details#update_catalog_entry"
     post "/update_entire_catalog", to: "service_provider_details#update_entire_catalog"
+    
+    post "/update_pg_catalog_entry", to: "service_provider_details#update_pg_catalog_entry"
+
     post "/advanced_search", to: "service_provider_details#advanced_search"
+    post "/service_group_list", to: "service_provider_details#service_group_list"
+    post "/population_group_list", to: "service_provider_details#population_group_list"
+    post "/service_tag_list", to: "service_provider_details#service_tag_list"
+    post "/favorite_query_list", to: "service_provider_details#favorite_query_list"
+    post "/delete_favorite_query", to: "service_provider_details#delete_favorite_query"
 
     post "/site_update", to: "service_provider_details#site_update"
     post "/site_program_list",to: "service_provider_details#site_program_list"
