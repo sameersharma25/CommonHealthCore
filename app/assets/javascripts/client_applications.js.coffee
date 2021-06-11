@@ -3,6 +3,17 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 jQuery ($) ->
   console.log("Client Application Coffee****")
+
+  $(document).on("click", "#replace_tag", ->
+    tag_to_remove = $('#tag_to_remove').val()
+    tag_to_replace_with = $('#tag_to_replace_with').val()
+
+    $.post "/backend/remove_unnecessary_service_tags",
+      tag_to_remove: tag_to_remove,
+      tag_to_replace_with: tag_to_replace_with
+    return
+  )
+
   $(document).on("click", "#filter_tag_button", ->
     tag = $('#tag_field').val()
     $.post "/backend/filtered_list",

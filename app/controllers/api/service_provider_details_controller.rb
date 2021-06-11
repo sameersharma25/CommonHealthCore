@@ -677,7 +677,7 @@ module Api
       #url_split = params[:catalog_data]["url"].split("/")
       #item["url"] = url_split[0]+"//"+url_split[2]+"/"
       #item["customer_id"] = client_application_id
-      #item["status"] = "New"
+      item["status"] = "Changed"
       #created_at = DateTime.now.strftime("%F %T")
       #item["created_at"] = created_at
       # item["catalog_id"] = SecureRandom.hex(13)
@@ -728,7 +728,8 @@ module Api
       logger.debug("********* * in THE ADVANCED SSEARCH")
 
       #result = api_call(params[:search_params], "advanced_search")
-      input = {"search_params": params[:search_params], email: params[:email], global_query: params[:global_query], query_name: params[:query_name] }
+      search_params = params[:search_params].to_unsafe_h
+      input = {"search_params": search_params, email: params[:email], global_query: params[:global_query], query_name: params[:query_name] }
       uri = URI("http://pg.commonhealthcore.org/advanced_search")
 
       header = {'Content-Type' => 'application/json'}

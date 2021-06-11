@@ -1445,6 +1445,35 @@ class ClientApplicationsController < ApplicationController
   end
 
 
+  def tag_cleanup_page
+
+  end
+
+
+  def remove_unnecessary_service_tags
+
+    input = {"tag_to_remove": params[:tag_to_remove], "tag_to_replace_with": params[:tag_to_replace_with]}
+    uri = URI("http://pg.commonhealthcore.org/remove_unnecessary_service_tags")
+
+    header = {'Content-Type' => 'application/json'}
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    # http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, header)
+    request.body = input.to_json
+
+    # logger.debug(" the request body is : #{request}")
+    response = http.request(request)
+    # puts "response {response.body} "
+    # puts JSON.parse(response.body)
+    result = JSON.parse(response.body)["message"]
+
+    logger.debug("************ the message is #{result}")
+
+    @message = result
+  end
+
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_client_application

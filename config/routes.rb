@@ -157,6 +157,8 @@ Rails.application.routes.draw do
   #post "/see_pg_entry", to: "client_applications#see_pg_entry"
   match "/see_pg_entry" => "client_applications#see_pg_entry", via: [:get, :post]
 
+  match "/remove_unnecessary_service_tags" => "client_applications#remove_unnecessary_service_tags", via: [:get, :post]
+  match "/tag_cleanup_page" => "client_applications#tag_cleanup_page", via: [:get, :post]
 
   namespace :api do
     # match 'activation', :to => 'minors#activation', via: [:get, :post]
