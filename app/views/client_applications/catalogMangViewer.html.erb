@@ -245,8 +245,12 @@
 
         <%= label_tag :P_LGBTQ %>
         <%= check_box_tag :P_LGBTQ, x['P_LGBTQ'], x['P_LGBTQ'].to_s.downcase == "true" %><br>
-        <%= label_tag :P_LowIncome %>
-        <%= check_box_tag :P_LowIncome, x['P_LowIncome'], x['P_LowIncome'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :P_VeryLowIncome %>
+        <%= check_box_tag :P_VeryLowIncome, x['P_VeryLowIncome'], x['P_VeryLowIncome'].to_s.downcase == "true" %><br>
+
+        <%= label_tag :P_Men %>
+        <%= check_box_tag :P_Men, x['P_Men'], x['P_Men'].to_s.downcase == "true" %><br>
 
         <%= label_tag :P_Native %>
         <%= check_box_tag :P_Native, x['P_Native'], x['P_Native'].to_s.downcase == "true" %><br>
@@ -257,9 +261,11 @@
         <%= label_tag :P_Senior %>
         <%= check_box_tag :P_Senior, x['P_Senior'], x['P_Senior'].to_s.downcase == "true"  %><br>
 
-
         <%= label_tag :P_Veteran %>
         <%= check_box_tag :P_Veteran, x['P_Veteran'] , x['P_Veteran'].to_s.downcase == "true"   %><br>
+        
+        <%= label_tag :P_Women %>
+        <%= check_box_tag :P_Women, x['P_Women'], x['P_Women'].to_s.downcase == "true" %><br>
 
         <%= label_tag :PopulationTags %>
         <%= text_field_tag :PopulationTags, x['PopulationTags'] %><br>
@@ -348,11 +354,14 @@
         <%= check_box_tag :S_Respite, x['S_Respite'] , x['S_Respite'].to_s.downcase == "true" %><br>
         <%= label_tag :S_Research %>
         <%= check_box_tag :S_Research, x['S_Research'], x['S_Research'].to_s.downcase == "true"  %><br>
-        <%= label_tag :S_Resources %>
-        <%= check_box_tag :S_Resources, x['S_Resources'], x['S_Resources'].to_s.downcase == "true"  %><br>
+        <%= label_tag :S_Referrals %>
+        <%= check_box_tag :S_Referrals, x['S_Referrals'], x['S_Referrals'].to_s.downcase == "true"  %><br>
 
         <%= label_tag :S_Senior %>
         <%= check_box_tag :S_Senior, x['S_Senior'], x['S_Senior'].to_s.downcase == "true" %><br>
+
+        <%= label_tag "S_Teen & Youth" %>
+        <%= check_box_tag "Teen & Youth", x['S_Teen & Youth'], x['S_Teen & Youth'].to_s.downcase == "true" %><br>
 
         <%= label_tag :S_Transportation %>
         <%= check_box_tag :S_Transportation, x['S_Transportation'], x['S_Transportation'].to_s.downcase == "true" %><br>
